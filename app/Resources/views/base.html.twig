@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Library Command Center{% endblock %}</title>
+        {% block stylesheets %}          
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+          {% stylesheets 'bundles/app/css/*' filter='cssrewrite' %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+          {% endstylesheets %}
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        {% block navbar %}
+        <nav class="navmenu navmenu-default navmenu-fixed-left offcanvas">
+          <a class="navmenu-brand" href="#">Library Command</a>
+          {% if app.user and is_granted('ROLE_ADMIN') %}
+          <span>Admin Functions</span>
+          <ul class="nav navmenu-nav">
+            <li><a href="{{ path('admin') }}">Dashboard</a></li>
+          </ul>
+          {% endif %}
+          <span>Website Forms</span>
+          <ul class="nav navmenu-nav">
+            <li><a href="#">Article Reserve</a></li>
+            <li><a href="#">AV Services</a></li>
+            <li><a href="#">Book Search Request</a></li>
+            <li><a href="#">Comments &amp; Suggestions</a></li>
+            <li class="active"><a href="#">Hours</a></li>
+            <li><a href="#">Material Purchase Request</a></li>
+            <li><a href="#">Media Reserve</a></li>
+            <li><a href="#">Privileges</a></li>
+            <li><a href="#">Room Reserve</a></li>
+            <li><a href="#">Staff Directory</a></li>
+          </ul>
+          <span>Internal Forms</span>
+          <ul class="nav navmenu-nav">
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+          </ul>
+          <span>Account</span>
+          <ul class="nav navmenu-nav">
+            <li><a href="{{ path('fos_user_profile_show') }}">Account Details</a></li>
+            <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
+          </ul>
+        </nav>
+        <div class="navbar navbar-default">
+          <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Library Command</a>
+        </div>
+        {% endblock %}
+        
+        <div class="container-fluid">
+        {% block body %}{% endblock %}
+        
+          <footer>
+           {% block footer %}Footer{% endblock %}
+          </footer>
+        </div><!-- /.container-fluid -->
+        
+       
+       
+        {% block javascripts %}
+          <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+          {% javascripts '@AppBundle/Resources/public/js/*' %}  
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+          {% endjavascripts %}
+        {% endblock %}
+        
+        <script>
+          $(document).ready(function () {
+              {% block documentReady %}{% endblock documentReady %}
+          });
+        </script>
+    </body>
+</html>
+
+    
