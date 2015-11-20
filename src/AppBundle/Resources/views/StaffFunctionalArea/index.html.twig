@@ -1,41 +1,41 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>StaffFunctionalArea list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Functionalarea</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('admin_staffarea_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.functionalArea }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('admin_staffarea_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_staffarea_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('admin_staffarea_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+    <h1 class="page-header">Staff Functional Areas</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('admin_staffdepartment') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table table-striped records_list">
+            <thead>
+                <tr>
+                    <th>Functional Area</th>
+                    <th>Parent Department</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td><a href="{{ path('admin_staffarea_show', { 'id': entity.id }) }}">{{ entity.functionalArea }}</a></td>
+                    <td><a href="{{ path('admin_staffdepartment_show', { 'id': entity.dept.id }) }}">{{ entity.dept.department }}</a></td>
+                    <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_staffarea_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_staffarea_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
     {% endblock %}

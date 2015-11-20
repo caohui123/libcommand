@@ -4,11 +4,13 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\StaffDepartment;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * FunctionalArea
  *
  * @ORM\Table()
+ * @UniqueEntity(fields={"functionalArea"}, message="That functional area already exists.")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\StaffFunctionalAreaRepository")
  */
 class StaffFunctionalArea
@@ -30,7 +32,7 @@ class StaffFunctionalArea
     private $functionalArea;
     
     /**
-     * @ORM\ManyToOne(targetEntity="StaffDepartment", inversedBy="functionalAreas", cascade={"all"}, fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="StaffDepartment", inversedBy="functionalAreas", fetch="LAZY")
      */
     private $dept;
     
@@ -73,12 +75,12 @@ class StaffFunctionalArea
         return $this->functionalArea;
     }
     
-    public function setDepartment(StaffDepartment $department){
-      $this->dept = $department;
+    public function setDept(StaffDepartment $dept){
+      $this->dept = $dept;
       return $this;
     }
     
-    public function getDepartment(){
+    public function getDept(){
       return $this->dept;
     }
 }

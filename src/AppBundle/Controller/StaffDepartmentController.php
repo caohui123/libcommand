@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\StaffDepartment;
 use AppBundle\Form\StaffDepartmentType;
+use AppBundle\Entity\StaffFunctionalArea;
 
 /**
  * StaffDepartment controller.
@@ -17,7 +18,6 @@ use AppBundle\Form\StaffDepartmentType;
  */
 class StaffDepartmentController extends Controller
 {
-
     /**
      * Lists all StaffDepartment entities.
      *
@@ -28,9 +28,9 @@ class StaffDepartmentController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $functional_areas = $em->getRepository('AppBundle\Entity\StaffFunctionalArea');
         $entities = $em->getRepository('AppBundle:StaffDepartment')->findAll();
-
+        
         return array(
             'entities' => $entities,
         );
@@ -76,7 +76,7 @@ class StaffDepartmentController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -165,7 +165,7 @@ class StaffDepartmentController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-default')));
 
         return $form;
     }
@@ -240,7 +240,7 @@ class StaffDepartmentController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_staffdepartment_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }

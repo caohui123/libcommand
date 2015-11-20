@@ -83,7 +83,7 @@ class StaffDepartment
      */
     public function setFunctionalAreas($functionalAreas)
     {
-        $this->functionalAreas = $functionalAreas;
+        $this->functionalAreas->add($functionalAreas);
 
         return $this;
     }

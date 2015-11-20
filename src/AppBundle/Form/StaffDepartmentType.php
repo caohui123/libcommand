@@ -15,7 +15,7 @@ class StaffDepartmentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('department')
+            ->add('department', 'text', array('label' => 'Department Title', 'attr' => array('class'=>'form-control')))
         ;
     }
     

@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\StaffFunctionalArea;
 use AppBundle\Form\StaffFunctionalAreaType;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * StaffFunctionalArea controller.
@@ -44,8 +45,11 @@ class StaffFunctionalAreaController extends Controller
      */
     public function createAction(Request $request)
     {
+        $formData = $request->get('appbundle_stafffunctionalarea'); //the name of the form
+        $departmentId = $formData['dept'];
+        
         $entity = new StaffFunctionalArea();
-        $form = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity, $departmentId);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -66,32 +70,34 @@ class StaffFunctionalAreaController extends Controller
      * Creates a form to create a StaffFunctionalArea entity.
      *
      * @param StaffFunctionalArea $entity The entity
+     * @param int $departmentId The id of the department under which the functional areas is to be created.
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(StaffFunctionalArea $entity)
+    private function createCreateForm(StaffFunctionalArea $entity, $departmentId = null)
     {
-        $form = $this->createForm(new StaffFunctionalAreaType(), $entity, array(
+        $form = $this->createForm(new StaffFunctionalAreaType($this->getDoctrine()->getManager(), $departmentId), $entity, array(
             'action' => $this->generateUrl('admin_staffarea_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Create', 'attr'=>array('class'=>'btn btn-sm btn-success')));
 
         return $form;
     }
 
     /**
      * Displays a form to create a new StaffFunctionalArea entity.
-     *
-     * @Route("/new", name="admin_staffarea_new")
+     * Optionally, pass the department ID to auto-select which department the are belongs to.
+     * 
+     * @Route("/new/{departmentId}", defaults={"departmentId" = 1}, name="admin_staffarea_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction($departmentId)
     {
         $entity = new StaffFunctionalArea();
-        $form   = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity, $departmentId);
 
         return array(
             'entity' => $entity,
@@ -141,7 +147,7 @@ class StaffFunctionalAreaController extends Controller
             throw $this->createNotFoundException('Unable to find StaffFunctionalArea entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($entity, $entity->getDept()->getId());
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -158,14 +164,14 @@ class StaffFunctionalAreaController extends Controller
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(StaffFunctionalArea $entity)
+    private function createEditForm(StaffFunctionalArea $entity, $departmentId = null)
     {
-        $form = $this->createForm(new StaffFunctionalAreaType(), $entity, array(
+        $form = $this->createForm(new StaffFunctionalAreaType($this->getDoctrine()->getManager(), $departmentId), $entity, array(
             'action' => $this->generateUrl('admin_staffarea_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class'=>'btn btn-sm btn-default')));
 
         return $form;
     }
@@ -178,6 +184,9 @@ class StaffFunctionalAreaController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $formData = $request->get('appbundle_stafffunctionalarea'); //the name of the form
+        $departmentId = $formData['dept'];
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:StaffFunctionalArea')->find($id);
@@ -187,7 +196,7 @@ class StaffFunctionalAreaController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($entity, $departmentId);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -240,7 +249,7 @@ class StaffFunctionalAreaController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_staffarea_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }

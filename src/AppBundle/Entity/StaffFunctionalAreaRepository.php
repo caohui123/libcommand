@@ -14,7 +14,7 @@ class StaffFunctionalAreaRepository extends \Doctrine\ORM\EntityRepository
    * List all functional areas for a department
    * @param Object $department
    */
-  public function listAreasByDepartment($department){
+  public function findByDepartment($department){
     $em = $this->getEntityManager();
     
     $areas = $em->createQuery(
