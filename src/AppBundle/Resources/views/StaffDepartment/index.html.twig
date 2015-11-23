@@ -1,12 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1 class="page-header">Staff Departments</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('admin_staffdepartment_new') }}"><span class="glyphicon glyphicon-plus"></span> New Department</a></p>
-      </div>
-    </div>
+    <h1 class="page-header">Staff Departments <span><a class="btn btn-sm btn-primary" href="{{ path('admin_staffdepartment_new') }}" role="button" aria-label="Add a new staff member"><span class="glyphicon glyphicon-plus"></span> New Department</a></span></h1>
     <div class="row">
       <div class="col-xs-12">
         <table class="table table-striped records_list">

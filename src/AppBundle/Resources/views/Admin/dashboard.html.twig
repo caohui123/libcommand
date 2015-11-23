@@ -10,7 +10,10 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-xs-12 col-md-6 col-lg-4">
-      
+        <h3>Staff Management</h3>
+        <ul>
+          <li><a href="{{ path('admin_staffdepartment') }}">Departments and Functional Areas</a></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -50,42 +53,4 @@
 
 {% block documentReady %}
     {{ parent() }}
-    
-    var options = {   
-      size: 'mini',
-      onText: 'I',
-      offText: 'O'
-    };
-    $(".user-status-ckbx").bootstrapSwitch(options);
-  
-    //ajax to activate/deactivate user
-    $('.user-status-ckbx').on('switchChange.bootstrapSwitch', function(event, state){
-        console.log(event);
-        var currentDiv = $("#" + event.currentTarget.id).bootstrapSwitch('state');
-        if( currentDiv == false ){
-          var confirmed = confirm("Are you sure you wish to deactivate this user? They will no longer be able to access any forms.");
-          if(confirmed == true){
-            changeActivationStatus($(this).val());
-          } else {
-            $("#" + event.currentTarget.id).bootstrapSwitch('toggleState', true);
-          }
-        } else {
-          var confirmed = confirm("Are you sure you wish to activate this user? Deactivated users which were previously active will have the same permissions prior to their de-activation unless changed manually.");
-          if(confirmed == true){
-            changeActivationStatus($(this).val());
-          } else {
-            $("#" + event.currentTarget.id).bootstrapSwitch('toggleState', true);
-          }
-        }
-    });
-    
-    function changeActivationStatus(userId){
-      $.post("{{ path('isactive') }}", {userId: userId})
-          .done(function(data){
-            console.log("Finished updating " + userId);
-          })
-          .fail(function(){
-            console.log("User could not be updated");
-          });
-    };
 {% endblock %}

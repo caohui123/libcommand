@@ -13,7 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
- * @UniqueEntity(fields={"username", "email"}, message="Username or Email address already taken.")
+ * @UniqueEntity(fields={"username"}, message="Username already taken.")
+ * @UniqueEntity(fields={"email"}, message="Email address already taken.")
  */
 class User extends BaseUser
 {
@@ -25,7 +26,6 @@ class User extends BaseUser
     protected $id;
     
     /**
-     * @Assert\NotBlank()
      * @Assert\Length(max = 4096)
      */
     protected $plainPassword;
@@ -36,9 +36,10 @@ class User extends BaseUser
     private $isActive;
     
     /**
-     * @ORM\ManyToOne(targetEntity="StaffFunctionalArea", cascade={"all"}, fetch="LAZY")
+     * @ORM\OneToOne(targetEntity="Staff")
+     * @ORM\JoinColumn(name="staff_id", referencedColumnName="id", nullable=true)
      */
-    private $staffFunctionalArea;
+    private $staffMember;
     
     public function __construct()
     {
@@ -93,15 +94,28 @@ class User extends BaseUser
     {
         return $this->isActive;
     }
-}
 
-/**
- * Why the 4096 Password Limit?
- * Notice that the plainPassword field has a max length of 4096 characters. 
- * For security purposes (CVE-2013-5750), Symfony limits the plain password length to 4096 characters when encoding it. 
- * Adding this constraint makes sure that your form will give a validation error if anyone tries a super-long password.
- * 
- * You'll need to add this constraint anywhere in your application where your user submits a plaintext password (e.g. change password form). 
- * The only place where you don't need to worry about this is your login form, 
- * since Symfony's Security component handles this for you.
- */
+    /**
+     * Set staffMember
+     *
+     * @param \AppBundle\Entity\Staff $staffMember
+     *
+     * @return User
+     */
+    public function setStaffMember(\AppBundle\Entity\Staff $staffMember = null)
+    {
+        $this->staffMember = $staffMember;
+
+        return $this;
+    }
+
+    /**
+     * Get staffMember
+     *
+     * @return \AppBundle\Entity\Staff
+     */
+    public function getStaffMember()
+    {
+        return $this->staffMember;
+    }
+}

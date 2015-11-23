@@ -103,8 +103,14 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-
-        $editForm = $this->createEditForm($entity);
+        
+        if(!is_null($entity->getStaffMember())){
+          $staffMember = $entity->getStaffMember()->getId();
+        } else {
+          $staffMember = null;
+        }
+        
+        $editForm = $this->createEditForm($entity, $staffMember);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -118,17 +124,18 @@ class UserController extends Controller
     * Creates a form to edit a User entity.
     *
     * @param User $entity The entity
-    *
+    * @param Staff $staffMember The staff member associated with the LDAP user object
+    * 
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(User $entity)
+    private function createEditForm(User $entity, $staffMemberId = null)
     {
-        $form = $this->createForm(new UserType(), $entity, array(
+        $form = $this->createForm(new UserType($this->getDoctrine(), $staffMemberId), $entity, array(
             'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class'=>'btn btn-sm btn-default')));
 
         return $form;
     }
@@ -141,6 +148,9 @@ class UserController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $formData = $request->get('appbundle_user'); //the name of the form
+        $staffMemberId = $formData['staffMember'];
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:User')->find($id);
@@ -148,9 +158,9 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-
+        
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($entity, $staffMemberId);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -203,7 +213,7 @@ class UserController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('user_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }
