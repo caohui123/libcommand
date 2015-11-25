@@ -1,7 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
-
+//potato
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
