@@ -119,6 +119,16 @@
                       console.log("User could not be updated");
                     });
               };    
+              
+              /**
+               * Toggle chevron on list groups such as admin/staffareas/
+               */
+              $('.list-group-item').on('click', function() {
+                $('.glyphicon', this)
+                  .toggleClass('glyphicon-chevron-right')
+                  .toggleClass('glyphicon-chevron-down');
+              });
+              
           });
         </script>
     </body>
