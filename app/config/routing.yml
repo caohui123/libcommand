@@ -4,3 +4,9 @@ app:
     
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    
+#Rest (FOSRestBundle)
+rest:
+    type: rest
+    #resource: "routing_rest.yml"
+    resource: AppBundle\Controller\AvRequestController

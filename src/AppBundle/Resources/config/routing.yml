@@ -1,16 +1,1 @@
 
-add_staff:
-    path:     /addStaff
-    defaults: { _controller: AppBundle:Staff:addStaff }
-
-update_staff:
-    path:     /updateStaff/{staffId}
-    defaults: { _controller: AppBundle:Staff:updateStaff }
-
-delete_staff:
-    path:     /deleteStaff/{staffId}
-    defaults: { _controller: AppBundle:Staff:deleteStaff }
-
-list_staff:
-    path:     /listStaff
-    defaults: { _controller: AppBundle:Staff:listStaff }

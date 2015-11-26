@@ -109,3 +109,8 @@ services:
     user_service:
       class: AppBundle\Resources\Services\UserService
       arguments: [ @doctrine.orm.entity_manager ]
+      
+#FOSRestBundle
+fos_rest:
+    routing_loader:
+        default_format: json
