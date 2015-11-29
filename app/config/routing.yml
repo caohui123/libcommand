@@ -10,3 +10,4 @@ rest:
     type: rest
     #resource: "routing_rest.yml"
     resource: AppBundle\Controller\AvRequestController
+    prefix: /api/

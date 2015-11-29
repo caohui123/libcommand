@@ -190,6 +190,12 @@ class AvRequest
     {
         return $this->created;
     }
+    public function setCreated($created)
+    {
+        $this->created = $created;
+        
+        return $this;
+    }
 
     /**
      * Get updated
@@ -200,6 +206,12 @@ class AvRequest
     {
         return $this->updated;
     }
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+        
+        return $this;
+    }
 
     /**
      * Get contentChangedBy
@@ -209,6 +221,12 @@ class AvRequest
     public function getContentChangedBy()
     {
         return $this->contentChangedBy;
+    }
+    public function setContentChangedBy($changedby)
+    {
+        $this->contentChangedBy = $changedby;
+        
+        return $this;
     }
 }
 

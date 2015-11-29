@@ -16,12 +16,21 @@ class AvRequestType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('requestDate')
-            ->add('deliverDate')
-            ->add('returnDate')
-            ->add('created')
-            ->add('updated')
-            ->add('contentChangedBy')
+            ->add('requestDate', 'datetime', array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd HH:mm:ss',
+            ))
+            ->add('deliverDate', 'datetime', array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd HH:mm:ss',
+            ))
+            ->add('returnDate', 'datetime', array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd HH:mm:ss',
+            ))
+            ->add('created', 'datetime')
+            ->add('updated', 'datetime')
+            ->add('contentChangedBy', 'text')
         ;
     }
     
@@ -31,7 +40,8 @@ class AvRequestType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\AvRequest'
+            'data_class' => 'AppBundle\Entity\AvRequest',
+            'csrf_protection' => false
         ));
     }
 
