@@ -1,112 +1,94 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Staff</h1>
+  <h1 class="page-header">{{ entity.firstName }} {{ entity.lastName }} <br> <small>{{ entity.jobTitle }} </small><span><a class="btn btn-sm btn-primary" href="{{ path('staff_edit', { 'id': entity.id }) }}" role="button" aria-label="Edit Staff Member"><span class="glyphicon glyphicon-pencil"></span> Edit Info</a></span></h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('staff') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Staff List</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table table-striped record_properties">
+            <tbody>
+                <tr>
+                    <th>LDAP User</th>
+                    <td>{{ ldap_user}} {% if is_granted('ROLE_ADMIN') %}<a class="btn btn-default btn-xs" href="{{ path('admin') }}">Change</a> {% endif %}</td>
+                </tr>
+                <tr>
+                    <th>Staff ID</th>
+                    <td>{{ entity.staffId }}</td>
+                </tr>
+                <tr>
+                    <th>Employment Status</th>
+                    <td>
+                      {% for status in entity.employmentStatus %}
+                        {{ status }}
+                      {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Job Description</th>
+                    <td>{{ entity.jobDescription }}</td>
+                </tr>
+                <tr>
+                    <th>Functional Area</th>
+                    <td>{{ entity.staffFunctionalArea }}</td>
+                </tr>
+                <tr>
+                    <th>LibGuides URL</th>
+                    <td>{{ entity.guidesUrl }}</td>
+                </tr>
+                <tr>
+                    <th>Office</th>
+                    <td>{{ entity.office }}</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td>{{ entity.phone }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ entity.email }}</td>
+                </tr>
+                <tr>
+                    <th>Home Address</th>
+                    <td>{{ entity.homeStreet }}, {{ entity.homeCity }}, {{ entity.homeState }} {{ entity.homeZip }}</td>
+                </tr>
+                <tr>
+                    <th>Home Phone</th>
+                    <td>{{ entity.homePhone }}</td>
+                </tr>
+                <tr>
+                    <th>Cell Phone</th>
+                    <td>{{ entity.cellPhone }}</td>
+                </tr>
+                <tr>
+                    <th>Bio</th>
+                    <td>{{ entity.selfIntro }}</td>
+                </tr>
+                <tr>
+                    <th>Favorite Websites</th>
+                    <td>{{ entity.favoriteWebsites }}</td>
+                </tr>
+                <tr>
+                    <th>Photo</th>
+                    <td>
+                      {{ entity.photo }}
+                      {% if entity.showPhoto == 1 %}
+                        Displayed publicly
+                      {% else %}
+                        NOT displayed publicly
+                      {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Staffid</th>
-                <td>{{ entity.staffId }}</td>
-            </tr>
-            <tr>
-                <th>Employmentstatus</th>
-                <td>{{ entity.employmentStatus }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ entity.firstName }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ entity.lastName }}</td>
-            </tr>
-            <tr>
-                <th>Jobtitle</th>
-                <td>{{ entity.jobTitle }}</td>
-            </tr>
-            <tr>
-                <th>Guidesurl</th>
-                <td>{{ entity.guidesUrl }}</td>
-            </tr>
-            <tr>
-                <th>Office</th>
-                <td>{{ entity.office }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ entity.phone }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ entity.email }}</td>
-            </tr>
-            <tr>
-                <th>Jobdescription</th>
-                <td>{{ entity.jobDescription }}</td>
-            </tr>
-            <tr>
-                <th>Showphoto</th>
-                <td>{{ entity.showPhoto }}</td>
-            </tr>
-            <tr>
-                <th>Homestreet</th>
-                <td>{{ entity.homeStreet }}</td>
-            </tr>
-            <tr>
-                <th>Homezip</th>
-                <td>{{ entity.homeZip }}</td>
-            </tr>
-            <tr>
-                <th>Homephone</th>
-                <td>{{ entity.homePhone }}</td>
-            </tr>
-            <tr>
-                <th>Cellphone</th>
-                <td>{{ entity.cellPhone }}</td>
-            </tr>
-            <tr>
-                <th>Selfintro</th>
-                <td>{{ entity.selfIntro }}</td>
-            </tr>
-            <tr>
-                <th>Favoritewebsites</th>
-                <td>{{ entity.favoriteWebsites }}</td>
-            </tr>
-            <tr>
-                <th>Photo</th>
-                <td>{{ entity.photo }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Contentchanged</th>
-                <td>{{ entity.contentChanged|date('Y-m-d H:i:s') }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('staff') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('staff_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
+    <div class="btn-group" role="group">
+      {{ form(delete_form) }}
+    </div>
 </ul>
 {% endblock %}

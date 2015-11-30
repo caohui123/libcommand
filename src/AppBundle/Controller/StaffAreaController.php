@@ -115,7 +115,7 @@ class StaffAreaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:StaffArea')->find($id);
-
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find StaffArea entity.');
         }
@@ -244,7 +244,7 @@ class StaffAreaController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_staffareas_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }

@@ -36,9 +36,9 @@ class Staff
     private $staffId;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="employmentStatus", type="array")
+     * @ORM\Column(name="employmentStatus", type="string")
      */
     private $employmentStatus;
 
@@ -111,6 +111,20 @@ class Staff
      * @ORM\Column(name="homeStreet", type="string", length=70)
      */
     private $homeStreet;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="homeCity", type="string", length=20)
+     */
+    private $homeCity;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="homeState", type="string", length=2)
+     */
+    private $homeState;
 
     /**
      * @var string
@@ -155,7 +169,7 @@ class Staff
     private $photo;
     
     /**
-     * @ORM\ManyToOne(targetEntity="StaffFunctionalArea", cascade={"persist"}, fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="StaffArea", cascade={"persist"}, fetch="LAZY")
      */
     private $staffFunctionalArea;
     
@@ -481,6 +495,54 @@ class Staff
     {
         return $this->homeStreet;
     }
+    
+    /**
+     * Set homeCity
+     *
+     * @param string $homeCity
+     *
+     * @return Staff
+     */
+    public function setHomeCity($homeCity)
+    {
+        $this->homeCity = $homeCity;
+
+        return $this;
+    }
+
+    /**
+     * Get homeCity
+     *
+     * @return string
+     */
+    public function getHomeCity()
+    {
+        return $this->homeCity;
+    }
+    
+    /**
+     * Set homeState
+     *
+     * @param string $homeState
+     *
+     * @return Staff
+     */
+    public function setHomeState($homeState)
+    {
+        $this->homeState = $homeState;
+
+        return $this;
+    }
+
+    /**
+     * Get homeState
+     *
+     * @return string
+     */
+    public function getHomeState()
+    {
+        return $this->homeState;
+    }
 
     /**
      * Set homeZip
@@ -633,7 +695,7 @@ class Staff
      *
      * @return Staff
      */
-    public function setStaffFunctionalArea(\AppBundle\Entity\StaffFunctionalArea $staffFunctionalArea = null)
+    public function setStaffFunctionalArea(\AppBundle\Entity\StaffArea $staffFunctionalArea = null)
     {
         $this->staffFunctionalArea = $staffFunctionalArea;
 

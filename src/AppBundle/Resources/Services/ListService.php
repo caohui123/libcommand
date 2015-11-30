@@ -3,8 +3,15 @@
 namespace AppBundle\Resources\Services;
 
 use Doctrine\ORM\EntityManager as EntityManager;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 class ListService{
+  private $router;
+  
+  public function __construct(Router $router)
+  {
+      $this->router = $router;
+  }
   
   public function collapsibleList($entities){    
     $styled_list = '';
@@ -16,7 +23,8 @@ class ListService{
       $level = $entity->getLvl();
       if($level == 0){
         $styled_list .= 
-            '<a href="#item-'.$parent_count.'" class="list-group-item" data-toggle="collapse"><i class="glyphicon glyphicon-chevron-right"></i>'.$entity->getTitle().'</a>';
+            //'<a href="#item-'.$parent_count.'" class="list-group-item" data-toggle="collapse"><i class="glyphicon glyphicon-chevron-right"></i>'.$entity->getTitle().'</a>';
+            '<a href="#item-'.$parent_count.'" class="list-group-item" data-toggle="collapse">'.$entity->getTitle().'<span class="badge" onclick="location.href=\''.$this->router->generate('admin_staffareas_edit', array('id'=>$entity->getId())).'\'">Edit</span></a>';
         $styled_list .= '<div class="list-group" id="item-'.$parent_count.'">';
         
         
@@ -26,7 +34,8 @@ class ListService{
         $child_count = 0;
         foreach($children as $child){
           $styled_list .= 
-              '<a href="#item-'.$parent_count.'-'.$child_count.'" class="list-group-item" data-toggle="collapse"><i class="glyphicon glyphicon-chevron-right"></i>'.$child->getTitle().'</a>';
+              //'<a href="#item-'.$parent_count.'-'.$child_count.'" class="list-group-item" data-toggle="collapse"><i class="glyphicon glyphicon-chevron-right"></i>'.$child->getTitle().'</a>';
+              '<a href="#item-'.$parent_count.'-'.$child_count.'" class="list-group-item" data-toggle="collapse">'.$child->getTitle().'<span class="badge" onclick="location.href=\''.$this->router->generate('admin_staffareas_edit', array('id'=>$child->getId())).'\'">Edit</span></a>';
           $styled_list .= '<div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'">';
           
           //Grandchildren (level 3)

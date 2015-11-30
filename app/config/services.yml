@@ -9,5 +9,19 @@ services:
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 #  logout_listener:
 #    class: UserBundle\Resources\utilities\LogoutListener
+    user_service:
+      class: AppBundle\Resources\Services\UserService
+      arguments: [ @doctrine.orm.entity_manager ]
+    
     list_service:
       class: AppBundle\Resources\Services\ListService
+      arguments:
+        router: "@router"
+        
+    security.access.avrequest_voter:
+      class: AppBundle\Resources\Security\Authorization\Voter\AvRequestVoter
+      public: false
+      tags: 
+        - {name: security.voter}
+        
+    

@@ -24,7 +24,7 @@ class StaffAreaType extends AbstractType
             ->add('lft', 'hidden')
             ->add('lvl', 'hidden')
             ->add('rgt', 'hidden')
-            ->add('root', 'hidden')
+            //->add('root', 'hidden') #leave out...will throw error "Root cannot be changed manually, change parent instead"
             ->add('parent', 'entity', array(
               'class'=>'AppBundle:StaffArea',
               'query_builder'=>function(EntityRepository $er){
@@ -40,7 +40,9 @@ class StaffAreaType extends AbstractType
                 'class' => 'form-control'
               ),
               'label' => 'Parent Area',
-              'label_attr' => array('class' => 'col-sm-2 control-label')
+              'label_attr' => array('class' => 'col-sm-2 control-label'),
+              'placeholder' => 'Choose Parent (leave blank if parent)',
+              'required' => false
             ))
         ;
     }

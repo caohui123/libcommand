@@ -67,6 +67,11 @@ class StaffArea
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Staff", mappedBy="staffFunctionalArea", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $users;
 
     private $indentedTitle;
     
@@ -119,6 +124,7 @@ class StaffArea
     public function __construct()
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -273,6 +279,30 @@ class StaffArea
     public function getChildren()
     {
         return $this->children;
+    }
+    
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\Staff $user
+     *
+     * @return StaffFunctionalArea
+     */
+    public function setUser(\AppBundle\Entity\Staff $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+    
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
     
     public function __toString() {

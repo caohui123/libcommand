@@ -111,6 +111,11 @@ class StaffController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Staff')->find($id);
+        
+        $ldapUser = $em->getRepository('AppBundle:User')->findOneBy(array('staffMember'=>$id));
+        if($ldapUser == null){
+          $ldapUser = "No associated LDAP User";
+        } 
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Staff entity.');
@@ -120,6 +125,7 @@ class StaffController extends Controller
 
         return array(
             'entity'      => $entity,
+            'ldap_user'   => $ldapUser,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -240,7 +246,7 @@ class StaffController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('staff_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }

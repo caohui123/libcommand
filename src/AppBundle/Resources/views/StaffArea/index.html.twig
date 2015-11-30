@@ -44,7 +44,11 @@
 
     <h1 class="page-header">Staff Areas <span><a class="btn btn-sm btn-primary" href="{{ path('admin_staffareas_new') }}" role="button" aria-label="Add a new staff area"><span class="glyphicon glyphicon-plus"></span> New Area</a></span></h1> 
     
-    {{ styled_list|raw }}
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        {{ styled_list|raw }}
+      </div>
+    </div>
           
 {% endblock %}
 
