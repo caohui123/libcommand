@@ -112,11 +112,14 @@ class UserController extends Controller
         
         $editForm = $this->createEditForm($entity, $staffMember);
         $deleteForm = $this->createDeleteForm($id);
+        
+        $service = $this->get('user_service');
 
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'lu' => $service->oneUser(1)
         );
     }
 

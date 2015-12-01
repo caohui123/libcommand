@@ -155,7 +155,7 @@ class AvRequestController extends Controller
       if (!$entity) {
           throw $this->createNotFoundException('Unable to find AvRequest entity.');
       }
-
+      
       $editForm = $this->createEditForm($entity);
       $deleteForm = $this->createDeleteForm($id);
       

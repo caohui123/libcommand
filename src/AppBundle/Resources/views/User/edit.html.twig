@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-12 col-md-3">
         <div class="btn-group btn-group-vertical" role="group" aria-label="actions">
           <div class="btn-group" role="group">
             {{ form(edit_form) }}
@@ -18,7 +18,21 @@
           </div>-->
         </div>
       </div>
+      <div class="col-xs-12 col-md-9">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{ entity.username}}'s Form Permissions</h3>
+            </div>
+            <div class="panel-body">
+              
+            </div>
+          </div>
+      </div>
     </div>
+              
+              
+                {{dump(lu)}}
+              
 {% endblock %}
 
 {% block documentReady %}

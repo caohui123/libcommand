@@ -12,12 +12,17 @@ class UserType extends AbstractType
   
     private $em;
     private $staffMember; //the ID of the staff member to use as the default selection in the dropdown
+    private $roles; 
     /**
      * Inject entity manager for querying
      */
-    public function __construct($em, $staffMember = null) {
+    public function __construct($em, $staffMember = null, $roles = null) {
       $this->em = $em;
       $this->staffMember = $staffMember;
+      
+      if(is_array($roles)){foreach($roles as $role => $val){
+        $this->roles[] = $role;
+      }};
     }
     
     /**
@@ -27,7 +32,6 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $data = $this->_staffMemberData($this->staffMember);
-        
         $builder
             ->add('isActive', 'checkbox', array('label'=> 'Active ', 'required'=>false, 'attr'=>array('class'=>'user-status-ckbx-noajax')))
             ->add('staffMember', 'entity', array(
@@ -41,6 +45,15 @@ class UserType extends AbstractType
               'placeholder' => 'No associated user',
               'required'=>false
             ))
+            /*->add('roles', 'choice', array(
+                'choices' => $this->roles,
+                'choices_as_values' => true,
+                'data' => array('ROLE_SUPER_ADMIN'),
+                'label' => 'Roles',
+                'expanded' => true,
+                'multiple' => true,
+                'mapped' => true,
+            ))*/
         ;
     }
     
@@ -78,4 +91,14 @@ class UserType extends AbstractType
       }
       return $data;
     }
+    
+    /*public function getExistingRoles(){
+      $roleHierarchy = $this->container->getParameter('security.role_hierarchy.roles');
+      $roles = array_keys($roleHierarchy); 
+
+      foreach ($roles as $role) {
+          $theRoles[$role] = $role;
+      }
+      return $theRoles;
+    }*/
 }

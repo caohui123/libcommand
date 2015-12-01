@@ -11,12 +11,18 @@ services:
 #    class: UserBundle\Resources\utilities\LogoutListener
     user_service:
       class: AppBundle\Resources\Services\UserService
-      arguments: [ @doctrine.orm.entity_manager ]
+      arguments: [ @doctrine.orm.entity_manager, @service_container ]
     
     list_service:
       class: AppBundle\Resources\Services\ListService
       arguments:
         router: "@router"
+        
+    form.type.permisssion:
+      class: AppBundle\Form\PermissionType
+      arguments: ["@service_container"]
+      tags:
+        - { name: form.type, alias: permission_choice }
         
     security.access.avrequest_voter:
       class: AppBundle\Resources\Security\Authorization\Voter\AvRequestVoter
