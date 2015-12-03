@@ -11,6 +11,9 @@
             Back to the list
         </a>
     </li>
-    <li>{{ form(delete_form) }}</li>
+    
+    {% if is_granted('EDIT', entity) %}
+        <li>{{ form(delete_form) }}</li>
+    {% endif %}
 </ul>
 {% endblock %}

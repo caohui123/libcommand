@@ -24,14 +24,16 @@
               <h3 class="panel-title">{{ entity.username}}'s Form Permissions</h3>
             </div>
             <div class="panel-body">
-              
+              {{ lu|raw }}
             </div>
           </div>
       </div>
     </div>
               
               
-                {{dump(lu)}}
+                {#dump(lu)#}
+                
+                
               
 {% endblock %}
 

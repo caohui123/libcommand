@@ -49,6 +49,26 @@ class AvRequestController extends Controller
 
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');
+            
+            
+            // creating the ACL
+            $aclProvider = $this->get('security.acl.provider');
+            $objectIdentity = ObjectIdentity::fromDomainObject($entity);
+            $acl = $aclProvider->createAcl($objectIdentity);
+
+            // retrieving the security identity of the currently logged-in user
+            $tokenStorage = $this->get('security.token_storage');
+            $users = $em->getRepository('AppBundle:User')->findAll();
+            
+            //$tokenStorage->getToken()->getUser();
+            foreach($users as $user){
+              $securityIdentity = UserSecurityIdentity::fromAccount($user);
+              
+              // grant owner access based on owner's overall permissions for this type of entity
+              $acl->insertObjectAce($securityIdentity, 0);
+              $aclProvider->updateAcl($acl);
+            }
+
             return new Response($serialized, 201);
         }
 
@@ -146,20 +166,26 @@ class AvRequestController extends Controller
      */
     public function editAction($id)
     {
-      $avRequest = new AvRequest();
-      
       $em = $this->getDoctrine()->getManager();
-
+      
       $entity = $em->getRepository('AppBundle:AvRequest')->find($id);
-
+      
+      $service = $this->get('user_service');
+      $user = $em->getRepository('AppBundle:User')->find(1);
+      $service->editPermission($user, 'AppBundle:AvRequest', MaskBuilder::MASK_EDIT);
+      
+      // check for edit access
+      $authorizationChecker = $this->get('security.authorization_checker');
+      if (false === $authorizationChecker->isGranted('EDIT', $entity)) {
+          throw new AccessDeniedException();
+      }
+      
       if (!$entity) {
           throw $this->createNotFoundException('Unable to find AvRequest entity.');
       }
       
       $editForm = $this->createEditForm($entity);
       $deleteForm = $this->createDeleteForm($id);
-      
-      $this->denyAccessUnlessGranted('ROLE_ADMIN', $entity, 'Unauthorized!');
       
       return array(
           'entity'      => $entity,

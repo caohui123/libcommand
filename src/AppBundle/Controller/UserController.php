@@ -114,12 +114,13 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         
         $service = $this->get('user_service');
+        $permissions = $service->permissionsTable();
 
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'lu' => $service->oneUser(1)
+            'lu' => $permissions
         );
     }
 
