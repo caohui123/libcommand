@@ -80,7 +80,28 @@ class UserService{
   }
   
   public function permissionsTable(){
-    $permissionsTable = "Hi there";
+    $permissionsTable = '
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Entity</th>
+              <th>None</th>
+              <th>View</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>AvRequest</td>
+              <td><input type="radio"> None</td>
+              <td><input type="radio"> View</td>
+              <td><input type="radio"> Edit</td>
+              <td><input type="radio"> Delete</td>
+            </tr>
+          </tbody>
+        </table>
+      ';
     return $permissionsTable;
   }
 
