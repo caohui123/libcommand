@@ -46,27 +46,10 @@ class UserType extends AbstractType
               'label'=>'Associate this LDAP user with...',
               'attr'=>array('class' => 'form-control'),
               'placeholder' => 'No associated user',
+              'choice_label' => 'getFirstLastName', //getFirstLastName() method in Staff class
               'required'=>false
             ))
-            /*->add('roles', 'choice', array(
-                'choices' => $this->roles,
-                'choices_as_values' => true,
-                'data' => array('ROLE_SUPER_ADMIN'),
-                'label' => 'Roles',
-                'expanded' => true,
-                'multiple' => true,
-                'mapped' => true,
-            ))*/
-           
         ;
-         /*    
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){
-             $form = $event->getForm();
-             $formOptions = array(
-                'class' => 'AppBundle\Entity\User',
-                'property' => 'roles',
-             );
-        });*/
     }
     
     /**

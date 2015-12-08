@@ -1,78 +1,120 @@
 <?php
 
 namespace AppBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * StaffArea
- *
+ * LiaisonSubject
+ * 
  * @Gedmo\Tree(type="nested")
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+ * @ORM\Entity
  */
-class StaffArea
+class LiaisonSubject
 {
     /**
      * @var integer
-     * 
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * 
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=120)
+     * @ORM\Column(name="name", type="string", length=100)
      */
-    private $title;
+    private $name;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=15)
+     */
+    private $phone;
+
+
+    /**
+     * @var integer
+     *
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
      */
     private $lft;
 
     /**
+     * @var integer
+     *
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer")
      */
     private $lvl;
 
     /**
+     * @var integer
+     *
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer")
      */
     private $rgt;
 
     /**
+     * @var integer
+     * 
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true)
      */
     private $root;
-
+    
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="StaffArea", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="LiaisonSubject", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="StaffArea", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="LiaisonSubject", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;
     
     /**
-     * @ORM\OneToMany(targetEntity="Staff", mappedBy="staffFunctionalArea", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\ManyToOne(targetEntity="Staff")
+     * @JoinColumn(name="primary_liaison", referencedColumnName="id", nullable=true)
      */
-    private $users;
+    private $primaryLiaison;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Staff")
+     * @JoinColumn(name="secondary_liaison", referencedColumnName="id", nullable=true)
+     */
+    private $secondaryLiaison;
 
-    private $indentedTitle;
+
+    private $indentedName; //use get method to display nested tree format
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get name with indentations for nested lists
+     * 
+     * @return string
+     */
+    public function getIndentedTitle(){
+      return str_repeat("-", $this->lvl)." ".$this->name;
+    }
     
     /**
      * Get id
@@ -85,45 +127,51 @@ class StaffArea
     }
 
     /**
-     * Set title
+     * Set name
      *
-     * @param string $title
+     * @param string $name
      *
-     * @return StaffArea
+     * @return LiaisonSubject
      */
-    public function setTitle($title)
+    public function setName($name)
     {
-        $this->title = $title;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get title
+     * Get name
      *
      * @return string
      */
-    public function getTitle()
+    public function getName()
     {
-        return $this->title;
+        return $this->name;
     }
     
     /**
-     * Get title with indentations for nested lists
-     * 
+     * Set phone
+     *
+     * @param string $phone
+     *
+     * @return LiaisonSubject
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
      * @return string
      */
-    public function getIndentedTitle(){
-      return str_repeat("-", $this->lvl)." ".$this->title;
-    }
-    
-    /**
-     * Constructor
-     */
-    public function __construct()
+    public function getPhone()
     {
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->phone;
     }
 
     /**
@@ -131,7 +179,7 @@ class StaffArea
      *
      * @param integer $lft
      *
-     * @return StaffArea
+     * @return LiaisonSubject
      */
     public function setLft($lft)
     {
@@ -155,7 +203,7 @@ class StaffArea
      *
      * @param integer $lvl
      *
-     * @return StaffArea
+     * @return LiaisonSubject
      */
     public function setLvl($lvl)
     {
@@ -179,7 +227,7 @@ class StaffArea
      *
      * @param integer $rgt
      *
-     * @return StaffArea
+     * @return LiaisonSubject
      */
     public function setRgt($rgt)
     {
@@ -203,7 +251,7 @@ class StaffArea
      *
      * @param integer $root
      *
-     * @return StaffArea
+     * @return LiaisonSubject
      */
     public function setRoot($root)
     {
@@ -221,15 +269,15 @@ class StaffArea
     {
         return $this->root;
     }
-
+    
     /**
      * Set parent
      *
-     * @param \AppBundle\Entity\Category $parent
+     * @param \AppBundle\Entity\LiaisonSubject $parent
      *
-     * @return StaffArea
+     * @return LiaisonSubject
      */
-    public function setParent(\AppBundle\Entity\StaffArea $parent = null)
+    public function setParent(\AppBundle\Entity\LiaisonSubject $parent = null)
     {
         $this->parent = $parent;
 
@@ -239,7 +287,7 @@ class StaffArea
     /**
      * Get parent
      *
-     * @return \AppBundle\Entity\Category
+     * @return \AppBundle\Entity\LiaisonSubject
      */
     public function getParent()
     {
@@ -249,11 +297,11 @@ class StaffArea
     /**
      * Add child
      *
-     * @param \AppBundle\Entity\Category $child
+     * @param \AppBundle\Entity\LiaisonSubject $child
      *
      * @return StaffArea
      */
-    public function addChild(\AppBundle\Entity\StaffArea $child)
+    public function addChild(\AppBundle\Entity\LiaisonSubject $child)
     {
         $this->children[] = $child;
 
@@ -263,9 +311,9 @@ class StaffArea
     /**
      * Remove child
      *
-     * @param \AppBundle\Entity\Category $child
+     * @param \AppBundle\Entity\LiaisonSubject $child
      */
-    public function removeChild(\AppBundle\Entity\StaffArea $child)
+    public function removeChild(\AppBundle\Entity\LiaisonSubject $child)
     {
         $this->children->removeElement($child);
     }
@@ -281,30 +329,55 @@ class StaffArea
     }
     
     /**
-     * Set user
+     * Set primary liaison
      *
-     * @param \AppBundle\Entity\Staff $user
+     * @param \AppBundle\Entity\Staff $primaryLiaison
      *
-     * @return StaffFunctionalArea
+     * @return Staff
      */
-    public function setUser(\AppBundle\Entity\Staff $user)
+    public function setPrimaryLiaison(\AppBundle\Entity\Staff $primaryLiaison = null)
     {
-        $this->users[] = $user;
+        $this->primaryLiaison = $primaryLiaison;
 
         return $this;
     }
     
     /**
-     * Get users
+     * Get primary liaison
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Staff
      */
-    public function getUsers()
+    public function getPrimaryLiaison()
     {
-        return $this->users;
+        return $this->primaryLiaison;
+    }
+    
+    /**
+     * Set secondary liaison
+     *
+     * @param \AppBundle\Entity\Staff $primaryLiaison
+     *
+     * @return Staff
+     */
+    public function setSecondaryLiaison(\AppBundle\Entity\Staff $secondaryLiaison = null)
+    {
+        $this->secondaryLiaison = $secondaryLiaison;
+
+        return $this;
+    }
+    
+    /**
+     * Get secondary liaison
+     *
+     * @return Staff
+     */
+    public function getSecondaryLiaison()
+    {
+        return $this->secondaryLiaison;
     }
     
     public function __toString() {
       return $this->getTitle();
     }
 }
+

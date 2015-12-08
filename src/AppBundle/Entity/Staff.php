@@ -727,7 +727,7 @@ class Staff
         return $this->contentChangedBy;
     }
     
-    public function __toString() {
+    public function getFirstLastName() {
       return $this->getLastName() . ', ' . $this->getFirstName();
     }
 }

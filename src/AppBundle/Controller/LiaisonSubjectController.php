@@ -7,48 +7,51 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use AppBundle\Entity\StaffArea;
-use AppBundle\Form\StaffAreaType;
-use AppBundle\Resources\Services\ListService;
+use AppBundle\Entity\LiaisonSubject;
+use AppBundle\Form\LiaisonSubjectType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
- * StaffArea controller.
+ * LiaisonSubject controller.
  *
- * @Route("/admin/staffareas")
+ * @Route("/liaisonsubject")
  */
-class StaffAreaController extends Controller
+class LiaisonSubjectController extends Controller
 {
 
     /**
-     * Lists all StaffArea entities.
+     * Lists all LiaisonSubject entities.
      *
-     * @Route("/", name="admin_staffareas")
+     * @Route("/", name="liaisonsubject")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_LIAISON_VIEW, ROLE_ADMIN")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        
-        $entities = $em->getRepository('AppBundle:StaffArea')->findAll();
+
+        $entities = $em->getRepository('AppBundle:LiaisonSubject')->findAll();
         
         $list_service = $this->get('list_service');
-        $styled_list = $list_service->staffAreasList($entities);
+        $styled_list = $list_service->liaisonSubjectsList($entities);
 
         return array(
+            //'entities' => $entities,
             'styled_list' => $styled_list
         );
     }
     /**
-     * Creates a new StaffArea entity.
+     * Creates a new LiaisonSubject entity.
      *
-     * @Route("/", name="admin_staffareas_create")
+     * @Route("/", name="liaisonsubject_create")
      * @Method("POST")
-     * @Template("AppBundle:StaffArea:new.html.twig")
+     * @Template("AppBundle:LiaisonSubject:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity = new StaffArea();
+        $entity = new LiaisonSubject();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -57,7 +60,7 @@ class StaffAreaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_staffareas_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('liaisonsubject_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -67,16 +70,16 @@ class StaffAreaController extends Controller
     }
 
     /**
-     * Creates a form to create a StaffArea entity.
+     * Creates a form to create a LiaisonSubject entity.
      *
-     * @param StaffArea $entity The entity
+     * @param LiaisonSubject $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(StaffArea $entity)
+    private function createCreateForm(LiaisonSubject $entity)
     {
-        $form = $this->createForm(new StaffAreaType(), $entity, array(
-            'action' => $this->generateUrl('admin_staffareas_create'),
+        $form = $this->createForm(new LiaisonSubjectType(), $entity, array(
+            'action' => $this->generateUrl('liaisonsubject_create'),
             'method' => 'POST',
         ));
 
@@ -86,15 +89,15 @@ class StaffAreaController extends Controller
     }
 
     /**
-     * Displays a form to create a new StaffArea entity.
+     * Displays a form to create a new LiaisonSubject entity.
      *
-     * @Route("/new", name="admin_staffareas_new")
+     * @Route("/new", name="liaisonsubject_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new StaffArea();
+        $entity = new LiaisonSubject();
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -104,9 +107,9 @@ class StaffAreaController extends Controller
     }
 
     /**
-     * Finds and displays a StaffArea entity.
+     * Finds and displays a LiaisonSubject entity.
      *
-     * @Route("/{id}", name="admin_staffareas_show")
+     * @Route("/{id}", name="liaisonsubject_show")
      * @Method("GET")
      * @Template()
      */
@@ -114,10 +117,10 @@ class StaffAreaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:StaffArea')->find($id);
-        
+        $entity = $em->getRepository('AppBundle:LiaisonSubject')->find($id);
+
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find StaffArea entity.');
+            throw $this->createNotFoundException('Unable to find LiaisonSubject entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -129,9 +132,9 @@ class StaffAreaController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing StaffArea entity.
+     * Displays a form to edit an existing LiaisonSubject entity.
      *
-     * @Route("/{id}/edit", name="admin_staffareas_edit")
+     * @Route("/{id}/edit", name="liaisonsubject_edit")
      * @Method("GET")
      * @Template()
      */
@@ -139,10 +142,10 @@ class StaffAreaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:StaffArea')->find($id);
+        $entity = $em->getRepository('AppBundle:LiaisonSubject')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find StaffArea entity.');
+            throw $this->createNotFoundException('Unable to find LiaisonSubject entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -156,16 +159,16 @@ class StaffAreaController extends Controller
     }
 
     /**
-    * Creates a form to edit a StaffArea entity.
+    * Creates a form to edit a LiaisonSubject entity.
     *
-    * @param StaffArea $entity The entity
+    * @param LiaisonSubject $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(StaffArea $entity)
+    private function createEditForm(LiaisonSubject $entity)
     {
-        $form = $this->createForm(new StaffAreaType(), $entity, array(
-            'action' => $this->generateUrl('admin_staffareas_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new LiaisonSubjectType(), $entity, array(
+            'action' => $this->generateUrl('liaisonsubject_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -174,20 +177,20 @@ class StaffAreaController extends Controller
         return $form;
     }
     /**
-     * Edits an existing StaffArea entity.
+     * Edits an existing LiaisonSubject entity.
      *
-     * @Route("/{id}", name="admin_staffareas_update")
+     * @Route("/{id}", name="liaisonsubject_update")
      * @Method("PUT")
-     * @Template("AppBundle:StaffArea:edit.html.twig")
+     * @Template("AppBundle:LiaisonSubject:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:StaffArea')->find($id);
+        $entity = $em->getRepository('AppBundle:LiaisonSubject')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find StaffArea entity.');
+            throw $this->createNotFoundException('Unable to find LiaisonSubject entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -197,7 +200,7 @@ class StaffAreaController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_staffareas_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('liaisonsubject_edit', array('id' => $id)));
         }
 
         return array(
@@ -207,9 +210,9 @@ class StaffAreaController extends Controller
         );
     }
     /**
-     * Deletes a StaffArea entity.
+     * Deletes a LiaisonSubject entity.
      *
-     * @Route("/{id}", name="admin_staffareas_delete")
+     * @Route("/{id}", name="liaisonsubject_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -219,21 +222,21 @@ class StaffAreaController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:StaffArea')->find($id);
+            $entity = $em->getRepository('AppBundle:LiaisonSubject')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find StaffArea entity.');
+                throw $this->createNotFoundException('Unable to find LiaisonSubject entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('admin_staffareas'));
+        return $this->redirect($this->generateUrl('liaisonsubject'));
     }
 
     /**
-     * Creates a form to delete a StaffArea entity by id.
+     * Creates a form to delete a LiaisonSubject entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -242,9 +245,9 @@ class StaffAreaController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('admin_staffareas_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('liaisonsubject_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
     }
