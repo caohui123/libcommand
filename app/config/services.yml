@@ -11,7 +11,7 @@ services:
 #    class: UserBundle\Resources\utilities\LogoutListener
     user_service:
       class: AppBundle\Resources\Services\UserService
-      arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @security.acl.provider ]
+      arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @security.acl.provider, @fos_user.util.user_manipulator ]
     
     list_service:
       class: AppBundle\Resources\Services\ListService
@@ -20,14 +20,21 @@ services:
         
     form.type.permisssion:
       class: AppBundle\Form\PermissionType
-      arguments: ["@service_container"]
+      arguments: [@service_container]
       tags:
         - { name: form.type, alias: permission_choice }
         
     security.access.avrequest_voter:
       class: AppBundle\Resources\Security\Authorization\Voter\AvRequestVoter
       public: false
+      arguments: [@security.role_hierarchy]
       tags: 
         - {name: security.voter}
+        
+    app.form.type.user:
+      class: AppBundle\Form\UserType
+      arguments: [ @doctrine, @service_container ]
+      tags:
+        - { name: form.type }
         
     

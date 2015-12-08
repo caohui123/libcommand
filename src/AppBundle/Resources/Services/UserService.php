@@ -9,6 +9,8 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface as AclProvider; 
+use Symfony\Component\Security\Core\Role\RoleHierarchy;
+use FOS\UserBundle\Util\UserManipulator;
 
 //USE USERREPOSITORY.PHP INSTEAD!!!
 class UserService{
@@ -17,12 +19,60 @@ class UserService{
   protected $container;
   protected $authorizationChecker;
   protected $aclProvider;
+  protected $manipulator;
   
-  public function __construct(EntityManager $em, ContainerInterface $container, AuthorizationCheckerInterface $authorizationChecker, AclProvider $aclProvider){
+  public function __construct(EntityManager $em, ContainerInterface $container, AuthorizationCheckerInterface $authorizationChecker, AclProvider $aclProvider, UserManipulator $manipulator){
     $this->em = $em; //injected in services.yml [ @doctrine.orm.entity_manager ]
     $this->container = $container;
     $this->authorizationChecker = $authorizationChecker;
     $this->aclProvider = $aclProvider;
+    $this->manipulator = $manipulator;
+  }
+  
+  /**
+   * Updates a user's role on a specific entity.
+   * Usually called from UserController::updatePermissionsAction()
+   * 
+   * @param User $user The user being updated
+   * @param String $newPermission The name of the new role
+   * @param String $previousPermission The name of the previous role
+   * 
+   * @return null
+   */
+  public function updatePermissions(User $user, $newPermission, $previousPermission){
+      //utilize the FOS\UserBundle\Util\UserManipulator;
+      $fos = $this->manipulator;
+
+      //remove the old role
+      $fos->removeRole($user, $previousPermission);
+      if($newPermission != 'none' && $newPermission != '' && $newPermission != null){
+        //add the new role
+        $fos->addRole($user, $newPermission);
+      }
+  }
+  
+  /**
+   * Concatenates a role prefix (e.g. ROLE_AV) with the appropriate suffix (e.g. _DELETE)
+   * 
+   * @param User $user The user entity
+   * @param String $prefix The role prefix
+   * 
+   * @return String $permission The concatenated permission name.
+   */
+  public function generateViewEditDelete(User $user, $prefix){
+    $userPermissions = $user->getRoles();
+    
+    if(in_array($prefix.'_DELETE', $userPermissions)){
+      $permission = $prefix.'_DELETE';
+    } else if(in_array($prefix.'_EDIT', $userPermissions)) {
+      $permission = $prefix.'_EDIT';
+    } else if(in_array($prefix.'_VIEW', $userPermissions)){
+      $permission = $prefix.'_VIEW';
+    } else {
+      $permission = 'none';
+    }
+    
+    return $permission;
   }
   
   /**
@@ -77,32 +127,6 @@ class UserService{
           $acl->updateObjectAce($i, $permission); 
       }
     }
-  }
-  
-  public function permissionsTable(){
-    $permissionsTable = '
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Entity</th>
-              <th>None</th>
-              <th>View</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>AvRequest</td>
-              <td><input type="radio"> None</td>
-              <td><input type="radio"> View</td>
-              <td><input type="radio"> Edit</td>
-              <td><input type="radio"> Delete</td>
-            </tr>
-          </tbody>
-        </table>
-      ';
-    return $permissionsTable;
   }
 
 }

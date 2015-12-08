@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Staff;
 use AppBundle\Form\StaffType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * Staff controller.
@@ -24,6 +25,8 @@ class StaffController extends Controller
      * @Route("/", name="staff")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_STAFF_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class StaffController extends Controller
      * @Route("/", name="staff_create")
      * @Method("POST")
      * @Template("AppBundle:Staff:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_STAFF_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class StaffController extends Controller
      * @Route("/new", name="staff_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_STAFF_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class StaffController extends Controller
      * @Route("/{id}", name="staff_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_STAFF_VIEW")
      */
     public function showAction($id)
     {
@@ -136,6 +145,8 @@ class StaffController extends Controller
      * @Route("/{id}/edit", name="staff_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_STAFF_EDIT")
      */
     public function editAction($id)
     {
@@ -181,6 +192,8 @@ class StaffController extends Controller
      * @Route("/{id}", name="staff_update")
      * @Method("PUT")
      * @Template("AppBundle:Staff:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_STAFF_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -213,6 +226,8 @@ class StaffController extends Controller
      *
      * @Route("/{id}", name="staff_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_STAFF_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

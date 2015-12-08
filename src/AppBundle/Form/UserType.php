@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 class UserType extends AbstractType
 {
@@ -16,7 +19,7 @@ class UserType extends AbstractType
     /**
      * Inject entity manager for querying
      */
-    public function __construct($em, $staffMember = null, $roles = null) {
+    public function __construct(Registry $em, $staffMember = null, $roles = null) {
       $this->em = $em;
       $this->staffMember = $staffMember;
       
@@ -54,7 +57,16 @@ class UserType extends AbstractType
                 'multiple' => true,
                 'mapped' => true,
             ))*/
+           
         ;
+         /*    
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){
+             $form = $event->getForm();
+             $formOptions = array(
+                'class' => 'AppBundle\Entity\User',
+                'property' => 'roles',
+             );
+        });*/
     }
     
     /**

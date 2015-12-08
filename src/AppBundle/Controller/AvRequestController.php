@@ -50,7 +50,7 @@ class AvRequestController extends Controller
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');
             
-            
+            /*
             // creating the ACL
             $aclProvider = $this->get('security.acl.provider');
             $objectIdentity = ObjectIdentity::fromDomainObject($entity);
@@ -68,7 +68,8 @@ class AvRequestController extends Controller
               $acl->insertObjectAce($securityIdentity, 0);
               $aclProvider->updateAcl($acl);
             }
-
+            */
+            
             return new Response($serialized, 201);
         }
 
@@ -174,11 +175,12 @@ class AvRequestController extends Controller
       $user = $em->getRepository('AppBundle:User')->find(1);
       $service->editPermission($user, 'AppBundle:AvRequest', MaskBuilder::MASK_EDIT);
       
+      /*
       // check for edit access
       $authorizationChecker = $this->get('security.authorization_checker');
       if (false === $authorizationChecker->isGranted('EDIT', $entity)) {
           throw new AccessDeniedException();
-      }
+      }*/
       
       if (!$entity) {
           throw $this->createNotFoundException('Unable to find AvRequest entity.');
@@ -186,6 +188,9 @@ class AvRequestController extends Controller
       
       $editForm = $this->createEditForm($entity);
       $deleteForm = $this->createDeleteForm($id);
+      
+      // keep in mind that this will call all registered security voters
+      $this->denyAccessUnlessGranted('ROLE_AV_EDIT', $entity, 'Unauthorized access!');
       
       return array(
           'entity'      => $entity,

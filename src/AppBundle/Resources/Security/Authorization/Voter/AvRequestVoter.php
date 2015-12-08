@@ -5,22 +5,32 @@ namespace AppBundle\Resources\Security\Authorization\Voter;
 use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
 use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Role\RoleHierarchy;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class AvRequestVoter extends AbstractVoter{
-    const ADMIN = 'admin';
-    const SUPER_ADMIN = 'super_admin';
+    const VIEW = 'ROLE_AV_VIEW';
+    const EDIT = 'ROLE_AV_EDIT';
+    const DELETE = 'ROLE_AV_DELETE';
+    
+    protected $securityContext;
+    
+    public function __construct($securityContext) {
+      $this->securityContext = $securityContext;
+    }
 
     protected function getSupportedAttributes()
     {
-        return array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN');
+        return array(self::VIEW, self::EDIT, self::DELETE);
     }
 
     protected function getSupportedClasses()
     {
-        return array('AppBundle\Entity\Post');
+        return array('AppBundle\Entity\AvRequest');
     }
 
-    protected function isGranted($attribute, $post, $user = null)
+    protected function isGranted($attribute, $avrequest, $user = null)
     {
         // make sure there is a user object (i.e. that the user is logged in)
         if (!$user instanceof UserInterface) {
@@ -33,25 +43,7 @@ class AvRequestVoter extends AbstractVoter{
             throw new \LogicException('The user is somehow not our User class!');
         }
 
-        switch($attribute) {
-            case 'ROLE_ADMIN':
-                // the data object could have for example a method isPrivate()
-                // which checks the Boolean attribute $private
-                if (!$post->isPrivate()) {
-                    return true;
-                }
-
-                break;
-            case 'ROLE_SUPER_ADMIN':
-                // this assumes that the data object has a getOwner() method
-                // to get the entity of the user who owns this data object
-                if ($user->getId() === $post->getOwner()->getId()) {
-                    return true;
-                }
-
-                break;
-        }
-
         return false;
     }
 }
+
