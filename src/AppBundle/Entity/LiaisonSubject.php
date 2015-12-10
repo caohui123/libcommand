@@ -5,13 +5,16 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * LiaisonSubject
  * 
  * @Gedmo\Tree(type="nested")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table()
  * @ORM\Entity
+ * @UniqueEntity(fields={"name"}, message="Department or program already exists.")
  */
 class LiaisonSubject
 {
@@ -95,6 +98,30 @@ class LiaisonSubject
      * @JoinColumn(name="secondary_liaison", referencedColumnName="id", nullable=true)
      */
     private $secondaryLiaison;
+    
+    /**
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updated;
+    
+    /**
+     * @var string $contentChangedBy
+     *
+     * @ORM\Column(name="content_changed_by", type="string", nullable=true)
+     * @Gedmo\Blameable(on="change", field={"name", "phone", "parent", "primaryLiaison", "secondaryLiaison"})
+     */
+    private $contentChangedBy;
 
 
     private $indentedName; //use get method to display nested tree format
@@ -374,6 +401,21 @@ class LiaisonSubject
     public function getSecondaryLiaison()
     {
         return $this->secondaryLiaison;
+    }
+    
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+    
+    public function getContentChangedBy()
+    {
+        return $this->contentChangedBy;
     }
     
     public function __toString() {

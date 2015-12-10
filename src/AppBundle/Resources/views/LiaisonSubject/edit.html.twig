@@ -1,16 +1,15 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>LiaisonSubject edit</h1>
-
-    {{ form_widget(edit_form) }}
+    <h1 class="page-header">Edit Liaison Subject</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('liaisonsubject') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Liaison Subject List</a></p>
+      </div>
+    </div>
+    {{ form(edit_form) }}
 
         <ul class="record_actions">
-    <li>
-        <a href="{{ path('liaisonsubject') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+            <li>{{ form(delete_form) }}</li>
+        </ul>
 {% endblock %}
