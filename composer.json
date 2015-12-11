@@ -22,9 +22,9 @@
         "fr3d/ldap-bundle": "2.0.*@dev",
         "gedmo/doctrine-extensions": "dev-master",
         "friendsofsymfony/rest-bundle": "^1.7",
-        "jms/serializer-bundle": "^1.1",
         "nelmio/cors-bundle": "^1.4",
-        "jms/security-extra-bundle": "dev-master"
+        "jms/security-extra-bundle": "dev-master",
+        "jms/serializer-bundle": "1.1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

@@ -11,13 +11,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\AvRequest;
 use AppBundle\Form\AvRequestType;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-class AvRequestController extends Controller
+class AvRequestController extends FOSRestController
 {
     /**
      * @Rest\View()
@@ -26,7 +27,6 @@ class AvRequestController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('AppBundle:AvRequest')->findAll();
-        
         $serializer = $this->container->get('serializer');
         $serialized = $serializer->serialize($entities, 'json');
         $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
@@ -36,6 +36,9 @@ class AvRequestController extends Controller
     public function getAvrequestAction($id){
         
     }
+    /**
+     * @Rest\View()
+     */
     public function postAvrequestAction(Request $request){
         $entity = new AvRequest();
 
@@ -75,7 +78,7 @@ class AvRequestController extends Controller
 
         return new JsonResponse(array(
             'errors' => $this->getFormErrors($form)
-        ));
+        ), 400);
     }
     protected function getFormErrors(\Symfony\Component\Form\Form $form)
     {

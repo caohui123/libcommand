@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * AvRequest
@@ -26,6 +27,7 @@ class AvRequest
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $title;
 
@@ -33,6 +35,8 @@ class AvRequest
      * @var \DateTime
      *
      * @ORM\Column(name="requestDate", type="datetime")
+     * @Assert\NotBlank()
+     * @Assert\DateTime()
      */
     private $requestDate;
 
@@ -40,6 +44,8 @@ class AvRequest
      * @var \DateTime
      *
      * @ORM\Column(name="deliverDate", type="datetime")
+     * @Assert\NotBlank()
+     * @Assert\DateTime()
      */
     private $deliverDate;
 
@@ -47,6 +53,8 @@ class AvRequest
      * @var \DateTime
      *
      * @ORM\Column(name="returnDate", type="datetime")
+     * @Assert\NotBlank()
+     * @Assert\DateTime()
      */
     private $returnDate;
 
