@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "62fa53826968028547d4564505478606",
-    "content-hash": "6589dce8d7050c0e9cb41e446f6820f7",
+    "hash": "63009252d94621726a5eff8c4665fa12",
+    "content-hash": "80e389efd739c7ca791c05fb78534c36",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1028,12 +1028,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "46e630db2b699f86cc4c98119ba18747d1f26aad"
+                "reference": "dced48e5e4e3ff37d5d4d71a7b0ae7b2a61da92b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/46e630db2b699f86cc4c98119ba18747d1f26aad",
-                "reference": "46e630db2b699f86cc4c98119ba18747d1f26aad",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/dced48e5e4e3ff37d5d4d71a7b0ae7b2a61da92b",
+                "reference": "dced48e5e4e3ff37d5d4d71a7b0ae7b2a61da92b",
                 "shasum": ""
             },
             "require": {
@@ -1099,7 +1099,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2015-12-11 14:01:40"
+            "time": "2015-12-14 19:56:04"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2167,6 +2167,60 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2015-11-07 08:07:40"
+        },
+        {
+            "name": "simshaun/recurr",
+            "version": "v0.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simshaun/recurr.git",
+                "reference": "d8fc4aa726f625b64d211a2501fa7eaad3a53f02"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simshaun/recurr/zipball/d8fc4aa726f625b64d211a2501fa7eaad3a53f02",
+                "reference": "d8fc4aa726f625b64d211a2501fa7eaad3a53f02",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/collections": "~1.3",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Recurr": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shaun Simmons",
+                    "email": "shaun@envysphere.com",
+                    "homepage": "http://envysphere.com"
+                }
+            ],
+            "description": "PHP library for working with recurrence rules",
+            "homepage": "https://github.com/simshaun/recurr",
+            "keywords": [
+                "dates",
+                "events",
+                "recurrence",
+                "recurring",
+                "rrule"
+            ],
+            "time": "2015-12-10 09:55:26"
         },
         {
             "name": "swiftmailer/swiftmailer",
