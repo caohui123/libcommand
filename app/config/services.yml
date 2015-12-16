@@ -36,5 +36,9 @@ services:
       arguments: [ @doctrine, @service_container ]
       tags:
         - { name: form.type }
+   
+    hours_service:
+        class: AppBundle\Resources\Services\HoursService
+        arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
         
     

@@ -1,0 +1,17 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 class="page-header">New Area</h1>
+    <p>You will be able to set hours for this area <mark>after</mark> creating it.</p>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+            <li>
+                <a href="{{ path('hoursarea') }}">
+                    Back to the list
+                </a>
+            </li>
+        </ul>
+          
+{% endblock %}

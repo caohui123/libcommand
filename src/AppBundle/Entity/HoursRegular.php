@@ -68,8 +68,8 @@ class HoursRegular
     /**
      * @var HoursArea
      * 
-     * @ORM\ManyToOne(targetEntity="HoursArea", cascade={"persist"}, fetch="LAZY")
-     * @JoinColumn(name="area", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="HoursArea", cascade={"remove"}, fetch="LAZY")
+     * @JoinColumn(name="area", referencedColumnName="id", onDelete="CASCADE")
      */
     private $area;
 
