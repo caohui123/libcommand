@@ -55,7 +55,7 @@ class AdminController extends Controller
       }
       $em->getManager()->flush($user);
       
-      return new JsonResponse('User status updated');
+      return new JsonResponse('User status updated', 204);
     }
     
     /**

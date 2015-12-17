@@ -17,12 +17,55 @@
     <div class="row">
         <div class="col-xs-12">
             <h2>Regular Hours</h2>
+            {{ form(semester_form) }}
+            Sunday: {{ form(day_0) }}
+            Monday: {{ form(day_1) }}
+            Tuesday: {{ form(day_2) }}
+            Wednesday: {{ form(day_3) }}
+            Thursday: {{ form(day_4) }}
+            Friday: {{ form(day_5) }}
+            Saturday: {{ form(day_6) }}
         </div>
     </div>
                 
     <div class="row">
         <div class="col-xs-12">
             <h2>Special Hours</h2>
+            <div class="row">
+                <div class="row-xs-"
+            </div>
         </div>
     </div>
 {% endblock %}
+{% block documentReady %}
+    /* Handle submission of regular hours form */
+    $('.regularHours_form').submit(function(event){
+        event.preventDefault();
+        
+        ajaxObject = {
+            url: $(this).attr("action"),
+            type: 'POST',
+            dataType: 'json',
+            contentType: "application/json; charset=UTF-8",
+            xhrFields: {
+                    withCredentials: true
+            },
+            data: JSON.stringify({"openTime":$("#appbundle_hoursregular_openTime", this).val(), "closeTime":$("#appbundle_hoursregular_closeTime", this).val(), "is24Hour":$("#appbundle_hoursrgular_is24Hour", this).is(':checked'), "isClosed":$("#appbundle_hoursrgular_isClosed", this).is(':checked')})
+        };
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+            });
+    }); 
+    
+    /* Handle toggling of Radio buttons Normal, 24 Hours, Closed */
+    {{ parent() }}
+{% endblock %}
+

@@ -24,9 +24,9 @@ class HoursSemester
     private $id;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="season", type="string", length=6, nullable=false)
+     * @ORM\Column(name="season", type="integer", length=1, nullable=false)
      */
     private $season;
 
@@ -50,6 +50,16 @@ class HoursSemester
      * @ORM\Column(name="endDate", type="date", nullable=false)
      */
     private $endDate;
+    
+    /**
+     * Provides a unique value for each semester/year pair
+     * Multiply the year by 10 and place the semeseter number in the 'ones' place
+     * Ex. Fall 2015 = 20153, Winter 2016 = 20160, Spring 2016 = 20161, Summer 2016 = 20162
+     * @var integer
+     *
+     * @ORM\Column(name="chronOrder", type="integer", nullable=false)
+     */
+    private $chronOrder;
 
 
     /**
@@ -156,6 +166,46 @@ class HoursSemester
     public function getEndDate()
     {
         return $this->endDate;
+    }
+    
+    /**
+     * Set chronOrder
+     * 
+     * @var int $chronOrder
+     *
+     * @return HoursSemester
+     */
+    public function setChronOrder($chronOrder)
+    {
+        $this->chronOrder = $chronOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get endDate
+     *
+     * @return integer
+     */
+    public function getChronOrder()
+    {
+        return $this->chronOrder;
+    }
+    
+    public function getSeasonYear(){
+        
+        switch($this->season){
+            case 0:
+                return 'Winter ' . $this->year;
+            case 1;
+                return 'Spring ' . $this->year;
+            case 2; 
+                return 'Summer ' . $this->year;
+            case 3;
+                return 'Fall ' . $this->year;
+        }
+        
+        return null;
     }
 }
 

@@ -30,7 +30,7 @@ class HoursSemesterController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:HoursSemester')->findAll();
+        $entities = $em->getRepository('AppBundle:HoursSemester')->findBy(array(), array('chronOrder'=>'DESC'));
 
         return array(
             'entities' => $entities,

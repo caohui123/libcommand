@@ -13,7 +13,7 @@ class HoursService{
   protected $em;
   protected $container;
   protected $authorizationChecker;
-  private $router;
+  protected $router;
   
   public function __construct(EntityManager $em, ContainerInterface $container, AuthorizationCheckerInterface $authorizationChecker, Router $router)
   {
@@ -23,4 +23,20 @@ class HoursService{
         $this->router = $router;
   }
   
+  public function createSemesterDropdown(){
+      //semesters dropdown
+        $semesterForm = $this->container->get('form.factory')->createBuilder()
+            ->add('semesters', 'entity', array(
+                'class' => 'AppBundle:HoursSemester',
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('s')->orderBy('s.chronOrder', 'DESC');
+                }, //order by year
+                'label' => 'Semester',
+                'property' => 'getSeasonYear' //string method to display choice
+            ))
+            ->getForm()
+        ;
+        
+        return $semesterForm->createView();
+  }
 }

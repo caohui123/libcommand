@@ -28,9 +28,6 @@ class AvRequestType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd HH:mm:ss',
             ))
-            ->add('created', 'datetime')
-            ->add('updated', 'datetime')
-            ->add('contentChangedBy', 'text')
         ;
     }
     

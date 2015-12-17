@@ -15,10 +15,18 @@ class HoursSemesterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('season')
+            ->add('season', 'choice', array(
+                'choices'=> array(
+                    0 => 'Winter',
+                    1 => 'Spring',
+                    2 => 'Summer',
+                    3 => 'Fall'
+                )
+            ))
             ->add('year')
             ->add('startDate')
             ->add('endDate')
+            ->add('chronOrder', 'hidden')
         ;
     }
     

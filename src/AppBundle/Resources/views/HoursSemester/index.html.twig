@@ -18,7 +18,17 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('hourssemester_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.season }}</td>
+                <td>
+                    {% if entity.season == 0 %}
+                        Winter
+                    {% elseif entity.season == 1 %}
+                        Spring
+                    {% elseif entity.season == 2 %}
+                        Summer
+                    {% elseif entity.season == 3 %}
+                        Fall
+                    {% endif %}    
+                </td>
                 <td>{{ entity.year }}</td>
                 <td>{% if entity.startDate %}{{ entity.startDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if entity.endDate %}{{ entity.endDate|date('Y-m-d H:i:s') }}{% endif %}</td>

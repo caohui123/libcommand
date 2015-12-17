@@ -11,7 +11,17 @@
             </tr>
             <tr>
                 <th>Season</th>
-                <td>{{ entity.season }}</td>
+                <td>
+                    {% if entity.season == 0 %}
+                        Winter
+                    {% elseif entity.season == 1 %}
+                        Spring
+                    {% elseif entity.season == 2 %}
+                        Summer
+                    {% elseif entity.season == 3 %}
+                        Fall
+                    {% endif %} 
+                </td>
             </tr>
             <tr>
                 <th>Year</th>

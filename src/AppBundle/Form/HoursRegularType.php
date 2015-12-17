@@ -15,9 +15,10 @@ class HoursRegularType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('startDate')
-            ->add('endDate')
+            ->add('openTime', null, array('label'=>'Open', 'widget'=>'single_text'))
+            ->add('closeTime', null, array('label'=>'Close', 'widget'=>'single_text'))
+            ->add('is24Hour', null, array('label'=>'24 Hours'))
+            ->add('isClosed', null, array('label'=>'Closed'))
         ;
     }
     
@@ -27,7 +28,8 @@ class HoursRegularType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\HoursRegular'
+            'data_class' => 'AppBundle\Entity\HoursRegular',
+            'csrf_protection' => false
         ));
     }
 
@@ -36,7 +38,7 @@ class HoursRegularType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_hoursrgular';
+        return 'appbundle_hoursregular';
     }
 }
 

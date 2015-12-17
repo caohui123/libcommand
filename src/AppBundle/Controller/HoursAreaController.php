@@ -12,6 +12,7 @@ use AppBundle\Form\HoursAreaType;
 use AppBundle\Entity\HoursRegular;
 use AppBundle\Form\HoursRegularType;
 use AppBundle\Form\HoursSpecialType;
+use AppBundle\Resources\Services\HoursService;
 
 /**
  * HoursArea controller.
@@ -157,6 +158,8 @@ class HoursAreaController extends Controller
      */
     public function editAction($id)
     {
+        $return = array(); //initialize the array of items to return to the view
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:HoursArea')->find($id);
@@ -168,39 +171,42 @@ class HoursAreaController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
         
-        $semesters = $em->getRepository('AppBundle:HoursSemester')->findAll();
+        $service = $this->get('hours_service'); //the hours service
         
-        if($semesters){
-            foreach($semesters as $semester){
-                $regularHours = $em->getRepository('AppBundle:HoursRegular')->findBy(array('area'=>$entity->getId(), 'semester'=>$semester->getId()));
-                
-                $day=0;
-                foreach($regularHours as $regularHour){
-                    $regularHoursForm = $this->createForm(new HoursRegularType(), $regularHour, array(
-                        //'action' => $this->generateUrl('hoursregular_update', array('id' => $entity->getId())),
-                        'method' => 'PUT',
-                    ));
-                    $regularHoursForm->add('submit', 'submit', array('label' => 'Update'));
-                    
-                    $day++;
-                };
-            }
+        $semesterForm = $service->createSemesterDropdown();
+        $return['semester_form'] = $semesterForm;
+        
+        $semester = $em->getRepository('AppBundle:HoursSemester')->find(11);
+      
+        for($day = 0; $day < 7; $day++){
+            $return['day_'.$day] = $this->getSemesterRegularHours($semester, $entity, $day);
         }
-        
-        /*$regularHoursForm = $this->createForm(new HoursRegularType(), $entity, array(
-            'action' => $this->generateUrl('hoursregular_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-        $regularHoursForm->add('submit', 'submit', array('label' => 'Update'));
 
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-            //'regular_hours_form' => $regularHoursForm->createView(),
-            //'special_hours_form' => $specialHoursForm->createView(),
-        );*/
+        $return['entity'] = $entity;
+        $return['edit_form'] = $editForm->createView();
+        $return['delete_form'] =$deleteForm->createView();
+
+        return $return;
     }
+    
+    /**
+     * 
+     * @param int $semester  The semester entity to use as criteria
+     * @param int $area      The area entity to use as criteria
+     * @param int $dayOfWeek 0-6 (Sunday-Saturday)
+     * @return $regularHoursForm
+     */
+    public function getSemesterRegularHours($semester, $area, $dayOfWeek){
+        $em = $this->getDoctrine()->getManager();
+        
+        $regularHour = $em->getRepository('AppBundle:HoursRegular')->findOneBy(array('area'=>$area, 'semester'=>$semester, 'dayOfWeek'=>$dayOfWeek));
+
+        //Help on using other Controllers as services: http://stackoverflow.com/questions/24889961/symfony-2-error-call-to-a-member-function-get-on-a-non-object
+        $hoursController = $this->get('hoursRegular_controller');
+        $regularHoursForm = $hoursController->createEditForm($regularHour);
+        
+        return $regularHoursForm->createView();
+    } 
 
     /**
     * Creates a form to edit a HoursArea entity.

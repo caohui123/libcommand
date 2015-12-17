@@ -201,8 +201,8 @@ class AvRequestController extends FOSRestController
       $entity = $em->getRepository('AppBundle:AvRequest')->find($id);
       
       $service = $this->get('user_service');
-      $user = $em->getRepository('AppBundle:User')->find(1);
-      $service->editPermission($user, 'AppBundle:AvRequest', MaskBuilder::MASK_EDIT);
+      //$user = $em->getRepository('AppBundle:User')->find(1);
+      //$service->editPermission($user, 'AppBundle:AvRequest', MaskBuilder::MASK_EDIT);
       
       /*
       // check for edit access
@@ -219,7 +219,7 @@ class AvRequestController extends FOSRestController
       $deleteForm = $this->createDeleteForm($id);
       
       // keep in mind that this will call all registered security voters
-      $this->denyAccessUnlessGranted('ROLE_AV_EDIT', $entity, 'Unauthorized access!');
+      //$this->denyAccessUnlessGranted('ROLE_AV_EDIT', $entity, 'Unauthorized access!');
       
       return array(
           'entity'      => $entity,
@@ -253,7 +253,7 @@ class AvRequestController extends FOSRestController
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_staffareas_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('avrequest_edit', array('id' => $id)));
         }
 
         return array(
