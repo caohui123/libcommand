@@ -44,18 +44,11 @@ class HoursRegular
     private $closeTime;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="is24Hour", type="boolean")
+     * @ORM\Column(name="status", type="integer")
      */
-    private $is24Hour;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isClosed", type="boolean")
-     */
-    private $isClosed;
+    private $status;
     
     /**
      * @var HoursSemester
@@ -157,51 +150,27 @@ class HoursRegular
     }
 
     /**
-     * Set is24Hour
+     * Set status
      *
-     * @param boolean $is24Hour
+     * @param integer $status
      *
      * @return HoursRegular
      */
-    public function setIs24Hour($is24Hour)
+    public function setStatus($status)
     {
-        $this->is24Hour = $is24Hour;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * Get is24Hour
+     * Get status
      *
      * @return boolean
      */
-    public function getIs24Hour()
+    public function getStatus()
     {
-        return $this->is24Hour;
-    }
-
-    /**
-     * Set isClosed
-     *
-     * @param boolean $isClosed
-     *
-     * @return HoursRegular
-     */
-    public function setIsClosed($isClosed)
-    {
-        $this->isClosed = $isClosed;
-
-        return $this;
-    }
-
-    /**
-     * Get isClosed
-     *
-     * @return boolean
-     */
-    public function getIsClosed()
-    {
-        return $this->isClosed;
+        return $this->status;
     }
     
     /**

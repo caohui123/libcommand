@@ -67,8 +67,7 @@ class HoursAreaController extends Controller
                         $regularHour->setCloseTime(new \DateTime('00:00:00'));
                         $regularHour->setOpenTime(new \DateTime('00:00:00'));
                         $regularHour->setDayOfWeek($i);
-                        $regularHour->setIs24Hour(0);
-                        $regularHour->setIsClosed(0);
+                        $regularHour->setStatus(0);
 
                         $em->persist($regularHour);
                     }
@@ -161,6 +160,7 @@ class HoursAreaController extends Controller
         $return = array(); //initialize the array of items to return to the view
         
         $em = $this->getDoctrine()->getManager();
+        $em2 = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('AppBundle:HoursArea')->find($id);
 
@@ -173,13 +173,18 @@ class HoursAreaController extends Controller
         
         $service = $this->get('hours_service'); //the hours service
         
-        $semesterForm = $service->createSemesterDropdown();
+        $semesterForm = $service->createSemesterDropdown(); //dropdown of semesters
         $return['semester_form'] = $semesterForm;
         
-        $semester = $em->getRepository('AppBundle:HoursSemester')->find(11);
-      
-        for($day = 0; $day < 7; $day++){
-            $return['day_'.$day] = $this->getSemesterRegularHours($semester, $entity, $day);
+        //$semester = $em->getRepository('AppBundle:HoursSemester')->findOneBy(array('chronOrder', 'DESC'));
+        $semesterQuery = $em2->createQuery(
+                    'SELECT s FROM AppBundle:HoursSemester s ORDER BY s.chronOrder DESC'
+                )->setMaxResults(1);
+        $semester = $semesterQuery->getSingleResult();
+        if($semester){
+            for($day = 0; $day < 7; $day++){
+                $return['day_'.$day] = $this->getSemesterRegularHours($semester, $entity, $day);
+            }
         }
 
         $return['entity'] = $entity;

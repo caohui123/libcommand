@@ -75,6 +75,34 @@ class HoursRegularController extends Controller
     }
     
     /**
+     * Edits an existing HoursRegular entity.
+     *
+     * @Route("/bysemester", name="semester_reghours")
+     * @Method("GET")
+     */
+    public function getHoursBySemesterAction(Request $request){
+        //retreive the URL parameters
+        $semesterId = $request->query->get('semesterId');
+        $areaId = $request->query->get('areaId');
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $semester = $em->getRepository('AppBundle:HoursSemester')->find($semesterId);
+        $area = $em->getRepository('AppBundle:HoursArea')->find($areaId);
+        
+        $areaController = $this->get('hoursArea_controller');
+        
+        $return = array(); //initialize forms array
+        
+        for($day = 0; $day < 7; $day++){
+            $return['day_'.$day] = $areaController->getSemesterRegularHours($semester, $area, $day);
+        }
+
+        
+        return $this->render('AppBundle:HoursArea:areaRegularHours.html.twig', $return);
+    }
+    
+    /**
      * Get any global or individual field errors in a form
      * 
      * @param \Symfony\Component\Form\Form $form

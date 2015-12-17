@@ -34,6 +34,8 @@ class HoursService{
                 'label' => 'Semester',
                 'property' => 'getSeasonYear' //string method to display choice
             ))
+            ->setAction($this->router->generate('semester_reghours'))  
+            ->setMethod('GET')
             ->getForm()
         ;
         

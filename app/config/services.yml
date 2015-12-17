@@ -46,4 +46,10 @@ services:
         class: AppBundle\Controller\HoursRegularController
         calls:
             - [ setContainer, [ @service_container ]]
+            
+    #This is the HoursAreaController
+    hoursArea_controller:
+        class: AppBundle\Controller\HoursAreaController
+        calls:
+            - [ setContainer, [ @service_container ]]
     

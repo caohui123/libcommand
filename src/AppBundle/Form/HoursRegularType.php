@@ -17,8 +17,16 @@ class HoursRegularType extends AbstractType
         $builder
             ->add('openTime', null, array('label'=>'Open', 'widget'=>'single_text'))
             ->add('closeTime', null, array('label'=>'Close', 'widget'=>'single_text'))
-            ->add('is24Hour', null, array('label'=>'24 Hours'))
-            ->add('isClosed', null, array('label'=>'Closed'))
+            ->add('status', 'choice', array(
+                'label'=>'Status',
+                'expanded' => true,
+                'multiple' => false,
+                'choices' => array(
+                    0 => 'Normal',
+                    1 => '24 Hours',
+                    2 => 'Closed'
+                )
+                ))
         ;
     }
     

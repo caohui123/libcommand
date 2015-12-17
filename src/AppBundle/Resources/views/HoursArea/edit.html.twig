@@ -18,13 +18,15 @@
         <div class="col-xs-12">
             <h2>Regular Hours</h2>
             {{ form(semester_form) }}
-            Sunday: {{ form(day_0) }}
-            Monday: {{ form(day_1) }}
-            Tuesday: {{ form(day_2) }}
-            Wednesday: {{ form(day_3) }}
-            Thursday: {{ form(day_4) }}
-            Friday: {{ form(day_5) }}
-            Saturday: {{ form(day_6) }}
+            <div id="regular_hours_container">
+                Sunday: {{ form(day_0) }}
+                Monday: {{ form(day_1) }}
+                Tuesday: {{ form(day_2) }}
+                Wednesday: {{ form(day_3) }}
+                Thursday: {{ form(day_4) }}
+                Friday: {{ form(day_5) }}
+                Saturday: {{ form(day_6) }}
+            </div>
         </div>
     </div>
                 
@@ -47,10 +49,7 @@
             type: 'POST',
             dataType: 'json',
             contentType: "application/json; charset=UTF-8",
-            xhrFields: {
-                    withCredentials: true
-            },
-            data: JSON.stringify({"openTime":$("#appbundle_hoursregular_openTime", this).val(), "closeTime":$("#appbundle_hoursregular_closeTime", this).val(), "is24Hour":$("#appbundle_hoursrgular_is24Hour", this).is(':checked'), "isClosed":$("#appbundle_hoursrgular_isClosed", this).is(':checked')})
+            data: JSON.stringify({"openTime":$("#appbundle_hoursregular_openTime", this).val(), "closeTime":$("#appbundle_hoursregular_closeTime", this).val(), "status":$("input[name^='appbundle_hoursregular']:checked", this).val()})
         };
         
         $.ajax(ajaxObject)
@@ -65,7 +64,25 @@
             });
     }); 
     
-    /* Handle toggling of Radio buttons Normal, 24 Hours, Closed */
+    /* Handle changing of semester dropdown */
+    $('#form_semesters').on('change', function(){
+        ajaxObject = {
+            url: $(this.form).attr("action"),
+            type: 'GET',
+            data: {semesterId: $(this).val(), areaId: {{entity.id}} }
+        };
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( data );
+                    $('#regular_hours_container').replaceWith(data);
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+            });
+    });
     {{ parent() }}
 {% endblock %}
-
