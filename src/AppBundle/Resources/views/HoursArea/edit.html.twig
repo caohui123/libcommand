@@ -1,32 +1,56 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1 class="page-header">HoursArea edit</h1>
-
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-            <li>
-                <a href="{{ path('hoursarea') }}">
-                    Back to the list
-                </a>
-            </li>
-            <li>{{ form(delete_form) }}</li>
-        </ul>
-       
+    <h1 class="page-header">Edit {{ entity.name }}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('hoursarea') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Areas</a></p>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-md-3 col-lg-3">
+            <h2>General Information</h2>
+            {{ form(edit_form) }}  
+        </div>
+    </div> 
     <div class="row">
         <div class="col-xs-12">
             <h2>Regular Hours</h2>
-            {{ form(semester_form) }}
-            <div id="regular_hours_container">
-                Sunday: {{ form(day_0) }}
-                Monday: {{ form(day_1) }}
-                Tuesday: {{ form(day_2) }}
-                Wednesday: {{ form(day_3) }}
-                Thursday: {{ form(day_4) }}
-                Friday: {{ form(day_5) }}
-                Saturday: {{ form(day_6) }}
-            </div>
+            <div class="row">
+                <div class="col-xs-4 col-sm-3">
+                    {{ form(semester_form) }} 
+                </div>
+            </div> 
+            <section id="regular_hours_container">
+                <div class="regularhours_day">
+                    <h3>Sunday</h3> 
+                    {{ form(day_0) }}
+                </div>
+                <div class="regularhours_day">
+                    <h3>Monday</h3> 
+                    {{ form(day_1) }}
+                </div>
+                <div class="regularhours_day">
+                    <h3>Tuesday</h3>
+                    {{ form(day_2) }}
+                </div>
+                <div class="regularhours_day">
+                    <h3>Wednesday</h3>
+                    {{ form(day_3) }}
+                </div>
+                <div class="regularhours_day">
+                    <h3>Thursday</h3>
+                    {{ form(day_4) }}
+                </div>
+                <div class="regularhours_day">
+                    <h3>Friday</h3>
+                    {{ form(day_5) }}
+                </div>
+                <div class="regularhours_day">
+                    <h3>Saturday</h3>
+                    {{ form(day_6) }}
+                </div>
+            </section>
         </div>
     </div>
                 
@@ -38,10 +62,20 @@
             </div>
         </div>
     </div>
+        
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-md-3 col-lg-3">
+            {{ form(delete_form) }}
+        </div>
+    </div> 
 {% endblock %}
 {% block documentReady %}
+    makeTimepicker('.regularHours_form', '#appbundle_hoursregular_openTime, #appbundle_hoursregular_closeTime'); //apply timepicker to new hours elements
+    
     /* Handle submission of regular hours form */
-    $('.regularHours_form').submit(function(event){
+    $('.regularHours_form').on('submit', function(event){
+        var targetForm = $(this);
+    
         event.preventDefault();
         
         ajaxObject = {
@@ -54,9 +88,13 @@
         
         $.ajax(ajaxObject)
             .success(function(data,status,xhr) {
+                    $('span.label-success, span.label-danger').remove();
+                    $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>');
                     console.log( status );
             })
             .fail(function(data,status,xhr) {
+                    $('span.label-success, span.label-danger').remove();
+                    $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
                     console.log( status );
             })
             .always(function(data,status,xhr) {
@@ -74,8 +112,41 @@
         
         $.ajax(ajaxObject)
             .success(function(data,status,xhr) {
-                    console.log( data );
-                    $('#regular_hours_container').replaceWith(data);
+                    console.log( status );
+                    $('#regular_hours_container').html(data); //show hours for chosen semester
+                    
+                    makeTimepicker('.regularHours_form', '#appbundle_hoursregular_openTime, #appbundle_hoursregular_closeTime'); //apply timepicker to new hours elements
+                    
+                    //why does this need to be run again? 
+                    //http://stackoverflow.com/questions/15357787/submitting-from-an-ajax-loaded-form
+                    $('.regularHours_form').on('submit', function(event){
+                        var targetForm = $(this);
+                        
+                        ajaxObject = {
+                            url: $(this).attr("action"),
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: "application/json; charset=UTF-8",
+                            data: JSON.stringify({"openTime":$("#appbundle_hoursregular_openTime", this).val(), "closeTime":$("#appbundle_hoursregular_closeTime", this).val(), "status":$("input[name^='appbundle_hoursregular']:checked", this).val()})
+                        };
+
+                        $.ajax(ajaxObject)
+                            .success(function(data,status,xhr) {
+                                    $('span.label-success, span.label-danger').remove();
+                                    $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>');
+                                    console.log( status );
+                            })
+                            .fail(function(data,status,xhr) {
+                                    $('span.label-success, span.label-danger').remove();
+                                    $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
+                                    console.log( status );
+                            })
+                            .always(function(data,status,xhr) {
+                                    console.log( status );
+                            });
+
+                            return false; //prevent form submission
+                    });
             })
             .fail(function(data,status,xhr) {
                     console.log( status );
@@ -84,5 +155,12 @@
                     console.log( status );
             });
     });
+    
+    /* JQuery Timepicker */
+    function makeTimepicker(form, targetElement){
+        $(form).on('click', function(){
+            $(targetElement, this).timepicker({ 'timeFormat': 'H:i' });
+        });
+    }
     {{ parent() }}
 {% endblock %}

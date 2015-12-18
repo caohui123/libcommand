@@ -36,6 +36,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form_themes: 
+        - bootstrap_3_layout.html.twig #tells symfony to use bootstrap 3 form themes
 
 # Assetic Configuration
 assetic:

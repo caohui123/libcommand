@@ -5,6 +5,7 @@
         <title>{% block title %}Library Command Center{% endblock %}</title>
         {% block stylesheets %}          
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+          <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
           {% stylesheets 'bundles/app/css/*' filter='cssrewrite' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
           {% endstylesheets %}
@@ -69,6 +70,7 @@
         {% block javascripts %}
           <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+          <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
           {% javascripts '@AppBundle/Resources/public/js/*' %}  
             <script type="text/javascript" src="{{ asset_url }}"></script>
           {% endjavascripts %}

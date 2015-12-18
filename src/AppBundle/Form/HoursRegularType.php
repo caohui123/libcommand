@@ -15,8 +15,16 @@ class HoursRegularType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('openTime', null, array('label'=>'Open', 'widget'=>'single_text'))
-            ->add('closeTime', null, array('label'=>'Close', 'widget'=>'single_text'))
+            ->add('openTime', null, array(
+                'label'=>'Open', 
+                'widget'=>'single_text',
+                'html5' => false  //input type="text" instead of "time"
+            ))
+            ->add('closeTime', null, array(
+                'label'=>'Close', 
+                'widget'=>'single_text',
+                'html5' => false //input type="text" instead of "time"
+            ))
             ->add('status', 'choice', array(
                 'label'=>'Status',
                 'expanded' => true,

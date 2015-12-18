@@ -225,9 +225,12 @@ class HoursAreaController extends Controller
         $form = $this->createForm(new HoursAreaType(), $entity, array(
             'action' => $this->generateUrl('hoursarea_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'id' => 'appbundle_hoursarea'
+            )
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update Area'));
 
         return $form;
     }
@@ -302,7 +305,12 @@ class HoursAreaController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('hoursarea_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete Area',
+                'attr' => array(
+                    'class' => 'btn-danger'
+                )
+            ))
             ->getForm()
         ;
     }

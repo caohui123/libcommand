@@ -46,7 +46,7 @@ class HoursRegularController extends Controller
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');  
             
-            return new JsonResponse($serialized, 204);
+            return new JsonResponse($serialized, 201);
         }
 
         return new JsonResponse(array(
