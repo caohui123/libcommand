@@ -47,9 +47,24 @@ services:
         calls:
             - [ setContainer, [ @service_container ]]
             
+    #This is the HoursSpecialController
+    hoursSpecial_controller:
+        class: AppBundle\Controller\HoursSpecialController
+        calls:
+            - [ setContainer, [ @service_container ]]
+            
     #This is the HoursAreaController
     hoursArea_controller:
         class: AppBundle\Controller\HoursAreaController
         calls:
             - [ setContainer, [ @service_container ]]
+            
+    #Custom type HiddenHoursArea
+    app.form.type.hiddenHoursArea:
+        class: AppBundle\Form\Type\HiddenHoursAreaType
+        tags:
+            - { name: form.type, alias: hiddenHoursArea }
+        arguments:
+            - @doctrine.orm.entity_manager
+           
     

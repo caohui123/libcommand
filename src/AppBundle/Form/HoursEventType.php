@@ -16,8 +16,12 @@ class HoursEventType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('startDate')
-            ->add('endDate')
+            ->add('startDate', null, array(
+                'widget'=>'single_text',
+            ))
+            ->add('endDate', null, array(
+                'widget'=>'single_text',
+            ))
         ;
     }
     

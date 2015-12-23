@@ -4,12 +4,15 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * HoursSpecial
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @UniqueEntity(fields={"eventDate", "area"}, message="An hour for that date and area already exists!")
  */
 class HoursSpecial
 {
@@ -25,36 +28,41 @@ class HoursSpecial
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="openTime", type="date")
+     * @ORM\Column(name="eventDate", type="date")
+     * @Assert\NotBlank()
+     */
+    private $eventDate;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="openTime", type="time")
+     * @Assert\NotBlank()
      */
     private $openTime;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="closeTime", type="date")
+     * @ORM\Column(name="closeTime", type="time")
+     * @Assert\NotBlank()
      */
     private $closeTime;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is24Hour", type="boolean")
+     * @var integer
+     * 
+     * @ORM\Column(name="status", type="integer")
+     * @Assert\NotBlank()
      */
-    private $is24Hour;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isClosed", type="boolean")
-     */
-    private $isClosed;
+    private $status;
     
     /**
      * @var HoursEvent
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="HoursEvent", cascade={"persist"}, fetch="LAZY")
-     * @JoinColumn(name="event", referencedColumnName="id")
+     * @JoinColumn(name="event", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
      */
     private $event;
     
@@ -63,6 +71,7 @@ class HoursSpecial
      * 
      * @ORM\ManyToOne(targetEntity="HoursArea", cascade={"persist"}, fetch="LAZY")
      * @JoinColumn(name="area", referencedColumnName="id")
+     * @Assert\NotBlank()
      */
     private $area;
 
@@ -75,6 +84,30 @@ class HoursSpecial
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Set eventDate
+     *
+     * @param \DateTime $date
+     *
+     * @return HoursSpecial
+     */
+    public function setEventDate($date)
+    {
+        $this->eventDate = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get eventDate
+     *
+     * @return \DateTime
+     */
+    public function getEventDate()
+    {
+        return $this->eventDate;
     }
 
     /**
@@ -219,6 +252,30 @@ class HoursSpecial
         $this->area = $area;
 
         return $this;
+    }
+    
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return HoursSpecial
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
 

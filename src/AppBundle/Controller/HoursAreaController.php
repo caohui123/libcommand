@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\HoursArea;
 use AppBundle\Form\HoursAreaType;
 use AppBundle\Entity\HoursRegular;
+use AppBundle\Entity\HoursSpecial;
 use AppBundle\Form\HoursRegularType;
 use AppBundle\Form\HoursSpecialType;
 use AppBundle\Resources\Services\HoursService;
@@ -176,7 +177,7 @@ class HoursAreaController extends Controller
         $semesterForm = $service->createSemesterDropdown(); //dropdown of semesters
         $return['semester_form'] = $semesterForm;
         
-        //$semester = $em->getRepository('AppBundle:HoursSemester')->findOneBy(array('chronOrder', 'DESC'));
+        //regular hours for most recent semester
         $semesterQuery = $em2->createQuery(
                     'SELECT s FROM AppBundle:HoursSemester s ORDER BY s.chronOrder DESC'
                 )->setMaxResults(1);
@@ -186,7 +187,30 @@ class HoursAreaController extends Controller
                 $return['day_'.$day] = $this->getSemesterRegularHours($semester, $entity, $day);
             }
         }
+        
+        //date range for current week
+        $weekRange = $service->getWeekDateRange(new \DateTime());
+        
+        for($dayOfWeek = 0; $dayOfWeek < 7; $dayOfWeek++){
 
+            //query any special hours for the area and the date
+            $specialHour = $em2->createQuery(
+                'SELECT sh from AppBundle:HoursSpecial sh WHERE sh.area = :area AND sh.eventDate = :eventDate'
+            )
+                ->setParameter('area', $entity)
+                ->setParameter('eventDate', $weekRange[$dayOfWeek])
+                ->setMaxResults(1)
+                ->getOneOrNullResult();
+
+            //entity edit form
+            $return['specialday_'.$dayOfWeek] = $this->getAreaSpecialHours($weekRange[$dayOfWeek], $entity);
+            //entity delete form
+            if($specialHour){
+                $return['specialdayDelete_'.$dayOfWeek] = $this->getSpecialHourDeleteForm($specialHour);
+            }
+            
+        }
+        
         $return['entity'] = $entity;
         $return['edit_form'] = $editForm->createView();
         $return['delete_form'] =$deleteForm->createView();
@@ -212,6 +236,38 @@ class HoursAreaController extends Controller
         
         return $regularHoursForm->createView();
     } 
+    
+    public function getAreaSpecialHours($date, HoursArea $area){
+        $em = $this->getDoctrine()->getManager();
+        
+        $specialHoursController = $this->get('hoursSpecial_controller');
+        $specialHour = $em->getRepository('AppBundle:HoursSpecial')->findOneBy(array('area'=>$area, 'eventDate'=> new \DateTime($date) ));
+        
+        if(!$specialHour){
+            $specialHour = new HoursSpecial();
+            $specialHoursForm = $specialHoursController->createCreateForm($specialHour, $area, new \DateTime($date));
+
+            return $specialHoursForm->createView();
+        }
+        
+        $specialHoursForm = $specialHoursController->createEditForm($specialHour, $area, new \DateTime($date));
+        //$specialHoursForm->add('eventDate');
+        
+        return $specialHoursForm->createView();
+    }
+    
+    public function getSpecialHourDeleteForm(HoursSpecial $entity = null){
+        
+        //will be null if no hour exists for the given date
+        if(!$entity){
+            return null;
+        }
+        
+        $specialHoursController = $this->get('hoursSpecial_controller');
+        $specialHoursForm = $specialHoursController->createDeleteForm($entity->getId());
+        
+        return $specialHoursForm->createView();
+    }
 
     /**
     * Creates a form to edit a HoursArea entity.

@@ -93,5 +93,9 @@ class HoursArea
     {
         return $this->displayOrder;
     }
+    
+    public function getHoursArea(){
+        return $this;
+    }
 }
 
