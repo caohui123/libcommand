@@ -12,6 +12,7 @@ use AppBundle\Entity\HoursSpecial;
 use AppBundle\Form\HoursSpecialType;
 use AppBundle\Form\Type\HiddenHoursAreaType;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * HoursRegular controller.
@@ -37,6 +38,7 @@ class HoursSpecialController extends Controller
         $form = $this->createForm(new HoursSpecialType($this->getDoctrine()->getManager()), $entity, array(
             'action' => $this->generateUrl('hoursspecial_postcreate'),
             'method' => 'POST',
+            'attr'=> array('class'=>'specialHours_form')
         ));
         $form->add('eventDate', new \AppBundle\Form\Type\HiddenDateTimeType(), array('data'=>$date));
         $form->add('area', new HiddenHoursAreaType($this->getDoctrine()->getManager()), array(
@@ -75,18 +77,22 @@ class HoursSpecialController extends Controller
      */
     public function postCreateAction(Request $request){
         $requestData = $request->request->all();
-        $date = $requestData['appbundle_hoursspecial']['eventDate'];
+        
+        $date = $requestData['eventDate'];
+        $areaId = $requestData['area'];
         
         //find area entity based on passed id
         $em = $this->getDoctrine()->getManager();
-        $area = $em->getRepository('AppBundle:HoursArea')->find($requestData['appbundle_hoursspecial']['area']);
-        
+        $area = $em->getRepository('AppBundle:HoursArea')->find($areaId);
+
         if(!$area){
             throw $this->createNotFoundException('Unable to find HoursArea entity returned in form.');
         }
         
         $entity = new HoursSpecial();
-        $form = $this->createCreateForm($entity, $area, new \DateTime($date) );
+        
+        //create blank named form for the SpecialHour instead of calling the createEditForm
+        $form = $this->get('form.factory')->createNamed('', new HoursSpecialType($em), $entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -94,15 +100,53 @@ class HoursSpecialController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            $serializer = $this->get('serializer');
-            $serialized = $serializer->serialize($entity, 'json');  
-            
-            return new JsonResponse($serialized, 201);
-        }
+            $areaService = $this->get('hoursArea_controller'); //the area controller
+            $hoursService = $this->get('hours_service'); //the hours service
 
+            $return = array(); //initialize the array of items to return to the view
+
+            $em2 = $this->getDoctrine()->getEntityManager();
+
+            //date range for selected week
+            $weekRange = $hoursService->getWeekDateRange(new \DateTime($date));
+
+            for($dayOfWeek = 0; $dayOfWeek < 7; $dayOfWeek++){
+
+                //query any special hours for the area and the date
+                $specialHour = $em2->createQuery(
+                    'SELECT sh from AppBundle:HoursSpecial sh WHERE sh.area = :area AND sh.eventDate = :eventDate'
+                )
+                    ->setParameter('area', $area)
+                    ->setParameter('eventDate', $weekRange[$dayOfWeek])
+                    ->setMaxResults(1)
+                    ->getOneOrNullResult();
+
+                //date of current day of week in loop 
+                $return['date_'.$dayOfWeek] = date('n/j/y', strtotime($weekRange[$dayOfWeek]));
+
+                //entity edit form
+                $return['specialday_'.$dayOfWeek] = $areaService->getAreaSpecialHours($weekRange[$dayOfWeek], $area);
+                //entity delete form
+                if($specialHour){
+                    $return['specialdayDelete_'.$dayOfWeek] = $areaService->getSpecialHourDeleteForm($specialHour);
+                }
+
+            }
+
+            $return['entity'] = $area;
+            
+            $response = new Response();
+            $response->setContent($this->render('AppBundle:HoursArea:areaSpecialHours.html.twig', $return));
+            $response->setStatusCode(Response::HTTP_CREATED);
+            $response->headers->set('Content-Type', 'text/html');
+            
+            $response->send(); //return the response
+        }
+        
         return new JsonResponse(array(
             $this->getFormErrors($form)
         ), 400);
+        
     }
     
     /**
@@ -111,26 +155,23 @@ class HoursSpecialController extends Controller
      * @Route("/{id}", name="hoursspecial_postupdate")
      * @Method("POST")
      */
-    public function postUpdateAction(Request $request, $id){
+    public function postUpdateAction(Request $request, $id){ 
         $em = $this->getDoctrine()->getManager();
-        var_dump($id);
         $entity = $em->getRepository('AppBundle:HoursSpecial')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find HoursSpecial entity.');
         }
         
-        //create blank named form for the SpecialHour instead of calling the createEditForm
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        
         if ($editForm->isValid()) {
             $em->flush();
-
+            
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');  
             
-            return new JsonResponse($serialized, 201);
+            return new JsonResponse($serialized, 200);
         }
 
         return new JsonResponse(array(
@@ -146,17 +187,20 @@ class HoursSpecialController extends Controller
     * @return \Symfony\Component\Form\Form The form
     */
     public function createEditForm(HoursSpecial $entity)
-    {      
+    {     
         $this->entity = $entity;
         
         $form = $this->createForm(new HoursSpecialType($this->getDoctrine()->getManager()), $entity, array(
             'action' => $this->generateUrl('hoursspecial_postupdate', array('id' => $entity->getId())),
             'method' => 'POST',
-            'attr' => array('class' => 'specialHours_form')
+            'attr' => array('class' => 'specialHours_updateform')
         ));
-        
-        //...no need to add eventDate or area fields since these will never change!...
-        
+        $form->add('eventDate', new \AppBundle\Form\Type\HiddenDateTimeType(), array(
+            'data' => $entity->getEventDate()
+        ));
+        $form->add('area', new \AppBundle\Form\Type\HiddenHoursAreaType($this->getDoctrine()->getManager()), array(
+            'data' => $entity->getArea()
+        ));
         $form->add('event', 'entity', array(
             'class'=>'AppBundle:HoursEvent',
             'query_builder'=>function(EntityRepository $er){
@@ -176,41 +220,32 @@ class HoursSpecialController extends Controller
             'required' => true
         ));
         
-        $form->add('submit', 'submit', array('label' => 'Save Day'));
+        $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
     
     /**
-     * Deletes a Staff entity.
+     * Deletes an HoursSpecial entity.
      *
      * @Route("/{id}", name="hoursspecial_delete")
      * @Method("DELETE")
      * 
      * //@Secure(roles="ROLE_HOURS_DELETE")
      */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+    public function deleteAction($id)
+    { 
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('AppBundle:HoursSpecial')->find($id);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:HoursSpecial')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find special hours entity.');
-            }
-            
-            $em->remove($entity);
-            $em->flush();
-
-            return new JsonResponse('Entity deleted', 204);
+        if (!$entity) {
+            return new JsonResponse('Entity not found.', 400);
         }
 
-        return new JsonResponse(array(
-            $this->getFormErrors($form)
-        ), 400);
+        $em->remove($entity);
+        $em->flush();
+
+        return new JsonResponse(null, 204);
     }
     
     /**
@@ -222,7 +257,7 @@ class HoursSpecialController extends Controller
     */
     public function createDeleteForm($id)
     {      
-        return $this->createFormBuilder()
+        return $this->createFormBuilder(null, array('attr'=>array('class'=>'specialhour_delete')))
             ->setAction($this->generateUrl('hoursspecial_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
@@ -253,6 +288,61 @@ class HoursSpecialController extends Controller
         }
 
         return $errors;
+    }
+    
+    /**
+     * Get the special hours for the week specified from the ajax request 
+     * 
+     * @Method("GET")
+     * @Route("/byweek", name="specialhours_changeweek")
+     */
+    public function getWeekAction(Request $request){
+        $date = $request->query->get('date');
+        $areaId = $request->query->get('areaId');
+        
+        $areaService = $this->get('hoursArea_controller'); //the area controller
+        $hoursService = $this->get('hours_service'); //the hours service
+        
+        $return = array(); //initialize the array of items to return to the view
+        
+        $em = $this->getDoctrine()->getManager();
+        $em2 = $this->getDoctrine()->getEntityManager();
+
+        $area = $em->getRepository('AppBundle:HoursArea')->find($areaId);
+
+        if (!$area) {
+            throw $this->createNotFoundException('Unable to find HoursArea entity.');
+        }
+
+        //date range for selected week
+        $weekRange = $hoursService->getWeekDateRange(new \DateTime($date));
+        
+        for($dayOfWeek = 0; $dayOfWeek < 7; $dayOfWeek++){
+
+            //query any special hours for the area and the date
+            $specialHour = $em2->createQuery(
+                'SELECT sh from AppBundle:HoursSpecial sh WHERE sh.area = :area AND sh.eventDate = :eventDate'
+            )
+                ->setParameter('area', $area)
+                ->setParameter('eventDate', $weekRange[$dayOfWeek])
+                ->setMaxResults(1)
+                ->getOneOrNullResult();
+            
+            //date of current day of week in loop 
+            $return['date_'.$dayOfWeek] = date('n/j/y', strtotime($weekRange[$dayOfWeek]));
+            
+            //entity edit form
+            $return['specialday_'.$dayOfWeek] = $areaService->getAreaSpecialHours($weekRange[$dayOfWeek], $area);
+            //entity delete form
+            if($specialHour){
+                $return['specialdayDelete_'.$dayOfWeek] = $areaService->getSpecialHourDeleteForm($specialHour);
+            }
+            
+        }
+        
+        $return['entity'] = $area;
+        
+        return $this->render('AppBundle:HoursArea:areaSpecialHours.html.twig', $return);
     }
 }
 

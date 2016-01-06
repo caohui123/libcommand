@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>HoursArea</h1>
+    <h1 class='page-header'>{{entity.name}}</h1>
 
     <table class="record_properties">
         <tbody>
@@ -13,10 +13,10 @@
                 <th>Name</th>
                 <td>{{ entity.name }}</td>
             </tr>
-            <tr>
+            <!--<tr>
                 <th>Displayorder</th>
-                <td>{{ entity.displayOrder }}</td>
-            </tr>
+                <td>{# entity.displayOrder #}</td>
+            </tr>-->
         </tbody>
     </table>
 
@@ -28,7 +28,7 @@
     </li>
     <li>
         <a href="{{ path('hoursarea_edit', { 'id': entity.id }) }}">
-            Edit
+            Edit info and hours
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>

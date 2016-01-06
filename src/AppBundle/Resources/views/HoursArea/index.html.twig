@@ -1,14 +1,16 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>HoursArea list</h1>
-
+    <h1 class="page-header">Library Hours: Area List <span><a class="btn btn-sm btn-primary" href="{{ path('hoursarea_new') }}"><span class="glyphicon glyphicon-plus"></span> New Area</a></span></h1>
+    <blockquote>
+        <p>To edit the general information, regular hours, or special hours for an area, click "Edit" next to the desired area. To create a new area, select the "New Area" button above.</p>
+    </blockquote>
     <table class="records_list">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Displayorder</th>
+                <!--<th>Displayorder</th>-->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -17,7 +19,7 @@
             <tr>
                 <td><a href="{{ path('hoursarea_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.name }}</td>
-                <td>{{ entity.displayOrder }}</td>
+                <!--<td>{# entity.displayOrder #}</td>-->
                 <td>
                 <ul>
                     <li>
@@ -32,12 +34,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('hoursarea_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
     {% endblock %}

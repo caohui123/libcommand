@@ -201,7 +201,10 @@ class HoursAreaController extends Controller
                 ->setParameter('eventDate', $weekRange[$dayOfWeek])
                 ->setMaxResults(1)
                 ->getOneOrNullResult();
-
+            
+            //date of current day of week in loop 
+            $return['date_'.$dayOfWeek] = date('n/j/y', strtotime($weekRange[$dayOfWeek]));
+            
             //entity edit form
             $return['specialday_'.$dayOfWeek] = $this->getAreaSpecialHours($weekRange[$dayOfWeek], $entity);
             //entity delete form
@@ -251,7 +254,7 @@ class HoursAreaController extends Controller
         }
         
         $specialHoursForm = $specialHoursController->createEditForm($specialHour, $area, new \DateTime($date));
-        //$specialHoursForm->add('eventDate');
+        
         
         return $specialHoursForm->createView();
     }

@@ -31,7 +31,7 @@ class HoursRegularController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $entity = $em->getRepository('AppBundle:HoursRegular')->find($id);
-
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find HoursRegular entity.');
         }
@@ -75,7 +75,7 @@ class HoursRegularController extends Controller
     }
     
     /**
-     * Edits an existing HoursRegular entity.
+     * Get regular hours for a semester.
      *
      * @Route("/bysemester", name="semester_reghours")
      * @Method("GET")

@@ -12,6 +12,7 @@ class HoursSpecialType extends AbstractType
 {
     //need to instantiate HoursAreaToIntTransformer
     private $manager;
+    private $specialHour;
 
     public function __construct(ObjectManager $manager)
     {
@@ -55,12 +56,22 @@ class HoursSpecialType extends AbstractType
                 ))
         ;
         
-        
-        
-        /*
-        $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SUBMIT, function(\Symfony\Component\Form\FormEvent $event){
-            $em = $event->getForm()->getConfig()->getOption('em');
-        });*/
+        //add in these fields only if the HoursSpecial object is new using an event listener
+        $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(\Symfony\Component\Form\FormEvent $event){
+            $specialHour = $event->getData();
+            $form = $event->getForm();
+            
+            // check if the HoursSpecial object is "new"
+            // If no data is passed to the form, the data is "null".
+            // This should be considered a new "HoursSpecial"
+            if(!$specialHour || null === $specialHour->getId()){
+                $form->add('eventDate', new \AppBundle\Form\Type\HiddenDateTimeType());
+                $form->add('area', new \AppBundle\Form\Type\HiddenHoursAreaType($this->manager));
+                $form->add('event', 'entity', array(
+                    'class'=>'AppBundle:HoursEvent',
+                ));
+            }
+        });
     }
     
     /**
@@ -70,6 +81,8 @@ class HoursSpecialType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\HoursSpecial',
+            'csrf_protection' => false,
+            'evDate' => null
         ));
     }
 

@@ -1,8 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>HoursEvent list</h1>
-
+    <h1 class="page-header">Special Events <span><a class="btn btn-sm btn-primary" href="{{ path('hoursevent_new') }}"><span class="glyphicon glyphicon-plus"></span> New Special Event</a></span></h1>
     <table class="records_list">
         <thead>
             <tr>
@@ -34,12 +33,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('hoursevent_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
     {% endblock %}
