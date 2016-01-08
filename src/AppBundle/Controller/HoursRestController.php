@@ -62,6 +62,38 @@ class HoursRestController extends FOSRestController{
     /**
      * @Rest\View()
      * 
+     * Return all special events that start before a certain date and end after a certain date
+     */
+    public function getHoursrestEventsbyweekAction(Request $request){
+        $requestData = $request->query->all();
+        $startDate = $requestData['startDate'];
+        $endDate = $requestData['endDate'];
+        
+        $em2 = $this->getDoctrine()->getEntityManager();
+        
+        $events = $em2->createQuery(
+                //'SELECT ev from AppBundle:HoursEvent ev WHERE (ev.startDate <= :startDate AND ev.endDate >= :endDate) OR (ev.startDate BETWEEN :startDate AND :endDate) ORDER BY ev.startDate ASC'
+                'SELECT ev from AppBundle:HoursEvent ev WHERE (:startDate BETWEEN ev.startDate AND ev.endDate) OR (:endDate BETWEEN ev.startDate and ev.endDate) OR (ev.startDate BETWEEN :startDate AND :endDate) ORDER BY ev.startDate ASC'
+            )
+                ->setParameter('startDate', new \DateTime($startDate))
+                ->setParameter('endDate', new \DateTime($endDate))
+                ->getResult();
+        
+        if(!$events){
+            $response = new Response('', 204, array('Content-Type' => 'application/json'));
+            return $response;
+        }
+        
+        $serializer = $this->container->get('serializer');
+        $serialized = $serializer->serialize($events, 'json');
+        $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+        return $response;
+    }
+    
+    /**
+     * @Rest\View()
+     * 
      * Return all special semesters
      */
     public function getHoursrestSemestersAction(){

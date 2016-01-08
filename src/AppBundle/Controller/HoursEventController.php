@@ -179,7 +179,8 @@ class HoursEventController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $em2 = $this->getDoctrine()->getEntityManager();
+        
         $entity = $em->getRepository('AppBundle:HoursEvent')->find($id);
 
         if (!$entity) {
@@ -192,10 +193,27 @@ class HoursEventController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+            //delete any special events that are outside of the new date range
+            $requestData = $request->request->all();
+            $newStartDate = new \DateTime($requestData['appbundle_hoursevent']['startDate']);
+            $newEndDate = new \DateTime($requestData['appbundle_hoursevent']['endDate']);
+            
+            $removeablDates = $em2->createQuery(
+                        'SELECT hs FROM AppBundle:HoursSpecial hs WHERE (hs.eventDate < :newStartDate OR hs.eventDate > :newEndDate) AND hs.event = :event'
+                    )
+                    ->setParameter('newStartDate', $newStartDate)
+                    ->setParameter('newEndDate', $newEndDate)
+                    ->setParameter('event', $entity)
+                    ->getResult();
+            
+            foreach($removeablDates as $dt){
+                $em2->remove($dt);
+            }
+            $em2->flush();
 
             return $this->redirect($this->generateUrl('hoursevent_edit', array('id' => $id)));
         }
-
+        
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
