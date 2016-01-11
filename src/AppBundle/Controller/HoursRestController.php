@@ -24,7 +24,7 @@ class HoursRestController extends FOSRestController{
     public function getHoursrestAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         
-        $areas = $em->getRepository('AppBundle:HoursArea')->findAll();
+        $areas = $em->getRepository('AppBundle:HoursArea')->findBy(array(), array('displayOrder'=>'ASC'));
         
         $hours = array();
         foreach($areas as $area){
@@ -120,7 +120,7 @@ class HoursRestController extends FOSRestController{
     public function getHoursrestAreasAction(){
         $em = $this->getDoctrine()->getManager();
         
-        $areas = $em->getRepository('AppBundle:HoursArea')->findBy(array(), array('name'=>'ASC'));
+        $areas = $em->getRepository('AppBundle:HoursArea')->findBy(array(), array('displayOrder'=>'ASC'));
         
         if(!$areas){
             throw new $this->createNotFoundException('No areas were found.');

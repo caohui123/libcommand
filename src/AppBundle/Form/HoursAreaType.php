@@ -16,7 +16,7 @@ class HoursAreaType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('displayOrder')
+            //->add('displayOrder')
         ;
     }
     

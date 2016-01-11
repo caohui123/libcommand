@@ -64,8 +64,7 @@ class HoursSemesterController extends Controller
                         $regularHour->setCloseTime(new \DateTime('00:00:00'));
                         $regularHour->setOpenTime(new \DateTime('00:00:00'));
                         $regularHour->setDayOfWeek($i);
-                        $regularHour->setIs24Hour(0);
-                        $regularHour->setIsClosed(0);
+                        $regularHour->setStatus(0);
 
                         $em->persist($regularHour);
                     }

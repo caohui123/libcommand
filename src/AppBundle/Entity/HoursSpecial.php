@@ -61,7 +61,7 @@ class HoursSpecial
      * @var HoursEvent
      *
      * @ORM\ManyToOne(targetEntity="HoursEvent", cascade={"persist"}, fetch="LAZY")
-     * @JoinColumn(name="event", referencedColumnName="id", nullable=false)
+     * @JoinColumn(name="event", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Assert\NotBlank()
      */
     private $event;

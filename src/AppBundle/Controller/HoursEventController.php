@@ -199,7 +199,7 @@ class HoursEventController extends Controller
             $newEndDate = new \DateTime($requestData['appbundle_hoursevent']['endDate']);
             
             $removeablDates = $em2->createQuery(
-                        'SELECT hs FROM AppBundle:HoursSpecial hs WHERE (hs.eventDate < :newStartDate OR hs.eventDate > :newEndDate) AND hs.event = :event'
+                        'SELECT hs FROM AppBundle:HoursSpecial hs WHERE (hs.eventDate < :newStartDate OR hs.eventDate > :newEndDate) OR (hs.eventDate > :newEndDate) OR (hs.eventDate < :newStartDate) AND hs.event = :event'
                     )
                     ->setParameter('newStartDate', $newStartDate)
                     ->setParameter('newEndDate', $newEndDate)

@@ -14,6 +14,7 @@ use AppBundle\Entity\HoursSpecial;
 use AppBundle\Form\HoursRegularType;
 use AppBundle\Form\HoursSpecialType;
 use AppBundle\Resources\Services\HoursService;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * HoursArea controller.
@@ -34,7 +35,7 @@ class HoursAreaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:HoursArea')->findAll();
+        $entities = $em->getRepository('AppBundle:HoursArea')->findBy(array(), array('displayOrder' => 'ASC'));
 
         return array(
             'entities' => $entities,
@@ -100,7 +101,7 @@ class HoursAreaController extends Controller
             'action' => $this->generateUrl('hoursarea_create'),
             'method' => 'POST',
         ));
-
+        $form->add('displayOrder', 'hidden', array('data' => 0));
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
@@ -372,5 +373,37 @@ class HoursAreaController extends Controller
             ))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Update areas via AJAX 
+     * 
+     * @Route("/displayorder", name="displayorder_update")
+     * @Method("POST")
+     */
+    public function updateDisplayOrderAction(Request $request){
+      $em = $this->getDoctrine()->getManager();
+      
+      $requestData = $request->request->all();
+      
+      $areas = $requestData['area'];
+      
+      $displayOrder = 0;
+      foreach($areas as $area){
+        $findArea = $em->getRepository('AppBundle:HoursArea')->find($area);
+        
+        if(!$findArea){
+          throw $this->createNotFoundException('Area with id ' . $area . ' not found.');
+        }
+        //update the area's display order
+        $findArea->setDisplayOrder($displayOrder);
+        
+        $displayOrder++;
+      }
+      $em->flush();
+      
+      $response = new Response('Area display order has been updated.', 200, array('Content-Type' => 'text/plain'));
+        
+      return $response;
     }
 }

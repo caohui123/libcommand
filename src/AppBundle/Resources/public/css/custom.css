@@ -11,6 +11,10 @@ body {
   margin-left: 15px;
 }
 
+/* Hours areas drag and drop */
+#displayOrderList{cursor: move;}
+#displayOrderList li span { position: absolute; margin-left: -1.3em; }
+
 @media (min-width: 0) {
   .navbar-toggle {
     display: block; /* force showing the toggle */
