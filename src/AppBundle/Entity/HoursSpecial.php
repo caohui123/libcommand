@@ -70,7 +70,7 @@ class HoursSpecial
      * @var HoursArea
      * 
      * @ORM\ManyToOne(targetEntity="HoursArea", cascade={"persist"}, fetch="LAZY")
-     * @JoinColumn(name="area", referencedColumnName="id")
+     * @JoinColumn(name="area", referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotBlank()
      */
     private $area;
