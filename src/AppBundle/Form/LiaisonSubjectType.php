@@ -17,18 +17,11 @@ class LiaisonSubjectType extends AbstractType
     {
         $builder
             ->add('name', 'text', array(
-              'attr' => array(
-                'class' => 'form-control'
-              ),
               'label' => 'Subject Title',
-              'label_attr' => array('class' => 'col-sm-2 control-label'),
             ))
             ->add('phone', null, array(
-              'attr' => array(
-                'class' => 'form-control'
-              ),
               'label' => 'Phone Number',
-              'label_attr' => array('class' => 'col-sm-2 control-label'),
+              'required' => false
             ))
             ->add('lft', 'hidden')
             ->add('lvl', 'hidden')
@@ -44,11 +37,7 @@ class LiaisonSubjectType extends AbstractType
                   return $qb;
               },
               'property' => 'indentedTitle',
-              'attr' => array(
-                'class' => 'form-control'
-              ),
               'label' => 'Parent Subject',
-              'label_attr' => array('class' => 'col-sm-2 control-label'),
               'placeholder' => 'Choose Parent (leave blank if top-level college)',
               'required' => false
             ))
@@ -63,11 +52,7 @@ class LiaisonSubjectType extends AbstractType
                   $qb->getQuery();
                   return $qb;
               },
-              'attr' => array(
-                'class' => 'form-control'
-              ),
               'label' => 'Primary Liaison',
-              'label_attr' => array('class' => 'col-sm-2 control-label'),
               'placeholder' => '--NOT SET--',
               'choice_label' => 'getFirstLastName', //getFirstLastName() method in Staff class
               'required' => false
@@ -83,13 +68,21 @@ class LiaisonSubjectType extends AbstractType
                   $qb->getQuery();
                   return $qb;
               },
-              'attr' => array(
-                'class' => 'form-control'
-              ),
               'label' => 'Secondary Liaison',
-              'label_attr' => array('class' => 'col-sm-2 control-label'),
               'placeholder' => '--NOT SET--',
               'choice_label' => 'getFirstLastName', //getFirstLastName() method in Staff class
+              'required' => false
+            ))
+            ->add('facultyName', null, array(
+              'label' => 'Faculty Liaison',
+              'required' => false
+            ))
+            ->add('facultyPhone', null, array(
+              'label' => 'Faculty Liaison Phone',
+              'required' => false
+            ))
+            ->add('facultyOffice', null, array(
+              'label' => 'Faculty Liaison Office',
               'required' => false
             ))
         ;

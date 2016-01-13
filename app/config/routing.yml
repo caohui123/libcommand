@@ -8,11 +8,15 @@ fos_user:
 #Rest (FOSRestBundle)
 avrequest:
     type: rest
-    #resource: "routing_rest.yml"
     resource: AppBundle\Controller\AvRequestController
     prefix: /api/
     
 hours:
     type: rest
     resource: AppBundle\Controller\HoursRestController
+    prefix: /api/
+
+hourdepartmentstaff:
+    type: rest
+    resource: AppBundle\Controller\DepartmentStaffRestController
     prefix: /api/

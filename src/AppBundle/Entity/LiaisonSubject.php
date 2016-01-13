@@ -37,9 +37,30 @@ class LiaisonSubject
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=15)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      */
     private $phone;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faculty_name", type="string", length=100, nullable=true)
+     */
+    private $facultyName;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faculty_phone", type="string", length=15, nullable=true)
+     */
+    private $facultyPhone;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faculty_office", type="string", length=15, nullable=true)
+     */
+    private $facultyOffice;
 
 
     /**
@@ -199,6 +220,78 @@ class LiaisonSubject
     public function getPhone()
     {
         return $this->phone;
+    }
+    
+    /**
+     * Set faculty name
+     *
+     * @param string $facultyName
+     *
+     * @return LiaisonSubject
+     */
+    public function setFacultyName($facultyName)
+    {
+        $this->facultyName = $facultyName;
+
+        return $this;
+    }
+
+    /**
+     * Get faculty name
+     *
+     * @return string
+     */
+    public function getFacultyName()
+    {
+        return $this->facultyName;
+    }
+    
+    /**
+     * Set faculty phone
+     *
+     * @param string $facultyPhone
+     *
+     * @return LiaisonSubject
+     */
+    public function setFacultyPhone($facultyPhone)
+    {
+        $this->facultyPhone = $facultyPhone;
+        
+        return $this;
+    }
+
+    /**
+     * Get faculty phone
+     *
+     * @return string
+     */
+    public function getFacultyPhone()
+    {
+        return $this->facultyPhone;
+    }
+    
+    /**
+     * Set faculty office
+     *
+     * @param string $facultyOffice
+     *
+     * @return LiaisonSubject
+     */
+    public function setFacultyOffice($facultyOffice)
+    {
+        $this->facultyOffice = $facultyOffice;
+        
+        return $this;
+    }
+
+    /**
+     * Get faculty office
+     *
+     * @return string
+     */
+    public function getFacultyOffice()
+    {
+        return $this->facultyOffice;
     }
 
     /**

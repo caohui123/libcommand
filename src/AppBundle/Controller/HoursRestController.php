@@ -19,9 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HoursRestController extends FOSRestController{
     /**
-     * @Rest\View()
+     * Get regular hours for all areas
      */
-    public function getHoursrestAction(Request $request){
+    public function getHoursrestAction(){
         $em = $this->getDoctrine()->getManager();
         
         $areas = $em->getRepository('AppBundle:HoursArea')->findBy(array(), array('displayOrder'=>'ASC'));
@@ -39,8 +39,6 @@ class HoursRestController extends FOSRestController{
     }
     
     /**
-     * @Rest\View()
-     * 
      * Return all special events
      */
     public function getHoursrestEventsAction(){
@@ -60,8 +58,6 @@ class HoursRestController extends FOSRestController{
     }
     
     /**
-     * @Rest\View()
-     * 
      * Return all special events that start before a certain date and end after a certain date
      */
     public function getHoursrestEventsbyweekAction(Request $request){
@@ -92,8 +88,6 @@ class HoursRestController extends FOSRestController{
     }
     
     /**
-     * @Rest\View()
-     * 
      * Return all special semesters
      */
     public function getHoursrestSemestersAction(){
@@ -113,8 +107,6 @@ class HoursRestController extends FOSRestController{
     }
     
     /**
-     * @Rest\View()
-     * 
      * Return all areas
      */
     public function getHoursrestAreasAction(){
@@ -134,8 +126,6 @@ class HoursRestController extends FOSRestController{
     }
     
     /**
-     * @Rest\View()
-     * 
      * Return hours for an area for a specified date range
      */
     public function getHoursrestAreadaterangeAction(Request $request){

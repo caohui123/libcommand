@@ -259,6 +259,8 @@ class UserController extends Controller
         $service->updatePermissions($entity, $formData['hours'], $formData['hours_previous']);
         //STAFF
         $service->updatePermissions($entity, $formData['staff'], $formData['staff_previous']);
+        //LIBRARY DEPARTMENTS
+        $service->updatePermissions($entity, $formData['departments'], $formData['departments_previous']);
         
         //redirect to the Edit screen for the given user
         return $this->redirect($this->generateUrl('user_edit', array('id' => $userId)));
@@ -285,6 +287,8 @@ class UserController extends Controller
         $hours_permission = $service->generateViewEditDelete($user, 'ROLE_HOURS');
         //HOURS
         $staff_permission = $service->generateViewEditDelete($user, 'ROLE_STAFF');
+        //LIBRARY DEPARTMENTS
+        $department_permission = $service->generateViewEditDelete($user, 'ROLE_DEPARTMENTS');
         
         $data = array();
         $form = $this->get('form.factory')->createNamedBuilder('user_permission_form', 'form', $data, array(
@@ -341,6 +345,23 @@ class UserController extends Controller
             ->add('staff_previous', 'hidden', array(
               //need to know the previous permission level so we can remove it and replace it with the new one.
               'data' => $staff_permission
+            ))
+            //LIBRARY DEPARTMENTS
+            ->add('departments', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_DEPARTMENTS_VIEW'=> 'View',
+                'ROLE_DEPARTMENTS_EDIT'=> 'Edit',
+                'ROLE_DEPARTMENTS_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $department_permission
+            ))
+            ->add('departments_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $department_permission
             ))
             //user's ID (send along to createEditForm action)
             ->add('userId', 'hidden', array(

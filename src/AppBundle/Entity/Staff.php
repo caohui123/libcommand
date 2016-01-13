@@ -174,6 +174,12 @@ class Staff
     private $staffFunctionalArea;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Department", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="department_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $department;
+    
+    /**
      * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
@@ -710,6 +716,30 @@ class Staff
     public function getStaffFunctionalArea()
     {
         return $this->staffFunctionalArea;
+    }
+    
+    /**
+     * Set department
+     *
+     * @param \AppBundle\Entity\Department $department
+     *
+     * @return Staff
+     */
+    public function setDepartment(\AppBundle\Entity\Department $department = null)
+    {
+        $this->department = $department;
+
+        return $this;
+    }
+
+    /**
+     * Get department
+     *
+     * @return \AppBundle\Entity\Department
+     */
+    public function getDepartment()
+    {
+        return $this->department;
     }
     
     public function getCreated()

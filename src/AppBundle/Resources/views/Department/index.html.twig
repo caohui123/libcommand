@@ -1,0 +1,52 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<style>
+.just-padding {
+    padding: 15px;
+}
+
+.list-group.list-group-root {
+    padding: 0;
+    overflow: hidden;
+}
+
+.list-group.list-group-root .list-group {
+    margin-bottom: 0;
+}
+
+.list-group.list-group-root .list-group-item {
+    border-radius: 0;
+    border-width: 1px 0 0 0;
+}
+
+.list-group.list-group-root > .list-group-item:first-child {
+    border-top-width: 0;
+}
+
+.list-group.list-group-root > .list-group > .list-group-item {
+    padding-left: 30px;
+}
+
+.list-group.list-group-root > .list-group > .list-group > .list-group-item {
+    padding-left: 45px;
+}
+
+.list-group-item .glyphicon {
+    margin-right: 5px;
+}
+</style> 
+
+    <h1 class="page-header">Library Departments <span><a class="btn btn-sm btn-primary" href="{{ path('department_new') }}" role="button" aria-label="Add a new department"><span class="glyphicon glyphicon-plus"></span> New Department</a></span></h1> 
+    
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        {{ styled_list|raw }}
+      </div>
+    </div>
+          
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+{% endblock %}

@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
-class StaffAreaType extends AbstractType
+class DepartmentType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,27 +16,26 @@ class StaffAreaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', 'text', array(
-              'label' => 'Title', 
-              'label_attr' => array('class' => 'col-sm-2 control-label'),
-              'attr' => array('class' => 'form-control')
-            ))
+            ->add('name')
+            ->add('room')
+            ->add('phone')
+            ->add('fax')
+            ->add('description')
             ->add('lft', 'hidden')
             ->add('lvl', 'hidden')
             ->add('rgt', 'hidden')
-            //->add('root', 'hidden') #leave out...will throw error "Root cannot be changed manually, change parent instead"
             ->add('parent', 'entity', array(
-              'class'=>'AppBundle:StaffArea',
+              'class'=>'AppBundle:Department',
               'query_builder'=>function(EntityRepository $er){
-                  $qb = $er->createQueryBuilder('sa');
+                  $qb = $er->createQueryBuilder('d');
                   $qb
-                    ->where('sa.lvl < 1') //only allow user to choose parent
-                    ->orderBy('sa.root, sa.lft', 'ASC')
+                    ->where('d.lvl < 1') //only allow user to choose parent
+                    ->orderBy('d.root, d.lft', 'ASC')
                     ->getQuery();
                   return $qb;
               },
               'property' => 'indentedTitle',
-              'label' => 'Parent Area',
+              'label' => 'Parent Department',
               'placeholder' => 'Choose Parent (leave blank if parent)',
               'required' => false
             ))
@@ -49,7 +48,7 @@ class StaffAreaType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\StaffArea'
+            'data_class' => 'AppBundle\Entity\Department'
         ));
     }
 
@@ -58,6 +57,6 @@ class StaffAreaType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_staffarea';
+        return 'appbundle_department';
     }
 }

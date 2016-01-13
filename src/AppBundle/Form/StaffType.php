@@ -46,8 +46,6 @@ class StaffType extends AbstractType
             ->add('cellPhone', null, array('required'=>false))
             ->add('selfIntro', null, array('required'=>false))
             ->add('favoriteWebsites', null, array('required'=>false))
-            ->add('photo', 'file', array('required'=>false))
-            ->add('showPhoto', 'checkbox', array('label' => 'Show photo on public website? ', 'required'=>false))
             ->add('staffFunctionalArea', 'entity', array(
               'class'=>'AppBundle:StaffArea',
               'query_builder'=>function(EntityRepository $er){
@@ -59,14 +57,26 @@ class StaffType extends AbstractType
                   return $qb;
               },
               'property' => 'indentedTitle',
-              'attr' => array(
-                'class' => 'form-control'
-              ),
               'label' => 'Functional Area',
-              'label_attr' => array('class' => 'col-sm-2 control-label'),
               'placeholder' => '--Choose a Functional Area--',
               'required' => true
-            ));
+            ))
+            ->add('department', 'entity', array(
+              'class'=>'AppBundle:Department',
+              'query_builder'=>function(EntityRepository $er){
+                  $qb = $er->createQueryBuilder('d');
+                  $qb
+                    ->orderBy('d.root, d.lft', 'ASC')
+                    ->getQuery();
+                  return $qb;
+              },
+              'property' => 'indentedTitle', //method to display the name of the dept.
+              'label' => 'Library Department',
+              'placeholder' => '--Choose a Department--',
+              'required' => false
+            ))
+            ->add('photo', 'file', array('required'=>false))
+            ->add('showPhoto', 'checkbox', array('label' => 'Show photo on public website? ', 'required'=>false));
     }
     
     /**

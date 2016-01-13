@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * StaffArea
@@ -75,6 +76,15 @@ class StaffArea
     private $indentedTitle;
     
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+        $this->users = new ArrayCollection();
+    }
+    
+    /**
      * Get id
      *
      * @return integer
@@ -115,15 +125,6 @@ class StaffArea
      */
     public function getIndentedTitle(){
       return str_repeat("-", $this->lvl)." ".$this->title;
-    }
-    
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
