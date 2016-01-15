@@ -26,7 +26,7 @@ class LiaisonSubjectController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_LIAISON_VIEW")
+     * //@Secure(roles="ROLE_LIAISON_VIEW")
      */
     public function indexAction()
     {

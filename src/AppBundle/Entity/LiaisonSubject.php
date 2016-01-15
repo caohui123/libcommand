@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
+
 
 /**
  * LiaisonSubject
@@ -15,6 +18,21 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table()
  * @ORM\Entity
  * @UniqueEntity(fields={"name"}, message="Department or program already exists.")
+ * 
+ * @Serializer\XmlRoot("liaisonSubject")
+ * @Hateoas\Relation("self", href="expr('/api/liaisons/' ~ object.getId())")
+ * @Hateoas\Relation(
+ *    "primaryliaison",
+ *    href = "expr('/api/staff/' ~ object.getPrimaryLiaison().getId())",
+ *    embedded = "expr(object.getPrimaryLiaison())",
+ *    exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getPrimaryLiaison() === null)")
+ * )
+ * @Hateoas\Relation(
+ *    "secondaryliaison",
+ *    href = "expr('/api/staff/' ~ object.getSecondaryLiaison().getId())",
+ *    embedded = "expr(object.getSecondaryLiaison())",
+ *    exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getSecondaryLiaison() === null)")
+ * )
  */
 class LiaisonSubject
 {
@@ -45,6 +63,7 @@ class LiaisonSubject
      * @var string
      *
      * @ORM\Column(name="faculty_name", type="string", length=100, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $facultyName;
     
@@ -52,6 +71,7 @@ class LiaisonSubject
      * @var string
      *
      * @ORM\Column(name="faculty_phone", type="string", length=15, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $facultyPhone;
     
@@ -59,6 +79,7 @@ class LiaisonSubject
      * @var string
      *
      * @ORM\Column(name="faculty_office", type="string", length=15, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $facultyOffice;
 
@@ -68,6 +89,7 @@ class LiaisonSubject
      *
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $lft;
 
@@ -84,6 +106,7 @@ class LiaisonSubject
      *
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $rgt;
 
@@ -92,6 +115,7 @@ class LiaisonSubject
      * 
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $root;
     
@@ -111,12 +135,14 @@ class LiaisonSubject
     /**
      * @ORM\ManyToOne(targetEntity="Staff")
      * @JoinColumn(name="primary_liaison", referencedColumnName="id", nullable=true)
+     * @Serializer\Exclude //embedded
      */
     private $primaryLiaison;
     
     /**
      * @ORM\ManyToOne(targetEntity="Staff")
      * @JoinColumn(name="secondary_liaison", referencedColumnName="id", nullable=true)
+     * @Serializer\Exclude //embedded
      */
     private $secondaryLiaison;
     
@@ -125,6 +151,7 @@ class LiaisonSubject
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $created;
 
@@ -133,6 +160,7 @@ class LiaisonSubject
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $updated;
     
@@ -141,6 +169,7 @@ class LiaisonSubject
      *
      * @ORM\Column(name="content_changed_by", type="string", nullable=true)
      * @Gedmo\Blameable(on="change", field={"name", "phone", "parent", "primaryLiaison", "secondaryLiaison"})
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $contentChangedBy;
 

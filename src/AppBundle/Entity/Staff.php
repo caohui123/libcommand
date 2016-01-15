@@ -6,6 +6,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Staff
@@ -16,6 +18,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @UniqueEntity(fields={"staffId"}, message="A staff member with that ID already exists.")
  * @UniqueEntity(fields={"firstName", "lastName"}, message="A staff member by that name already exists.")
  * @UniqueEntity(fields={"email"}, message="A staff member with email already exists.")
+ * 
+ * @Serializer\XmlRoot("staff")
+ * @Hateoas\Relation("self", href="expr('/api/staff/' ~ object.getStaffId())")
+ * @Hateoas\Relation(
+ *    "department",
+ *    href = "expr('/api/department/' ~ object.getDepartment().getId())",
+ *    embedded = "expr(object.getDepartment())",
+ *    exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getDepartment() === null)")
+ * )
  */
 class Staff
 {
@@ -25,6 +36,8 @@ class Staff
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * 
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $id;
 
@@ -39,6 +52,7 @@ class Staff
      * @var string
      *
      * @ORM\Column(name="employmentStatus", type="string")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $employmentStatus;
 
@@ -66,35 +80,36 @@ class Staff
     /**
      * @var string
      *
-     * @ORM\Column(name="guidesUrl", type="string", length=255)
+     * @ORM\Column(name="guidesUrl", type="string", length=255, nullable=true)
      */
     private $guidesUrl;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="office", type="string", length=20)
+     * @ORM\Column(name="office", type="string", length=20, nullable=true)
      */
     private $office;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=12)
+     * @ORM\Column(name="phone", type="string", length=12, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=30)
+     * @ORM\Column(name="email", type="string", length=30, nullable=true)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="jobDescription", type="text")
+     * @ORM\Column(name="jobDescription", type="text", nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $jobDescription;
 
@@ -102,80 +117,90 @@ class Staff
      * @var boolean
      *
      * @ORM\Column(name="showPhoto", type="boolean")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $showPhoto;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="homeStreet", type="string", length=70)
+     * @ORM\Column(name="homeStreet", type="string", length=70, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $homeStreet;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="homeCity", type="string", length=20)
+     * @ORM\Column(name="homeCity", type="string", length=20, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $homeCity;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="homeState", type="string", length=2)
+     * @ORM\Column(name="homeState", type="string", length=2, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $homeState;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="homeZip", type="string", length=10)
+     * @ORM\Column(name="homeZip", type="string", length=10, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $homeZip;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="homePhone", type="string", length=12)
+     * @ORM\Column(name="homePhone", type="string", length=12, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $homePhone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cellPhone", type="string", length=12)
+     * @ORM\Column(name="cellPhone", type="string", length=12, nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $cellPhone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="selfIntro", type="text")
+     * @ORM\Column(name="selfIntro", type="text", nullable=true)
      */
     private $selfIntro;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="favoriteWebsites", type="text")
+     * @ORM\Column(name="favoriteWebsites", type="text", nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $favoriteWebsites;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="photo", type="blob", nullable=true)
+     * @ORM\Column(name="photo", type="blob", nullable=true, nullable=true)
      */
     private $photo;
     
     /**
      * @ORM\ManyToOne(targetEntity="StaffArea", cascade={"persist"}, fetch="LAZY")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $staffFunctionalArea;
     
     /**
      * @ORM\ManyToOne(targetEntity="Department", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinColumn(name="department_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @Serializer\Exclude //embedded
      */
     private $department;
     
@@ -184,6 +209,7 @@ class Staff
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $created;
 
@@ -192,6 +218,7 @@ class Staff
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $updated;
     
@@ -200,6 +227,7 @@ class Staff
      *
      * @ORM\Column(name="content_changed_by", type="string", nullable=true)
      * @Gedmo\Blameable(on="change", field={"firstName", "lastName"})
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $contentChangedBy;
 

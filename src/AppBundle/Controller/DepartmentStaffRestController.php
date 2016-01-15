@@ -35,18 +35,16 @@ class DepartmentStaffRestController extends FOSRestController{
     
     /**
      * Get individual staff member by employee id (not entity record id)
+     * 
+     * @var $employeeId  The employee's staffID (e.g. 'lib198')
      */
-    public function getStaffAction(Request $request){
-      $requestData = $request->query->all();
-      
-      $employeeId = $requestData['id'];
-      
+    public function getStaffAction($employeeId){
       $em = $this->getDoctrine()->getManager();
       
       $employee = $em->getRepository('AppBundle:Staff')->findBy(array('staffId' => $employeeId));
       
       if(!$employee){
-        throw $this->createNotFoundException('No employee with that ID could be found.');
+        throw $this->createNotFoundException('No employee with that staff ID could be found.');
       }
       
       $serializer = $this->container->get('serializer');
@@ -56,5 +54,124 @@ class DepartmentStaffRestController extends FOSRestController{
       return $response;
     }
     
+    /**
+     * Get a group of staff members by first letter of the last name
+     * 
+     * @var $letter  The first letter of the last name
+     */
+    public function getStaffByletterAction($letter){
+      $em2 = $this->getDoctrine()->getEntityManager();
+      
+      $employees = $em2->createQuery('
+            SELECT s FROM AppBundle:Staff s WHERE s.lastName LIKE :letter ORDER BY s.lastName ASC
+            ')
+            ->setParameter('letter', $letter . '%')
+            ->getResult();
+      
+      if(!$employees){
+        throw $this->createNotFoundException('No employees with last name beginning with '.$letter.' could be found.');
+      }
+      
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($employees, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+      return $response;
+    }
+    
+    /**
+     * Get all liaison departments in College>Department>Program order
+     */
+    public function getLiaisonsAllAction(){
+      $em2 = $this->getDoctrine()->getEntityManager();
+      
+      $liaisonDepts = $em2->createQuery('
+            SELECT l FROM AppBundle:LiaisonSubject l ORDER BY l.root, l.lft ASC
+            ')
+            ->getResult();
+      
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($liaisonDepts, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+      return $response;
+    }
+    
+    /**
+     * Get top-level liaison colleges
+     */
+    public function getLiaisonsToplevelAction(){
+      $em = $this->getDoctrine()->getManager();
+      
+      $topLevels = $em->getRepository('AppBundle:LiaisonSubject')->findBy(array('lvl' => 0), array('name'=>'ASC'));
+      
+      if(!$topLevels){
+        throw $this->createNotFoundException('No top-level departments found.');
+      }
+      
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($topLevels, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+      return $response;
+    }
+    
+    /**
+     * Get all departments and services
+     */
+    public function getDepartmentsAction(){
+      $em2 = $this->getDoctrine()->getEntityManager();
+      
+      $liaisonDepts = $em2->createQuery('
+            SELECT l FROM AppBundle:Department l ORDER BY l.root, l.lft ASC
+            ')
+            ->getResult();
+      
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($liaisonDepts, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+      return $response;
+    }
+    
+    /**
+     * Get top-level departments
+     */
+    public function getDepartmentsToplevelAction(){
+      $em = $this->getDoctrine()->getManager();
+      
+      $topLevels = $em->getRepository('AppBundle:Department')->findBy(array('lvl' => 0), array('name'=>'ASC'));
+      
+      if(!$topLevels){
+        throw $this->createNotFoundException('No top-level departments found.');
+      }
+      
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($topLevels, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+      return $response;
+    }
+    
+     /**
+     * Get individual department
+     * 
+     * @var id The department's id
+     */
+    public function getDepartmentAction($id){
+      $em = $this->getDoctrine()->getManager();
+      
+      $department = $em->getRepository('AppBundle:Department')->find($id);
+      
+      if(!$department){
+        throw $this->createNotFoundException('No department with that ID could be found.');
+      }
+      
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($department, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+      return $response;
+    }
 }
 

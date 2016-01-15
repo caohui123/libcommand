@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Department
@@ -16,6 +18,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @UniqueEntity(fields={"name"}, message="Department exists.")
  * @Gedmo\Tree(type="nested")
+ * 
+ * @Serializer\XmlRoot("department")
+ * @Hateoas\Relation("self", href="expr('/api/staff/' ~ object.getId())")
  */
 class Department
 {
@@ -65,30 +70,36 @@ class Department
     
     /**
      * @ORM\OneToMany(targetEntity="Staff", mappedBy="department", cascade={"persist"})
+     * 
+     * //@Serializer\Exclude //returned as "embedded resourse" in API
      */
     private $users;
     
     /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $lft;
 
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $lvl;
 
     /**
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $rgt;
 
     /**
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $root;
 
@@ -96,6 +107,7 @@ class Department
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Department", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $parent;
 
@@ -110,6 +122,7 @@ class Department
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $created;
 
@@ -118,6 +131,7 @@ class Department
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $updated;
     
@@ -126,6 +140,7 @@ class Department
      *
      * @ORM\Column(name="content_changed_by", type="string", nullable=true)
      * @Gedmo\Blameable(on="change", field={"name", "phone", "parent", "primaryLiaison", "secondaryLiaison"})
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $contentChangedBy;
     
