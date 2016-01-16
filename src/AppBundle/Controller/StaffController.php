@@ -54,6 +54,19 @@ class StaffController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $photo = $entity->getPhoto();
+            
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$photo->guessExtension();
+            
+            // Move the photo to the directory where they are stored
+            $photosDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/profile';
+            $photo->move($photosDir, $fileName);
+            
+            // Update the 'photo' property to store the file name instead of its contents
+            $entity->setPhoto($fileName);
+
+            // persist the entity
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();

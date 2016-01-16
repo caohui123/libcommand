@@ -33,6 +33,10 @@ body {
   margin-left: 15px;
 }
 
+/* Hours areas drag and drop */
+#displayOrderList{cursor: move;}
+#displayOrderList li span { position: absolute; margin-left: -1.3em; }
+
 @media (min-width: 0) {
   .navbar-toggle {
     display: block; /* force showing the toggle */
@@ -40,7 +44,7 @@ body {
 }
 
 @media (min-width: 480px) {
-  .regularhours_day{
+  .regularhours_day, .specialhours_day{
       width: 100%; 
       float: none
   }
@@ -55,7 +59,7 @@ body {
 }
 
 @media (min-width: 768px) {
-  .regularhours_day{
+  .regularhours_day, .specialhours_day{
       width: 25%; 
       float: left
   }
@@ -70,7 +74,7 @@ body {
     background: none;
     border: none;
   }
-  .regularhours_day{
+  .regularhours_day, .specialhours_day{
       width: 12.2857142%; 
       padding: 1%;
       float: left

@@ -75,7 +75,10 @@ class StaffType extends AbstractType
               'placeholder' => '--Choose a Department--',
               'required' => false
             ))
-            ->add('photo', 'file', array('required'=>false))
+            ->add('photo', 'file', array(
+              'required' => false,
+              'data_class' => null,
+            ))
             ->add('showPhoto', 'checkbox', array('label' => 'Show photo on public website? ', 'required'=>false));
     }
     
