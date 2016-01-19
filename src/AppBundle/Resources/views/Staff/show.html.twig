@@ -74,12 +74,20 @@
                 <tr>
                     <th>Photo</th>
                     <td>
-                      {{ entity.photo }}
-                      {% if entity.showPhoto == 1 %}
-                        Displayed publicly
-                      {% else %}
-                        NOT displayed publicly
-                      {% endif %}
+                      <p>
+                        
+                        {% if entity.photo != '' %}
+                          <a href="{{ asset('uploads/profile/' ~ entity.photo) }}">View photo</a></p>
+                        {% else %}
+                          no photo uploaded
+                        {% endif %}
+                      <p>
+                        {% if entity.showPhoto == 1 %}
+                          Set to display publicly
+                        {% else %}
+                          Set to NOT display publicly
+                        {% endif %}
+                      </p>
                     </td>
                 </tr>
             </tbody>

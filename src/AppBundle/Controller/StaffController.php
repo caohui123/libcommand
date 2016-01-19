@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Staff;
 use AppBundle\Form\StaffType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Staff controller.
@@ -54,7 +55,9 @@ class StaffController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $photo = $entity->getPhoto();
+            $files = $request->files->all();
+            $photo = $files['appbundle_staff']['photo'];
+            //$photo = $entity->getPhoto();
             
             // Generate a unique name for the file before saving it
             $fileName = md5(uniqid()).'.'.$photo->guessExtension();
@@ -73,11 +76,11 @@ class StaffController extends Controller
 
             return $this->redirect($this->generateUrl('staff_show', array('id' => $entity->getId())));
         }
-
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
         );
+
     }
 
     /**
@@ -170,10 +173,10 @@ class StaffController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Staff entity.');
         }
-
+         
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
-
+        
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -194,7 +197,7 @@ class StaffController extends Controller
             'action' => $this->generateUrl('staff_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-
+        //$form->add('deletePhotoSubmit', 'submit', array('label'=>'Delete Photo'));
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
@@ -213,16 +216,61 @@ class StaffController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Staff')->find($id);
-
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Staff entity.');
         }
+        
+        //staff photo directory
+        $photosDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/profile/';
+        $existingPhotoName = $entity->getPhoto();
 
+            
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $files = $request->files->all();
+            //check to see if there was an existing photo
+            if($existingPhotoName != ''){
+              $photoPath = $photosDir . $existingPhotoName;
+            } 
+            //if main submit button was clicked
+            if($editForm->get('submit')->isClicked()){
+
+              //check to see if there is a new photo
+              if($files['appbundle_staff']['photo'] != null){
+                //new photo? add it to the profile directory.
+                $photo = $files['appbundle_staff']['photo'];
+                $fileName = md5(uniqid()).'.'.$photo->guessExtension();
+                $photo->move($photosDir, $fileName);
+                $entity->setPhoto($fileName);
+                
+                if(isset($photoPath) && file_exists($photoPath)){
+                  //now remove the old one
+                  $fs = new FileSystem();
+                  $fs->remove($photoPath);
+                }
+              }
+             
+              //if there is an existing photo but not a new one, retain the old file's name in the database
+              if($files['appbundle_staff']['photo'] == null && $existingPhotoName != ''){
+                $entity->setPhoto($existingPhotoName); //retain old photo name
+              }
+            } 
+            
+            //if delete photo submit button is clicked
+            if($editForm->has('deletePhotoSubmit') && $editForm->get('deletePhotoSubmit')->isClicked()){
+              if(isset($photoPath) && file_exists($photoPath)){
+                //remove the profile pic
+                $fs = new FileSystem();
+                $fs->remove($photoPath);
+                $entity->setShowPhoto(0);
+              }
+            }
+             
+            $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('staff_edit', array('id' => $id)));

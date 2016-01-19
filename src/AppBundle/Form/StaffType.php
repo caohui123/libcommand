@@ -78,8 +78,23 @@ class StaffType extends AbstractType
             ->add('photo', 'file', array(
               'required' => false,
               'data_class' => null,
+              'label' => 'New Photo'
             ))
             ->add('showPhoto', 'checkbox', array('label' => 'Show photo on public website? ', 'required'=>false));
+              
+          
+         //add in these fields only if the HoursSpecial object is new using an event listener
+        $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(\Symfony\Component\Form\FormEvent $event){
+            $staff = $event->getData();
+            $form = $event->getForm();
+            
+            // check for the exsitence of a current photo path
+            // If no path is passed to the form, the data is "null".
+            // There should be no delete button present if there is no photo path present
+            if(!$staff || null !== $staff->getPhoto()){
+                $form->add('deletePhotoSubmit', 'submit', array('label'=>'Delete Photo'));
+            }
+        });
     }
     
     /**

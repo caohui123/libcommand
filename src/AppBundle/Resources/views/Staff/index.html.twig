@@ -20,7 +20,10 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td>{{ entity.lastName }}, {{ entity.firstName }}</td>
+                <td>
+                  {{ entity.lastName }}, {{ entity.firstName }}
+                  <p><a href="{{ path('staff_show', { 'id': entity.id }) }}">show</a> | <a href="{{ path('staff_edit', { 'id': entity.id }) }}">edit</a></p>
+                </td>
                 <td>{{ entity.staffId }}</td>
                 <td>
                   {% for status in entity.employmentStatus %}
@@ -33,14 +36,7 @@
                 <td>{{ entity.phone }}</td>
                 <td>{{ entity.email }}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('staff_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('staff_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                
                 </td>
             </tr>
         {% endfor %}

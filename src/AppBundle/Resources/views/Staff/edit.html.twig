@@ -9,10 +9,19 @@
     </div>
     <div class="row">
       <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
-        {{ form(edit_form) }}
+        {{ form_start(edit_form) }}
+          {{ form_row(edit_form.photo) }}
+          {{ form_row(edit_form.showPhoto) }}
+          {% if edit_form.deletePhotoSubmit is defined %}
+            <p class="control-label">Current Photo</p>
+            <img src="{{ asset('uploads/profile/' ~ entity.photo) }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/>
+            {{ form_row(edit_form.deletePhotoSubmit) }}
+          {% endif %}
+          <hr/>
+        {{ form_end(edit_form) }}
       </div>
     </div>
     {{ form(delete_form) }}
-    <!--<a href="{# asset('uploads/profile/' ~ entity.photo) #}">View photo</a>-->
+    
 </ul>
 {% endblock %}

@@ -118,7 +118,6 @@ class Staff
      * @var boolean
      *
      * @ORM\Column(name="showPhoto", type="boolean")
-     * @Serializer\Exclude //exclude from API calls 
      */
     private $showPhoto;
 
@@ -187,12 +186,6 @@ class Staff
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Image(
-     *     minWidth = 200,
-     *     maxWidth = 400,
-     *     minHeight = 200,
-     *     maxHeight = 400
-     * )
      */
     private $photo;
     
@@ -235,6 +228,32 @@ class Staff
      * @Serializer\Exclude //exclude from API calls 
      */
     private $contentChangedBy;
+    
+    private $currentPhoto;
+    
+    /**
+     * Set currentPhoto
+     *
+     * @param string $currentPhoto
+     *
+     * @return Staff
+     */
+    public function setCurrentPhoto($currentPhoto)
+    {
+        $this->currentPhoto = $currentPhoto;
+
+        return $this;
+    }
+
+    /**
+     * Get currentPhoto
+     *
+     * @return string
+     */
+    public function getCurrentPhoto()
+    {
+        return $this->currentPhoto;
+    }
 
 
     /**
