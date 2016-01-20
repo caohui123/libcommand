@@ -240,7 +240,7 @@ class StaffArea
     /**
      * Get parent
      *
-     * @return \AppBundle\Entity\Category
+     * @return StaffArea
      */
     public function getParent()
     {
@@ -264,7 +264,7 @@ class StaffArea
     /**
      * Remove child
      *
-     * @param \AppBundle\Entity\Category $child
+     * @param \AppBundle\Entity\StaffArea $child
      */
     public function removeChild(\AppBundle\Entity\StaffArea $child)
     {
