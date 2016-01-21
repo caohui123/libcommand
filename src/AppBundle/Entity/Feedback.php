@@ -455,7 +455,7 @@ class Feedback
      *
      * @return Feedback
      */
-    public function setCategory(\AppBundle\Entity\Category $category = null)
+    public function setCategory(\AppBundle\Entity\FeedbackCategory $category = null)
     {
         $this->category = $category;
 

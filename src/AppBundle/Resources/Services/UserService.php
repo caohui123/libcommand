@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface as AclProvider; 
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use FOS\UserBundle\Util\UserManipulator;
 
@@ -18,14 +17,12 @@ class UserService{
   protected $em;
   protected $container;
   protected $authorizationChecker;
-  protected $aclProvider;
   protected $manipulator;
   
-  public function __construct(EntityManager $em, ContainerInterface $container, AuthorizationCheckerInterface $authorizationChecker, AclProvider $aclProvider, UserManipulator $manipulator){
+  public function __construct(EntityManager $em, ContainerInterface $container, AuthorizationCheckerInterface $authorizationChecker, UserManipulator $manipulator){
     $this->em = $em; //injected in services.yml [ @doctrine.orm.entity_manager ]
     $this->container = $container;
     $this->authorizationChecker = $authorizationChecker;
-    $this->aclProvider = $aclProvider;
     $this->manipulator = $manipulator;
   }
   
@@ -113,6 +110,8 @@ class UserService{
  * 
  * @return null
  */
+
+/*
   public function editPermission(User $user, $entity, $permission){
     $allEntities = $this->em->getRepository($entity)->findAll();
     
@@ -127,7 +126,7 @@ class UserService{
           $acl->updateObjectAce($i, $permission); 
       }
     }
-  }
+  }*/
 
 }
 

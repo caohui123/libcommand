@@ -11,7 +11,7 @@ services:
 #    class: UserBundle\Resources\utilities\LogoutListener
     user_service:
       class: AppBundle\Resources\Services\UserService
-      arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @security.acl.provider, @fos_user.util.user_manipulator ]
+      arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @fos_user.util.user_manipulator ]
     
     list_service:
       class: AppBundle\Resources\Services\ListService
