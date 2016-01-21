@@ -13,3 +13,26 @@
             <li>{{ form(delete_form) }}</li>
         </ul>
 {% endblock %}
+{% block documentReady %}
+  //dynamically update the subject's level (lvl) each time a new parent subject is picked
+  $('#appbundle_liaisonsubject_parent').on('change', function(event){
+    var parentId = $(this).val();
+    var url = "{{ path('liaisonsubject_parentlvl', {'id': 'replace'}) }}";
+    url = url.replace("replace", parentId); //twig runs before javascipt so the ID must be inserted after
+    
+    var ajaxObject = {
+          type: 'GET',
+          dataType: 'text', //expect plain text from the server
+          url: url
+        };
+        
+        $.ajax(ajaxObject)
+          .success(function(data,status,xhr){
+            //'data' is the integer id of the parent's 'lvl' field
+            $('#appbundle_liaisonsubject_lvl').val(parseInt(data)+1);
+          })
+          .fail(function(data,status,xhr){console.log(status);})
+          .always(function(data,status,xhr){console.log(status);});
+  });
+  {{ parent() }}
+{% endblock %}

@@ -68,6 +68,7 @@ class FeedbackArea
      */
     private $children;
 
+    private $indentedTitle;
     /**
      * Get id
      *
@@ -76,6 +77,15 @@ class FeedbackArea
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Get title with indentations for nested lists
+     * 
+     * @return string
+     */
+    public function getIndentedTitle(){
+      return str_repeat("-", $this->lvl)." ".$this->name;
     }
 
     /**

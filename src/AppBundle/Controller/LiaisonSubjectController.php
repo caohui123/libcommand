@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\LiaisonSubject;
 use AppBundle\Form\LiaisonSubjectType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * LiaisonSubject controller.
@@ -32,7 +33,7 @@ class LiaisonSubjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:LiaisonSubject')->findAll();
+        $entities = $em->getRepository('AppBundle:LiaisonSubject')->findBy(array(), array('name'=>'ASC'));
         
         $list_service = $this->get('list_service');
         $styled_list = $list_service->liaisonSubjectsList($entities);
@@ -250,5 +251,26 @@ class LiaisonSubjectController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Returns the 'lvl' field of a liaisonSubject
+     *
+     * @Route("/parent/{id}", name="liaisonsubject_parentlvl")
+     * @Method("GET")
+     */
+    public function getLevelAction($id){
+      $em = $this->getDoctrine()->getManager();
+      
+      $liaisonSubject = $em->getRepository('AppBundle:LiaisonSubject')->find($id);
+      
+      if(!$liaisonSubject){
+        throw $this->createNotFoundException('No LiaisonSubject entity found with that ID');
+      }
+      
+      $liaisonId = $liaisonSubject->getLvl();
+      
+      $response = new Response($liaisonId, 200, array('Content-Type' => 'text/plain'));
+      return $response;
     }
 }

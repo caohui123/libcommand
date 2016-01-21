@@ -1,41 +1,57 @@
 {% extends '::base.html.twig' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+{% endblock %}
+
 {% block body -%}
-    <h1>FeedbackArea list</h1>
+  
+<style>
+.just-padding {
+    padding: 15px;
+}
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('feedbackarea_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('feedbackarea_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('feedbackarea_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+.list-group.list-group-root {
+    padding: 0;
+    overflow: hidden;
+}
 
-        <ul>
-        <li>
-            <a href="{{ path('feedbackarea_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+.list-group.list-group-root .list-group {
+    margin-bottom: 0;
+}
+
+.list-group.list-group-root .list-group-item {
+    border-radius: 0;
+    border-width: 1px 0 0 0;
+}
+
+.list-group.list-group-root > .list-group-item:first-child {
+    border-top-width: 0;
+}
+
+.list-group.list-group-root > .list-group > .list-group-item {
+    padding-left: 30px;
+}
+
+.list-group.list-group-root > .list-group > .list-group > .list-group-item {
+    padding-left: 45px;
+}
+
+.list-group-item .glyphicon {
+    margin-right: 5px;
+}
+</style> 
+
+    <h1 class="page-header">Feedback Areas <span><a class="btn btn-sm btn-primary" href="{{ path('feedbackarea_new') }}" role="button" aria-label="Add a new feedback area"><span class="glyphicon glyphicon-plus"></span> New Area</a></span></h1> 
+    
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        {{ styled_list|raw }}
+      </div>
+    </div>
+          
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+{% endblock %}

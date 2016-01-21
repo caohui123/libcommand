@@ -18,8 +18,6 @@ class StaffAreaType extends AbstractType
         $builder
             ->add('title', 'text', array(
               'label' => 'Title', 
-              'label_attr' => array('class' => 'col-sm-2 control-label'),
-              'attr' => array('class' => 'form-control')
             ))
             ->add('lft', 'hidden')
             ->add('lvl', 'hidden')

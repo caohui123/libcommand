@@ -32,7 +32,7 @@ class LiaisonSubjectType extends AbstractType
                   $qb = $er->createQueryBuilder('ls');
                   $qb
                     ->where('ls.lvl < 2') //only allow user to choose college or department
-                    ->orderBy('ls.root, ls.lft', 'ASC')
+                    ->orderBy('ls.root, ls.lvl, ls.name', 'ASC')
                     ->getQuery();
                   return $qb;
               },

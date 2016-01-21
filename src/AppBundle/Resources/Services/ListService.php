@@ -183,6 +183,54 @@ class ListService{
     return $styled_list;
   }
   
+  public function feedbackAreasList(array $entities){    
+    $styled_list = '';
+    $styled_list .= '<div class="just-padding"><div class="list-group list-group-root well">';
+    
+    //Parents (Level 1)
+    $parent_count = 0;
+    foreach($entities as $entity){
+      $level = $entity->getLvl();
+      if($level == 0){
+        $styled_list .= 
+            '<a href="#item-'.$parent_count.'" class="list-group-item" data-toggle="collapse">'.$entity->getName().'<span class="badge" onclick="location.href=\''.$this->router->generate('feedbackarea_edit', array('id'=>$entity->getId())).'\'">Edit</span></a>';
+        $styled_list .= '<div class="list-group" id="item-'.$parent_count.'">';
+        
+        
+        //Children (Level 2)
+        $children = $entity->getChildren();
+        
+        $child_count = 0;
+        foreach($children as $child){
+          $styled_list .= 
+              '<a href="#item-'.$parent_count.'-'.$child_count.'" class="list-group-item" data-toggle="collapse">'.$child->getName().'<span class="badge" onclick="location.href=\''.$this->router->generate('feedbackarea_edit', array('id'=>$child->getId())).'\'">Edit</span></a>';
+          $styled_list .= '<div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'">';
+          
+          //Grandchildren (level 3)
+          $grandchildren = $child->getChildren();
+          
+          $grandchild_count = 0;
+          foreach($grandchildren as $grandchild){
+            $styled_list .= 
+              '<a href="#" class="list-group-item">'.$grandchild->getName().'</a>';
+            $styled_list .= '<div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'-'.$grandchild_count.'">';
+            $styled_list .= '</div>';
+            $grandchild_count++;
+          }
+          
+          $styled_list .= '</div>';
+          $child_count++;
+        }
+        $parent_count++;
+        
+        $styled_list .= '</div>';
+      }
+    }
+    
+    $styled_list .= '</div></div>';
+    return $styled_list;
+  }
+  
   /**
    * Package a staff's name and ID for useage in the liaison subject table
    * 

@@ -115,6 +115,12 @@ class Feedback
      *      )
      */
     private $areas;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="FeedbackCategory", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="feedbackcategory_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $category;
 
     public function __construct() {
         $this->areas = new ArrayCollection();
@@ -440,6 +446,30 @@ class Feedback
     public function getArea()
     {
         return $this->area;
+    }
+    
+    /**
+     * Set category
+     *
+     * @param \AppBundle\Entity\FeedbackCategory $category
+     *
+     * @return Feedback
+     */
+    public function setCategory(\AppBundle\Entity\Category $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \AppBundle\Entity\FeedbackCategory
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }
 

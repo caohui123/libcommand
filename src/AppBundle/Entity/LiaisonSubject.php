@@ -128,7 +128,7 @@ class LiaisonSubject
 
     /**
      * @ORM\OneToMany(targetEntity="LiaisonSubject", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $children;
     

@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class FeedbackAreaType extends AbstractType
 {
@@ -16,6 +17,24 @@ class FeedbackAreaType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('lft', 'hidden')
+            ->add('lvl', 'hidden')
+            ->add('rgt', 'hidden')
+            ->add('parent', 'entity', array(
+              'class'=>'AppBundle:FeedbackArea',
+              'query_builder'=>function(EntityRepository $er){
+                  $qb = $er->createQueryBuilder('fa');
+                  $qb
+                    ->where('fa.lvl < 1') //only allow user to choose parent
+                    ->orderBy('fa.root, fa.lft', 'ASC')
+                    ->getQuery();
+                  return $qb;
+              },
+              'property' => 'indentedTitle',
+              'label' => 'Parent Area',
+              'placeholder' => 'Choose Parent (leave blank if parent)',
+              'required' => false
+            ))
         ;
     }
     

@@ -29,10 +29,13 @@ class FeedbackAreaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:FeedbackArea')->findAll();
+        $entities = $em->getRepository('AppBundle:FeedbackArea')->findBy(array(), array('name'=>'ASC'));
+
+        $list_service = $this->get('list_service');
+        $styled_list = $list_service->feedbackAreasList($entities);
 
         return array(
-            'entities' => $entities,
+            'styled_list' => $styled_list
         );
     }
     /**
