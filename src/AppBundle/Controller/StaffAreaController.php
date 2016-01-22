@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\StaffArea;
 use AppBundle\Form\StaffAreaType;
 use AppBundle\Resources\Services\ListService;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * StaffArea controller.
@@ -30,7 +31,7 @@ class StaffAreaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $entities = $em->getRepository('AppBundle:StaffArea')->findAll();
+        $entities = $em->getRepository('AppBundle:StaffArea')->findBy(array(), array('title'=>'ASC'));
         
         $list_service = $this->get('list_service');
         $styled_list = $list_service->staffAreasList($entities);
@@ -195,16 +196,35 @@ class StaffAreaController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $requestData = $request->request->all();
+          
+            //staff areas can't have more than one sub-level.
+            //if placing an area with children under another category, those children must now become siblings of that area
+            if($requestData['appbundle_staffarea']['parent'] != null){
+              //find parent area
+              $parent = $em->getRepository('AppBundle:StaffArea')->find($requestData['appbundle_staffarea']['parent']);
+
+              $children = $em->getRepository('AppBundle:StaffArea')->findBy(array('parent' => $entity));
+              if($children){
+                foreach($children as $child){
+                  $child->setParent($parent);
+                  $child->setLvl(1);
+
+                  $em->persist($child);
+                }
+              }
+            }
+          
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_staffareas_edit', array('id' => $id)));
         }
-
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
+
     }
     /**
      * Deletes a StaffArea entity.
@@ -247,5 +267,26 @@ class StaffAreaController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Returns the 'lvl' field of a staffArea
+     *
+     * @Route("/parent/{id}", name="staffarea_parentlvl")
+     * @Method("GET")
+     */
+    public function getLevelAction($id){
+      $em = $this->getDoctrine()->getManager();
+      
+      $staffArea = $em->getRepository('AppBundle:StaffArea')->find($id);
+      
+      if(!$staffArea){
+        throw $this->createNotFoundException('No StaffArea entity found with that ID');
+      }
+      
+      $areaId = $staffArea->getLvl();
+      
+      $response = new Response($areaId, 200, array('Content-Type' => 'text/plain'));
+      return $response;
     }
 }

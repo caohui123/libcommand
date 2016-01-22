@@ -191,6 +191,7 @@ class Staff
     
     /**
      * @ORM\ManyToOne(targetEntity="StaffArea", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="staff_functional_area_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      * @Serializer\Exclude //exclude from API calls 
      */
     private $staffFunctionalArea;

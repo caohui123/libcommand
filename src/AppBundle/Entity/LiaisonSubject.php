@@ -134,14 +134,14 @@ class LiaisonSubject
     
     /**
      * @ORM\ManyToOne(targetEntity="Staff")
-     * @JoinColumn(name="primary_liaison", referencedColumnName="id", nullable=true)
+     * @JoinColumn(name="primary_liaison", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      * @Serializer\Exclude //embedded
      */
     private $primaryLiaison;
     
     /**
      * @ORM\ManyToOne(targetEntity="Staff")
-     * @JoinColumn(name="secondary_liaison", referencedColumnName="id", nullable=true)
+     * @JoinColumn(name="secondary_liaison", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      * @Serializer\Exclude //embedded
      */
     private $secondaryLiaison;

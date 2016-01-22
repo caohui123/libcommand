@@ -29,7 +29,7 @@ class StaffAreaType extends AbstractType
                   $qb = $er->createQueryBuilder('sa');
                   $qb
                     ->where('sa.lvl < 1') //only allow user to choose parent
-                    ->orderBy('sa.root, sa.lft', 'ASC')
+                    ->orderBy('sa.title', 'ASC')
                     ->getQuery();
                   return $qb;
               },

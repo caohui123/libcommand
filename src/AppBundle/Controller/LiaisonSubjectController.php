@@ -199,16 +199,36 @@ class LiaisonSubjectController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $requestData = $request->request->all();
+
+            //top liaison subject areas can't have more than two sub-level.
+            //if placing a level-one subarea with children under another level-one subarea, those children must now become siblings of that subarea
+            if($requestData['appbundle_liaisonsubject']['parent'] != null && $requestData['appbundle_liaisonsubject']['lvl'] == 2){
+              //find parent subject
+              $parent = $em->getRepository('AppBundle:LiaisonSubject')->find($requestData['appbundle_liaisonsubject']['parent']);
+
+              $children = $em->getRepository('AppBundle:LiaisonSubject')->findBy(array('parent' => $entity));
+              if($children){
+                foreach($children as $child){
+                  $child->setParent($parent);
+                  $child->setLvl(2);
+
+                  $em->persist($child);
+                }
+              }
+            }
+          
             $em->flush();
 
             return $this->redirect($this->generateUrl('liaisonsubject_edit', array('id' => $id)));
         }
-
+        
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
+         
     }
     /**
      * Deletes a LiaisonSubject entity.

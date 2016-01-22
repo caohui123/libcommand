@@ -64,7 +64,7 @@ class StaffArea
 
     /**
      * @ORM\OneToMany(targetEntity="StaffArea", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
+     * @ORM\OrderBy({"title" = "ASC"})
      */
     private $children;
     

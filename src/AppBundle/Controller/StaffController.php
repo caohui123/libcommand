@@ -33,7 +33,7 @@ class StaffController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:Staff')->findAll(array('lastName'=>'ASC'));
+        $entities = $em->getRepository('AppBundle:Staff')->findBy(array(), array('lastName'=>'ASC'));
 
         return array(
             'entities' => $entities,
@@ -243,7 +243,7 @@ class StaffController extends Controller
               if($files['appbundle_staff']['photo'] != null){
                 //new photo? add it to the profile directory.
                 $photo = $files['appbundle_staff']['photo'];
-                $fileName = md5(uniqid()).'.'.$photo->guessExtension();
+                $fileName = md5(uniqid()).'.'.$photo->getClientOriginalExtension();
                 $photo->move($photosDir, $fileName);
                 $entity->setPhoto($fileName);
                 
