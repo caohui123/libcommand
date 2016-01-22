@@ -1,12 +1,4 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
 security:
-
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
-    providers:
-        in_memory:
-            memory: ~
-
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
@@ -14,11 +6,64 @@ security:
             security: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
+          pattern:    ^/
+          fr3d_ldap:  ~
+          form_login:
+              always_use_default_target_path: true
+              default_target_path: /profile
+          logout:     true
+          anonymous:  true
+    
+    # Preserve plain text password in token for refresh the user.
+    # Analyze the security considerations before turn off this setting.
+    erase_credentials: false     
+    
+    #Re-authenticates user every time when set to true 
+    #(otherwise users would have to log out every time their permissions change for them to take effect)
+    always_authenticate_before_granting:  true
+            
+    encoders:
+        #Symfony\Component\Security\Core\User\User: plaintext  #for in_memory provider
+        AppBundle\Entity\User: plaintext
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+    providers:
+        chain_provider:
+            chain:
+                providers: [fos_userbundle, fr3d_ldapbundle]
 
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+        fr3d_ldapbundle:
+            id: fr3d_ldap.security.user.provider
+
+        fos_userbundle:
+            id: fos_user.user_provider.username
+    
+    acl:
+        connection: default
+            
+    access_control:
+      - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/register, role: ROLE_SUPER_ADMIN } #login through LDAP, should not need to register
+      - { path: ^/admin, role: ROLE_ADMIN }
+      
+    role_hierarchy:
+        #General
+        ROLE_UNCONFIRMED:  ~
+        ROLE_USER:         ROLE_UNCONFIRMED
+        ROLE_ADMIN:        ROLE_USER
+        ROLE_SUPER_ADMIN:  ROLE_ADMIN
+        #AVRequests
+        ROLE_AV_VIEW:      ROLE_USER
+        ROLE_AV_EDIT:      ROLE_AV_VIEW
+        ROLE_AV_DELETE:    ROLE_AV_EDIT
+        #Hours
+        ROLE_HOURS_VIEW:   ROLE_USER
+        ROLE_HOURS_EDIT:   ROLE_HOURS_VIEW
+        ROLE_HOURS_DELETE: ROLE_HOURS_EDIT
+        #Staff
+        ROLE_STAFF_VIEW:   ROLE_USER
+        ROLE_STAFF_EDIT:   ROLE_STAFF_VIEW
+        ROLE_STAFF_DELETE: ROLE_STAFF_EDIT
+        #Library Departments
+        ROLE_DEPARTMENTS_VIEW:   ROLE_USER
+        ROLE_DEPARTMENTS_EDIT:   ROLE_DEPARTMENTS_VIEW
+        ROLE_DEPARTMENTS_DELETE: ROLE_DEPARTMENTS_EDIT

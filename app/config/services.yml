@@ -7,3 +7,64 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+#  logout_listener:
+#    class: UserBundle\Resources\utilities\LogoutListener
+    user_service:
+      class: AppBundle\Resources\Services\UserService
+      arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @fos_user.util.user_manipulator ]
+    
+    list_service:
+      class: AppBundle\Resources\Services\ListService
+      arguments:
+        router: "@router"
+        
+    form.type.permisssion:
+      class: AppBundle\Form\PermissionType
+      arguments: [@service_container]
+      tags:
+        - { name: form.type, alias: permission_choice }
+        
+    security.access.avrequest_voter:
+      class: AppBundle\Resources\Security\Authorization\Voter\AvRequestVoter
+      public: false
+      arguments: [@security.role_hierarchy]
+      tags: 
+        - {name: security.voter}
+        
+    app.form.type.user:
+      class: AppBundle\Form\UserType
+      arguments: [ @doctrine, @service_container ]
+      tags:
+        - { name: form.type }
+   
+    hours_service:
+        class: AppBundle\Resources\Services\HoursService
+        arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
+        
+    #This is the HoursRegularController
+    hoursRegular_controller:
+        class: AppBundle\Controller\HoursRegularController
+        calls:
+            - [ setContainer, [ @service_container ]]
+            
+    #This is the HoursSpecialController
+    hoursSpecial_controller:
+        class: AppBundle\Controller\HoursSpecialController
+        calls:
+            - [ setContainer, [ @service_container ]]
+            
+    #This is the HoursAreaController
+    hoursArea_controller:
+        class: AppBundle\Controller\HoursAreaController
+        calls:
+            - [ setContainer, [ @service_container ]]
+            
+    #Custom type HiddenHoursArea
+    app.form.type.hiddenHoursArea:
+        class: AppBundle\Form\Type\HiddenHoursAreaType
+        tags:
+            - { name: form.type, alias: hiddenHoursArea }
+        arguments:
+            - @doctrine.orm.entity_manager
+           
+    

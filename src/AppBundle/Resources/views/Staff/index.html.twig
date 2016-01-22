@@ -1,0 +1,82 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 class="page-header">Staff List <span><a class="btn btn-sm btn-primary" href="{{ path('staff_new') }}"><span class="glyphicon glyphicon-plus"></span> New Staff</a></span></h1>
+    <div class="table-responsive">
+      <table class="table table-striped records_list">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Staffid</th>
+                <th>Status</th>
+                <th>Jobtitle</th>
+                <th>Guidesurl</th>
+                <th>Office</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>
+                  {{ entity.lastName }}, {{ entity.firstName }}
+                  <p><a href="{{ path('staff_show', { 'id': entity.id }) }}">show</a> | <a href="{{ path('staff_edit', { 'id': entity.id }) }}">edit</a></p>
+                </td>
+                <td>{{ entity.staffId }}</td>
+                <td>
+                  {% for status in entity.employmentStatus %}
+                    lobbage
+                  {% endfor %}
+                </td>
+                <td>{{ entity.jobTitle }}</td>
+                <td>{{ entity.guidesUrl }}</td>
+                <td>{{ entity.office }}</td>
+                <td>{{ entity.phone }}</td>
+                <td>{{ entity.email }}</td>
+                <td>
+                
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div><!--/.table-responsive-->
+
+
+        <ul>
+        <li>
+            <a href="{{ path('staff_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+                <!--
+                <th>Id</th>
+                <th>Staffid</th>
+                <th>Employmentstatus</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Jobtitle</th>
+                <th>Guidesurl</th>
+                <th>Office</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Jobdescription</th>
+                <th>Showphoto</th>
+                <th>Homestreet</th>
+                <th>Homezip</th>
+                <th>Homephone</th>
+                <th>Cellphone</th>
+                <th>Selfintro</th>
+                <th>Favoritewebsites</th>
+                <th>Photo</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Contentchanged</th>
+                <th>Actions</th>
+    -->
+    {% endblock %}
+    
+    

@@ -1,0 +1,28 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 class="page-header">Edit {{ entity.name }} Department</h1>
+    {{ form(edit_form) }}
+    
+    <h2>Department Staff</h2>     
+    <blockquote>
+      <p>To include a library staff member as part of this department, select a <a href="{{ path('staff') }}" target="_blank">staff member</a> and choose it in the <mark>"Department"</mark> menu.</p>
+      <p>To remove a library staff member currently in this department, click the name below.</p>
+    </blockquote>
+      <ul>
+    {% if members is empty %}
+      <p class="alert alert-info">There are no staff members in this department.</p>
+    {% else %}
+      {% for member in members %}
+          <li><a href="{{ path('staff_edit', {'id': member.id}) }}">{{ member.lastName }}, {{ member.firstName }}</a></li>
+      {% endfor %}
+    {% endif %}
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('department') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

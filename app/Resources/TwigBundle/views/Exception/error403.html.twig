@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1>Hey! NO!</h1>
+    {# example security usage, see below #}
+    {% if app.user and is_granted('ROLE_UNCONFIRMED') %}
+      <p>You have not been authenticated by an administrator yet.</p>
+    {% else %}
+      <p>You do not have permission to access this page.</p>
+    {% endif %}
+{% endblock %}

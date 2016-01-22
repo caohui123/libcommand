@@ -1,0 +1,65 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h1 class="panel-title">Admin Dashboard</h1>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-12 col-md-6 col-lg-4">
+        <h3>Staff Management</h3>
+        <ul>
+            <li><a href="{{ path('staff') }}">Staff List</a></li>
+            <li><a href="{{ path('admin_staffareas') }}">Functional Areas</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 col-lg-4">
+        <h3>AV Requests (non-admin...remove later)</h3>
+        <ul>
+          <li><a href="{{ path('avrequests') }}">Requests List</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <h2 class="panel-title">User Management</h2>
+    <div class="row">
+      <div class="col-md-3">
+        <h3>Registered Users <span class="badge">{{ num_registeredusers }}</span></h3>
+        <ul class="list-group">
+          {% for registereduser in registeredusers %}
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-xs-12 col-md-5">
+                  {{registereduser.username}}
+                </div>
+                <div class="col-xs-6 col-md-4">
+                  <a class="btn btn-info btn-xs" href="{{ path('user_show', {'id': registereduser.id}) }}">Full Info</a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                  <input class="user-status-ckbx" type="checkbox" id="user_{{ registereduser.id }}" value="{{registereduser.id}}" {{ registereduser.isActive ? 'checked' : '' }}>
+                </div>
+              </div>     
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-9">
+
+      </div>
+      <div class="col-md-6">
+        
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block documentReady %}
+    {{ parent() }}
+{% endblock %}

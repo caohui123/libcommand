@@ -1,0 +1,54 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 class="page-header">Library Hours: Area List <span><a class="btn btn-sm btn-primary" href="{{ path('hoursarea_new') }}"><span class="glyphicon glyphicon-plus"></span> New Area</a></span></h1>
+    <blockquote>
+        <p>To edit the general information, regular hours, or special hours for an area, click "Edit" next to the desired area. To create a new area, select the "New Area" button above.</p>
+        <p>Areas are displayed on the website in the order in which they appear here. To change the display order, drag the area boxes into their appropriate positions. The positions will be updated automatically after each drop.</p>
+    </blockquote>
+    <div class="row">
+      <div class="col-xs-12 col-md-3">
+        <ul class="list-group" id="displayOrderList">
+          {% for entity in entities %}
+                <li class="list-group-item" id="area_{{ entity.id }}">
+                  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span> {{ entity.name }}
+                  <ul>
+                      <li>
+                          <a href="{{ path('hoursarea_show', { 'id': entity.id }) }}">show</a>
+                      </li>
+                      <li>
+                          <a href="{{ path('hoursarea_edit', { 'id': entity.id }) }}">edit</a>
+                      </li>
+                  </ul>
+                </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+{% endblock %}
+
+{% block documentReady %}
+  
+    //Make the list sortable using JQuery UI and re-order the list when re-ordered
+    $( "#displayOrderList" ).sortable({
+      update: function(event, ui){
+        var data = $(this).sortable('serialize');
+        
+        var ajaxObject = {
+          data: data,
+          type: 'POST',
+          dataType: 'text', //expect plain text from the server
+          url: '{{ path('displayorder_update') }}'
+        };
+        
+        $.ajax(ajaxObject)
+          .success(function(data,status,xhr){console.log(data);})
+          .fail(function(data,status,xhr){console.log(status);})
+          .always(function(data,status,xhr){console.log(status);});
+      }
+    });
+    $( "#displayOrderList" ).disableSelection();
+    
+    {{ parent() }}
+{% endblock %}
+

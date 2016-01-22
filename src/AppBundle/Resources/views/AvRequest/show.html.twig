@@ -1,0 +1,56 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>AvRequest</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ entity.title }}</td>
+            </tr>
+            <tr>
+                <th>Requestdate</th>
+                <td>{{ entity.requestDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Deliverdate</th>
+                <td>{{ entity.deliverDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Returndate</th>
+                <td>{{ entity.returnDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Contentchangedby</th>
+                <td>{{ entity.contentChangedBy }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('avrequests') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('avrequest_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
