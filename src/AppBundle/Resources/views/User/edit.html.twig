@@ -1,0 +1,43 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 class="page-header">Edit LDAP User {{ entity.username }}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('admin') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Admin Panel</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-3">
+        <div class="btn-group btn-group-vertical" role="group" aria-label="actions">
+          <div class="btn-group" role="group">
+            {{ form(edit_form) }}
+          </div>
+          <!--<div class="btn-group" role="group">
+            {# form(delete_form) #}
+          </div>-->
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-9">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{ entity.username}}'s Form Permissions</h3>
+            </div>
+            <div class="panel-body">
+              {{ form(permission_form) }}
+            </div>
+          </div>
+      </div>
+    </div>
+              
+              
+                {#dump(lu)#}
+                
+                
+              
+{% endblock %}
+
+{% block documentReady %}
+    {{ parent() }}
+{% endblock %}
+

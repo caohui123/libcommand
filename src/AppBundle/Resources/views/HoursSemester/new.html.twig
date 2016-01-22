@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>HoursSemester creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('hourssemester') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}
+{% block documentReady %}
+    $('#appbundle_hourssemester_season, #appbundle_hourssemester_year').on('change', function(){
+        var yearValue = $('#appbundle_hourssemester_year').val() * 10;
+        var seasonValue = $('#appbundle_hourssemester_season').val();
+    
+        $('#appbundle_hourssemester_chronOrder').val( yearValue + parseInt(seasonValue) );
+    });
+    {{ parent() }}
+{% endblock %}

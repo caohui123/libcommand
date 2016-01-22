@@ -1,0 +1,524 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 class="page-header">Edit {{ entity.name }}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('hoursarea') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Areas</a></p>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-md-3 col-lg-3">
+            <h2>General Information</h2>
+            {{ form_start(edit_form) }}  
+              {{ form_label(edit_form.name) }}
+              {{ form_errors(edit_form.name) }}
+              {{ form_widget(edit_form.name) }}
+              
+              {{ form_widget(edit_form.submit) }}
+              {{ form_widget(edit_form._token) }}
+            {{ form_end(edit_form, {'render_rest':false}) }}
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Regular Hours</h2>
+            <div class="row">
+                <div class="col-xs-4 col-sm-3">
+                    {{ form(semester_form) }} 
+                </div>
+            </div> 
+            <section id="regular_hours_container">
+                <div class="regularhours_day" id="regularhours_day_0">
+                    <h3>Sunday</h3> 
+                    {{ form(day_0) }}
+                </div>
+                <div class="regularhours_day" id="regularhours_day_1">
+                    <h3>Monday</h3> 
+                    {{ form(day_1) }}
+                </div>
+                <div class="regularhours_day" id="regularhours_day_2">
+                    <h3>Tuesday</h3>
+                    {{ form(day_2) }}
+                </div>
+                <div class="regularhours_day" id="regularhours_day_3">
+                    <h3>Wednesday</h3>
+                    {{ form(day_3) }}
+                </div>
+                <div class="regularhours_day" id="regularhours_day_4">
+                    <h3>Thursday</h3>
+                    {{ form(day_4) }}
+                </div>
+                <div class="regularhours_day" id="regularhours_day_5">
+                    <h3>Friday</h3>
+                    {{ form(day_5) }}
+                </div>
+                <div class="regularhours_day" id="regularhours_day_6">
+                    <h3>Saturday</h3>
+                    {{ form(day_6) }}
+                </div>
+                {# include("areaRegularHours.html.twig") #}
+              
+            </section>
+        </div>
+    </div>
+                
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Special Hours</h2>
+            <div class="row">
+                <div class="col-xs-12">
+                    <p><a class="btn btn-sm btn-primary" href="{{ path('hoursevent_new') }}"><span class="glyphicon glyphicon-plus"></span> New Special Event</a></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <p><a href="{{ path('specialhours_changeweek') }}" id="prevWeek" class="btn btn-sm btn-default glyphicon glyphicon-triangle-left"></a><span id="dynamic_daterange"></span><a href="{{ path('specialhours_changeweek') }}" id="nextWeek" class="btn btn-sm btn-default glyphicon glyphicon-triangle-right"></a></p>
+                    <p>
+                        <form id="jumpToDateForm" class="form-inline" action="{{ path('specialhours_changeweek') }}">
+                            <div class="form-group">
+                              <label class="sr-only" for="jumpToDate">Jump to date</label>
+                              <input type="text" class="form-control" id="jumpToDate" placeholder="Jump to date">
+                            </div>
+                            <button type="submit" class="btn btn-default btn-sm">Go</button>
+                        </form>
+                    </p>
+                </div>
+            </div>
+            <section id="special_hours_container">
+                <div class="specialhours_day" id="specialhours_day_0">
+                    <h3>Sunday <small id="special_firstday">{{ date_0 }}</small></h3> 
+                    {{ form(specialday_0) }}
+                    {% if specialdayDelete_0 is defined %}
+                        {{ form(specialdayDelete_0) }}
+                    {% endif %}
+                </div>
+                <div class="specialhours_day" id="specialhours_day_1">
+                    <h3>Monday <small>{{ date_1 }}</small></h3> 
+                    {{ form(specialday_1) }}
+                    {% if specialdayDelete_1 is defined %}
+                        {{ form(specialdayDelete_1) }}
+                    {% endif %}
+                </div>
+                <div class="specialhours_day" id="specialhours_day_2">
+                    <h3>Tuesday <small>{{ date_2 }}</small></h3>
+                    {{ form(specialday_2) }}
+                    {% if specialdayDelete_2 is defined %}
+                        {{ form(specialdayDelete_2) }}
+                    {% endif %}
+                </div>
+                <div class="specialhours_day" id="specialhours_day_3">
+                    <h3>Wednesday <small>{{ date_3 }}</small></h3>
+                    {{ form(specialday_3) }}
+                    {% if specialdayDelete_3 is defined %}
+                        {{ form(specialdayDelete_3) }}
+                    {% endif %}
+                </div>
+                <div class="specialhours_day" id="specialhours_day_4">
+                    <h3>Thursday <small>{{ date_4 }}</small></h3>
+                    {{ form(specialday_4) }}
+                    {% if specialdayDelete_4 is defined %}
+                        {{ form(specialdayDelete_4) }}
+                    {% endif %}
+                </div>
+                <div class="specialhours_day" id="specialhours_day_5">
+                    <h3>Friday <small>{{ date_5 }}</small></h3>
+                    {{ form(specialday_5) }}
+                    {% if specialdayDelete_5 is defined %}
+                        {{ form(specialdayDelete_5) }}
+                    {% endif %}
+                </div>
+                <div class="specialhours_day" id="specialhours_day_6">
+                    <h3>Saturday <small id="special_lastday">{{ date_6 }}</small></h3>
+                    {{ form(specialday_6) }}
+                    {% if specialdayDelete_6 is defined %}
+                        {{ form(specialdayDelete_6) }}
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+        
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-md-3 col-lg-3">
+            {{ form(delete_form) }}
+        </div>
+    </div> 
+{% endblock %}
+{% block documentReady %}
+    applyTimepicker(); //initialize all timepickers (function declared below)
+    
+    $('#dynamic_daterange').html(' Week of ' + $('#special_firstday').html() + ' thru ' + $('#special_lastday').html() + ' '); //fill in date range
+    $('#jumpToDate').datepicker(); //initialize datepicker
+    
+    /* Handle submission of regular hours form */
+    $('.regularHours_form').on('submit', function(event){
+        var targetForm = $(this);
+    
+        event.preventDefault();
+        
+        ajaxObject = {
+            url: $(this).attr("action"),
+            type: 'POST',
+            dataType: 'json',
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify({"openTime":$("#appbundle_hoursregular_openTime", this).val(), "closeTime":$("#appbundle_hoursregular_closeTime", this).val(), "status":$("input[name^='appbundle_hoursregular']:checked", this).val()})
+        };
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    $('span.label-success, span.label-danger').remove();
+                    $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>');
+                    console.log( status );
+            })
+            .fail(function(data,status,xhr) {
+                    $('span.label-success, span.label-danger').remove();
+                    $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
+                    console.log( status );
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+                    applyTimepicker();
+            });
+    }); 
+    
+    /* Handle creation of special hours */
+    $('.specialHours_form').on('submit', function(event){
+        event.preventDefault();
+        specialHourCreation($(this));
+    });
+    
+    function specialHourCreation(form){
+        ajaxObject = {
+            url: $(form).attr("action"),
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify({"openTime":$("#appbundle_hoursspecial_openTime", form).val(), "closeTime":$("#appbundle_hoursspecial_closeTime", form).val(), "status":$("input[name^='appbundle_hoursspecial']:checked", form).val(), "event":$("#appbundle_hoursspecial_event", form).val(), "area":$("#appbundle_hoursspecial_area", form).val(), "eventDate":$("#appbundle_hoursspecial_eventDate", form).val()})
+        }
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+                    $('#special_hours_container').html(data); //show special hours for chosen week
+                    $('#dynamic_daterange').html(' Week of ' + $('#special_firstday').html() + ' thru ' + $('#special_lastday').html() + ' ');
+                    $('span.label-success, span.label-danger').remove();
+            })
+            .fail(function(data,status,xhr) {
+                    $('span.label-success, span.label-danger').remove();
+                    $('#appbundle_hoursspecial_submit', targetForm).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
+                    console.log( status );
+                    console.log("dangah!");
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+                    
+                    /* Handle deletion of a special hour after submission */
+                    $('.specialhour_delete').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourDeletion($(this));
+                    }); 
+                    
+                    /* Handle creation of special hour */
+                    $('.specialHours_form').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourCreation($(this));
+                    });
+                    
+                    /* Handle updating of special hour */
+                    $('.specialHours_updateform').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourUpdate($(this));
+                    });
+                    
+                    applyTimepicker();
+            });
+    };
+    
+    /* Handle updating of a special hour */
+    $('.specialHours_updateform').on('submit', function(event){
+        event.preventDefault();
+        specialHourUpdate($(this));
+    });
+    
+    function specialHourUpdate(form){
+        ajaxObject = {
+            url: $(form).attr("action"),
+            type: 'POST',
+            data: $(form).serialize()
+        }
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+                    $('span.label-success, span.label-danger').remove();
+                    $('#appbundle_hoursspecial_submit', form).after('<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>');
+            })
+            .fail(function(data,status,xhr) {
+                    $('span.label-success, span.label-danger').remove();
+                    $('#appbundle_hoursspecial_submit', form).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
+                    console.log( status );
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+                    
+                    /* Handle deletion of a special hour after submission */
+                    $('.specialhour_delete').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourDeletion($(this));
+                    }); 
+                    
+                    /* Handle creation of special hour */
+                    $('.specialHours_form').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourCreation($(this));
+                    });
+                    
+                    /* Handle updating of special hour */
+                    $('.specialHours_updateform').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourUpdate($(this));
+                    });
+                    
+                    applyTimepicker();
+            });
+    };
+    
+    /* Handle deletion of a special hour */
+    $('.specialhour_delete').on('submit', function(event){
+        event.preventDefault();
+        specialHourDeletion($(this));
+    }); 
+    
+    function specialHourDeletion(form){
+        ajaxObject = {
+            url: $(form).attr("action"),
+            type: 'DELETE',
+        }
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( "sikcess" );
+                    
+                    var date = new Date($('#special_firstday').html());
+                    var convertedDate = new Date(date).toISOString().slice(0,10);
+                    
+                    ajaxObject = {
+                        url: '{{ path('specialhours_changeweek') }}',
+                        type: 'GET',
+                        data: {date: convertedDate, areaId: {{entity.id}}}
+                    };
+
+                    $.ajax(ajaxObject)
+                        .success(function(data,status,xhr) {
+                                console.log( status );
+                                $('#special_hours_container').html(data); //show special hours for chosen week
+                                $('#dynamic_daterange').html(' Week of ' + $('#special_firstday').html() + ' thru ' + $('#special_lastday').html() + ' ');
+                        })
+                        .fail(function(data,status,xhr) {
+                                console.log( status );
+                        })
+                        .always(function(data,status,xhr) {
+                                console.log( status );
+                                
+                                /* Handle deletion of a special hour after submission */
+                                $('.specialhour_delete').on('submit', function(event){
+                                    event.preventDefault();
+                                    specialHourDeletion($(this));
+                                });
+                                
+                                /* Handle creation of special hour */
+                                $('.specialHours_form').on('submit', function(event){
+                                    event.preventDefault();
+                                    specialHourCreation($(this));
+                                });
+                                
+                                /* Handle updating of special hour */
+                                $('.specialHours_updateform').on('submit', function(event){
+                                    event.preventDefault();
+                                    specialHourUpdate($(this));
+                                });
+                                
+                                applyTimepicker();
+                        });
+                        
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+                    applyTimepicker();
+            });
+    };
+    
+    /* Handle changing of semester dropdown */
+    $('#form_semesters').on('change', function(){
+        ajaxObject = {
+            url: $(this.form).attr("action"),
+            type: 'GET',
+            data: {semesterId: $(this).val(), areaId: {{entity.id}} }
+        };
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+                    $('#regular_hours_container').html(data); //show hours for chosen semester
+                    
+                    makeTimepicker('.regularHours_form', '#appbundle_hoursregular_openTime, #appbundle_hoursregular_closeTime'); //apply timepicker to new hours elements
+                    
+                    //why does this need to be run again? 
+                    //http://stackoverflow.com/questions/15357787/submitting-from-an-ajax-loaded-form
+                    $('.regularHours_form').on('submit', function(event){
+                        var targetForm = $(this);
+                        
+                        ajaxObject = {
+                            url: $(this).attr("action"),
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: "application/json; charset=UTF-8",
+                            data: JSON.stringify({"openTime":$("#appbundle_hoursregular_openTime", this).val(), "closeTime":$("#appbundle_hoursregular_closeTime", this).val(), "status":$("input[name^='appbundle_hoursregular']:checked", this).val()})
+                        };
+
+                        $.ajax(ajaxObject)
+                            .success(function(data,status,xhr) {
+                                    $('span.label-success, span.label-danger').remove();
+                                    $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>');
+                                    console.log( status );
+                            })
+                            .fail(function(data,status,xhr) {
+                                    $('span.label-success, span.label-danger').remove();
+                                    $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
+                                    console.log( status );
+                            })
+                            .always(function(data,status,xhr) {
+                                    console.log( status );
+                                    applyTimepicker();
+                            });
+
+                            return false; //prevent form submission
+                    });
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+                    applyTimepicker();
+            });
+    });
+    
+    /* Handle changing of previous and next week arrow clicks on special hours */
+    $('#prevWeek, #nextWeek').on('click', function(event){
+        event.preventDefault();
+        
+        if($(this).attr('id') == 'prevWeek'){
+            var date = new Date($('#special_firstday').html());
+            var newDate = date.setDate(date.getDate()-1);
+            var convertedDate = new Date(newDate).toISOString().slice(0,10);
+        } else {
+            var date = new Date($('#special_lastday').html());
+            var newDate = date.setDate(date.getDate()+1);
+            var convertedDate = new Date(newDate).toISOString().slice(0,10);
+        }
+        
+        ajaxObject = {
+            url: $(this).attr("href"),
+            type: 'GET',
+            data: {date: convertedDate, areaId: {{entity.id}}}
+        };
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+                    $('#special_hours_container').html(data); //show special hours for chosen week
+                    $('#dynamic_daterange').html(' Week of ' + $('#special_firstday').html() + ' thru ' + $('#special_lastday').html() + ' ');
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+                    /* Handle deletion of a special hour after submission */
+                    $('.specialhour_delete').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourDeletion($(this));
+                    });
+
+                    /* Handle creation of special hour */
+                    $('.specialHours_form').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourCreation($(this));
+                    });
+                    
+                    /* Handle updating of special hour */
+                    $('.specialHours_updateform').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourUpdate($(this));
+                    });
+                    
+                    applyTimepicker();
+            });
+    });
+    
+    /* Handle special hours jump to date form */
+    $('#jumpToDateForm').on('submit', function(event){
+        event.preventDefault();
+        
+        var date = new Date($('#jumpToDate').val());
+        var convertedDate = new Date(date).toISOString().slice(0,10);
+        
+        
+        ajaxObject = {
+            url: $(this).attr("action"),
+            type: 'GET',
+            data: {date: convertedDate, areaId: {{entity.id}}}
+        };
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+                    $('#special_hours_container').html(data); //show special hours for chosen week
+                    $('#dynamic_daterange').html(' Week of ' + $('#special_firstday').html() + ' thru ' + $('#special_lastday').html() + ' ');
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+                    /* Handle deletion of a special hour after submission */
+                    $('.specialhour_delete').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourDeletion($(this));
+                    });
+
+                    /* Handle creation of special hour */
+                    $('.specialHours_form').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourCreation($(this));
+                    });
+                    
+                    /* Handle updating of special hour */
+                    $('.specialHours_updateform').on('submit', function(event){
+                        event.preventDefault();
+                        specialHourUpdate($(this));
+                    });
+                    
+                    applyTimepicker();
+            });
+    });
+    
+    /* JQuery Timepicker */
+    function makeTimepicker(form, targetElement){
+        $(form).on('click', function(){
+            $(targetElement, this).timepicker({ 'timeFormat': 'H:i' });
+        });
+    }
+    
+    /* Put anything that needs a timepicker in here */
+    function applyTimepicker(){
+        makeTimepicker('.regularHours_form', '#appbundle_hoursregular_openTime, #appbundle_hoursregular_closeTime'); //apply timepicker to regular hours elements
+        makeTimepicker('.specialHours_form', '#appbundle_hoursspecial_openTime, #appbundle_hoursspecial_closeTime'); //apply timepicker to special hours elements
+        makeTimepicker('.specialHours_updateform', '#appbundle_hoursspecial_openTime, #appbundle_hoursspecial_closeTime'); //apply timepicker to special hours elements
+    }
+    {{ parent() }}
+{% endblock %}

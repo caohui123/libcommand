@@ -1,0 +1,22 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+    
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    
+#Rest (FOSRestBundle)
+avrequest:
+    type: rest
+    resource: AppBundle\Controller\AvRequestController
+    prefix: /api/
+    
+hours:
+    type: rest
+    resource: AppBundle\Controller\HoursRestController
+    prefix: /api/
+
+hourdepartmentstaff:
+    type: rest
+    resource: AppBundle\Controller\DepartmentStaffRestController
+    prefix: /api/
