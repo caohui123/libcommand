@@ -12,3 +12,4 @@
 /web/bundles/
 /web/app_dev.php
 composer.phar
+/nbproject
