@@ -1,0 +1,58 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Feedback list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Receiveddate</th>
+                <th>Body</th>
+                <th>Patronemail</th>
+                <th>Patronfirstname</th>
+                <th>Patronlastname</th>
+                <th>Patronphone</th>
+                <th>Patrongroup</th>
+                <th>Response</th>
+                <th>Replydate</th>
+                <th>Forwarddate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('feedback_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.receivedDate %}{{ entity.receivedDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.body }}</td>
+                <td>{{ entity.patronEmail }}</td>
+                <td>{{ entity.patronFirstName }}</td>
+                <td>{{ entity.patronLastName }}</td>
+                <td>{{ entity.patronPhone }}</td>
+                <td>{{ entity.patronGroup }}</td>
+                <td>{{ entity.response }}</td>
+                <td>{% if entity.replyDate %}{{ entity.replyDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('feedback_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('feedback_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('feedback_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

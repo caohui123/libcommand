@@ -5,6 +5,8 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\FeedbackArea;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 /**
  * Feedback
@@ -27,6 +29,8 @@ class Feedback
      * @var \DateTime
      *
      * @ORM\Column(name="receivedDate", type="datetime")
+     * @Assert\NotBlank()
+     * @Assert\DateTime()
      */
     private $receivedDate;
 
@@ -40,77 +44,56 @@ class Feedback
     /**
      * @var string
      *
-     * @ORM\Column(name="patronEmail", type="string", length=255)
+     * @ORM\Column(name="patronEmail", type="string", length=50)
      */
     private $patronEmail;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="patronFirstName", type="string", length=40)
+     * @ORM\Column(name="patronFirstName", type="string", length=40, nullable=true)
      */
     private $patronFirstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="patronLastName", type="string", length=40)
+     * @ORM\Column(name="patronLastName", type="string", length=40, nullable=true)
      */
     private $patronLastName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="patronPhone", type="string", length=15)
+     * @ORM\Column(name="patronPhone", type="string", length=15, nullable=true)
      */
     private $patronPhone;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="patronStatus", type="smallint")
-     */
-    private $patronStatus;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="response", type="text")
+     * @ORM\Column(name="response", type="text", nullable=true)
      */
     private $response;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="forwardedTo", type="string", length=50)
-     */
-    private $forwardedTo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="forwardedMessage", type="text")
-     */
-    private $forwardedMessage;
-
-    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="replyDate", type="datetime")
+     * @ORM\Column(name="replyDate", type="datetime", nullable=true)
      */
     private $replyDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="forwardDate", type="datetime")
+     * @ORM\Column(name="lastForwardDate", type="datetime", nullable=true)
      */
-    private $forwardDate;
+    private $lastForwardDate;
     
     /**
      * @ORM\ManyToMany(targetEntity="FeedbackArea")
      * @ORM\JoinTable(name="feedback_feedbackarea",
-     *      joinColumns={@ORM\JoinColumn(name="feedback_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="feedback_id", referencedColumnName="id", nullable=true)},
      *      inverseJoinColumns={@ORM\JoinColumn(name="feedbackarea_id", referencedColumnName="id")}
      *      )
      */
@@ -121,6 +104,12 @@ class Feedback
      * @ORM\JoinColumn(name="feedbackcategory_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $category;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PatronGroup", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="patrongroup_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $patronGroup;
 
     public function __construct() {
         $this->areas = new ArrayCollection();
@@ -143,7 +132,7 @@ class Feedback
      *
      * @return Feedback
      */
-    public function setReceivedDate($receivedDate)
+    public function setReceivedDate(\DateTime $receivedDate)
     {
         $this->receivedDate = $receivedDate;
     
@@ -281,30 +270,6 @@ class Feedback
     }
 
     /**
-     * Set patronStatus
-     *
-     * @param integer $patronStatus
-     *
-     * @return Feedback
-     */
-    public function setPatronStatus($patronStatus)
-    {
-        $this->patronStatus = $patronStatus;
-    
-        return $this;
-    }
-
-    /**
-     * Get patronStatus
-     *
-     * @return integer
-     */
-    public function getPatronStatus()
-    {
-        return $this->patronStatus;
-    }
-
-    /**
      * Set response
      *
      * @param string $response
@@ -329,61 +294,13 @@ class Feedback
     }
 
     /**
-     * Set forwardedTo
-     *
-     * @param string $forwardedTo
-     *
-     * @return Feedback
-     */
-    public function setForwardedTo($forwardedTo)
-    {
-        $this->forwardedTo = $forwardedTo;
-    
-        return $this;
-    }
-
-    /**
-     * Get forwardedTo
-     *
-     * @return string
-     */
-    public function getForwardedTo()
-    {
-        return $this->forwardedTo;
-    }
-
-    /**
-     * Set forwardedMessage
-     *
-     * @param string $forwardedMessage
-     *
-     * @return Feedback
-     */
-    public function setForwardedMessage($forwardedMessage)
-    {
-        $this->forwardedMessage = $forwardedMessage;
-    
-        return $this;
-    }
-
-    /**
-     * Get forwardedMessage
-     *
-     * @return string
-     */
-    public function getForwardedMessage()
-    {
-        return $this->forwardedMessage;
-    }
-
-    /**
      * Set replyDate
      *
      * @param \DateTime $replyDate
      *
      * @return Feedback
      */
-    public function setReplyDate($replyDate)
+    public function setReplyDate(\DateTime $replyDate)
     {
         $this->replyDate = $replyDate;
     
@@ -401,27 +318,27 @@ class Feedback
     }
 
     /**
-     * Set forwardDate
+     * Set lastForwardDate
      *
      * @param \DateTime $forwardDate
      *
      * @return Feedback
      */
-    public function setForwardDate($forwardDate)
+    public function setLastForwardDate(\DateTime $forwardDate)
     {
-        $this->forwardDate = $forwardDate;
+        $this->lastForwardDate = $forwardDate;
     
         return $this;
     }
 
     /**
-     * Get forwardDate
+     * Get lastForwardDate
      *
      * @return \DateTime
      */
-    public function getForwardDate()
+    public function getLastForwardDate()
     {
-        return $this->forwardDate;
+        return $this->lastForwardDate;
     }
     
     /**
@@ -431,11 +348,13 @@ class Feedback
      *
      * @return Feedback
      */
-    public function setArea(\AppBundle\Entity\FeedbackArea $feedbackArea = null)
+    public function setAreas(ArrayCollection $feedbackAreas = null)
     {
-        $this->area = $feedbackArea;
-
-        return $this;
+      foreach($feedbackAreas as $area){
+        $this->areas[] = $area;
+      }
+      
+      return $this;
     }
 
     /**
@@ -443,9 +362,9 @@ class Feedback
      *
      * @return \AppBundle\Entity\FeedbackArea
      */
-    public function getArea()
+    public function getAreas()
     {
-        return $this->area;
+        return $this->areas;
     }
     
     /**
@@ -470,6 +389,30 @@ class Feedback
     public function getCategory()
     {
         return $this->category;
+    }
+    
+    /**
+     * Set patron group
+     *
+     * @param \AppBundle\Entity\PatronGroup $patronGroup
+     *
+     * @return Feedback
+     */
+    public function setPatronGroup(\AppBundle\Entity\PatronGroup $patronGroup = null)
+    {
+        $this->patronGroup = $patronGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get patron group
+     *
+     * @return \AppBundle\Entity\PatronGroup
+     */
+    public function getPatronGroup()
+    {
+        return $this->patronGroup;
     }
 }
 

@@ -20,3 +20,8 @@ hourdepartmentstaff:
     type: rest
     resource: AppBundle\Controller\DepartmentStaffRestController
     prefix: /api/
+    
+feedback:
+    type: rest
+    resource: AppBundle\Controller\FeedbackRestController
+    prefix: /api/

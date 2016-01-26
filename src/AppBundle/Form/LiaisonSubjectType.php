@@ -38,7 +38,7 @@ class LiaisonSubjectType extends AbstractType
               },
               'property' => 'indentedTitle',
               'label' => 'Parent Subject',
-              'placeholder' => 'Choose Parent (leave blank if top-level college)',
+              'placeholder' => 'No parent',
               'required' => false
             ))
             ->add('primaryLiaison', 'entity', array(

@@ -26,13 +26,13 @@ class FeedbackAreaType extends AbstractType
                   $qb = $er->createQueryBuilder('fa');
                   $qb
                     ->where('fa.lvl < 1') //only allow user to choose parent
-                    ->orderBy('fa.root, fa.lft', 'ASC')
+                    ->orderBy('fa.name', 'ASC')
                     ->getQuery();
                   return $qb;
               },
               'property' => 'indentedTitle',
               'label' => 'Parent Area',
-              'placeholder' => 'Choose Parent (leave blank if parent)',
+              'placeholder' => 'No parent',
               'required' => false
             ))
         ;
@@ -44,7 +44,7 @@ class FeedbackAreaType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\FeedbackArea'
+            'data_class' => 'AppBundle\Entity\FeedbackArea',
         ));
     }
 

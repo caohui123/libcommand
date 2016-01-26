@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\FeedbackArea;
 use AppBundle\Form\FeedbackAreaType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * FeedbackArea controller.
@@ -194,11 +195,37 @@ class FeedbackAreaController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $requestData = $request->request->all();
+            var_dump($requestData);
+          
+            //feedback areas can't have more than one sub-level.
+            //if placing an area with children under another category, those children must now become siblings of that area
+            if($requestData['appbundle_feedbackarea']['parent'] != null){
+              //find parent area
+              $parent = $em->getRepository('AppBundle:FeedbackArea')->find($requestData['appbundle_feedbackarea']['parent']);
+
+              $children = $em->getRepository('AppBundle:FeedbackArea')->findBy(array('parent' => $entity));
+              if($children){
+                foreach($children as $child){
+                  $child->setParent($parent);
+                  $child->setLvl(1);
+
+                  $em->persist($child);
+                }
+              }
+            }
+            
+            //if no parent, make sure this area's lvl is set to 0
+            else {
+              $entity->setLvl(0);
+              $em->persist($entity);
+            }
+          
             $em->flush();
 
             return $this->redirect($this->generateUrl('feedbackarea_edit', array('id' => $id)));
         }
-
+        
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -246,5 +273,26 @@ class FeedbackAreaController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Returns the 'lvl' field of a feebackArea
+     *
+     * @Route("/parent/{id}", name="feedbackarea_parentlvl")
+     * @Method("GET")
+     */
+    public function getLevelAction($id){
+      $em = $this->getDoctrine()->getManager();
+      
+      $feedbackArea = $em->getRepository('AppBundle:FeedbackArea')->find($id);
+      
+      if(!$feedbackArea){
+        throw $this->createNotFoundException('No FeedbackArea entity found with that ID');
+      }
+      
+      $areaId = $feedbackArea->getLvl();
+      
+      $response = new Response($areaId, 200, array('Content-Type' => 'text/plain'));
+      return $response;
     }
 }

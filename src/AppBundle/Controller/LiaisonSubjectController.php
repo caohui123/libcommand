@@ -217,6 +217,12 @@ class LiaisonSubjectController extends Controller
                 }
               }
             }
+            
+            //if no parent, make sure this area's lvl is set to 0
+            else {
+              $entity->setLvl(0);
+              $em->persist($entity);
+            }
           
             $em->flush();
 

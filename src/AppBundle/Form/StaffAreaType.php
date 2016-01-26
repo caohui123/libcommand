@@ -35,7 +35,7 @@ class StaffAreaType extends AbstractType
               },
               'property' => 'indentedTitle',
               'label' => 'Parent Area',
-              'placeholder' => 'Choose Parent (leave blank if parent)',
+              'placeholder' => 'No parent',
               'required' => false
             ))
         ;

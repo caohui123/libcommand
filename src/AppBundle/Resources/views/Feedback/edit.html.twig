@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 class="page-header">Edit Feedback</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('feedback') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Feedback List</a></p>
+      </div>
+    </div>
+    <blockquote>
+      <p>Patrons may only be replied to <mark>once</mark> per feedback in order to prevent potential spamming. If a response has already been sent, you will see it below.</p>
+    </blockquote>
+    <section id="submission_info">
+      <h2>Submission Information</h2> 
+      <dl>
+        <dt>Feedback Type</dt>
+        <dd>
+          {% if entity.category == 'Complaint' %}
+            {% set alert = 'danger'%}
+          {% elseif entity.category == 'Compliment' %}
+            {% set alert = 'success'%}
+          {% elseif entity.category == 'Suggestion' %}
+            {% set alert = 'warning'%}
+          {% else %}
+            {% set alert = 'info'%}
+          {% endif %}
+            <span class="alert-{{alert}}">{{ entity.category }}</span>
+          
+        </dd>
+        <dt>Received</dt>
+        <dd>{{ entity.receivedDate|date('l n/j/y g:i A') }}</dd>
+        <dt>Patron</dt>
+        <dd>{{entity.patronFirstName}} {{entity.patronLastName}} &lt;{{entity.patronEmail}}&gt</dd>
+        <dd>{{entity.patronPhone}}</dd>
+        <dd>Patron is {{entity.patronGroup}}</dd>
+      {% if entity.response is not empty %}
+        <dt>Response</dt>
+        <dd><em>{{entity.response}}</em></dd>
+        <dd><small>-- Sent on {{entity.replyDate|date('l n/j/y g:i A')}}</small></dd>
+      {% endif %}
+      </dl>
+    </section>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        {{ form(edit_form) }}
+        {{ form(delete_form) }}
+      </div>
+    </div>
+{% endblock %}

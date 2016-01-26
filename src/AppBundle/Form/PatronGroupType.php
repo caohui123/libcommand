@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class FeedbackCategoryType extends AbstractType
+class PatronGroupType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,7 +15,9 @@ class FeedbackCategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('name', null, array(
+              'label' => 'Group Name'
+            ))
         ;
     }
     
@@ -25,7 +27,7 @@ class FeedbackCategoryType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\FeedbackCategory',
+            'data_class' => 'AppBundle\Entity\PatronGroup'
         ));
     }
 
@@ -34,6 +36,6 @@ class FeedbackCategoryType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_feedbackcategory';
+        return 'appbundle_patrongroup';
     }
 }

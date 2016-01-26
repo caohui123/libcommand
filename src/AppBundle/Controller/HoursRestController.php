@@ -68,7 +68,6 @@ class HoursRestController extends FOSRestController{
         $em2 = $this->getDoctrine()->getEntityManager();
         
         $events = $em2->createQuery(
-                //'SELECT ev from AppBundle:HoursEvent ev WHERE (ev.startDate <= :startDate AND ev.endDate >= :endDate) OR (ev.startDate BETWEEN :startDate AND :endDate) ORDER BY ev.startDate ASC'
                 'SELECT ev from AppBundle:HoursEvent ev WHERE (:startDate BETWEEN ev.startDate AND ev.endDate) OR (:endDate BETWEEN ev.startDate and ev.endDate) OR (ev.startDate BETWEEN :startDate AND :endDate) ORDER BY ev.startDate ASC'
             )
                 ->setParameter('startDate', new \DateTime($startDate))

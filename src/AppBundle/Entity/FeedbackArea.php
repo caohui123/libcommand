@@ -64,7 +64,7 @@ class FeedbackArea
 
     /**
      * @ORM\OneToMany(targetEntity="FeedbackArea", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $children;
 
@@ -264,6 +264,10 @@ class FeedbackArea
     public function getChildren()
     {
         return $this->children;
+    }
+    
+    public function __toString() {
+      return $this->getName();
     }
 }
 
