@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * FeedbackCategory
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @UniqueEntity(fields={"staffId"}, message="A feedback category with that name already exists.")
  */
 class FeedbackCategory
 {

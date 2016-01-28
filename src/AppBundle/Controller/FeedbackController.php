@@ -185,7 +185,6 @@ class FeedbackController extends Controller
             throw $this->createNotFoundException('Unable to find Feedback entity.');
         }
         
-
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
@@ -193,15 +192,55 @@ class FeedbackController extends Controller
         if ($editForm->isValid()) {
             $requestData = $request->request->all();
             
-            //if necessary, mark the time of the message being forwarded
-            if(null != $requestData['appbundle_feedback']['forwardedMessage']){
+            //if necessary, forward the reply with an optional comment and mark the time thereof
+            if(null != $requestData['appbundle_feedback']['forwardedTo']){
               $entity->setLastForwardDate(new \DateTime());
+              //forward the email
+              $forwardeeEmail = $requestData['appbundle_feedback']['forwardedTo'];
+              $user = $this->container->get('security.context')->getToken()->getUser();
+              
+              $message = \Swift_Message::newInstance()
+                  ->setSubject('Fwd: EMU Library Feedback ' . $entity->getCreated()->format('d/m/Y'))
+                  ->setFrom($user->getEmail())
+                  ->setTo($forwardeeEmail)
+                  ->setBody(
+                        $this->renderView(
+                            'AppBundle:Feedback/Emails:forwardfeedback.html.twig',
+                            array(
+                              'created' => $entity->getCreated(),
+                              'body' => $entity->getBody(),
+                              'message' => $requestData['appbundle_feedback']['forwardedMessage']
+                            )
+                        ),
+                        'text/html'
+                    );
+              $this->get('mailer')->send($message);
             }
             
             //if necessary, record the reply to the patron and the time thereof
             if(isset($requestData['appbundle_feedback']['reply']) && null != $requestData['appbundle_feedback']['reply']){
               $entity->setResponse($requestData['appbundle_feedback']['reply']);
               $entity->setReplyDate(new \DateTime());
+              $em->persist($entity);
+              
+              //email the patron
+              $patronEmail = $entity->getPatronEmail();
+              $message = \Swift_Message::newInstance()
+                  ->setSubject('Response to Your Feedback at EMU Library')
+                  ->setFrom('feedback@emulibrary.com')
+                  ->setTo($patronEmail)
+                  ->setBody(
+                      $this->renderView(
+                            'AppBundle:Feedback/Emails:patronresponse.html.twig',
+                            array(
+                              'created' => $entity->getCreated(),
+                              'body' => $entity->getBody(),
+                              'message' => $entity->getResponse(),
+                            )
+                        ),
+                        'text/html'
+                      );
+              $this->get('mailer')->send($message);
             }
             $em->flush();
 

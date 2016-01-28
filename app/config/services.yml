@@ -18,6 +18,10 @@ services:
       arguments:
         router: "@router"
         
+    email_service:
+        class: AppBundle\Resources\Services\EmailService
+        arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
+        
     form.type.permisssion:
       class: AppBundle\Form\PermissionType
       arguments: [@service_container]

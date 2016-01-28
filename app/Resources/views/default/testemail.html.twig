@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <h1>SMTP Test</h1>
+  {{ form(emailForm) }}
+  {% if message is defined %}
+    {{message}}
+  {% endif %}
+{% endblock %}

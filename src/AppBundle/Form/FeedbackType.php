@@ -42,17 +42,21 @@ class FeedbackType extends AbstractType
             $feedback = $event->getData();
             $form = $event->getForm();
             
-            //add in these fields only if the Feedback entity already exists (i.e. editing an existing Feedback)
+            //run only if the Feedback entity already exists (i.e. editing an existing Feedback)
             if($feedback && null !== $feedback->getId()){
-                $form->add('forwardedTo', 'email', array(
+                $form->add('forwardedTo', 'text', array(
                   'mapped' => false, //this field is NOT mapped to the entity
                   'required' => false,
-                  'label' => 'Forward this feedback to (valid email address required)'
+                  'label' => 'Forward this feedback (emich address only)'
                 ));
                 $form->add('forwardedMessage', 'textarea', array(
                   'mapped' => false, //this field is NOT mapped to the entity
                   'required' => false,
                   'label' => 'Optional forawrd message (not sent to patron)'
+                ));
+                $form->add('note', 'textarea', array(
+                  'required' => false,
+                  'label' => 'Note about this feedback (will NOT be sent to patron)'
                 ));
                 $form->add('areas', 'entity', array(
                   'class'=>'AppBundle:FeedbackArea',
@@ -82,10 +86,6 @@ class FeedbackType extends AbstractType
             
             //add in these fields only if the Feedback is NEW
             if(!$feedback && null === $feedback->getId()){
-              $form->add('receivedDate', 'datetime', array(
-                'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd HH:mm:ss'
-              ));
               $form->add('body', null, array(
                 'label' => 'Your feedback'
               ));
@@ -102,7 +102,7 @@ class FeedbackType extends AbstractType
             }  
         });
         
-        //Make sure if there is a message being forwarded that the forwardedTo field contains an email address!
+        //Make sure if there is a message being forwarded that the forwardedTo field contains an emich email address!
         $forwardValidator = function(FormEvent $event){
             $feedback = $event->getData();
             $form = $event->getForm();
@@ -112,8 +112,13 @@ class FeedbackType extends AbstractType
               $forwardedMessage = $form->get('forwardedMessage')->getData();
               $forwardedTo = $form->get('forwardedTo')->getData();
 
-              if ( !empty($forwardedMessage) && !filter_var($forwardedTo, FILTER_VALIDATE_EMAIL) ) {
+              if ( !empty($forwardedTo) && !filter_var($forwardedTo, FILTER_VALIDATE_EMAIL) ) {
                 $form['forwardedTo']->addError(new FormError("Please specify a valid email address for forwarding."));
+              } else if (!empty($forwardedTo) && filter_var($forwardedTo, FILTER_VALIDATE_EMAIL)){
+                $domain = explode('@', $forwardedTo);
+                if( $domain[1] != 'emich.edu' ){
+                  $form['forwardedTo']->addError(new FormError("You are only allowed to forward to 'emich.edu' email addresses."));
+                }
               }
             }
         };

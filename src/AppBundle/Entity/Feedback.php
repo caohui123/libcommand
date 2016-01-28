@@ -7,6 +7,9 @@ use AppBundle\Entity\FeedbackArea;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ExecutionContextInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Feedback
@@ -24,15 +27,6 @@ class Feedback
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="receivedDate", type="datetime")
-     * @Assert\NotBlank()
-     * @Assert\DateTime()
-     */
-    private $receivedDate;
 
     /**
      * @var string
@@ -75,6 +69,13 @@ class Feedback
      * @ORM\Column(name="response", type="text", nullable=true)
      */
     private $response;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text", nullable=true)
+     */
+    private $note;
 
     /**
      * @var \DateTime
@@ -110,6 +111,33 @@ class Feedback
      * @ORM\JoinColumn(name="patrongroup_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $patronGroup;
+    
+    /**
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
+     */
+    private $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
+     */
+    private $updated;
+    
+    /**
+     * @var string $contentChangedBy
+     *
+     * @ORM\Column(name="content_changed_by", type="string", nullable=true)
+     * @Gedmo\Blameable(on="change", field={"body", "response", "replyDate", "lastForwardDate", "patronGroup", "category"})
+     * @Serializer\Exclude //exclude from API calls 
+     */
+    private $contentChangedBy;
 
     public function __construct() {
         $this->areas = new ArrayCollection();
@@ -123,30 +151,6 @@ class Feedback
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set receivedDate
-     *
-     * @param \DateTime $receivedDate
-     *
-     * @return Feedback
-     */
-    public function setReceivedDate(\DateTime $receivedDate)
-    {
-        $this->receivedDate = $receivedDate;
-    
-        return $this;
-    }
-
-    /**
-     * Get receivedDate
-     *
-     * @return \DateTime
-     */
-    public function getReceivedDate()
-    {
-        return $this->receivedDate;
     }
 
     /**
@@ -292,6 +296,30 @@ class Feedback
     {
         return $this->response;
     }
+    
+    /**
+     * Set note
+     *
+     * @param string $note
+     *
+     * @return Feedback
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+    
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
 
     /**
      * Set replyDate
@@ -413,6 +441,21 @@ class Feedback
     public function getPatronGroup()
     {
         return $this->patronGroup;
+    }
+    
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+    
+    public function getContentChangedBy()
+    {
+        return $this->contentChangedBy;
     }
 }
 

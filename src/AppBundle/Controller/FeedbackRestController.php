@@ -67,10 +67,6 @@ class FeedbackRestController extends FOSRestController{
         $patronGroupId = $requestData['patronGroup'];
          
         $form = $this->get('form.factory')->createNamed('', new FeedbackType(), $entity);
-        $form->add('receivedDate', 'datetime', array(
-                'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd HH:mm:ss'
-              ));
         $form->add('body', null, array(
                 'label' => 'Your feedback'
               ));
@@ -96,12 +92,11 @@ class FeedbackRestController extends FOSRestController{
 
             $message = \Swift_Message::newInstance()
                 ->setSubject('EMU Library Feedback Received')
-                ->setFrom('send@example.com')
-                ->setTo('cpuzzuol@gmail.com')
+                ->setFrom('feedback@emulibrary.com')
+                ->setTo($entity->getPatronEmail())
                 ->setBody(
                     $this->renderView(
-                        // app/Resources/views/Emails/registration.html.twig
-                        'AppBundle:AvRequest/Emails:avrequest.html.twig',
+                        'AppBundle:Feedback/Emails:feedback.html.twig',
                         array('form' => $request->request->all())
                     ),
                     'text/html'

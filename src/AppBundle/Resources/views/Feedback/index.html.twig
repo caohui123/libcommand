@@ -24,7 +24,7 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('feedback_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{% if entity.receivedDate %}{{ entity.receivedDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.created %}{{ entity.created|date('l n/j/y g:i A') }}{% endif %}</td>
                 <td>{{ entity.body }}</td>
                 <td>{{ entity.patronEmail }}</td>
                 <td>{{ entity.patronFirstName }}</td>
@@ -32,7 +32,7 @@
                 <td>{{ entity.patronPhone }}</td>
                 <td>{{ entity.patronGroup }}</td>
                 <td>{{ entity.response }}</td>
-                <td>{% if entity.replyDate %}{{ entity.replyDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.replyDate %}{{ entity.replyDate|date('l n/j/y g:i A') }}{% endif %}</td>
                 <td>
                 <ul>
                     <li>

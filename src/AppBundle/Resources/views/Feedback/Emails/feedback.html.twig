@@ -1,0 +1,16 @@
+{% if form.patronFirstName is defined %}
+  Dear {{ form.patronFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+
+<h3>Thank you for your valuable feedback to the EMU Library.</h3> If your feedback requires a response, you should receive one shortly.
+
+Request Summary:
+<ul>
+  <li>Received: {{ form.created|date('l n/j/y g:i A') }}</li>
+  <li>Feedback: {{ form.body }}</li>
+</ul>
+
+---<br>
+This email was automatically generated from the EMU Library Patron Feedback System.

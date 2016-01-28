@@ -1,7 +1,18 @@
-Thank you for your Audio/Visual Request.
+{% if form.patronFirstName is defined %}
+  Dear {{ form.patronFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+
+<h3>Thank you for your Audio/Visual Request.</h3>
 
 Request summary:
-Title: {{ form.title }}
-Request Date: {{ form.requestDate }}
-Delivery Date: {{ form.deliverDate }}
-Return Date: {{ form.returnDate }}
+<ul>
+  <li>Title: {{ form.title }}</li>
+  <li>Request Date: {{ form.requestDate }}</li>
+  <li>Delivery Date: {{ form.deliverDate }}</li>
+  <li>Return Date: {{ form.returnDate }}</li>
+</ul>
+
+--<br>
+This email was automatically generated from the EMU AV Request System.

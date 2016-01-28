@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * FeedbackArea
@@ -11,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table()
  * @ORM\Entity
  * @Gedmo\Tree(type="nested")
- * 
+ * @UniqueEntity(fields={"name"}, message="A feedback area with that name already exsits.")
  */
 class FeedbackArea
 {
