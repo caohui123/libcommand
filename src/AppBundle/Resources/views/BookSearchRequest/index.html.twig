@@ -1,0 +1,47 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>BookSearchRequest list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Booktitle</th>
+                <th>Bookauthor</th>
+                <th>Bookcallnumber</th>
+                <th>Usefuldate</th>
+                <th>Patronfirstname</th>
+                <th>Patronlastname</th>
+                <th>Patronphone</th>
+                <th>Patronemail</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('booksearchrequest_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.bookTitle }}</td>
+                <td>{{ entity.bookAuthor }}</td>
+                <td>{{ entity.bookCallNumber }}</td>
+                <td>{% if entity.usefulDate %}{{ entity.usefulDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.patronFirstName }}</td>
+                <td>{{ entity.patronLastName }}</td>
+                <td>{{ entity.patronPhone }}</td>
+                <td>{{ entity.patronEmail }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('booksearchrequest_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('booksearchrequest_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

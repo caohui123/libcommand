@@ -1,0 +1,35 @@
+{% if entity.patronFirstName is defined %}
+  Dear {{ entity.patronFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+<br>
+<p>Your book search request for {{entity.bookTitle}} by {{entity.bookAuthor}} has been processed with the following information:</p>
+
+    {% if entity.bookStatus == 'found' %}
+      <p><strong>Your book was found.</strong> The book will be held for you for 10 days at the Circulation Desk in the halle Library. If you have questions please contact at (734)487-0020 ext. 2142 or email us at
+lib_searches@emich.edu.</p>
+    {% elseif entity.bookStatus == 'missing' %}
+      <p><strong>Your book was not found. If you have questions please contact at (734)487-0020 ext. 2142 or email us at
+lib_searches@emich.edu.</strong></p>
+    {% elseif entity.bookStatus == 'charged' %}
+      <p><strong>Your book has been checked out. If you have questions please contact at (734)487-0020 ext. 2142 or email us at
+lib_searches@emich.edu.</strong></p>
+    {% else %}
+      <p><strong>We are still working to fulfill your request. If you have questions please contact at (734)487-0020 ext. 2142 or email us at
+lib_searches@emich.edu.</strong></p>
+    {% endif %}
+<br>
+<br>
+--- REQUEST SUMMARY ---<br>
+<ul>
+  <li>Book Title: {{entity.bookTitle}}</li>
+  <li>Book Author: {{entity.bookAuthor}}</li>
+  <li>Book Call Number: {{entity.bookCallNumber}}</li>
+  <li>Needed By: {{entity.usefulDate|date('l n/j/y g:i A')}}</li>
+</ul>
+--- <br>
+Circulation Desk <br>
+Halle Library<br>
+---<br>
+This Email was sent from the EMU Library Book Search Request System.

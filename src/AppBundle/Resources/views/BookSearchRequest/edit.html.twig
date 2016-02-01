@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 class="page-header">Edit Book Search Request</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('booksearchrequest') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Request List</a></p>
+      </div>
+    </div>
+    <section id="submission_info">
+      <h2>Patron Information</h2> 
+      <dl>
+        <dt>Name</dt>
+        <dd>
+          {{entity.patronFirstName}} {{entity.patronLastName}}
+        </dd>
+        <dt>Phone</dt>
+        <dd>{{ entity.patronPhone }}</dd>
+        <dt>Email</dt>
+        <dd>{{entity.patronEmail}}</dd>
+        <dt>ENumber</dt>
+        <dd>{{entity.patronEnumber}}</dd>
+      </dl>
+      <h2>Other Information</h2>
+      <dl>
+        <dt>Time of Submission</dt>
+        <dd>{{entity.created|date('l n/j/y g:i A')}}</dd>
+        <dt>Book Useful Until</dt>
+        <dd>{{entity.usefulDate|date('n/j/y')}}</dd>
+        <dt>Response Status</dt>
+        {% if entity.patronEmailed|date('Y-m-d H:i:s') != '0000-00-00 00:00:00'|date('Y-m-d H:i:s') %}
+          <dd>Patron was replied to on {{entity.patronEmailed|date('l n/j/y g:i A')}}.</dd>
+        {% else %}
+          <dd>Patron has not yet been replied to.</dd>
+        {% endif %}
+      </dl>
+    </section>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        {{ form(edit_form) }}
+        {{ form(delete_form) }}
+      </div>
+    </div>
+{% endblock %}

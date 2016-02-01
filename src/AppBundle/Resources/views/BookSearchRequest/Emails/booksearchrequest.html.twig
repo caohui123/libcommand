@@ -1,0 +1,19 @@
+{% if form.patronFirstName is defined %}
+  Dear {{ form.patronFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+
+<h3>Thank you for book request at the EMU Library.</h3> You request has been sent to our staff and you will be notified when there is an update.
+
+Request Summary:
+<ul>
+  <li>Received: {{ form.created|date('l n/j/y g:i A') }}</li>
+  <li>Book Title: {{ form.bookTitle }}</li>
+  <li>Book Author: {{ form.bookAuthor }}</li>
+  <li>Book Call Number: {{ form.bookCallNumber }}</li>
+  <li>Needed By: {{ form.usefulDate|date('l n/j/y g:i A') }}</li>
+</ul>
+
+---<br>
+This email was automatically generated from the EMU Library Book Search Request system.

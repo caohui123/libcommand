@@ -38,9 +38,9 @@ class FeedbackController extends Controller
     /**
      * Creates a new Feedback entity.
      *
-     * @Route("/", name="feedback_create")
-     * @Method("POST")
-     * @Template("AppBundle:Feedback:new.html.twig")
+     * //@Route("/", name="feedback_create")
+     * //@Method("POST")
+     * //@Template("AppBundle:Feedback:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -83,9 +83,9 @@ class FeedbackController extends Controller
     /**
      * Displays a form to create a new Feedback entity.
      *
-     * @Route("/new", name="feedback_new")
-     * @Method("GET")
-     * @Template()
+     * //@Route("/new", name="feedback_new")
+     * //@Method("GET")
+     * //@Template()
      */
     public function newAction()
     {

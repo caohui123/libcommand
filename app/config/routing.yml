@@ -8,15 +8,15 @@ fos_user:
 #Rest (FOSRestBundle)
 avrequest:
     type: rest
-    resource: AppBundle\Controller\AvRequestController
+    resource: AppBundle\Controller\AvRequestRestController
     prefix: /api/
     
-hours:
+booksearchrequest:
     type: rest
-    resource: AppBundle\Controller\HoursRestController
+    resource: AppBundle\Controller\BookSearchRequestRestController
     prefix: /api/
-
-hourdepartmentstaff:
+    
+departmentstaff:
     type: rest
     resource: AppBundle\Controller\DepartmentStaffRestController
     prefix: /api/
@@ -25,3 +25,10 @@ feedback:
     type: rest
     resource: AppBundle\Controller\FeedbackRestController
     prefix: /api/
+    
+hours:
+    type: rest
+    resource: AppBundle\Controller\HoursRestController
+    prefix: /api/
+    
+
