@@ -10,18 +10,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\AvRequest;
 use AppBundle\Form\AvRequestType;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use AppBundle\Entity\AvRequestEvent;
 
+/**
+ * AvRequest Controller.
+ * 
+ * @Route("/avrequest")
+ */
 class AvRequestController extends Controller
 {
     /**
-     * @Route("/avrequest", name="avrequests")
+     * @Route("/", name="avrequests")
+     * @Method("GET")
      * @Template()
      */
     public function indexAction(){
@@ -35,9 +35,74 @@ class AvRequestController extends Controller
     }
     
     /**
+     * Creates a new Department entity.
+     *
+     * @Route("/", name="avrequest_create")
+     * @Method("POST")
+     * @Template("AppBundle:AvRequest:new.html.twig")
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new AvRequest();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('avrequest_show', array('id' => $entity->getId())));
+        }
+
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+    
+    /**
+     * Creates a form to create a AvRequest entity.
+     *
+     * @param AvRequest $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(AvRequest $entity)
+    {
+        $form = $this->createForm(new AvRequestType(), $entity, array(
+            'action' => $this->generateUrl('avrequest_create'),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Create'));
+
+        return $form;
+    }
+
+    /**
+     * Displays a form to create a new AvRequest entity.
+     *
+     * @Route("/new", name="avrequest_new")
+     * @Method("GET")
+     * @Template()
+     */
+    public function newAction()
+    {
+        $entity = new AvRequest();
+        
+        $form   = $this->createCreateForm($entity);
+
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+    
+    /**
      * Finds and displays an AvRequest entity.
      *
-     * @Route("/avrequest/{id}", name="avrequest_show")
+     * @Route("/{id}", name="avrequest_show")
      * @Method("GET")
      * @Template()
      */
@@ -58,6 +123,7 @@ class AvRequestController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
     
     /**
     * Creates a form to edit a AvRequest entity.
@@ -81,7 +147,7 @@ class AvRequestController extends Controller
     /**
      * Displays a form to edit an existing AvRequest entity.
      *
-     * @Route("/avrequest/{id}/edit", name="avrequest_edit")
+     * @Route("/{id}/edit", name="avrequest_edit")
      * @Method("GET")
      * @Template()
      */
@@ -123,7 +189,7 @@ class AvRequestController extends Controller
     /**
      * Edits an existing AvRequest entity.
      *
-     * @Route("/avrequest/{id}", name="avrequest_update")
+     * @Route("/{id}", name="avrequest_update")
      * @Method("PUT")
      * @Template("AppBundle:AvRequest:edit.html.twig")
      */
@@ -157,7 +223,7 @@ class AvRequestController extends Controller
     /**
      * Deletes a AvRequest entity.
      *
-     * @Route("/avrequest/{id}", name="avrequest_delete")
+     * @Route("/{id}", name="avrequest_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -177,7 +243,7 @@ class AvRequestController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('admin_staffareas'));
+        return $this->redirect($this->generateUrl('avrequests'));
     }
     
     /**

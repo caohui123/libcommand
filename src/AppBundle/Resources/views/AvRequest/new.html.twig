@@ -3,13 +3,61 @@
 {% block body -%}
     <h1>AvRequest creation</h1>
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+      <ul class="events" data-prototype="{{ form_widget(form.event.vars.prototype)|e }}">
 
+      </ul>
+    {{ form_end(form) }}
+    
         <ul class="record_actions">
     <li>
-        <a href="{{ path('avrequest') }}">
+        <a href="{{ path('avrequests') }}">
             Back to the list
         </a>
     </li>
 </ul>
+{% endblock %}
+{% block documentReady %}
+  var $eventsHolder;
+  var $addEventLink = $('<a href="#" class="add_event_link">Add Event</a>');
+  var $newLinkLi = $('<li></li>').append($addEventLink);
+  
+  $eventsHolder = $('ul.events');
+  $eventsHolder.append($newLinkLi);
+
+  /*
+    count the current form inputs we have (e.g. 2), use that as the new
+    index when inserting a new item (e.g. 2)
+  */
+  $eventsHolder.data('index', $eventsHolder.find(':input').length);
+  
+  //add a new event form on page load
+  addEventForm($eventsHolder, $newLinkLi);
+  
+  $addEventLink.on('click', function(event){
+    event.preventDefault();
+    
+    //add a new event form
+    addEventForm($eventsHolder, $newLinkLi);
+  });
+  
+  function addEventForm($eventsHolder, $newLinkLi) {
+      // Get the data-prototype explained earlier
+      var prototype = $eventsHolder.data('prototype');
+
+      // get the new index
+      var index = $eventsHolder.data('index');
+
+      // Replace '__name__' in the prototype's HTML to
+      // instead be a number based on how many items we have
+      var newForm = prototype.replace(/__name__/g, index);
+
+      // increase the index with one for the next item
+      $eventsHolder.data('index', index + 1);
+
+      // Display the form in the page in an li, before the "Add a tag" link li
+      var $newFormLi = $('<li></li>').append(newForm);
+      $newLinkLi.before($newFormLi);
+  }
+  {{ parent() }}
 {% endblock %}

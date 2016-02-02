@@ -2,7 +2,12 @@
 
 {% block body -%}
     <h1>AvRequest edit</h1>
-
+    <ul>
+      {{dump(entity)}}
+    {% for event in entity.event %}
+      <li>{{event.location}}</li>
+    {% endfor %}
+    </ul>
     {{ form(edit_form) }}
 
         <ul class="record_actions">

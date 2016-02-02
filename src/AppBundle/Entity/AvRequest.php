@@ -5,6 +5,8 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\AvRequestEvent;
 
 /**
  * AvRequest
@@ -25,12 +27,9 @@ class AvRequest
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     * @Assert\NotBlank()
+     * @ORM\OneToMany(targetEntity="AvRequestEvent", mappedBy="avrequest", cascade={"persist"})
      */
-    private $title;
+    private $events;
 
     /**
      * @var \DateTime
@@ -83,7 +82,10 @@ class AvRequest
      */
     private $contentChangedBy;
 
-
+    public function __construct() {
+      $this->events = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -95,27 +97,26 @@ class AvRequest
     }
 
     /**
-     * Set title
+     * Set events
      *
-     * @param string $title
-     *
+     * @param AppBundle\Entity\AvRequestEvent $event
      * @return AvRequest
      */
-    public function setTitle($title)
+    public function setEvent(AvRequestEvent $event)
     {
-        $this->title = $title;
+        $this->events[] = $event;
 
         return $this;
     }
 
     /**
-     * Get title
+     * Get events
      *
-     * @return string
+     * @return AppBundle\Entity\AvRequestEvent
      */
-    public function getTitle()
+    public function getEvent()
     {
-        return $this->title;
+        return $this->events;
     }
 
     /**
