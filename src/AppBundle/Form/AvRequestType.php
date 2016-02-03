@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 use AppBundle\Form\AvRequestEventType;
+use AppBundle\Form\AvRequestEquipmentQuantityType;
 
 class AvRequestType extends AbstractType
 {
@@ -28,23 +29,31 @@ class AvRequestType extends AbstractType
             
             //add in these fields only if the AvRequest is NEW
             if(!$request || null === $request->getId()){
+              
+              $form->add('eventDate', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+              ));
+              $form->add('pickupDate', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd HH:mm:ss',
+              ));
+              $form->add('returnDate', 'date', array(
+                  'widget' => 'single_text',
+                  'format' => 'yyyy-MM-dd HH:mm:ss',
+              ));
               //AvRequestEvent entity collection
+              //tutorial: http://symfony.com/doc/2.7/cookbook/form/form_collections.html
               $form->add('event', 'collection', array(
                 'type' => new AvRequestEventType(),
                 'allow_add' => true,
+                'by_reference' => false,
               ));
-              
-              $form->add('requestDate', 'datetime', array(
-                'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd HH:mm:ss',
-              ));
-              $form->add('deliverDate', 'datetime', array(
-                'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd HH:mm:ss',
-              ));
-              $form->add('returnDate', 'datetime', array(
-                  'widget' => 'single_text',
-                  'format' => 'yyyy-MM-dd HH:mm:ss',
+              //AvRequestEquipment entity collection
+              $form->add('equipment', 'collection', array(
+                'type' => new AvRequestEquipmentQuantityType(),
+                'allow_add' => true,
+                'by_reference' => false,
               ));
             }  
         });

@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class AvRequestEventType extends AbstractType
+class AvRequestEquipmentType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,10 +15,7 @@ class AvRequestEventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('location')
-            ->add('time', 'time', array(
-              'widget' => 'single_text'
-            ))
+            ->add('name')
         ;
     }
     
@@ -28,7 +25,7 @@ class AvRequestEventType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\AvRequestEvent'
+            'data_class' => 'AppBundle\Entity\AvRequestEquipment'
         ));
     }
 
@@ -37,6 +34,6 @@ class AvRequestEventType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_avrequestevent';
+        return 'appbundle_avrequestequipment';
     }
 }

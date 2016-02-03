@@ -50,6 +50,13 @@ class AvRequestController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
+            
+            //set request ID on any equipment quantity fields
+            $equipment = $entity->getEquipment()->toArray();
+            foreach($equipment as $eq){
+              $eq->setAvRequest($entity);
+              $em->persist($eq);
+            }
             $em->flush();
 
             return $this->redirect($this->generateUrl('avrequest_show', array('id' => $entity->getId())));

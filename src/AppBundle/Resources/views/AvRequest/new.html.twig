@@ -4,9 +4,18 @@
     <h1>AvRequest creation</h1>
 
     {{ form_start(form) }}
-      <ul class="events" data-prototype="{{ form_widget(form.event.vars.prototype)|e }}">
-
-      </ul>
+      <fieldset>
+        <legend>Events</legend>
+        {{ form_label(form.event) }}
+        <ul class="events" data-prototype="{{ form_widget(form.event.vars.prototype)|e }}">
+        </ul>
+      </fieldset>
+      <fieldset>
+        <legend>Equipment</legend>
+        {{ form_label(form.equipment) }}
+        <ul class="equipment" data-prototype="{{ form_widget(form.equipment.vars.prototype)|e }}">
+        </ul>
+      </fieldset>
     {{ form_end(form) }}
     
         <ul class="record_actions">
@@ -18,6 +27,8 @@
 </ul>
 {% endblock %}
 {% block documentReady %}
+  
+/////////// EVENTS /////////////
   var $eventsHolder;
   var $addEventLink = $('<a href="#" class="add_event_link">Add Event</a>');
   var $newLinkLi = $('<li></li>').append($addEventLink);
@@ -58,6 +69,49 @@
       // Display the form in the page in an li, before the "Add a tag" link li
       var $newFormLi = $('<li></li>').append(newForm);
       $newLinkLi.before($newFormLi);
+  }
+  
+/////////// EQUIPMENT /////////////
+  var $equipmentHolder;
+  var $addEquipmentLink = $('<a href="#" class="add_equipment_link">Add Equipment</a>');
+  var $newEqLinkLi = $('<li></li>').append($addEquipmentLink);
+  
+  $equipmentHolder = $('ul.equipment');
+  $equipmentHolder.append($newEqLinkLi);
+
+  /*
+    count the current form inputs we have (e.g. 2), use that as the new
+    index when inserting a new item (e.g. 2)
+  */
+  $equipmentHolder.data('index', $equipmentHolder.find(':input').length);
+  
+  //add a new equipment form on page load
+  addEquipmentForm($equipmentHolder, $newEqLinkLi);
+  
+  $addEquipmentLink.on('click', function(event){
+    event.preventDefault();
+    
+    //add a new event form
+    addEquipmentForm($equipmentHolder, $newEqLinkLi);
+  });
+  
+  function addEquipmentForm($equipmentHolder, $newEqLinkLi) {
+      // Get the data-prototype explained earlier
+      var prototype = $equipmentHolder.data('prototype');
+
+      // get the new index
+      var index = $equipmentHolder.data('index');
+
+      // Replace '__name__' in the prototype's HTML to
+      // instead be a number based on how many items we have
+      var newEqForm = prototype.replace(/__name__/g, index);
+
+      // increase the index with one for the next item
+      $equipmentHolder.data('index', index + 1);
+
+      // Display the form in the page in an li, before the "Add a tag" link li
+      var $newEqFormLi = $('<li></li>').append(newEqForm);
+      $newEqLinkLi.before($newEqFormLi);
   }
   {{ parent() }}
 {% endblock %}

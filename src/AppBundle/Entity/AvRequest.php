@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\AvRequestEvent;
+use AppBundle\Entity\AvRequestEquipmentQuantity;
 
 /**
  * AvRequest
@@ -27,27 +28,22 @@ class AvRequest
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="AvRequestEvent", mappedBy="avrequest", cascade={"persist"})
+     * @var \DateTime
+     *
+     * @ORM\Column(name="eventDate", type="date")
+     * @Assert\NotBlank()
+     * @Assert\DateTime()
      */
-    private $events;
+    private $eventDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="requestDate", type="datetime")
+     * @ORM\Column(name="pickupDate", type="datetime")
      * @Assert\NotBlank()
      * @Assert\DateTime()
      */
-    private $requestDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="deliverDate", type="datetime")
-     * @Assert\NotBlank()
-     * @Assert\DateTime()
-     */
-    private $deliverDate;
+    private $pickupDate;
 
     /**
      * @var \DateTime
@@ -57,6 +53,43 @@ class AvRequest
      * @Assert\DateTime()
      */
     private $returnDate;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="specialInstruction", type="text", nullable=true)
+     */
+    private $specialInstruction;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facultyFirstName", type="string", length=40)
+     */
+    private $facultyFirstName;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facultyLastName", type="string", length=40)
+     */
+    private $facultyLastName;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="liaisonSubject")
+     * @ORM\JoinColumn(name="liaisonsubject_id", referencedColumnName="id")
+     */
+    private $facultySubject;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AvRequestEvent", mappedBy="avrequest", cascade={"persist"})
+     */
+    private $events;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AvRequestEquipmentQuantity", mappedBy="avrequest", cascade={"persist"})
+     */
+    private $equipment;
 
     /**
      * @var \DateTime $created
@@ -78,12 +111,13 @@ class AvRequest
      * @var string $contentChangedBy
      *
      * @ORM\Column(name="content_changed_by", type="string", nullable=true)
-     * @Gedmo\Blameable(on="change", field={"title", "requestDate", "deliverDate", "returnDate"})
+     * @Gedmo\Blameable(on="change", field={"eventDate", "pickupDate", "returnDate"})
      */
     private $contentChangedBy;
 
     public function __construct() {
       $this->events = new ArrayCollection();
+      $this->equipment = new ArrayCollection();
     }
     
     /**
@@ -97,18 +131,32 @@ class AvRequest
     }
 
     /**
-     * Set events
+     * Add events
      *
      * @param AppBundle\Entity\AvRequestEvent $event
      * @return AvRequest
      */
-    public function setEvent(AvRequestEvent $event)
+    public function addEvent(AvRequestEvent $event)
     {
-        $this->events[] = $event;
+        $event->setAvRequest($this); //also add this avrequest as the foreign key of the event
+        $this->events->add($event);
 
         return $this;
     }
 
+    /**
+     * Remove events
+     *
+     * @param AppBundle\Entity\AvRequestEvent $event
+     * @return AvRequest
+     */
+    public function removeEvent(AvRequestEvent $event)
+    {
+        $this->events->removeElement($event);
+        
+        return $this;
+    }
+    
     /**
      * Get events
      *
@@ -120,51 +168,88 @@ class AvRequest
     }
 
     /**
-     * Set requestDate
+     * Add equipment
      *
-     * @param \DateTime $requestDate
-     *
+     * @param AppBundle\Entity\AvRequestEquipmentQuantity  $equipment
      * @return AvRequest
      */
-    public function setRequestDate($requestDate)
+    public function addEquipment(AvRequestEquipmentQuantity  $equipment)
     {
-        $this->requestDate = $requestDate;
+        //$equipment->setAvRequest($this); //also add this avrequest as the foreign key of the event
+        $this->equipment->add($equipment);
 
         return $this;
     }
 
     /**
-     * Get requestDate
+     * Remove equipment
+     *
+     * @param AppBundle\Entity\AvRequestEquipmentQuantity  $equipment
+     * @return AvRequest
+     */
+    public function removeEquipment(AvRequestEquipmentQuantity $equipment)
+    {
+        $this->equipment->removeElement($equipment);
+        
+        return $this;
+    }
+    
+    /**
+     * Get equipment
+     *
+     * @return AppBundle\Entity\AvRequestEquipmentQuantity 
+     */
+    public function getEquipment()
+    {
+        return $this->equipment;
+    }
+    
+    /**
+     * Set eventDate
+     *
+     * @param \DateTime $eventDate
+     *
+     * @return AvRequest
+     */
+    public function setEventDate(\DateTime $eventDate)
+    {
+        $this->eventDate = $eventDate;
+
+        return $this;
+    }
+
+    /**
+     * Get eventDate
      *
      * @return \DateTime
      */
-    public function getRequestDate()
+    public function getEventDate()
     {
-        return $this->requestDate;
+        return $this->eventDate;
     }
 
     /**
      * Set deliverDate
      *
-     * @param \DateTime $deliverDate
+     * @param \DateTime $pickupDate
      *
      * @return AvRequest
      */
-    public function setDeliverDate($deliverDate)
+    public function setPickupDate($pickupDate)
     {
-        $this->deliverDate = $deliverDate;
+        $this->pickupDate = $pickupDate;
 
         return $this;
     }
 
     /**
-     * Get deliverDate
+     * Get pickupDate
      *
      * @return \DateTime
      */
-    public function getDeliverDate()
+    public function getPickupDate()
     {
-        return $this->deliverDate;
+        return $this->pickupDate;
     }
 
     /**
@@ -237,6 +322,30 @@ class AvRequest
         $this->contentChangedBy = $changedby;
         
         return $this;
+    }
+    
+    /**
+     * Set specialInstruction
+     *
+     * @param string $specialInstruction
+     *
+     * @return AvRequest
+     */
+    public function setSpecialInstruction($specialInstruction)
+    {
+        $this->specialInstruction = $specialInstruction;
+
+        return $this;
+    }
+
+    /**
+     * Get specialInstruction
+     *
+     * @return string
+     */
+    public function getSpecialInstruction()
+    {
+        return $this->specialInstruction;
     }
 }
 

@@ -22,8 +22,8 @@
             <tr>
                 <td><a href="{{ path('avrequest_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
 
-                <td>{% if entity.requestDate %}{{ entity.requestDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.deliverDate %}{{ entity.deliverDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.eventDate %}{{ entity.eventDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.pickupDate %}{{ entity.pickupDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if entity.returnDate %}{{ entity.returnDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if entity.created %}{{ entity.created|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if entity.updated %}{{ entity.updated|date('Y-m-d H:i:s') }}{% endif %}</td>

@@ -2,12 +2,22 @@
 
 {% block body -%}
     <h1>AvRequest edit</h1>
+    <fieldset>
+      <legend>Events</legend>
     <ul>
-      {{dump(entity)}}
     {% for event in entity.event %}
       <li>{{event.location}}</li>
     {% endfor %}
     </ul>
+    </fieldset>
+    <fieldset>
+      <legend>Equipment</legend>
+    <ul>
+    {% for equip in entity.equipment %}
+      <li>{{equip.equipment}} x {{equip.quantity}}</li>
+    {% endfor %}
+    </ul>
+    </fieldset>
     {{ form(edit_form) }}
 
         <ul class="record_actions">
