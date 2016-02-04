@@ -25,8 +25,33 @@ class AvRequestRestController extends FOSRestController{
         
         return $response;
     }
-    public function getAvrequestAction($id){
-        
+
+    /**
+     * Return all LiaisonSubject departments
+     */
+    public function getAvrequestFacultyliaisonsAction(){
+      $em = $this->getDoctrine()->getManager();
+
+      $entities = $em->getRepository('AppBundle:LiaisonSubject')->findBy(array('lvl' => 1), array('name' => 'ASC'));
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($entities, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+
+      return $response;
+    }
+    
+    /**
+     * Return all Equipment types
+     */
+    public function getAvrequestEquipmentAction(){
+      $em = $this->getDoctrine()->getManager();
+
+      $entities = $em->getRepository('AppBundle:AvRequestEquipment')->findBy(array(), array('name' => 'ASC'));
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($entities, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+
+      return $response;
     }
 
     public function postAvrequestAction(Request $request){
@@ -92,7 +117,7 @@ class AvRequestRestController extends FOSRestController{
             return new Response($serialized, 201);
         }
 
-        return new JsonResponse(array(
+        return new Response(array(
             'errors' => $this->getFormErrors($form)
         ), 400);
     }

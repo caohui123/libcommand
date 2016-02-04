@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\AvRequestEvent;
 use AppBundle\Entity\AvRequestEquipmentQuantity;
+use AppBundle\Entity\LiaisonSubject;
 
 /**
  * AvRequest
@@ -76,10 +77,52 @@ class AvRequest
     private $facultyLastName;
     
     /**
-     * @ORM\ManyToOne(targetEntity="liaisonSubject")
-     * @ORM\JoinColumn(name="liaisonsubject_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="LiaisonSubject")
+     * @ORM\JoinColumn(name="liaisonsubject_id", referencedColumnName="id", nullable=true)
      */
     private $facultySubject;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facultyPhone", type="string", length=15)
+     */
+    private $facultyPhone;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facultyEmail", type="string", length=40)
+     */
+    private $facultyEmail;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="course", type="string", length=15, nullable=true)
+     */
+    private $course;
+    
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="attendees", type="smallint", nullable=true)
+     */
+    private $attendees;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="studentName", type="string", length=40, nullable=true)
+     */
+    private $studentName;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="studentEnumber", type="string", length=10, nullable=true)
+     */
+    private $studentEnumber;
     
     /**
      * @ORM\OneToMany(targetEntity="AvRequestEvent", mappedBy="avrequest", cascade={"persist"})
@@ -275,6 +318,78 @@ class AvRequest
     {
         return $this->returnDate;
     }
+    
+    function getFacultyFirstName() {
+      return $this->facultyFirstName;
+    }
+
+    function getFacultyLastName() {
+      return $this->facultyLastName;
+    }
+
+    function getFacultyPhone() {
+      return $this->facultyPhone;
+    }
+
+    function getFacultyEmail() {
+      return $this->facultyEmail;
+    }
+
+    function getCourse() {
+      return $this->course;
+    }
+
+    function getAttendees() {
+      return $this->attendees;
+    }
+
+    function getStudentName() {
+      return $this->studentName;
+    }
+
+    function getStudentEnumber() {
+      return $this->studentEnumber;
+    }
+
+    function setFacultyFirstName($facultyFirstName) {
+      $this->facultyFirstName = $facultyFirstName;
+      return $this;
+    }
+
+    function setFacultyLastName($facultyLastName) {
+      $this->facultyLastName = $facultyLastName;
+      return $this;
+    }
+
+    function setFacultyPhone($facultyPhone) {
+      $this->facultyPhone = $facultyPhone;
+      return $this;
+    }
+
+    function setFacultyEmail($facultyEmail) {
+      $this->facultyEmail = $facultyEmail;
+      return $this;
+    }
+
+    function setCourse($course) {
+      $this->course = $course;
+      return $this;
+    }
+
+    function setAttendees($attendees) {
+      $this->attendees = $attendees;
+      return $this;
+    }
+
+    function setStudentName($studentName) {
+      $this->studentName = $studentName;
+      return $this;
+    }
+
+    function setStudentEnumber($studentEnumber) {
+      $this->studentEnumber = $studentEnumber;
+      return $this;
+    }
 
     /**
      * Get created
@@ -346,6 +461,30 @@ class AvRequest
     public function getSpecialInstruction()
     {
         return $this->specialInstruction;
+    }
+    
+    /**
+     * Set facultySubject
+     *
+     * @param AppBundle\Entity\LiaisonSubject $liaisonSubject
+     *
+     * @return AvRequest
+     */
+    public function setFacultySubject(LiaisonSubject $liaisonSubject)
+    {
+        $this->facultySubject = $liaisonSubject;
+
+        return $this;
+    }
+
+    /**
+     * Get facultySubject
+     *
+     * @return AppBundle\Entity\LiaisonSubject
+     */
+    public function getFacultySubject()
+    {
+        return $this->facultySubject;
     }
 }
 

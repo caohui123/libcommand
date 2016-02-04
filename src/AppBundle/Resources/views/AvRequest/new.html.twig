@@ -29,6 +29,7 @@
 {% block documentReady %}
   
 /////////// EVENTS /////////////
+/* TUTORIAL HERE: http://symfony.com/doc/2.7/cookbook/form/form_collections.html */
   var $eventsHolder;
   var $addEventLink = $('<a href="#" class="add_event_link">Add Event</a>');
   var $newLinkLi = $('<li></li>').append($addEventLink);
@@ -96,7 +97,7 @@
   });
   
   function addEquipmentForm($equipmentHolder, $newEqLinkLi) {
-      // Get the data-prototype explained earlier
+      // Get the data-prototype code
       var prototype = $equipmentHolder.data('prototype');
 
       // get the new index
