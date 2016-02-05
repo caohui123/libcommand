@@ -1,0 +1,84 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>ExtendedPrivilegeRequest</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Expirationdate</th>
+                <td>{{ entity.expirationDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Studentfirstname</th>
+                <td>{{ entity.studentFirstName }}</td>
+            </tr>
+            <tr>
+                <th>Studentlastname</th>
+                <td>{{ entity.studentLastName }}</td>
+            </tr>
+            <tr>
+                <th>Studentenumber</th>
+                <td>{{ entity.studentEnumber }}</td>
+            </tr>
+            <tr>
+                <th>Studentemail</th>
+                <td>{{ entity.studentEmail }}</td>
+            </tr>
+            <tr>
+                <th>Studentphone</th>
+                <td>{{ entity.studentPhone }}</td>
+            </tr>
+            <tr>
+                <th>Facultyfirstname</th>
+                <td>{{ entity.facultyFirstName }}</td>
+            </tr>
+            <tr>
+                <th>Facultylastname</th>
+                <td>{{ entity.facultyLastName }}</td>
+            </tr>
+            <tr>
+                <th>Facultyemail</th>
+                <td>{{ entity.facultyEmail }}</td>
+            </tr>
+            <tr>
+                <th>Facultyphone</th>
+                <td>{{ entity.facultyPhone }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ entity.note }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Contentchangedby</th>
+                <td>{{ entity.contentChangedBy }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('extendedprivilege') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('extendedprivilege_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

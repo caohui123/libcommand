@@ -88,16 +88,18 @@ class AvRequestRestController extends FOSRestController{
             }
             */
             
-            
+            $facultySubject = $entity->getFacultySubject()->getName();
             $message = \Swift_Message::newInstance()
-                ->setSubject('Hello Email')
-                ->setFrom('send@example.com')
-                ->setTo('recipient@example.com')
+                ->setSubject('Your Audio/Visual Request at EMU Library')
+                ->setFrom('avrequest@emulibrary.com')
+                ->setTo($entity->getFacultyEmail())
                 ->setBody(
                     $this->renderView(
-                        // app/Resources/views/Emails/registration.html.twig
                         'AppBundle:AvRequest/Emails:avrequest.html.twig',
-                        array('form' => $request->request->all())
+                        array(
+                          'form' => $request->request->all(),
+                          'facultySubject' => $facultySubject
+                        )
                     ),
                     'text/html'
                 )

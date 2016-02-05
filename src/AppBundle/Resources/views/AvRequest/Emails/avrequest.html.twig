@@ -1,18 +1,36 @@
-{% if form.patronFirstName is defined %}
-  Dear {{ form.patronFirstName }},
+{% if form.facultyFirstName is defined %}
+  Dear {{ form.facultyFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
 
-<h3>Thank you for your Audio/Visual Request.</h3>
+<h3>Thank you for your Audio/Visual Request.</h3><br>
 
-Request summary:
-<ul>
-  <li>Title: {{ form.title }}</li>
-  <li>Request Date: {{ form.requestDate }}</li>
-  <li>Delivery Date: {{ form.deliverDate }}</li>
-  <li>Return Date: {{ form.returnDate }}</li>
-</ul>
+<strong>Request summary:<strong><br>
+<dl>
+  <dt>Request Submission</dt>
+  <dd>{{ form.created|date('l n/j/y g:i A') }}</dd>
+  <dt>Event Date</dt>
+  <dd>{{ form.eventDate|date('l n/j/y g:i A') }}</dd>
+  <dt>Pickup Date</dt>
+  <dd>{{ form.pickupDate|date('l n/j/y g:i A') }}</dd>
+  <dt>Return Date</dt>
+  <dd>{{ form.returnDate|date('l n/j/y g:i A') }}</dd>
+  <dt>Special Instruction</dt>
+  <dd>{{ form.specialInstruction }}</dd>
+  <dt>Faculty Name</dt>
+  <dd>{{ form.facultyFirstName }} {{ form.facultyLastName }} </dd>
+  <dt>Department</dt>
+  <dd>{{ facultySubject }}</dd>
+  <dt>Phone</dt>
+  <dd>{{ form.facultyPhone }}</dd>
+  <dt>Course</dt>
+  <dd>{{ form.course }}</dd>
+  <dt>Number of Attendees</dt>
+  <dd>{{ form.attendees }}</dd>
+  <dt>Student Information</dt>
+  <dd>{{ form.studentName }} | {{form.studentEnumber}}</dd>
+</dl>
 
 --<br>
 This email was automatically generated from the EMU AV Request System.

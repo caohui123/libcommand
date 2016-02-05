@@ -37,7 +37,7 @@ class FeedbackController extends Controller
     }
     /**
      * Creates a new Feedback entity.
-     *
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
      * //@Route("/", name="feedback_create")
      * //@Method("POST")
      * //@Template("AppBundle:Feedback:new.html.twig")
@@ -82,7 +82,7 @@ class FeedbackController extends Controller
 
     /**
      * Displays a form to create a new Feedback entity.
-     *
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
      * //@Route("/new", name="feedback_new")
      * //@Method("GET")
      * //@Template()

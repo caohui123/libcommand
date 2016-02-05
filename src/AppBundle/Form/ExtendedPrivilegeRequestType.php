@@ -5,14 +5,13 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
-use AppBundle\Form\AvRequestEventType;
-use AppBundle\Form\AvRequestEquipmentQuantityType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Doctrine\ORM\EntityRepository;
+use AppBundle\Entity\ExtendedPrivilegeRequestStatus;
 
-class AvRequestType extends AbstractType
+class ExtendedPrivilegeRequestType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -20,49 +19,43 @@ class AvRequestType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('specialInstruction', 'textarea', array(
-              'label' => 'Special Instructions'
-            ))
-        ;
         
         $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(\Symfony\Component\Form\FormEvent $event){
             $request = $event->getData();
             $form = $event->getForm();
             
-            //run only if the AvRequest entity already exists (i.e. editing an existing AvRequest)
+            //run only if the ExtendedPrivilegeRequest entity already exists (i.e. editing an existing AvRequest)
             if($request && null !== $request->getId()){
-
+              $form->add('note');
+              $form->add('status', 'entity', array(
+                'class'=>'AppBundle:ExtendedPrivilegeRequestStatus',
+                'query_builder'=>function(EntityRepository $er){
+                    $qb = $er->createQueryBuilder('ep');
+                    $qb
+                      ->orderBy('ep.name', 'ASC')
+                      ->getQuery();
+                    return $qb;
+                },
+                'property' => 'getName',
+                'placeholder' => '--NOT SET--',
+                'preferred_choices' => function(ExtendedPrivilegeRequestStatus $status){
+                  return 'other' !== strtolower($status->getName());
+                }
+              ));
             }
             
-            //add in these fields only if the AvRequest is NEW
+            //add in these fields only if the ExtendedPrivilegeRequest is NEW
             if(!$request || null === $request->getId()){
               
-              $form->add('eventDate', 'date', array(
+              $form->add('expirationDate', 'date', array(
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
               ));
-              $form->add('pickupDate', 'date', array(
-                'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd HH:mm:ss',
-              ));
-              $form->add('returnDate', 'date', array(
-                  'widget' => 'single_text',
-                  'format' => 'yyyy-MM-dd HH:mm:ss',
-              ));
-              //AvRequestEvent entity collection
-              //tutorial: http://symfony.com/doc/2.7/cookbook/form/form_collections.html
-              /*$form->add('event', 'collection', array(
-                'type' => new AvRequestEventType(),
-                'allow_add' => true,
-                'by_reference' => false,
-              ));
-              //AvRequestEquipment entity collection
-              $form->add('equipment', 'collection', array(
-                'type' => new AvRequestEquipmentQuantityType(),
-                'allow_add' => true,
-                'by_reference' => false,
-              ));*/
+              $form->add('studentFirstName');
+              $form->add('studentLastName');
+              $form->add('studentPhone');
+              $form->add('studentEmail');
+              $form->add('studentEnumber');
               $form->add('facultyFirstName');
               $form->add('facultyLastName');
               $form->add('facultyPhone');
@@ -80,12 +73,6 @@ class AvRequestType extends AbstractType
                 'placeholder' => 'Not Sure/Other',
                 'required' => false
               ));
-              $form->add('course', null, array(
-                'label' => 'Course or Event'
-              ));
-              $form->add('attendees');
-              $form->add('studentName');
-              $form->add('studentEnumber');
             }  
         });
         
@@ -102,6 +89,13 @@ class AvRequestType extends AbstractType
               if( $domain[1] != 'emich.edu' ){
                 $form['facultyEmail']->addError(new FormError("You are only allowed to enter an 'emich.edu' email addresses."));
               }
+              
+              $studentEmail = $form->get('studentEmail')->getData();
+
+              $domain = explode('@', $studentEmail);
+              if( $domain[1] != 'emich.edu' ){
+                $form['studentEmail']->addError(new FormError("You are only allowed to enter an 'emich.edu' email addresses."));
+              }
             }
         };
         $builder->addEventListener(FormEvents::POST_BIND, $emailValidator);
@@ -113,7 +107,7 @@ class AvRequestType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\AvRequest',
+            'data_class' => 'AppBundle\Entity\ExtendedPrivilegeRequest',
             'csrf_protection' => false,
             'allow_extra_fields' => true
         ));
@@ -124,6 +118,6 @@ class AvRequestType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_avrequest';
+        return 'appbundle_extendedprivilegerequest';
     }
 }

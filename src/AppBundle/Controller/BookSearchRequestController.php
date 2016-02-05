@@ -37,7 +37,7 @@ class BookSearchRequestController extends Controller
     }
     /**
      * Creates a new BookSearchRequest entity.
-     *
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
      * //@Route("/", name="booksearchrequest_create")
      * //@Method("POST")
      * //@Template("AppBundle:BookSearchRequest:new.html.twig")
@@ -83,7 +83,7 @@ class BookSearchRequestController extends Controller
 
     /**
      * Displays a form to create a new BookSearchRequest entity.
-     *
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
      * //@Route("/new", name="booksearchrequest_new")
      * //@Method("GET")
      * //@Template()

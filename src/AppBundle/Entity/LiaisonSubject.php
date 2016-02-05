@@ -541,7 +541,7 @@ class LiaisonSubject
     }
     
     public function __toString() {
-      return $this->getTitle();
+      return $this->getName();
     }
 }
 

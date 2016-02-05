@@ -36,10 +36,10 @@ class AvRequestController extends Controller
     
     /**
      * Creates a new Department entity.
-     *
-     * @Route("/", name="avrequest_create")
-     * @Method("POST")
-     * @Template("AppBundle:AvRequest:new.html.twig")
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
+     * //@Route("/", name="avrequest_create")
+     * //@Method("POST")
+     * //@Template("AppBundle:AvRequest:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -89,10 +89,10 @@ class AvRequestController extends Controller
 
     /**
      * Displays a form to create a new AvRequest entity.
-     *
-     * @Route("/new", name="avrequest_new")
-     * @Method("GET")
-     * @Template()
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
+     * //@Route("/new", name="avrequest_new")
+     * //@Method("GET")
+     * //@Template()
      */
     public function newAction()
     {

@@ -21,6 +21,11 @@ departmentstaff:
     resource: AppBundle\Controller\DepartmentStaffRestController
     prefix: /api/
     
+extendedprivilege:
+    type: rest
+    resource: AppBundle\Controller\ExtendedPrivilegeRequestRestController
+    prefix: /api/
+    
 feedback:
     type: rest
     resource: AppBundle\Controller\FeedbackRestController

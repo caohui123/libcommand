@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>ExtendedPrivilegeRequest list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Expirationdate</th>
+                <th>Studentfirstname</th>
+                <th>Studentlastname</th>
+                <th>Studentenumber</th>
+                <th>Studentemail</th>
+                <th>Studentphone</th>
+                <th>Facultyfirstname</th>
+                <th>Facultylastname</th>
+                <th>Facultyemail</th>
+                <th>Facultyphone</th>
+                <th>Note</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Contentchangedby</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('extendedprivilege_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.expirationDate %}{{ entity.expirationDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.studentFirstName }}</td>
+                <td>{{ entity.studentLastName }}</td>
+                <td>{{ entity.studentEnumber }}</td>
+                <td>{{ entity.studentEmail }}</td>
+                <td>{{ entity.studentPhone }}</td>
+                <td>{{ entity.facultyFirstName }}</td>
+                <td>{{ entity.facultyLastName }}</td>
+                <td>{{ entity.facultyEmail }}</td>
+                <td>{{ entity.facultyPhone }}</td>
+                <td>{{ entity.note }}</td>
+                <td>{% if entity.created %}{{ entity.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.updated %}{{ entity.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.contentChangedBy }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('extendedprivilege_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('extendedprivilege_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

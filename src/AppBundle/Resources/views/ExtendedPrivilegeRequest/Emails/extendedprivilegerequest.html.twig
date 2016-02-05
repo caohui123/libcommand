@@ -1,0 +1,40 @@
+{% if form.facultyFirstName is defined %}
+  Dear {{ form.facultyFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+
+<h3>Thank you for your Extended Privilege Request.</h3><br>
+
+    <h4>General Information</h4>
+    <dl>
+      <dt>Request Submission</dt>
+      <dd>{{ form.created|date('l n/j/y g:i A') }}</dd>
+      <dt>Requested Privilege Expiration Date</dt>
+      <dd>{{ form.expirationDate|date('l n/j/y') }}</dd>
+    </dl>
+    
+    <h4>Student Information</h4>
+    <dl>
+      <dt>Name</dt>
+      <dd>{{ form.studentFirstName }} {{ form.studentLastName }}</dd>
+      <dt>E-Number</dt>
+      <dd>{{ form.studentEnumber }}</dd>
+      <dt>Emich Email</dt>
+      <dd>{{ form.studentEmail }}</dd>
+      <dt>Phone</dt>
+      <dd>{{ form.studentPhone }}</dd>
+    </dl>
+    <h4>Faculty Information</h4>
+    <dl>
+      <dt>Name</dt>
+      <dd>{{ form.facultyFirstName }} {{ form.facultyLastName }}</dd>
+      <dt>Department</dt>
+      <dd>{{ facultySubject }}</dd>
+      <dt>Emich Email</dt>
+      <dd>{{ form.facultyEmail }}</dd>
+      <dt>Phone</dt>
+      <dd>{{ form.facultyPhone }}</dd>
+    </dl>
+--<br>
+This email was automatically generated from the EMU Extended Privilege Request System.
