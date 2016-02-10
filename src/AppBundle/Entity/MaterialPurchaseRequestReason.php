@@ -3,19 +3,19 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ExtendedPrivilegeRequestStatus
+ * MaterialPurchaseRequestReason
  *
  * @ORM\Table()
  * @ORM\Entity
  * 
- * @UniqueEntity(fields={"name"}, message="This status already exists.")
+ * @UniqueEntity(fields={"name"}, message="This reason already exists.")
  */
-class ExtendedPrivilegeRequestStatus
+class MaterialPurchaseRequestReason
 {
     /**
      * @var integer
@@ -29,7 +29,7 @@ class ExtendedPrivilegeRequestStatus
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100)
+     * @ORM\Column(name="name", type="string", length=75)
      */
     private $name;
     
@@ -57,6 +57,7 @@ class ExtendedPrivilegeRequestStatus
      */
     private $contentChangedBy;
 
+
     /**
      * Get id
      *
@@ -72,7 +73,7 @@ class ExtendedPrivilegeRequestStatus
      *
      * @param string $name
      *
-     * @return ExtendedPrivilegeRequestStatus
+     * @return MaterialPurchaseRequestReason
      */
     public function setName($name)
     {
@@ -137,6 +138,10 @@ class ExtendedPrivilegeRequestStatus
         $this->contentChangedBy = $changedby;
         
         return $this;
+    }
+    
+    public function __toString() {
+       return $this->getName(); 
     }
 }
 

@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\FeedbackArea;
+use AppBundle\Entity\PatronGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ExecutionContextInterface;
@@ -426,7 +427,7 @@ class Feedback
      *
      * @return Feedback
      */
-    public function setPatronGroup(\AppBundle\Entity\PatronGroup $patronGroup = null)
+    public function setPatronGroup(PatronGroup $patronGroup = null)
     {
         $this->patronGroup = $patronGroup;
 

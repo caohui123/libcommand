@@ -3,19 +3,19 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ExtendedPrivilegeRequestStatus
+ * MediaType
  *
  * @ORM\Table()
  * @ORM\Entity
  * 
- * @UniqueEntity(fields={"name"}, message="This status already exists.")
+ * @UniqueEntity(fields={"name"}, message="This media type already exists.")
  */
-class ExtendedPrivilegeRequestStatus
+class MediaType
 {
     /**
      * @var integer
@@ -29,10 +29,10 @@ class ExtendedPrivilegeRequestStatus
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100)
+     * @ORM\Column(name="name", type="string", length=50)
      */
     private $name;
-    
+
     /**
      * @var \DateTime $created
      *
@@ -56,7 +56,7 @@ class ExtendedPrivilegeRequestStatus
      * @Gedmo\Blameable(on="change", field={"name"})
      */
     private $contentChangedBy;
-
+    
     /**
      * Get id
      *
@@ -72,7 +72,7 @@ class ExtendedPrivilegeRequestStatus
      *
      * @param string $name
      *
-     * @return ExtendedPrivilegeRequestStatus
+     * @return MediaType
      */
     public function setName($name)
     {
@@ -137,6 +137,10 @@ class ExtendedPrivilegeRequestStatus
         $this->contentChangedBy = $changedby;
         
         return $this;
+    }
+    
+    public function __toString() {
+       return $this->getName(); 
     }
 }
 

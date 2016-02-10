@@ -261,6 +261,14 @@ class UserController extends Controller
         $service->updatePermissions($entity, $formData['staff'], $formData['staff_previous']);
         //LIBRARY DEPARTMENTS
         $service->updatePermissions($entity, $formData['departments'], $formData['departments_previous']);
+        //FEEDBACK
+        $service->updatePermissions($entity, $formData['feedback'], $formData['feedback_previous']);
+        //BOOK SEARCH REQUEST
+        $service->updatePermissions($entity, $formData['book_search_request'], $formData['book_search_request_previous']);
+        //EXTENDED PRIVILEGE REQUEST
+        $service->updatePermissions($entity, $formData['extended_privileges'], $formData['extended_privileges_previous']);
+        //MATERIAL PURCHASE REQUEST
+        $service->updatePermissions($entity, $formData['material_purchase_request'], $formData['material_purchase_request_previous']);
         
         //redirect to the Edit screen for the given user
         return $this->redirect($this->generateUrl('user_edit', array('id' => $userId)));
@@ -289,6 +297,14 @@ class UserController extends Controller
         $staff_permission = $service->generateViewEditDelete($user, 'ROLE_STAFF');
         //LIBRARY DEPARTMENTS
         $department_permission = $service->generateViewEditDelete($user, 'ROLE_DEPARTMENTS');
+        //FEEDBACK
+        $feedback_permission = $service->generateViewEditDelete($user, 'ROLE_FEEDBACK');
+        //BOOK SEARCH REQUEST
+        $booksearch_permission = $service->generateViewEditDelete($user, 'ROLE_BOOKSEARCH');
+        //EXTENDED PRIVILEGE REQUEST
+        $extendedprivileges_permission = $service->generateViewEditDelete($user, 'ROLE_EXTENDEDPRIVILEGES');
+        //MATERIAL PURCHASE REQUEST
+        $materialpurchase_permission = $service->generateViewEditDelete($user, 'ROLE_MATERIALPURCHASE');
         
         $data = array();
         $form = $this->get('form.factory')->createNamedBuilder('user_permission_form', 'form', $data, array(
@@ -362,6 +378,74 @@ class UserController extends Controller
             ->add('departments_previous', 'hidden', array(
               //need to know the previous permission level so we can remove it and replace it with the new one.
               'data' => $department_permission
+            ))
+            //FEEDBACK
+            ->add('feedback', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_FEEDBACK_VIEW'=> 'View',
+                'ROLE_FEEDBACK_EDIT'=> 'Edit',
+                'ROLE_FEEDBACK_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $feedback_permission
+            ))
+            ->add('feedback_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $feedback_permission
+            ))
+            //BOOK SEARCH REQUEST
+            ->add('book_search_request', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_BOOKSEARCH_VIEW'=> 'View',
+                'ROLE_BOOKSEARCH_EDIT'=> 'Edit',
+                'ROLE_BOOKSEARCH_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $booksearch_permission
+            ))
+            ->add('book_search_request_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $booksearch_permission
+            ))
+            //EXTENDED PRIVILEGES
+            ->add('extended_privileges', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_EXTENDEDPRIVILEGES_VIEW'=> 'View',
+                'ROLE_EXTENDEDPRIVILEGES_EDIT'=> 'Edit',
+                'ROLE_EXTENDEDPRIVILEGES_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $extendedprivileges_permission
+            ))
+            ->add('extended_privileges_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $extendedprivileges_permission
+            ))
+            //MATERIAL PURCHASE REQUEST
+            ->add('material_purchase_request', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_MATERIALPURCHASE_VIEW'=> 'View',
+                'ROLE_MATERIALPURCHASE_EDIT'=> 'Edit',
+                'ROLE_MATERIALPURCHASE_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $materialpurchase_permission
+            ))
+            ->add('material_purchase_request_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $materialpurchase_permission
             ))
             //user's ID (send along to createEditForm action)
             ->add('userId', 'hidden', array(

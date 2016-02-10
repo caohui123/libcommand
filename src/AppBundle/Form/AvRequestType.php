@@ -26,7 +26,7 @@ class AvRequestType extends AbstractType
             ))
         ;
         
-        $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(\Symfony\Component\Form\FormEvent $event){
+        $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(FormEvent $event){
             $request = $event->getData();
             $form = $event->getForm();
             

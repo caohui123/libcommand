@@ -1,0 +1,108 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>MaterialPurchaseRequest</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Patronfirstname</th>
+                <td>{{ entity.patronFirstName }}</td>
+            </tr>
+            <tr>
+                <th>Patronlastname</th>
+                <td>{{ entity.patronLastName }}</td>
+            </tr>
+            <tr>
+                <th>Patronemail</th>
+                <td>{{ entity.patronEmail }}</td>
+            </tr>
+            <tr>
+                <th>Notify</th>
+                <td>{{ entity.notify }}</td>
+            </tr>
+            <tr>
+                <th>Isnotified</th>
+                <td>{{ entity.isNotified }}</td>
+            </tr>
+            <tr>
+                <th>Notifieddate</th>
+                <td>{{ entity.notifiedDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ entity.title }}</td>
+            </tr>
+            <tr>
+                <th>Isbn</th>
+                <td>{{ entity.isbn }}</td>
+            </tr>
+            <tr>
+                <th>Issn</th>
+                <td>{{ entity.issn }}</td>
+            </tr>
+            <tr>
+                <th>Author</th>
+                <td>{{ entity.author }}</td>
+            </tr>
+            <tr>
+                <th>Publisher</th>
+                <td>{{ entity.publisher }}</td>
+            </tr>
+            <tr>
+                <th>Publicationyear</th>
+                <td>{{ entity.publicationYear }}</td>
+            </tr>
+            <tr>
+                <th>Edition</th>
+                <td>{{ entity.edition }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ entity.price }}</td>
+            </tr>
+            <tr>
+                <th>Source</th>
+                <td>{{ entity.source }}</td>
+            </tr>
+            <tr>
+                <th>Isincatalog</th>
+                <td>{{ entity.isInCatalog }}</td>
+            </tr>
+            <tr>
+                <th>Reasontoaddexplain</th>
+                <td>{{ entity.reasonToAddExplain }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Contentchangedby</th>
+                <td>{{ entity.contentChangedBy }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('materialpurchase') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('materialpurchase_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
