@@ -36,4 +36,9 @@ hours:
     resource: AppBundle\Controller\HoursRestController
     prefix: /api/
     
+materialpurchaserequest:
+    type: rest
+    resource: AppBundle\Controller\MaterialPurchaseRequestRestController
+    prefix: /api/
+    
 

@@ -45,13 +45,43 @@ class MaterialPurchaseRequestController extends Controller
     public function createAction(Request $request)
     {
         $entity = new MaterialPurchaseRequest();
+        
+        $requestData = $request->request->all();
+
+        $sourceRadio = $requestData['appbundle_materialpurchaserequest']['sourceRadio'];
+        $sourceOther = $requestData['appbundle_materialpurchaserequest']['sourceOther'];
+        
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            //log the source of the material
+            if($sourceRadio == 'other'){
+              $entity->setSource($sourceOther);
+            } else {
+              $entity->setSource($sourceRadio);
+            }
+            //log that the user has not been notified of a purchase update
+            $entity->setIsNotified(0);
+            
             $em->persist($entity);
             $em->flush();
+            
+            //send the requestor an email
+            $message = \Swift_Message::newInstance()
+                  ->setSubject('Your Material Purchase Request at EMU Library')
+                  ->setFrom('materialrequest@emulibrary.com')
+                  ->setTo($entity->getPatronEmail())
+                  ->setBody(
+                        $this->renderView(
+                            'AppBundle:MaterialPurchaseRequest/Emails:materialpurchaserequest.html.twig',
+                            array('form' => $requestData)
+                        ),
+                        'text/html'
+                    );
+              $this->get('mailer')->send($message);
 
             return $this->redirect($this->generateUrl('materialpurchase_show', array('id' => $entity->getId())));
         }

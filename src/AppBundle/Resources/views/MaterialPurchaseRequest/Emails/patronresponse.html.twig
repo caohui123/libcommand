@@ -1,0 +1,43 @@
+{% if entity.patronFirstName is defined %}
+  Dear {{ entity.patronFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+
+<p>The item you requested for purchase (see full item information below) has a status update: </p>
+<p>{{ status }}</p>
+<br>
+-----<br><br><br>
+Your original request (received {{ created|date('l n/j/y g:i A') }}):
+<h4>Material Information</h4>
+<dl>
+  <dt>Title</dt>
+  <dd>{{ entity.title }}</dd>
+  <dt>Author</dt>
+  <dd>{{ entity.author }}</dd>
+  <dt>ISBN</dt>
+  <dd>{{ entity.isbn }} </dd>
+  <dt>ISSN</dt>
+  <dd>{{ entity.issn }}</dd>
+  <dt>Publisher</dt>
+  <dd>{{ entity.publisher }}</dd>
+  <dt>Year</dt>
+  <dd>{{ entity.publicationYear }}</dd>
+  <dt>Edition</dt>
+  <dd>{{ entity.edition }}</dd>
+  <dt>Price</dt>
+  <dd>{{ entity.price }}</dd>
+  <dt>Media Type</dt>
+  <dd>{{ mediaType }}</dd>
+</dl>
+
+<h4>Other Information</h4>
+<dl>
+  <dt>Source</dt>
+  <dd>{{ entity.source }}</dd>
+  <dt>Reason to Add</dt>
+  <dd>{{ reason }} | {{ entity.reasonToAddExplain }} </dd>
+</dl>
+<br>
+---<br>
+This Email was sent from the EMU Library Material Purchase Request System.

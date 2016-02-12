@@ -1,0 +1,64 @@
+{% if form.patronFirstName is defined %}
+  Dear {{ form.patronFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+
+<h3>Thank you for material purchase request at EMU Library.</h3> Your request has been received. We will send you an update when we have more information regarding your materials.
+
+Request Summary:
+<h4>Requestor Information</h4>
+<dl>
+  <dt>Name</dt>
+  <dd>{{ form.patronFirstName }} {{ form.patronLastName }}</dd>
+  <dt>Email</dt>
+  <dd>{{ form.patronEmail }}</dd>
+  <dt>Department</dt>
+  <dd>{{ department }}</dd>
+  <dt>Academic Status</dt>
+  <dd>{{ academicStatus }}</dd>
+  <dt>Notify</dt>
+  {% if form.notify == true %}
+  <dd>You asked to be informed when the title is available.</dd>
+  {% else %}
+  <dd>You did not ask to be informed when the title is available.</dd>
+  {% endif %}
+</dl>
+
+<h4>Material Information</h4>
+<dl>
+  <dt>Title</dt>
+  <dd>{{ form.title }}</dd>
+  <dt>Author</dt>
+  <dd>{{ form.author }}</dd>
+  <dt>ISBN</dt>
+  <dd>{{ form.isbn }} </dd>
+  <dt>ISSN</dt>
+  <dd>{{ form.issn }}</dd>
+  <dt>Publisher</dt>
+  <dd>{{ form.publisher }}</dd>
+  <dt>Year</dt>
+  <dd>{{ form.publicationYear }}</dd>
+  <dt>Edition</dt>
+  <dd>{{ form.edition }}</dd>
+  <dt>Price</dt>
+  <dd>{{ form.price }}</dd>
+  <dt>Media Type</dt>
+  <dd>{{ mediaType }}</dd>
+  <dt>In Catalog?</dt>
+  {% if form.isInCatalog == true %}
+  <dd>This title is in the EMU Library catalog.</dd>
+  {% else %}
+  <dd>This title is not in the EMU Library catalog.</dd>
+  {% endif %}
+</dl>
+
+<h4>Other Information</h4>
+<dl>
+  <dt>Source</dt>
+  <dd>{{ form.source }}</dd>
+  <dt>Reason to Add</dt>
+  <dd>{{ reason }} | {{ form.reasonToAddExplain }} </dd>
+</dl>
+---<br>
+This email was automatically generated from the EMU Library Patron Feedback System.

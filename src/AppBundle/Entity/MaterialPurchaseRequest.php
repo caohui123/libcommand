@@ -8,6 +8,7 @@ use AppBundle\Entity\MediaType;
 use AppBundle\Entity\LiaisonSubject;
 use AppBundle\Entity\MaterialPurchaseRequestReason;
 use Gedmo\Mapping\Annotation as Gedmo;
+use AppBundle\Entity\MaterialPurchaseRequestStatus;
 
 /**
  * MaterialPurchaseRequest
@@ -76,7 +77,7 @@ class MaterialPurchaseRequest
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="notifiedDate", type="datetime")
+     * @ORM\Column(name="notifiedDate", type="datetime", nullable=true)
      */
     private $notifiedDate;
 
@@ -172,6 +173,21 @@ class MaterialPurchaseRequest
      * @ORM\Column(name="reasonToAddExplain", type="text", nullable=true)
      */
     private $reasonToAddExplain;
+    
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="MaterialPurchaseRequestStatus", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="materialpurchaserequeststatus_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     */
+    private $status;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text", nullable=true)
+     */
+    private $note;
     
     /**
      * @var \DateTime $created
@@ -617,16 +633,39 @@ class MaterialPurchaseRequest
     }
 
     /**
+     * Get status
+     *
+     * @return AppBundle\Entity\MaterialPurchaseRequestStatus
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    /**
+     * Set status
+     *
+     * @param \AppBundle\Entity\MaterialPurchaseRequestStatus $status
+     *
+     * @return MaterialPurchaseRequest
+     */
+    public function setStatus(MaterialPurchaseRequestStatus $status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+    
+    /**
      * Set source
      *
-     * @param string $source
-     *
+     * @var string $source
+     * 
      * @return MaterialPurchaseRequest
      */
     public function setSource($source)
     {
         $this->source = $source;
-
+        
         return $this;
     }
 
@@ -710,6 +749,30 @@ class MaterialPurchaseRequest
     public function getReasonToAddExplain()
     {
         return $this->reasonToAddExplain;
+    }
+    
+    /**
+     * Get source
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * Set isInCatalog
+     *
+     * @param string $note
+     *
+     * @return MaterialPurchaseRequest
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+
+        return $this;
     }
     
     /**

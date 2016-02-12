@@ -27,7 +27,6 @@ class MaterialPurchaseRequestType extends AbstractType
             ->add('publicationYear')
             ->add('edition')
             ->add('price')
-            ->add('source')
             ->add('isInCatalog')
         ;
         
@@ -37,7 +36,22 @@ class MaterialPurchaseRequestType extends AbstractType
             
             //run only if the AvRequest entity already exists (i.e. editing an existing AvRequest)
             if($request && null !== $request->getId()){
-
+              $form->add('status', 'entity', array(
+                'class'=>'AppBundle:MaterialPurchaseRequestStatus',
+                'query_builder'=>function(EntityRepository $er){
+                    $qb = $er->createQueryBuilder('st');
+                    $qb
+                      ->orderBy('st.name', 'ASC')
+                      ->getQuery();
+                    return $qb;
+                },
+                'placeholder' => 'New Request',
+                'required' => false
+              ));
+                
+              $form->add('note', null, array(
+                'required' => false
+              ));
             }
             
             //add in these fields only if the AvRequest is NEW
@@ -58,7 +72,7 @@ class MaterialPurchaseRequestType extends AbstractType
                 'multiple' => false
               ));
               $form->add('notify', null, array(
-                'label' => 'Notify me when the book is in the library.'
+                'label' => 'Notify me when the book is in the library.',
               ));
               $form->add('mediaType', 'entity', array(
                 'class'=>'AppBundle:MediaType',
@@ -109,11 +123,12 @@ class MaterialPurchaseRequestType extends AbstractType
               ));
               $form->add('sourceOther', 'text', array(
                 'mapped' => false,
-                'label' => 'Other Reason'
+                'label' => 'Other Reason',
+                'required' => false
               ));
             }  
         });
-        
+        /*
         //Make sure the facultyEmail field contains an emich email address!
         $emailValidator = function(FormEvent $event){
             $request = $event->getData();
@@ -125,11 +140,11 @@ class MaterialPurchaseRequestType extends AbstractType
 
               $domain = explode('@', $patronEmail);
               if( $domain[1] != 'emich.edu' ){
-                $form['$patronEmail']->addError(new FormError("You are only allowed to enter an 'emich.edu' email addresses."));
+                $form['patronEmail']->addError(new FormError("You are only allowed to enter an 'emich.edu' email addresses."));
               }
             }
         };
-        $builder->addEventListener(FormEvents::POST_BIND, $emailValidator);
+        $builder->addEventListener(FormEvents::POST_BIND, $emailValidator);*/
     }
     
     /**
@@ -138,7 +153,9 @@ class MaterialPurchaseRequestType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\MaterialPurchaseRequest'
+            'data_class' => 'AppBundle\Entity\MaterialPurchaseRequest',
+            'csrf_protection' => false,
+            'allow_extra_fields' => true
         ));
     }
 
