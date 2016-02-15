@@ -1,16 +1,47 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>MaterialPurchaseRequest edit</h1>
-
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('materialpurchase') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
+    <h1 class="page-header">Edit Material Purchase Request</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('materialpurchase') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
+      </div>
+    </div>
+    <blockquote>
+      <p>Patrons may only be emailed <mark>once</mark> per request in order to prevent potential spamming. If you fill out a response in the "reply" field, the patron will be responded to on update. If a response has already been sent, you will see it below. Additonally, if a patron specified that they did NOT want to be informed of updates, the "reply" field will not show.</p>
+    </blockquote>
+    <section id="submission_info">
+      <h2>Request Information</h2> 
+      <dl>
+        <dt>Received</dt>
+        <dd>{{ entity.created|date('l n/j/y g:i A') }}</dd>
+        <dt>Patron Information</dt>
+        <dd>{{entity.patronFirstName}} {{entity.patronLastName}} &lt;{{entity.patronEmail}}&gt</dd>
+        <dd>Group: {{entity.patronGroup}}</dd>
+        <dd>Department: {{entity.patronDepartment}}</dd>
+        <dd>
+          {% if entity.notify == 1 and entity.notifiedDate is empty %}
+            <span class="alert-success">Patron wants to be notified of status changes.</span>
+          {% elseif entity.notifiedDate is not empty %}
+              <dt>Library Response</dt>
+              <dd><em>{{entity.reply}}</em></dd>
+              <dd><small>-- Sent on {{entity.notifiedDate|date('l n/j/y g:i A')}}</small></dd>
+          {% else %}
+            <span class="alert-warning">Patron does NOT want to be notified of status changes.</span>            
+          {% endif %}
+        </dd>
+        <dt>Item Source</dt>
+        <dd>{{entity.source}}</dd>
+        <dt>Reason to Add</dt>
+        <dd>{{entity.reasonToAdd}} | {{entity.reasonToAddExplain}}</dd>
+        
+      </dl>
+    </section>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        {{ form(edit_form) }}
+        {{ form(delete_form) }}
+      </div>
+    </div>
 </ul>
 {% endblock %}

@@ -94,8 +94,6 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
             } else {
               $entity->setSource($requestData['sourceRadio']);
             }
-
-            $entity->setIsNotified(0);
             
             $em->persist($entity);
             $em->flush();

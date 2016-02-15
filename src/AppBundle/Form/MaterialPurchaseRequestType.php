@@ -28,13 +28,24 @@ class MaterialPurchaseRequestType extends AbstractType
             ->add('edition')
             ->add('price')
             ->add('isInCatalog')
+            ->add('mediaType', 'entity', array(
+                'class'=>'AppBundle:MediaType',
+                'query_builder'=>function(EntityRepository $er){
+                    $qb = $er->createQueryBuilder('mt');
+                    $qb
+                      ->orderBy('mt.name', 'ASC')
+                      ->getQuery();
+                    return $qb;
+                },
+                'placeholder' => 'Choose Type',
+              ))
         ;
         
         $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(FormEvent $event){
             $request = $event->getData();
             $form = $event->getForm();
             
-            //run only if the AvRequest entity already exists (i.e. editing an existing AvRequest)
+            //run only if the MaterialPurchaseRequest entity already exists (i.e. editing an existing MaterialPurchaseRequest)
             if($request && null !== $request->getId()){
               $form->add('status', 'entity', array(
                 'class'=>'AppBundle:MaterialPurchaseRequestStatus',
@@ -50,11 +61,19 @@ class MaterialPurchaseRequestType extends AbstractType
               ));
                 
               $form->add('note', null, array(
-                'required' => false
+                'required' => false,
+                'label' => 'Note (internal only)'
               ));
+              
+              //only allow a reply to patron if one hasn't been sent already
+              if(null === $request->getNotifiedDate() && $request->getNotify() == 1){
+                $form->add('reply', null, array(
+                  'label' => 'Reply to Patron (patron will be emailed if text present)',
+                ));
+              }
             }
             
-            //add in these fields only if the AvRequest is NEW
+            //add in these fields only if the MaterialPurchaseRequest is NEW
             if(!$request || null === $request->getId()){
               $form->add('patronFirstName');
               $form->add('patronLastName');
@@ -73,17 +92,6 @@ class MaterialPurchaseRequestType extends AbstractType
               ));
               $form->add('notify', null, array(
                 'label' => 'Notify me when the book is in the library.',
-              ));
-              $form->add('mediaType', 'entity', array(
-                'class'=>'AppBundle:MediaType',
-                'query_builder'=>function(EntityRepository $er){
-                    $qb = $er->createQueryBuilder('mt');
-                    $qb
-                      ->orderBy('mt.name', 'ASC')
-                      ->getQuery();
-                    return $qb;
-                },
-                'placeholder' => 'Choose Type',
               ));
               $form->add('patronDepartment', 'entity', array(
                 'class'=>'AppBundle:LiaisonSubject',
@@ -128,7 +136,7 @@ class MaterialPurchaseRequestType extends AbstractType
               ));
             }  
         });
-        /*
+        
         //Make sure the facultyEmail field contains an emich email address!
         $emailValidator = function(FormEvent $event){
             $request = $event->getData();
@@ -144,7 +152,7 @@ class MaterialPurchaseRequestType extends AbstractType
               }
             }
         };
-        $builder->addEventListener(FormEvents::POST_BIND, $emailValidator);*/
+        $builder->addEventListener(FormEvents::POST_BIND, $emailValidator);
     }
     
     /**

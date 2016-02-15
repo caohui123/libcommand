@@ -195,7 +195,7 @@ class MaterialPurchaseRequestController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-default')));
 
         return $form;
     }
@@ -215,12 +215,54 @@ class MaterialPurchaseRequestController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find MaterialPurchaseRequest entity.');
         }
-
+        
+        $requestData = $request->request->all(); 
+        
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+          
+          if(null !== $entity->getMediaType()){
+            $mediaType = $entity->getMediaType()->getName();
+          } else {
+            $mediaType = '';
+          }
+          
+          if(null !== $entity->getReasonToAdd()){
+            $reason = $entity->getReasonToAdd()->getName();
+          } else {
+            $reason = '';
+          }
+          
+          
+            //if necessary, record the reply to the patron and the time thereof (do NOT email if status is null)
+            if(isset($requestData['appbundle_materialpurchaserequest']['reply']) && trim($requestData['appbundle_materialpurchaserequest']['reply']) != '' && null !== $entity->getStatus()){
+              $entity->setReply($requestData['appbundle_materialpurchaserequest']['reply']);
+              $entity->setNotifiedDate(new \DateTime());
+              $em->persist($entity);
+              
+              //email the patron
+              $patronEmail = $entity->getPatronEmail();
+              $message = \Swift_Message::newInstance()
+                  ->setSubject('Update to your material purchase request at EMU library')
+                  ->setFrom('purchaserequest@emulibrary.com')
+                  ->setTo($patronEmail)
+                  ->setBody(
+                      $this->renderView(
+                            'AppBundle:MaterialPurchaseRequest/Emails:patronresponse.html.twig',
+                            array(
+                              'entity' => $entity,
+                              'mediaType' => $mediaType,
+                              'reason' => $reason,
+                              'status' => $entity->getStatus()->getName()
+                            )
+                        ),
+                        'text/html'
+                      );
+              $this->get('mailer')->send($message);
+            }
             $em->flush();
 
             return $this->redirect($this->generateUrl('materialpurchase_edit', array('id' => $id)));
@@ -270,7 +312,7 @@ class MaterialPurchaseRequestController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('materialpurchase_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }

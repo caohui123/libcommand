@@ -68,13 +68,6 @@ class MaterialPurchaseRequest
     private $notify;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isNotified", type="boolean")
-     */
-    private $isNotified;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="notifiedDate", type="datetime", nullable=true)
@@ -188,6 +181,13 @@ class MaterialPurchaseRequest
      * @ORM\Column(name="note", type="text", nullable=true)
      */
     private $note;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reply", type="text", nullable=true)
+     */
+    private $reply;
     
     /**
      * @var \DateTime $created
@@ -369,37 +369,13 @@ class MaterialPurchaseRequest
     }
 
     /**
-     * Set isNotified
-     *
-     * @param boolean $isNotified
-     *
-     * @return MaterialPurchaseRequest
-     */
-    public function setIsNotified($isNotified)
-    {
-        $this->isNotified = $isNotified;
-
-        return $this;
-    }
-
-    /**
-     * Get isNotified
-     *
-     * @return boolean
-     */
-    public function getIsNotified()
-    {
-        return $this->isNotified;
-    }
-
-    /**
      * Set notifiedDate
      *
      * @param \DateTime $notifiedDate
      *
      * @return MaterialPurchaseRequest
      */
-    public function setNotifiedDate($notifiedDate)
+    public function setNotifiedDate(\DateTime $notifiedDate)
     {
         $this->notifiedDate = $notifiedDate;
 
@@ -771,6 +747,30 @@ class MaterialPurchaseRequest
     public function setNote($note)
     {
         $this->note = $note;
+
+        return $this;
+    }
+    
+    /**
+     * Get source
+     *
+     * @return MaterialPurchaseRequest
+     */
+    public function getReply()
+    {
+        return $this->reply;
+    }
+
+    /**
+     * Set isInCatalog
+     *
+     * @param string $reply
+     *
+     * @return string
+     */
+    public function setReply($reply)
+    {
+        $this->reply = $reply;
 
         return $this;
     }

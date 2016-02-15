@@ -218,7 +218,7 @@ class FeedbackController extends Controller
             }
             
             //if necessary, record the reply to the patron and the time thereof
-            if(isset($requestData['appbundle_feedback']['reply']) && null != $requestData['appbundle_feedback']['reply']){
+            if(isset($requestData['appbundle_feedback']['reply']) && trim($requestData['appbundle_feedback']['reply']) != ''){
               $entity->setResponse($requestData['appbundle_feedback']['reply']);
               $entity->setReplyDate(new \DateTime());
               $em->persist($entity);
