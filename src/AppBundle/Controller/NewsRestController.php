@@ -24,18 +24,34 @@ class NewsRestController extends FOSRestController{
      * @param int $num_stories
      * @return Response
      */
-    public function getNewsPageAction($page_num = 1, $num_results = 5){
+    public function getNewsPageAction($page_num = 1, $results_per_page = 5){
         $em = $this->getDoctrine()->getManager();
         
-        $offset = (($page_num - 1) * $num_results) + 1; //which record to start on
+        $offset = ($page_num - 1) * $results_per_page; //which record to start on
         
         $entities = $em->createQuery(
           'SELECT n FROM AppBundle:News n WHERE n.hidden = :hidden ORDER BY n.created DESC'
         )
             ->setParameter('hidden', 0)
-            ->setMaxResults($num_results)
+            ->setMaxResults($results_per_page)
             ->setFirstResult($offset)
             ->getResult();
+        
+        $serializer = $this->container->get('serializer');
+        $serialized = $serializer->serialize($entities, 'json');
+        $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+        return $response;
+    }
+    
+    /**
+     * Get total records and number of pages based on the specified results per page.
+     * 
+     * @param int $results_per_page
+     * @return JsonResponse
+     */
+    public function getNewspaginationinfoAction($results_per_page){
+        $em = $this->getDoctrine()->getManager();
         
         $qb = $em->createQueryBuilder('n');
         $qb->select('count(n.id)');
@@ -43,16 +59,11 @@ class NewsRestController extends FOSRestController{
         
         $num_records = $qb->getQuery()->getSingleScalarResult();
         
-        $serializer = $this->container->get('serializer');
-        $serialized = $serializer->serialize($entities, 'json');
-        
-        //return the number of records and total pages (based on number of records specified per page)
         $response = new JsonResponse();
         $response->setData(array(
-            'num_records' => $num_records,
-            'pages' => ceil($num_records/$num_results),
-            'stories' => $serialized
-        ));
+              'num_pages' => ceil($num_records/$results_per_page),
+              'num_records' => intval($num_records)
+            ));
         $response->setStatusCode(200);
         
         return $response;
