@@ -269,6 +269,10 @@ class UserController extends Controller
         $service->updatePermissions($entity, $formData['extended_privileges'], $formData['extended_privileges_previous']);
         //MATERIAL PURCHASE REQUEST
         $service->updatePermissions($entity, $formData['material_purchase_request'], $formData['material_purchase_request_previous']);
+        //MATERIAL RESERVE
+        $service->updatePermissions($entity, $formData['material_reserve'], $formData['material_reserve_previous']);
+        //NEWS
+        $service->updatePermissions($entity, $formData['news'], $formData['news_previous']);
         
         //redirect to the Edit screen for the given user
         return $this->redirect($this->generateUrl('user_edit', array('id' => $userId)));
@@ -305,6 +309,10 @@ class UserController extends Controller
         $extendedprivileges_permission = $service->generateViewEditDelete($user, 'ROLE_EXTENDEDPRIVILEGES');
         //MATERIAL PURCHASE REQUEST
         $materialpurchase_permission = $service->generateViewEditDelete($user, 'ROLE_MATERIALPURCHASE');
+        //MATERIAL RESERVE
+        $materialreserve_permission = $service->generateViewEditDelete($user, 'ROLE_MATERIALRESERVE');
+        //NEWS
+        $news_permission = $service->generateViewEditDelete($user, 'ROLE_NEWS');
         
         $data = array();
         $form = $this->get('form.factory')->createNamedBuilder('user_permission_form', 'form', $data, array(
@@ -446,6 +454,40 @@ class UserController extends Controller
             ->add('material_purchase_request_previous', 'hidden', array(
               //need to know the previous permission level so we can remove it and replace it with the new one.
               'data' => $materialpurchase_permission
+            ))
+            //MATERIAL RESERVE
+            ->add('material_reserve', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_MATERIALRESERVE_VIEW'=> 'View',
+                'ROLE_MATERIALRESERVE_EDIT'=> 'Edit',
+                'ROLE_MATERIALRESERVE_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $materialreserve_permission
+            ))
+            ->add('material_reserve_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $materialreserve_permission
+            ))
+            //NEWS
+            ->add('news', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_NEWS_VIEW'=> 'View',
+                'ROLE_NEWS_EDIT'=> 'Edit',
+                'ROLE_NEWS_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $news_permission
+            ))
+            ->add('news_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $news_permission
             ))
             //user's ID (send along to createEditForm action)
             ->add('userId', 'hidden', array(

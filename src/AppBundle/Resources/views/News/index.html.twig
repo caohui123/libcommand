@@ -1,0 +1,9 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>News list</h1>
+    {{ dump(paginatedCollection) }}
+    {% for entity in paginatedCollection.inline.resources %}
+      {{ entity.title }}
+    {% endfor %}
+{% endblock %}

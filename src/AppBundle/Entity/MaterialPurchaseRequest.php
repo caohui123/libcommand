@@ -209,7 +209,7 @@ class MaterialPurchaseRequest
      * @var string $contentChangedBy
      *
      * @ORM\Column(name="content_changed_by", type="string", nullable=true)
-     * @Gedmo\Blameable(on="change", field={"note", "status"})
+     * @Gedmo\Blameable(on="change", field={"note", "status", "title", "author", "reply", "isInCatalog", "edition", "price", "publisher", "publicationYear" })
      */
     private $contentChangedBy;
 
