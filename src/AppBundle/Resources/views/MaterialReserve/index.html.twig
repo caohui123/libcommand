@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>MaterialReserve list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Semester</th>
+                <th>Year</th>
+                <th>Course</th>
+                <th>Enrollment</th>
+                <th>Instructor</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Contentchangedby</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('materialreserve_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.semester }}</td>
+                <td>{{ entity.year }}</td>
+                <td>{{ entity.course }}</td>
+                <td>{{ entity.enrollment }}</td>
+                <td>{{ entity.instructor }}</td>
+                <td>{{ entity.phone }}</td>
+                <td>{{ entity.email }}</td>
+                <td>{% if entity.created %}{{ entity.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.updated %}{{ entity.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.contentChangedBy }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('materialreserve_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('materialreserve_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('materialreserve_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

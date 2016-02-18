@@ -3,6 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\MaterialReserveItem;
 
 /**
  * MediaReserve
@@ -69,8 +72,39 @@ class MaterialReserve
      * @ORM\Column(name="email", type="string", length=50)
      */
     private $email;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="MaterialReserveMedia", mappedBy="materialreserve", cascade={"persist"})
+     */
+    private $items;
+    
+    /**
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
 
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updated;
+    
+    /**
+     * @var string $contentChangedBy
+     *
+     * @ORM\Column(name="content_changed_by", type="string", nullable=true)
+     * @Gedmo\Blameable(on="change", field={"semester", "year", "course", "enrollment", "instructor", "phone", "email"})
+     */
+    private $contentChangedBy;
 
+    public function __construct() {
+      $this->items = new ArrayCollection();
+    }
     /**
      * Get id
      *
@@ -247,6 +281,81 @@ class MaterialReserve
     public function getEmail()
     {
         return $this->email;
+    }
+    
+    /**
+     * Remove items
+     *
+     * @param AppBundle\Entity\MaterialReserveItem $item
+     * @return MaterialReserve
+     */
+    public function removeItem(MaterialReserveItem $item)
+    {
+        $this->items->removeElement($item);
+        
+        return $this;
+    }
+    
+    /**
+     * Get items
+     *
+     * @return AppBundle\Entity\MaterialReserveItem
+     */
+    public function getItem()
+    {
+        return $this->items;
+    }
+    
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+    public function setCreated($created)
+    {
+        $this->created = $created;
+        
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+        
+        return $this;
+    }
+
+    /**
+     * Get contentChangedBy
+     *
+     * @return string
+     */
+    public function getContentChangedBy()
+    {
+        return $this->contentChangedBy;
+    }
+    public function setContentChangedBy($changedby)
+    {
+        $this->contentChangedBy = $changedby;
+        
+        return $this;
+    }
+    
+    public function __toString() {
+       return $this->getCreated(); 
     }
 }
 

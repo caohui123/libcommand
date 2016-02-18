@@ -1,0 +1,68 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>MaterialReserve</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Semester</th>
+                <td>{{ entity.semester }}</td>
+            </tr>
+            <tr>
+                <th>Year</th>
+                <td>{{ entity.year }}</td>
+            </tr>
+            <tr>
+                <th>Course</th>
+                <td>{{ entity.course }}</td>
+            </tr>
+            <tr>
+                <th>Enrollment</th>
+                <td>{{ entity.enrollment }}</td>
+            </tr>
+            <tr>
+                <th>Instructor</th>
+                <td>{{ entity.instructor }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.phone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.email }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Contentchangedby</th>
+                <td>{{ entity.contentChangedBy }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('materialreserve') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('materialreserve_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

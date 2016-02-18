@@ -131,7 +131,7 @@ class MaterialPurchaseRequest
     private $price;
 
     /**
-     * @var string
+     * @var AppBundle\Entity\MediaType
      *
      * @ORM\ManyToOne(targetEntity="MediaType", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinColumn(name="mediatype_id", referencedColumnName="id", onDelete="SET NULL")

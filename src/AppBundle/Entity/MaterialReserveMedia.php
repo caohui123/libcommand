@@ -3,19 +3,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * MediaType
+ * MaterialReserveMedia
  *
  * @ORM\Table()
  * @ORM\Entity
- * 
- * @UniqueEntity(fields={"name"}, message="This media type already exists.")
  */
-class MediaType
+class MaterialReserveMedia
 {
     /**
      * @var integer
@@ -29,10 +25,10 @@ class MediaType
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50)
+     * @ORM\Column(name="name", type="string", length=100)
      */
     private $name;
-
+    
     /**
      * @var \DateTime $created
      *
@@ -56,7 +52,8 @@ class MediaType
      * @Gedmo\Blameable(on="change", field={"name"})
      */
     private $contentChangedBy;
-    
+
+
     /**
      * Get id
      *
@@ -72,7 +69,7 @@ class MediaType
      *
      * @param string $name
      *
-     * @return MediaItem
+     * @return MaterialReserveMedia
      */
     public function setName($name)
     {

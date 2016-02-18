@@ -33,12 +33,12 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
     }
     
   /**
-     * Return all MediaType entities
+     * Return all MediaItem entities
      */
-    public function getMaterialpurchaseMediatypesAction(){
+    public function getMaterialpurchaseMediaitemsAction(){
       $em = $this->getDoctrine()->getManager();
 
-      $entities = $em->getRepository('AppBundle:MediaType')->findBy(array(), array('name' => 'ASC'));
+      $entities = $em->getRepository('AppBundle:MediaItem')->findBy(array(), array('name' => 'ASC'));
       $serializer = $this->container->get('serializer');
       $serialized = $serializer->serialize($entities, 'json');
       $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
@@ -107,10 +107,10 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
               $department = $entity->getPatronDepartment()->getName();
             }
             
-            if(null == $entity->getMediaType()){
-              $mediaType = null;
+            if(null == $entity->getMediaItem()){
+              $mediaItem = null;
             } else {
-              $mediaType = $entity->getMediaType()->getName();
+              $mediaItem = $entity->getMediaItem()->getName();
             }
             
             if(null == $entity->getPatronGroup()){
@@ -136,7 +136,7 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
                             array(
                               'form' => $requestData,
                               'department' => $department,
-                              'mediaType' => $mediaType,
+                              'mediaItem' => $mediaItem,
                               'academicStatus' => $patronGroup,
                               'reason' => $reason,
                             )
