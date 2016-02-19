@@ -3,7 +3,14 @@
 {% block body -%}
     <h1>MaterialReserve creation</h1>
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+      <fieldset>
+        <legend>Items</legend>
+        {{ form_label(form.item) }}
+        <ul class="items" data-prototype="{{ form_widget(form.item.vars.prototype)|e }}">
+        </ul>
+      </fieldset>
+    {{ form_end(form) }}
 
         <ul class="record_actions">
     <li>
@@ -12,4 +19,51 @@
         </a>
     </li>
 </ul>
+{% endblock %}
+{% block documentReady %}
+  
+/////////// ITEMS /////////////
+/* TUTORIAL HERE: http://symfony.com/doc/2.7/cookbook/form/form_collections.html */
+  var $itemsHolder;
+  var $addItemLink = $('<a href="#" class="add_item_link">Add Item</a>');
+  var $newLinkLi = $('<li></li>').append($addItemLink);
+  
+  $itemsHolder = $('ul.items');
+  $itemsHolder.append($newLinkLi);
+
+  /*
+    count the current form inputs we have (e.g. 2), use that as the new
+    index when inserting a new item (e.g. 2)
+  */
+  $itemsHolder.data('index', $itemsHolder.find(':input').length);
+  
+  //add a new item form on page load
+  addItemForm($itemsHolder, $newLinkLi);
+  
+  $addItemLink.on('click', function(event){
+    event.preventDefault();
+    
+    //add a new item form
+    addItemForm($itemsHolder, $newLinkLi);
+  });
+  
+  function addItemForm($itemsHolder, $newLinkLi) {
+      // Get the data-prototype explained earlier
+      var prototype = $itemsHolder.data('prototype');
+
+      // get the new index
+      var index = $itemsHolder.data('index');
+
+      // Replace '__name__' in the prototype's HTML to
+      // instead be a number based on how many items we have
+      var newForm = prototype.replace(/__name__/g, index);
+
+      // increase the index with one for the next item
+      $itemsHolder.data('index', index + 1);
+
+      // Display the form in the page in an li, before the "Add a tag" link li
+      var $newFormLi = $('<li></li>').append(newForm);
+      $newLinkLi.before($newFormLi);
+  }
+  {{ parent() }}
 {% endblock %}

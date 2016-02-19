@@ -216,7 +216,7 @@ class MaterialReserveItem
     /**
      * Get MaterialReserveMedia
      *
-     * @return \AppBundle\Entity\MediaType
+     * @return \AppBundle\Entity\MaterialReserveMedia
      */
     public function getMaterialReserveMedia()
     {

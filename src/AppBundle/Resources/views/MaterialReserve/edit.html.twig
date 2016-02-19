@@ -3,6 +3,27 @@
 {% block body -%}
     <h1>MaterialReserve edit</h1>
 
+    <fieldset>
+      <legend>Request Items</legend>
+    <ul>
+    
+    <dl>
+    {% for item in entity.item %}
+      <dt>{{item.title}}</dt>
+        <dd>Media Type: {{item.materialReserveMedia}}</dd>
+        <dd>Author: {{item.author}}</dd>
+        <dd>Edition: {{item.edition}}</dd>
+        <dd>
+          Circulation Period: 
+          {% if item.circulationHours < 24 %}
+            {{item.circulationHours}} Hours
+          {% else %}
+            {{item.circulationHours / 24}} {{ item.circulationHours == 24 ? 'Day' : 'Days' }}
+          {% endif %}
+        </dd>
+    {% endfor %}
+    </dl>
+    </fieldset>
     {{ form(edit_form) }}
 
         <ul class="record_actions">

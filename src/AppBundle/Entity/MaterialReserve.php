@@ -74,7 +74,7 @@ class MaterialReserve
     private $email;
     
     /**
-     * @ORM\OneToMany(targetEntity="MaterialReserveMedia", mappedBy="materialreserve", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="MaterialReserveItem", mappedBy="materialreserve", cascade={"persist"})
      */
     private $items;
     
@@ -281,6 +281,20 @@ class MaterialReserve
     public function getEmail()
     {
         return $this->email;
+    }
+    
+    /**
+     * Add item
+     *
+     * @param AppBundle\Entity\MaterialReserveItem $item
+     * @return MaterialReserve
+     */
+    public function addItem(MaterialReserveItem $item)
+    {
+        $item->setMaterialReserve($this); //also add this MaterialReserve as the foreign key of the event
+        $this->items->add($item);
+
+        return $this;
     }
     
     /**

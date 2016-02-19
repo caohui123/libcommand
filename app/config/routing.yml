@@ -46,4 +46,9 @@ news:
     resource: AppBundle\Controller\NewsRestController
     prefix: /api/
     
+materialreserve:
+    type: rest
+    resource: AppBundle\Controller\MaterialReserveRestController
+    prefix: /api/
+    
 
