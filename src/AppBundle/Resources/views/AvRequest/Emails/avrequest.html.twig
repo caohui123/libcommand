@@ -6,7 +6,7 @@
 
 <h3>Thank you for your Audio/Visual Request.</h3><br>
 
-<strong>Request summary:<strong><br>
+<strong>Event/Equipment summary:</strong><br>
 <dl>
   <dt>Request Submission</dt>
   <dd>{{ form.created|date('l n/j/y g:i A') }}</dd>
@@ -18,6 +18,18 @@
   <dd>{{ form.returnDate|date('l n/j/y g:i A') }}</dd>
   <dt>Special Instruction</dt>
   <dd>{{ form.specialInstruction }}</dd>
+  <dt>Event Locations</dt>
+  {% for event in events %}
+    <dd>{{ event.location }} at {{ even.time|date('g:i A') }}</dd>
+  {% endfor %}
+  <dt>Equipment</dt>
+  {% for equip in equipment %}
+    <dd>{{ equip.quantity }}x {{ equip.equipment }}</dd>
+  {% endfor %}
+</dl>
+
+<strong>Other information:</strong><br>
+<dl>
   <dt>Faculty Name</dt>
   <dd>{{ form.facultyFirstName }} {{ form.facultyLastName }} </dd>
   <dt>Department</dt>
@@ -31,6 +43,7 @@
   <dt>Student Information</dt>
   <dd>{{ form.studentName }} | {{form.studentEnumber}}</dd>
 </dl>
+
 
 --<br>
 This email was automatically generated from the EMU AV Request System.

@@ -56,8 +56,11 @@ class AvRequestRestController extends FOSRestController{
 
     public function postAvrequestAction(Request $request){
         $entity = new AvRequest();
-
-        $form = $this->get('form.factory')->createNamed('', new AvRequestType(), $entity);
+        
+        $formData = $request->request->all();
+        
+        /* Forms on client side must follow naming format of 'avrequest[formfieldname]' */
+        $form = $this->get('form.factory')->createNamed('avrequest', new AvRequestType(), $entity);
         $form->handleRequest($request);
         
         if ($form->isValid()) {
@@ -97,8 +100,10 @@ class AvRequestRestController extends FOSRestController{
                     $this->renderView(
                         'AppBundle:AvRequest/Emails:avrequest.html.twig',
                         array(
-                          'form' => $request->request->all(),
-                          'facultySubject' => $facultySubject
+                          'form' => $formData['avrequest'],
+                          'facultySubject' => $facultySubject,
+                          'events' => $entity->getEvent(),
+                          'equipment' => $entity->getEquipment()
                         )
                     ),
                     'text/html'

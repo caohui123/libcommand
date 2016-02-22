@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\AvRequest;
 use AppBundle\Entity\AvRequestEquipment;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * AvRequestEquipmentQuantity
@@ -33,7 +34,7 @@ class AvRequestEquipmentQuantity
     /**
      * @var AppBundle\Entity\AvRequestEquipment
      * 
-     * @ORM\OneToOne(targetEntity="AvRequestEquipment")
+     * @ORM\ManyToOne(targetEntity="AvRequestEquipment")
      * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $equipment;
@@ -43,6 +44,7 @@ class AvRequestEquipmentQuantity
      * 
      * @ORM\ManyToOne(targetEntity="AvRequest", inversedBy="equipment")
      * @ORM\JoinColumn(name="avrequest_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Assert\NotBlank()
      */
     private $avrequest;
 

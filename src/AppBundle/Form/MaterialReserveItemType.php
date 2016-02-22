@@ -31,6 +31,7 @@ class MaterialReserveItemType extends AbstractType
             ->add('circulationHours', 'choice', array(
               'choices' => array(
                 2 => '2 Hours',
+                4 => '4 Hours',
                 24 => '24 Hours',
                 72 => '3 Days',
                 168 => '7 Days'

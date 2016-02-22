@@ -218,7 +218,7 @@ class AvRequest
      */
     public function addEquipment(AvRequestEquipmentQuantity  $equipment)
     {
-        //$equipment->setAvRequest($this); //also add this avrequest as the foreign key of the event
+        $equipment->setAvRequest($this); //also add this avrequest as the foreign key of the equipment
         $this->equipment->add($equipment);
 
         return $this;

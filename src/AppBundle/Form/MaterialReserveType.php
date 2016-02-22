@@ -76,7 +76,9 @@ class MaterialReserveType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\MaterialReserve'
+            'data_class' => 'AppBundle\Entity\MaterialReserve',
+            'csrf_protection' => false,
+            'allow_extra_fields' => true
         ));
     }
 

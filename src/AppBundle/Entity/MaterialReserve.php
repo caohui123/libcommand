@@ -48,21 +48,21 @@ class MaterialReserve
     /**
      * @var integer
      *
-     * @ORM\Column(name="enrollment", type="integer")
+     * @ORM\Column(name="enrollment", type="integer", nullable=true)
      */
     private $enrollment;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="instructor", type="string", length=50)
+     * @ORM\Column(name="instructor", type="string", length=50, nullable=true)
      */
     private $instructor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=15)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      */
     private $phone;
 

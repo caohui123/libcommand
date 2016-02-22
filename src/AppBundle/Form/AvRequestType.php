@@ -52,7 +52,7 @@ class AvRequestType extends AbstractType
               ));
               //AvRequestEvent entity collection
               //tutorial: http://symfony.com/doc/2.7/cookbook/form/form_collections.html
-              /*$form->add('event', 'collection', array(
+              $form->add('event', 'collection', array(
                 'type' => new AvRequestEventType(),
                 'allow_add' => true,
                 'by_reference' => false,
@@ -62,7 +62,7 @@ class AvRequestType extends AbstractType
                 'type' => new AvRequestEquipmentQuantityType(),
                 'allow_add' => true,
                 'by_reference' => false,
-              ));*/
+              ));
               $form->add('facultyFirstName');
               $form->add('facultyLastName');
               $form->add('facultyPhone');

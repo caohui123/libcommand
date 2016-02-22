@@ -38,9 +38,10 @@ class MaterialReserveController extends Controller
     /**
      * Creates a new MaterialReserve entity.
      *
-     * @Route("/", name="materialreserve_create")
-     * @Method("POST")
-     * @Template("AppBundle:MaterialReserve:new.html.twig")
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
+     * //@Route("/", name="materialreserve_create")
+     * //@Method("POST")
+     * //@Template("AppBundle:MaterialReserve:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -84,9 +85,10 @@ class MaterialReserveController extends Controller
     /**
      * Displays a form to create a new MaterialReserve entity.
      *
-     * @Route("/new", name="materialreserve_new")
-     * @Method("GET")
-     * @Template()
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
+     * //@Route("/new", name="materialreserve_new")
+     * //@Method("GET")
+     * //@Template()
      */
     public function newAction()
     {

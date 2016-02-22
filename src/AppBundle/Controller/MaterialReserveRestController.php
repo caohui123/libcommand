@@ -30,4 +30,65 @@ class MaterialReserveRestController extends FOSRestController
         
         return $response;
     }
+    
+    public function postMaterialreserveAction(Request $request){
+      
+      $entity = new MaterialReserve();
+        
+      $formData = $request->request->all();
+      
+        /* Forms on client side must follow naming format of 'materialreserve[formfieldname]' */
+        $form = $this->get('form.factory')->createNamed('materialreserve', new MaterialReserveType(), $entity);
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            $serializer = $this->get('serializer');
+            $serialized = $serializer->serialize($entity, 'json');
+          
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Your Material Reserve Submission at EMU Library')
+                ->setFrom('facultymaterialreserve@emulibrary.com')
+                ->setTo('cpuzzuol@emich.edu')
+                ->setBody(
+                    $this->renderView(
+                        'AppBundle:MaterialReserve/Emails:materialreserve.html.twig',
+                        array(
+                          'form' => $formData['materialreserve'],
+                        )
+                    ),
+                    'text/html'
+                )
+            ;
+            $this->get('mailer')->send($message);
+          
+            return new Response($serialized, 201);
+        }
+
+        return new Response(array(
+            'errors' => $this->getFormErrors($form)
+        ), 400);
+
+    }
+    protected function getFormErrors(\Symfony\Component\Form\Form $form)
+    {
+        $errors = array();
+
+        foreach ($form->getErrors() as $error) {
+            $errors['global'][] = $error->getMessage();
+        }
+
+        foreach ($form as $field) {
+            if (!$field->isValid()) {
+                foreach ($field->getErrors() as $error) {
+                    $errors['fields'][$field->getName()] = $error->getMessage();
+                }
+            }
+        }
+
+        return $errors;
+    }
 }
