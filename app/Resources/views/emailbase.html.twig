@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}{% endblock %} &#8211; EMU Library</title>
+  </head>
+  <body style="max-width: 640px;">
+    <div style="background: #3c7f6c; color: #FFFFFF; height: 75px">
+      {% image '@AppBundle/Resources/public/images/email_banner_640x75.jpg' %}
+      <img src="{{ header_image }}" width="640px" height="75px" alt="Eastern Michigan University Library"  />
+      {% endimage %}
+    </div>
+    <div class="container" style="border:1px solid #333333; padding: 7px;">{% block body %}{% endblock %}</div>
+    <div style="background: #333333; color: #FFFFFF; height: 75px">{% block footer %}{% endblock %}</div>
+  </body>
+</html>

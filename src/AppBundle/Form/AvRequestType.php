@@ -20,11 +20,7 @@ class AvRequestType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('specialInstruction', 'textarea', array(
-              'label' => 'Special Instructions'
-            ))
-        ;
+        $builder;
         
         $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(FormEvent $event){
             $request = $event->getData();
@@ -86,6 +82,9 @@ class AvRequestType extends AbstractType
               $form->add('attendees');
               $form->add('studentName');
               $form->add('studentEnumber');
+              $form->add('specialInstruction', 'textarea', array(
+                'label' => 'Special Instructions'
+              ));
             }  
         });
         

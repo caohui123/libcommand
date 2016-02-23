@@ -1,34 +1,83 @@
-{% extends '::base.html.twig' %}
-
+{% extends 'base.html.twig' %}
+{% block title %}Audio/Visual Request{% endblock %}
 {% block body -%}
-    <h1>AvRequest edit</h1>
-    <fieldset>
-      <legend>Events</legend>
-    <ul>
-    {% for event in entity.event %}
-      <li>{{event.location}}</li>
-    {% endfor %}
-    </ul>
-    </fieldset>
-    <fieldset>
-      <legend>Equipment</legend>
-    <ul>
-    {% for equip in entity.equipment %}
-      <li>{{equip.equipment}} x {{equip.quantity}}</li>
-    {% endfor %}
-    </ul>
-    </fieldset>
-    {{ form(edit_form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('avrequests') }}">
-            Back to the list
-        </a>
-    </li>
+    <h1 class="page-header">Edit AV Request</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('avrequests') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to AV List</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-5 col-lg-3">
+          {{ form_start(edit_form) }}
+          <dl class="dl-horizontal">
+            <dt>Submitted</dt>
+            <dd>{{entity.created|date('l n/j/y g:i A')}}</dd>
+            <dt>Pickup Date</dt>
+            <dd>{{entity.pickupDate|date('l n/j/y g:i A')}}</dd>
+            <dt>Return Date</dt>
+            <dd>{{entity.returnDate|date('l n/j/y g:i A')}}</dd>
+            <dt>Attendees</dt>
+            <dd>{{entity.attendees}}</dd>
+            <dt>Special Instructions</dt>
+            <dd>{{entity.specialInstruction}}</dd>
+          </dl>
+          <dl class="dl-horizontal">
+            <dt>Faculty Name</dt>
+            <dd>{{entity.facultyFirstName}} {{entity.facultyLastName}}</dd>
+            <dt>Department</dt>
+            <dd>{{entity.facultySubject}}</dd>
+            <dt>Phone</dt>
+            <dd>{{entity.facultyPhone}}</dd>
+            <dt>Email</dt>
+            <dd>{{entity.facultyEmail}}</dd>
+            <dt>Course/Event</dt>
+            <dd>{{entity.course}}</dd>
+          </dl>
+          <dl class="dl-horizontal">
+            <dt>Student Name</dt>
+            <dd>{{entity.studentName}}</dd>
+            <dt>E-Number</dt>
+            <dd>{{entity.studentEnumber}}</dd>
+          </dl>
+            <table class="table table-striped">
+              <caption>Locations/Times</caption>
+              <thead>
+                <tr>
+                  <th>Location</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+            {% for event in entity.event if event %}
+              <tr><td>{{event.location}}</td><td>{{event.time|date('g:i A')}}</td></tr>
+            {% else %}
+              <tr><td colspan="2"><p class="alert alert-warning">No event locations specified.</p></td></tr>
+            {% endfor %}
+              </tbody>
+            </table>
+            <table class="table table-striped">
+              <caption>Equipment</caption>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+            {% for equip in entity.equipment if equip %}
+              <tr><td>{{equip.equipment}}</td><td>{{equip.quantity}}</td></tr>
+            {% else %}
+              <tr><td colspan="2"><p class="alert alert-warning">No equipment specified.</p></td></tr>
+            {% endfor %}
+              </tbody>
+            </table>
+          {{ form_end(edit_form)}}
+      </div>
+    </div>
     
     {% if is_granted('ROLE_AV_DELETE', entity) %}
-        <li>{{ form(delete_form) }}</li>
+       {{ form(delete_form) }}
     {% endif %}
-</ul>
 {% endblock %}

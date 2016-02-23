@@ -92,7 +92,9 @@ class AvRequestRestController extends FOSRestController{
             */
             
             $facultySubject = $entity->getFacultySubject()->getName();
-            $message = \Swift_Message::newInstance()
+            $message = \Swift_Message::newInstance();
+            $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+            $message
                 ->setSubject('Your Audio/Visual Request at EMU Library')
                 ->setFrom('avrequest@emulibrary.com')
                 ->setTo($entity->getFacultyEmail())
@@ -103,7 +105,8 @@ class AvRequestRestController extends FOSRestController{
                           'form' => $formData['avrequest'],
                           'facultySubject' => $facultySubject,
                           'events' => $entity->getEvent(),
-                          'equipment' => $entity->getEquipment()
+                          'equipment' => $entity->getEquipment(),
+                          'header_image' => $header_image
                         )
                     ),
                     'text/html'

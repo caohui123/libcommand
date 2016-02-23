@@ -1,3 +1,6 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
 {% if form.facultyFirstName is defined %}
   Dear {{ form.facultyFirstName }},
 {% else %}
@@ -47,3 +50,4 @@
 
 --<br>
 This email was automatically generated from the EMU AV Request System.
+{% endblock %}
