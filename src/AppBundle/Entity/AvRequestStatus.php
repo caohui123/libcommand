@@ -3,18 +3,19 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * MaterialPurchaseRequestStatus
+ * AvReqeustStatus
  *
  * @ORM\Table()
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields={"name"}, message="A status with that name already exsits.")
  */
-class MaterialPurchaseRequestStatus
+class AvRequestStatus
 {
     /**
      * @var integer
@@ -28,7 +29,7 @@ class MaterialPurchaseRequestStatus
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100)
+     * @ORM\Column(name="name", type="string", length=75)
      */
     private $name;
     
@@ -72,7 +73,7 @@ class MaterialPurchaseRequestStatus
      *
      * @param string $name
      *
-     * @return MaterialPurchaseRequestStatus
+     * @return AvReqeustStatus
      */
     public function setName($name)
     {

@@ -28,7 +28,21 @@ class AvRequestType extends AbstractType
             
             //run only if the AvRequest entity already exists (i.e. editing an existing AvRequest)
             if($request && null !== $request->getId()){
-
+              $form->add('note', null, array(
+                'label'=>'Note (not viewable by patron)',
+                'required' => false
+              ));
+              $form->add('status', 'entity', array(
+                'class'=>'AppBundle:AvRequestStatus',
+                'query_builder'=>function(EntityRepository $er){
+                    $qb = $er->createQueryBuilder('st');
+                    $qb
+                      ->orderBy('st.name', 'ASC')
+                      ->getQuery();
+                    return $qb;
+                },
+                'placeholder' => '--NOT SET (required)--',
+              ));
             }
             
             //add in these fields only if the AvRequest is NEW

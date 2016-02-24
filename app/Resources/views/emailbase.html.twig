@@ -4,13 +4,29 @@
     <meta charset="UTF-8" />
     <title>{% block title %}{% endblock %} &#8211; EMU Library</title>
   </head>
-  <body style="max-width: 640px;">
+  <body style="max-width: 640px; font-family: Verdana, Arial, sans-serif">
     <div style="background: #3c7f6c; color: #FFFFFF; height: 75px">
       {% image '@AppBundle/Resources/public/images/email_banner_640x75.jpg' %}
       <img src="{{ header_image }}" width="640px" height="75px" alt="Eastern Michigan University Library"  />
       {% endimage %}
     </div>
-    <div class="container" style="border:1px solid #333333; padding: 7px;">{% block body %}{% endblock %}</div>
-    <div style="background: #333333; color: #FFFFFF; height: 75px">{% block footer %}{% endblock %}</div>
+    <div style="background:rgb(108,122,137); padding:30px 0px 30px 0px">
+        <div class="container" style="border:3px inset #EEEEEE; padding: 17px; margin:0px 30px 30px 30px; background:#FFFFFF">{% block body %}{% endblock %}</div>
+        <div style="background: rgb(236,236,236); color: rgb(108,122,137); padding:17px; margin:0px 30px 0px 30px;">
+        {% block footer %}
+          <p><a href="http://webstage.emich.edu/library_new" style="color:rgb(108,122,137)">Library Home</a> | <a href="http://webstage.emich.edu/library_new/services.php" style="color:rgb(108,122,137)">Library Services</a> | <a href="http://webstage.emich.edu/library_new/hours.php" style="color:rgb(108,122,137)">Hours</a></p>
+          <address>
+          Eastern Michigan University Library<br> 
+          955 W. Circle Dr.<br>
+          Ypsilanti, MI 48197<br>
+          734.487.0020<br>
+          </address>
+        {% endblock %}
+        </div>
+        <div>
+          <p style="font-size:12px; font-style: italic; margin: 30px; color:#FFFFFF">This Email was automatically generated from the EMU Library.</p>
+        </div>
+    </div>
   </body>
 </html>
+

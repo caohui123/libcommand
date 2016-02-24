@@ -24,6 +24,14 @@
             <dd>{{entity.specialInstruction}}</dd>
           </dl>
           <dl class="dl-horizontal">
+            <dt>Patron Last Emailed</dt>
+            {% if entity.replyDate is not null %}
+              <dd>{{entity.replyDate|date('l n/j/y g:i A')}}</dd>
+            {% else %}
+              <dd>Never</dd>
+            {% endif %}
+          </dl>
+          <dl class="dl-horizontal">
             <dt>Faculty Name</dt>
             <dd>{{entity.facultyFirstName}} {{entity.facultyLastName}}</dd>
             <dt>Department</dt>

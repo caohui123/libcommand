@@ -1,21 +1,22 @@
 {% extends "emailbase.html.twig" %}
 
 {% block body %}
-{% if form.facultyFirstName is defined %}
-  Dear {{ form.facultyFirstName }},
+{% if entity.facultyFirstName is defined %}
+  Dear {{ entity.facultyFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
 
-<h3>Thank you for your Audio/Visual Request.</h3>
-<p>You will be notified via email by a member of our staff when there is an update to the status of your request.</p>
+<h3>Your Audio/Visual Request at EMU Library.</h3>
+<p>We have reviewed your request and updated its status to: <strong>{{entity.status}}</strong></p>
+<p>You will be notified via email if there are further updates to the status of your request.</p>
 
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Event Information</strong></caption>
-  <tr><td align="right">Event Date</td><td align="right">{{ form.eventDate|date('l n/j/y g:i A') }}</td></tr>
-  <tr style="color:"><td align="right">Pickup Date</td><td align="right">{{ form.pickupDate|date('l n/j/y g:i A') }}</td></tr>
-  <tr><td align="right">Return Date</td><td align="right">{{ form.returnDate|date('l n/j/y g:i A') }}</td></tr>
-  <tr><td align="right">Special Instruction</td><td align="right">{{ form.specialInstruction }}</td></tr>
+  <tr><td align="right">Event Date</td><td align="right">{{ entity.eventDate|date('l n/j/y g:i A') }}</td></tr>
+  <tr style="color:"><td align="right">Pickup Date</td><td align="right">{{ entity.pickupDate|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Return Date</td><td align="right">{{ entity.returnDate|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Special Instruction</td><td align="right">{{ entity.specialInstruction }}</td></tr>
 </table>
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Locations/Times</strong></caption>
@@ -23,7 +24,7 @@
     <tr><th align="right">Location</th><th align="right">Time</th></tr>
   </thead>
   <tbody>
-{% for event in events if event %}
+{% for event in entity.event if event %}
   <tr><td align="right">{{ event.location }}</td><td align="right">{{ event.time|date('g:i A') }}</td></tr>
 {% else %}
   <tr><td colspan="2">No locations specified</td></tr>
@@ -36,7 +37,7 @@
     <tr><th align="right">Item</th><th align="right">Quantity</th></tr>
   </thead>
   <tbody>
-{% for equip in equipment if equip %}
+{% for equip in entity.equipment if equip %}
   <tr><td align="right">{{ equip.equipment }}</td><td align="right">{{ equip.quantity }}</td></tr>
 {% else %}
   <tr><td colspan="2">No equipment specified</td></tr>
@@ -45,11 +46,11 @@
 </table>
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Other Information</strong></caption>
-  <tr><td align="right">Faculty Name</td><td align="right">{{ form.facultyFirstName }} {{ form.facultyLastName }}</td></tr>
-  <tr><td align="right">Department</td><td align="right">{{ facultySubject }}</td></tr>
-  <tr><td align="right">Phone</td><td align="right">{{ form.facultyPhone }}</td></tr>
-  <tr><td align="right">Course</td><td align="right">{{ form.course }}</td></tr>
-  <tr><td align="right">Attendees</td><td align="right">{{ form.attendees }}</td></tr>
-  <tr><td align="right">Student</td><td align="right">{{ form.studentName }} | {{form.studentEnumber}}</td></tr>
+  <tr><td align="right">Faculty Name</td><td align="right">{{ entity.facultyFirstName }} {{ entity.facultyLastName }}</td></tr>
+  <tr><td align="right">Department</td><td align="right">{{ entity.facultySubject }}</td></tr>
+  <tr><td align="right">Phone</td><td align="right">{{ entity.facultyPhone }}</td></tr>
+  <tr><td align="right">Course</td><td align="right">{{ entity.course }}</td></tr>
+  <tr><td align="right">Attendees</td><td align="right">{{ entity.attendees }}</td></tr>
+  <tr><td align="right">Student</td><td align="right">{{ entity.studentName }} | {{entity.studentEnumber}}</td></tr>
 </table>
 {% endblock %}

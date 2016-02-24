@@ -54,6 +54,9 @@ class AvRequestRestController extends FOSRestController{
       return $response;
     }
 
+    /**
+     * Handle an AV Request from the library website
+     */
     public function postAvrequestAction(Request $request){
         $entity = new AvRequest();
         
@@ -65,6 +68,10 @@ class AvRequestRestController extends FOSRestController{
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            $status = $em->getRepository('AppBundle:AvRequestStatus')->findOneBy(array('name' => 'pending'));
+            $entity->setStatus($status); //set status to 'Pending'
+            
             $em->persist($entity);
             $em->flush();
 
@@ -96,7 +103,7 @@ class AvRequestRestController extends FOSRestController{
             $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
             $message
                 ->setSubject('Your Audio/Visual Request at EMU Library')
-                ->setFrom('avrequest@emulibrary.com')
+                ->setFrom(array('avrequest@emulibrary.com' => 'EMU Library'))
                 ->setTo($entity->getFacultyEmail())
                 ->setBody(
                     $this->renderView(
@@ -111,16 +118,6 @@ class AvRequestRestController extends FOSRestController{
                     ),
                     'text/html'
                 )
-                /*
-                 * If you also want to include a plaintext version of the message
-                ->addPart(
-                    $this->renderView(
-                        'Emails/registration.txt.twig',
-                        array('name' => $name)
-                    ),
-                    'text/plain'
-                )
-                */
             ;
             $this->get('mailer')->send($message);
             

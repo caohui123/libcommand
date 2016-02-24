@@ -133,7 +133,28 @@ class AvRequest
      * @ORM\OneToMany(targetEntity="AvRequestEquipmentQuantity", mappedBy="avrequest", cascade={"persist"})
      */
     private $equipment;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text", nullable=true)
+     */
+    private $note;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AvRequestStatus")
+     * @ORM\JoinColumn(name="avrequeststatus_id", referencedColumnName="id", nullable=true)
+     */
+    private $status;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="replyDate", type="datetime", nullable=true)
+     * @Assert\DateTime()
+     */
+    private $replyDate;
+    
     /**
      * @var \DateTime $created
      *
@@ -350,6 +371,10 @@ class AvRequest
     function getStudentEnumber() {
       return $this->studentEnumber;
     }
+    
+    function getNote() {
+      return $this->note;
+    }
 
     function setFacultyFirstName($facultyFirstName) {
       $this->facultyFirstName = $facultyFirstName;
@@ -388,6 +413,11 @@ class AvRequest
 
     function setStudentEnumber($studentEnumber) {
       $this->studentEnumber = $studentEnumber;
+      return $this;
+    }
+    
+    function setNote($note) {
+      $this->note = $note;
       return $this;
     }
 
@@ -485,6 +515,51 @@ class AvRequest
     public function getFacultySubject()
     {
         return $this->facultySubject;
+    }
+    
+    /**
+     * Set av request status
+     *
+     * @param AppBundle\Entity\AvRequestStatus $status
+     *
+     * @return AvRequest
+     */
+    function setStatus(AvRequestStatus $status) {
+      $this->status = $status;
+      return $this;
+    }
+    
+    /**
+     * Get av request status
+     *
+     * @return AppBundle\Entity\AvRequestStatus
+     */
+    function getStatus() {
+      return $this->status;
+    }
+    
+    /**
+     * Set replyDate
+     *
+     * @param \DateTime $replyDate
+     *
+     * @return AvRequest
+     */
+    public function setReplyDate(\DateTime $replyDate)
+    {
+        $this->replyDate = $replyDate;
+
+        return $this;
+    }
+
+    /**
+     * Get replyDate
+     *
+     * @return \DateTime
+     */
+    public function getReplyDate()
+    {
+        return $this->replyDate;
     }
 }
 

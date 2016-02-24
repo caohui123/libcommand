@@ -147,6 +147,7 @@ class AvRequestController extends Controller
         ));
 
         $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('emailPatron', 'submit', array('label' => 'Update and Email Status to Patron'));
 
         return $form;
     }
@@ -215,8 +216,34 @@ class AvRequestController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+          
+            //if necessary, email the patron with the updated status
+            if( $editForm->get('emailPatron')->isClicked()){
+              $entity->setReplyDate(new \DateTime());
+              $message = \Swift_Message::newInstance();
+              $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+              //send the email              
+              $message
+                ->setSubject('Status Update to Your Audio/Visual Request at EMU Library')
+                ->setFrom(array('avrequest@emulibrary.com' => 'EMU Library'))
+                ->setTo($entity->getFacultyEmail())
+                ->setBody(
+                    $this->renderView(
+                        'AppBundle:AvRequest/Emails:avrequeststatusupdate.html.twig',
+                        array(
+                          'entity' => $entity,
+                          'header_image' => $header_image
+                        )
+                    ),
+                    'text/html'
+                )
+            ;
+              $this->get('mailer')->send($message);
+            }
+            
+            $em->persist($entity);
             $em->flush();
-
+            
             return $this->redirect($this->generateUrl('avrequest_edit', array('id' => $id)));
         }
 
