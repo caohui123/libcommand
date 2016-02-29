@@ -165,7 +165,7 @@ class AvRequestStatusController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-small btn-success')));
 
         return $form;
     }
@@ -240,7 +240,7 @@ class AvRequestStatusController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('avrequeststatus_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-small btn-danger')))
             ->getForm()
         ;
     }

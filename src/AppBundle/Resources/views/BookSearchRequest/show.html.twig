@@ -1,60 +1,96 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>BookSearchRequest</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Booktitle</th>
-                <td>{{ entity.bookTitle }}</td>
-            </tr>
-            <tr>
-                <th>Bookauthor</th>
-                <td>{{ entity.bookAuthor }}</td>
-            </tr>
-            <tr>
-                <th>Bookcallnumber</th>
-                <td>{{ entity.bookCallNumber }}</td>
-            </tr>
-            <tr>
-                <th>Usefuldate</th>
-                <td>{{ entity.usefulDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Patronfirstname</th>
-                <td>{{ entity.patronFirstName }}</td>
-            </tr>
-            <tr>
-                <th>Patronlastname</th>
-                <td>{{ entity.patronLastName }}</td>
-            </tr>
-            <tr>
-                <th>Patronphone</th>
-                <td>{{ entity.patronPhone }}</td>
-            </tr>
-            <tr>
-                <th>Patronemail</th>
-                <td>{{ entity.patronEmail }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('booksearchrequest') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('booksearchrequest_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <h1 class="page-header">Book Search Request</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('booksearchrequest') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Request List</a></p>
+      </div>
+    </div>
+    {% if is_granted('ROLE_BOOKSEARCH_EDIT', entity) %}
+    <div class="row">
+        <div class="col-xs-12">
+            <p><a href="{{ path('booksearchrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Request</a></p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Request Status</caption>
+              <tbody>
+                  <tr>
+                      <td>Submission</td>
+                      <td>{{entity.created|date('l n/j/y g:i A')}}</td>
+                  </tr>
+                  <tr>
+                      <td>Book Useful Until</td>
+                      <td>{{entity.usefulDate|date('n/j/y')}}</td>
+                  </tr>
+                  <tr>
+                      <td>Response Status</td>
+                      <td>
+                          {% if entity.patronEmailed|date('Y-m-d H:i:s') != '0000-00-00 00:00:00'|date('Y-m-d H:i:s') %}
+                            Patron was replied to on {{entity.patronEmailed|date('l n/j/y g:i A')}}.
+                          {% else %}
+                            Patron has not yet been replied to.
+                          {% endif %}
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>Note</td>
+                      <td>{{entity.note}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Book Information</caption>
+              <tbody>
+                  <tr>
+                      <td>Title</td>
+                      <td>{{entity.bookTitle}}</td>
+                  </tr>
+                  <tr>
+                      <td>Author</td>
+                      <td>{{entity.bookAuthor}}</td>
+                  </tr>
+                  <tr>
+                      <td>Call Number</td>
+                      <td>{{entity.bookCallNumber}}</td>
+                  </tr>
+                  <tr>
+                      <td>Book Status</td>
+                      <td>{% if entity.bookStatus is not null %}{{entity.bookStatus|capitalize}}{%endif%}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Patron Information</caption>
+              <tbody>
+                  <tr>
+                      <td>Name</td>
+                      <td>{{entity.patronFirstName}} {{entity.patronLastName}}</td>
+                  </tr>
+                  <tr>
+                      <td>Email</td>
+                      <td>{{entity.patronEmail}}</td>
+                  </tr>
+                  <tr>
+                      <td>Phone</td>
+                      <td>{{entity.patronPhone}}</td>
+                  </tr>
+                  <tr>
+                      <td>E-Number</td>
+                      <td>{{entity.patronEnumber}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
 {% endblock %}

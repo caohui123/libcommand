@@ -1,8 +1,12 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
 {% if entity.patronFirstName is defined %}
   Dear {{ entity.patronFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
+
 <br>
 <p>Your book search request for {{entity.bookTitle}} by {{entity.bookAuthor}} has been processed with the following information:</p>
 
@@ -19,17 +23,13 @@ lib_searches@emich.edu.</strong></p>
       <p><strong>We are still working to fulfill your request. If you have questions please contact at (734)487-0020 ext. 2142 or email us at
 lib_searches@emich.edu.</strong></p>
     {% endif %}
-<br>
-<br>
---- REQUEST SUMMARY ---<br>
-<ul>
-  <li>Book Title: {{entity.bookTitle}}</li>
-  <li>Book Author: {{entity.bookAuthor}}</li>
-  <li>Book Call Number: {{entity.bookCallNumber}}</li>
-  <li>Needed By: {{entity.usefulDate|date('l n/j/y g:i A')}}</li>
-</ul>
---- <br>
-Circulation Desk <br>
-Halle Library<br>
----<br>
-This Email was sent from the EMU Library Book Search Request System.
+
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Request Information</strong></caption>
+  <tr><td align="right">Received</td><td align="right">{{ entity.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr style="color:"><td align="right">Needed By</td><td align="right">{{ entity.usefulDate|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Title</td><td align="right">{{ entity.bookTitle }}</td></tr>
+  <tr><td align="right">Author</td><td align="right">{{ entity.bookAuthor }}</td></tr>
+  <tr><td align="right">Call Number</td><td align="right">{{ entity.bookCallNumber }}</td></tr>
+</table>
+{% endblock %}

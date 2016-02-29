@@ -40,20 +40,27 @@ class BookSearchRequestRestController extends FOSRestController{
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            $entity->setBookStatus('none'); //set the book status to 'none'
             $em->persist($entity);
             $em->flush();
 
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');
 
-            $message = \Swift_Message::newInstance()
+            $message = \Swift_Message::newInstance();
+            $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+            $message
                 ->setSubject('EMU Library Book Request Received')
                 ->setFrom('bookrequest@emulibrary.com')
                 ->setTo($entity->getPatronEmail())
                 ->setBody(
                     $this->renderView(
                         'AppBundle:BookSearchRequest/Emails:booksearchrequest.html.twig',
-                        array('form' => $request->request->all())
+                        array(
+                            'form' => $request->request->all(),
+                            'header_image' => $header_image
+                        )
                     ),
                     'text/html'
                 )

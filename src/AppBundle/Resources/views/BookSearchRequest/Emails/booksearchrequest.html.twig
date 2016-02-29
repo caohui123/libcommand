@@ -1,19 +1,21 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
 {% if form.patronFirstName is defined %}
   Dear {{ form.patronFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
 
-<h3>Thank you for book request at the EMU Library.</h3> You request has been sent to our staff and you will be notified when there is an update.
+<h3>Thank you for your Book Request.</h3>
+<p>You will be notified via email by a member of our staff when there is an update to the status of your request.</p>
 
-Request Summary:
-<ul>
-  <li>Received: {{ form.created|date('l n/j/y g:i A') }}</li>
-  <li>Book Title: {{ form.bookTitle }}</li>
-  <li>Book Author: {{ form.bookAuthor }}</li>
-  <li>Book Call Number: {{ form.bookCallNumber }}</li>
-  <li>Needed By: {{ form.usefulDate|date('l n/j/y g:i A') }}</li>
-</ul>
-
----<br>
-This email was automatically generated from the EMU Library Book Search Request system.
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Request Information</strong></caption>
+  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr style="color:"><td align="right">Needed By</td><td align="right">{{ form.usefulDate|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Title</td><td align="right">{{ form.bookTitle }}</td></tr>
+  <tr><td align="right">Author</td><td align="right">{{ form.bookAuthor }}</td></tr>
+  <tr><td align="right">Call Number</td><td align="right">{{ form.bookCallNumber }}</td></tr>
+</table>
+{% endblock %}

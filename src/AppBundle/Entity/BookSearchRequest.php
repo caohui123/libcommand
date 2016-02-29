@@ -95,14 +95,14 @@ class BookSearchRequest
     /**
      * @var string
      *
-     * @ORM\Column(name="bookStatus", type="string")
+     * @ORM\Column(name="bookStatus", type="string", nullable=true)
      */
     private $bookStatus;
     
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="patronEmailed", type="datetime")
+     * @ORM\Column(name="patronEmailed", type="datetime", nullable=true)
      */
     private $patronEmailed;
     

@@ -175,7 +175,7 @@ class AvRequest
      * @var string $contentChangedBy
      *
      * @ORM\Column(name="content_changed_by", type="string", nullable=true)
-     * @Gedmo\Blameable(on="change", field={"eventDate", "pickupDate", "returnDate"})
+     * @Gedmo\Blameable(on="change", field={"eventDate", "pickupDate", "returnDate", "status", "note"})
      */
     private $contentChangedBy;
 

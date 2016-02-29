@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Book Search Request{% endblock %}
 {% block body -%}
     <h1 class="page-header">Edit Book Search Request</h1>
     <div class="row">
@@ -7,38 +7,90 @@
         <p><a class="btn btn-sm btn-primary" href="{{ path('booksearchrequest') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Request List</a></p>
       </div>
     </div>
-    <section id="submission_info">
-      <h2>Patron Information</h2> 
-      <dl>
-        <dt>Name</dt>
-        <dd>
-          {{entity.patronFirstName}} {{entity.patronLastName}}
-        </dd>
-        <dt>Phone</dt>
-        <dd>{{ entity.patronPhone }}</dd>
-        <dt>Email</dt>
-        <dd>{{entity.patronEmail}}</dd>
-        <dt>ENumber</dt>
-        <dd>{{entity.patronEnumber}}</dd>
-      </dl>
-      <h2>Other Information</h2>
-      <dl>
-        <dt>Time of Submission</dt>
-        <dd>{{entity.created|date('l n/j/y g:i A')}}</dd>
-        <dt>Book Useful Until</dt>
-        <dd>{{entity.usefulDate|date('n/j/y')}}</dd>
-        <dt>Response Status</dt>
-        {% if entity.patronEmailed|date('Y-m-d H:i:s') != '0000-00-00 00:00:00'|date('Y-m-d H:i:s') %}
-          <dd>Patron was replied to on {{entity.patronEmailed|date('l n/j/y g:i A')}}.</dd>
-        {% else %}
-          <dd>Patron has not yet been replied to.</dd>
-        {% endif %}
-      </dl>
-    </section>
     <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-        {{ form(edit_form) }}
-        {{ form(delete_form) }}
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Request Status</caption>
+              <tbody>
+                  <tr>
+                      <td>Submission</td>
+                      <td>{{entity.created|date('l n/j/y g:i A')}}</td>
+                  </tr>
+                  <tr>
+                      <td>Book Useful Until</td>
+                      <td>{{entity.usefulDate|date('n/j/y')}}</td>
+                  </tr>
+                  <tr>
+                      <td>Response Status</td>
+                      <td>
+                          {% if entity.patronEmailed|date('Y-m-d H:i:s') != '0000-00-00 00:00:00'|date('Y-m-d H:i:s') %}
+                            Patron was replied to on {{entity.patronEmailed|date('l n/j/y g:i A')}}.
+                          {% else %}
+                            Patron has not yet been replied to.
+                          {% endif %}
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>Note</td>
+                      <td>{{entity.note}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Book Information</caption>
+              <tbody>
+                  <tr>
+                      <td>Title</td>
+                      <td>{{entity.bookTitle}}</td>
+                  </tr>
+                  <tr>
+                      <td>Author</td>
+                      <td>{{entity.bookAuthor}}</td>
+                  </tr>
+                  <tr>
+                      <td>Call Number</td>
+                      <td>{{entity.bookCallNumber}}</td>
+                  </tr>
+                  <tr>
+                      <td>Book Status</td>
+                      <td>{% if entity.bookStatus is not null %}{{entity.bookStatus|capitalize}}{%endif%}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Patron Information</caption>
+              <tbody>
+                  <tr>
+                      <td>Name</td>
+                      <td>{{entity.patronFirstName}} {{entity.patronLastName}}</td>
+                  </tr>
+                  <tr>
+                      <td>Email</td>
+                      <td>{{entity.patronEmail}}</td>
+                  </tr>
+                  <tr>
+                      <td>Phone</td>
+                      <td>{{entity.patronPhone}}</td>
+                  </tr>
+                  <tr>
+                      <td>E-Number</td>
+                      <td>{{entity.patronEnumber}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <div class="well well-lg">{{ form(edit_form) }}
+         {% if is_granted('ROLE_BOOKSEARCH_DELETE', entity) %}
+            {{ form(delete_form) }}
+         {% endif %}
+         </div>
       </div>
     </div>
 {% endblock %}

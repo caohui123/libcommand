@@ -27,7 +27,7 @@ class AvRequestController extends Controller
     public function indexAction(){
       $em = $this->getDoctrine()->getManager();
 
-      $entities = $em->getRepository('AppBundle:AvRequest')->findAll();
+      $entities = $em->getRepository('AppBundle:AvRequest')->findBy(array(), array('created'=>'DESC'));
 
       return array(
           'entities' => $entities,
@@ -146,8 +146,8 @@ class AvRequestController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
-        $form->add('emailPatron', 'submit', array('label' => 'Update and Email Status to Patron'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-success')));
+        $form->add('emailPatron', 'submit', array('label' => 'Update and Email Status to Patron', 'attr' => array('class' => 'btn btn-sm btn-default')));
 
         return $form;
     }

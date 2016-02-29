@@ -21,11 +21,6 @@ class BookSearchRequestType extends AbstractType
             ->add('bookTitle')
             ->add('bookAuthor')
             ->add('bookCallNumber')
-            //->add('usefulDate')
-            //->add('patronFirstName')
-            //->add('patronLastName')
-            //->add('patronPhone')
-            //->add('patronEmail')
         ;
         
         $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(\Symfony\Component\Form\FormEvent $event){
@@ -46,14 +41,6 @@ class BookSearchRequestType extends AbstractType
                   ),
                 ));
                 $form->add('note');
-                  
-                //provide an area to reply to the patron ONLY IF it hasn't been done already
-                //if(false === $request->getIsPatronEmailed()){
-                  $form->add('submitPatronConfirm', 'submit', array(
-                    'label' => 'Update and Email Patron',
-                    'attr'=>array('class' => 'btn btn-sm btn-default')
-                  ));
-                //}
             }
         });
     }

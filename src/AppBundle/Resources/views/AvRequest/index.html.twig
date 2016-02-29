@@ -1,45 +1,49 @@
 {% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1 class="page-header">AvRequest list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Events</th>
-                <th>Requestdate</th>
-                <th>Deliverdate</th>
-                <th>Returndate</th>
-                <th>Created</th>
-                <th>Updated</th>
-                <th>Contentchangedby</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('avrequest_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-
-                <td>{% if entity.eventDate %}{{ entity.eventDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.pickupDate %}{{ entity.pickupDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.returnDate %}{{ entity.returnDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.created %}{{ entity.created|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.updated %}{{ entity.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.contentChangedBy }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('avrequest_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('avrequest_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block title %}AV Requests{% endblock %}
+{% block body %}
+    <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="{{ path('avrequests') }}"><span class="glyphicon glyphicon-th-list"></span> AV Requests</a></li>
+        <li role="presentation"><a href="{{ path('avrequest_equipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
+        <li role="presentation"><a href="{{ path('avrequeststatus') }}"><span class="glyphicon glyphicon-check"></span> Statuses</a></li>
+    </ul>
+    <h1 class="page-header">Audio/Visual Requests</h1>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-9">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Event Date</th>
+                        <th>Pickup</th>
+                        <th>Return</th>
+                        <th>Faculty</th>
+                        <th>Status</th>
+                        <th>Status Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{% if entity.eventDate %}{{ entity.eventDate|date('n/j/y') }}{% endif %}</td>
+                        <td>{% if entity.pickupDate %}{{ entity.pickupDate|date('n/j/y g:i A') }}{% endif %}</td>
+                        <td>{% if entity.returnDate %}{{ entity.returnDate|date('n/j/y g:i A') }}{% endif %}</td>
+                        <td>
+                            {% if entity.facultyFirstName %}{{ entity.facultyFirstName }}{% endif %}
+                            {% if entity.facultyLastName %}{{ entity.facultyLastName }}{% endif %}
+                        </td>
+                        <td>{% if entity.status %}{{ entity.status }}{% endif %}</td>
+                        <td>{% if entity.replyDate is not null %}<span class="glyphicon glyphicon-ok-sign"></span>{% endif %}</td>
+                        <td>
+                            {% if is_granted('ROLE_AV_EDIT', entity) %}
+                                <a href="{{ path('avrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            {% elseif is_granted('ROLE_AV_VIEW', entity) %}
+                                <a href="{{ path('avrequest_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

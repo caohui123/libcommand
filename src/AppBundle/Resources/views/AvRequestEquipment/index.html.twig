@@ -1,41 +1,35 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}AV Request Equipment{% endblock %}
 {% block body -%}
-    <h1>AvRequestEquipment list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('avrequest_equipment_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('avrequest_equipment_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('avrequest_equipment_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('avrequest_equipment_new') }}">
-                Create a new entry
-            </a>
-        </li>
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{ path('avrequests') }}"><span class="glyphicon glyphicon-th-list"></span> AV Requests</a></li>
+        <li role="presentation" class="active"><a href="{{ path('avrequest_equipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
+        <li role="presentation"><a href="{{ path('avrequeststatus') }}"><span class="glyphicon glyphicon-check"></span> Statuses</a></li>
     </ul>
+    <h1 class="page-header">AV Request Equipment <span><a class="btn btn-sm btn-primary" href="{{ path('avrequest_equipment_new') }}"><span class="glyphicon glyphicon-plus"></span> New Equipment</a></span></h1>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Equipment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>
+                            {{ entity.name }}
+                            {% if is_granted('ROLE_AV_EDIT', entity) %}
+                                <a href="{{ path('avrequest_equipment_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            {% elseif is_granted('ROLE_AV_VIEW', entity) %}
+                                <a href="{{ path('avrequest_equipment_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            {% endif %}
+                        </td>        
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

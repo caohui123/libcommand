@@ -1,15 +1,15 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}AV Request Equipment{% endblock %}
 {% block body -%}
-    <h1>AvRequestEquipment creation</h1>
-
-    {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('avrequest_equipment') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <h1 class="page-header">New AV Request Equipment</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('avrequest_equipment') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="well well-lg">{{ form(form) }}</div>
+      </div>
+    </div>
 {% endblock %}

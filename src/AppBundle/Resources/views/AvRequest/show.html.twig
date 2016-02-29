@@ -1,52 +1,164 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}Audio/Visual Request{% endblock %}
 {% block body -%}
-    <h1>AvRequest</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Requestdate</th>
-                <td>{{ entity.eventDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Deliverdate</th>
-                <td>{{ entity.pickupDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Returndate</th>
-                <td>{{ entity.returnDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Contentchangedby</th>
-                <td>{{ entity.contentChangedBy }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('avrequests') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('avrequest_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+<h1 class="page-header">Edit AV Request</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('avrequests') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to AV List</a></p>
+      </div>
+    </div>
+    {% if is_granted('ROLE_AV_EDIT', entity) %}
+       
+    <div class="row">
+        <div class="col-xs-12">
+            <p><a href="{{ path('avrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Request</a></p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Status</caption>
+              <tbody>
+                  <tr>
+                      <td>Status</td>
+                      <td>{{entity.status}}</td>
+                  </tr>
+                  <tr>
+                      <td>Patron Last Emailed</td>
+                      {% if entity.replyDate is not null %}
+                      <td>{{entity.replyDate|date('l n/j/y g:i A')}}</td>
+                      {% else %}
+                      <td>Never</td>
+                      {% endif %}
+                  </tr>
+                  <tr>
+                      <td>Last Updated</td>
+                      <td>
+                          {% if entity.updated == entity.created %}
+                              Never
+                          {% else %}
+                              {{entity.updated|date('l n/j/y g:i A')}}
+                          {% endif %}
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>Original Submission</td>
+                      <td>{{entity.created|date('l n/j/y g:i A')}}</td>
+                  </tr>
+              </tbody>
+            </table>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">    
+            <table class="table table-responsive table-striped">
+              <caption>Request Information</caption>
+              <tbody>
+                  <tr>
+                      <td>Submitted</td>
+                      <td>{{entity.created|date('l n/j/y g:i A')}}</td>
+                  </tr>
+                  <tr>
+                      <td>Pickup Date</td>
+                      <td>{{entity.pickupDate|date('l n/j/y g:i A')}}</td>
+                  </tr>
+                  <tr>
+                      <td>Return Date</td>
+                      <td>{{entity.returnDate|date('l n/j/y g:i A')}}</td>
+                  </tr>
+                  <tr>
+                      <td>Attendees</td>
+                      <td>{{entity.attendees}}</td>
+                  </tr>
+                  <tr>
+                      <td>Special Instructions</td>
+                      <td>{{entity.specialInstruction}}</td>
+                  </tr>
+                  <tr>
+                      <td>Note (visible to staff only)</td>
+                      <td>{{entity.note}}</td>
+                  </tr>
+              </tbody>
+            </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="row">
+              <div class="col-xs-12">
+                  <table class="table table-responsive table-striped">
+                    <caption>Locations/Times</caption>
+                    <thead>
+                      <tr>
+                        <th>Location</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                  {% for event in entity.event if event %}
+                    <tr><td>{{event.location}}</td><td>{{event.time|date('g:i A')}}</td></tr>
+                  {% else %}
+                    <tr><td colspan="2"><p class="alert alert-warning">No event locations specified.</p></td></tr>
+                  {% endfor %}
+                    </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-xs-12">
+                  <table class="table table-responsive table-striped">
+                    <caption>Equipment</caption>
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                  {% for equip in entity.equipment if equip %}
+                    <tr><td>{{equip.equipment}}</td><td>{{equip.quantity}}</td></tr>
+                  {% else %}
+                    <tr><td colspan="2"><p class="alert alert-warning">No equipment specified.</p></td></tr>
+                  {% endfor %}
+                    </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+            <table class="table table-responsive table-striped">
+              <caption>Faculty/Student Information</caption>
+              <tbody>
+                  <tr>
+                      <td>Faculty Name</td>
+                      <td>{{entity.facultyFirstName}} {{entity.facultyLastName}}</td>
+                  </tr>
+                  <tr>
+                      <td>Department</td>
+                      <td>{{entity.facultySubject}}</td>
+                  </tr>
+                  <tr>
+                      <td>Phone</td>
+                      <td>{{entity.facultyPhone}}</td>
+                  </tr>
+                  <tr>
+                      <td>Email</td>
+                      <td>{{entity.facultyEmail}}</td>
+                  </tr>
+                  <tr>
+                      <td>Course/Event</td>
+                      <td>{{entity.course}}</td>
+                  </tr>
+                  <tr>
+                      <td>Student Name</td>
+                      <td>{{entity.studentName}}</td>
+                  </tr>
+                  <tr>
+                      <td>E-Number</td>
+                      <td>{{entity.studentEnumber}}</td>
+                  </tr>
+              </tbody>
+            </table>
+      </div>
+    </div>
 {% endblock %}

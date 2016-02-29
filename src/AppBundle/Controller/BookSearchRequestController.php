@@ -165,7 +165,11 @@ class BookSearchRequestController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update WITHOUT Emailing Patron', 'attr'=>array('class' => 'btn btn-sm btn-success')));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr'=>array('class' => 'btn btn-sm btn-success')));
+        $form->add('submitPatronConfirm', 'submit', array(
+                    'label' => 'Update and Email Patron',
+                    'attr'=>array('class' => 'btn btn-sm btn-default')
+                  ));
 
         return $form;
     }
@@ -193,21 +197,25 @@ class BookSearchRequestController extends Controller
         if ($editForm->isValid()) {
             //if "submitPatronConfirm" button is clicked, email the patron the status of the request
             if($editForm->get('submitPatronConfirm')->isClicked()){
-              $message = \Swift_Message::newInstance()
+              $message = \Swift_Message::newInstance();
+              $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+              $message
                   ->setSubject('EMU Library Book Request Status Update')
                   ->setFrom('bookrequest@emulibrary.com')
                   ->setTo($entity->getPatronEmail())
                   ->setBody(
                       $this->renderView(
                           'AppBundle:BookSearchRequest/Emails:patronresponse.html.twig',
-                          array('entity' => $entity)
+                          array(
+                              'entity' => $entity,
+                              'header_image' => $header_image
+                            )
                       ),
                       'text/html'
                   )
                 ;
                 $this->get('mailer')->send($message);
-                
-                $entity->setIsPatronEmailed(true);
+
                 $entity->setPatronEmailed(new \DateTime());
                 $em->persist($entity);
             }
