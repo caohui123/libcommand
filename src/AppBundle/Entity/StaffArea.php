@@ -304,4 +304,8 @@ class StaffArea
     {
         return $this->users;
     }
+    
+    public function __toString() {
+        return $this->getTitle();
+    }
 }

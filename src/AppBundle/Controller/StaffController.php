@@ -174,11 +174,13 @@ class StaffController extends Controller
             throw $this->createNotFoundException('Unable to find Staff entity.');
         }
          
+        $ldap_user = $em->getRepository('AppBundle:User')->findOneBy( array('staffMember'=>$entity) );
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
         
         return array(
             'entity'      => $entity,
+            'ldap_user'   => $ldap_user,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
@@ -198,7 +200,7 @@ class StaffController extends Controller
             'method' => 'PUT',
         ));
         //$form->add('deletePhotoSubmit', 'submit', array('label'=>'Delete Photo'));
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -322,7 +324,7 @@ class StaffController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('staff_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array('label' => 'Delete Staff Member', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }

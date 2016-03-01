@@ -1,43 +1,91 @@
 {% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1 class="page-header">Edit Extension Request</h1>
+{% block title %}Extended Privilege Request{% endblock %}
+{% block body %}
+    <h1 class="page-header">Edit Extended Privilege Request #{{entity.id}}</h1>
     <div class="row">
       <div class="col-xs-12">
         <p><a class="btn btn-sm btn-primary" href="{{ path('extendedprivilege') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Extensions List</a></p>
       </div>
     </div>
-    <section id="submission_info">
-      <h2>Submission Information</h2> 
-      <dl>
-        <dt>Received</dt>
-        <dd>{{ entity.created|date('l n/j/y g:i A') }}</dd>
-        <dt>Privilege Expiration</dt>
-        <dd>{{ entity.expirationDate|date('l n/j/y') }}</dd>
-      </dl>
-      <h2>Faculty Information</h2> 
-      <dl>
-        <dt>Name</dt>
-        <dd>{{ entity.facultyFirstName }} {{ entity.facultyLastName }}</dd>
-        <dt>Department</dt>
-        <dd>{{ entity.facultySubject }}</dd>
-        <dt>Phone</dt>
-        <dd>{{ entity.facultyPhone }}</dd>
-        <dt>Email</dt>
-        <dd>{{ entity.facultyEmail }}</dd>
-      </dl>
-      <h2>Student Information</h2> 
-      <dl>
-        <dt>Name</dt>
-        <dd>{{ entity.studentFirstName }} {{ entity.studentLastName }}</dd>
-        <dt>E-Number</dt>
-        <dd>{{ entity.studentEnumber }}</dd>
-        <dt>Phone</dt>
-        <dd>{{ entity.facultyPhone }}</dd>
-        <dt>Email</dt>
-        <dd>{{ entity.facultyEmail }}</dd>
-      </dl>
-    </section>
-    {{ form(edit_form) }}
-    {{ form(delete_form) }}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">               
+        <div class="well well-lg">
+          {{ form(edit_form) }}
+          {% if is_granted('ROLE_AV_DELETE', entity) %}
+          {{ form(delete_form) }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">    
+          <table class="table table-responsive table-striped">
+              <caption>Sumbssion Information</caption>
+              <tbody>
+                  <tr>
+                      <th>Received</th>
+                      <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+                  </tr>
+                  <tr>
+                      <th>Privilege Expiration</th>
+                      <td>{{ entity.expirationDate|date('l n/j/y') }}</td>
+                  </tr>
+                  <tr>
+                      <th>Note</th>
+                      <td>{{ entity.note }}</td>
+                  </tr>
+                  <tr>
+                      <th>Status</th>
+                      <td>{{ entity.status }}</td>
+                  </tr>
+              </tbody>
+            </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+           <table class="table table-responsive table-striped">
+              <caption>Faculty Information</caption>
+              <tbody>
+                  <tr>
+                      <th>Name</th>
+                      <td>{{ entity.facultyFirstName }} {{ entity.facultyLastName }}</td>
+                  </tr>
+                  <tr>
+                      <th>Department</th>
+                      <td>{{ entity.facultySubject }}</td>
+                  </tr>
+                  <tr>
+                      <th>Phone</th>
+                      <td>{{ entity.facultyPhone }}</td>
+                  </tr>
+                  <tr>
+                      <th>Email</th>
+                      <td>{{ entity.facultyEmail }}</td>
+                  </tr>
+              </tbody>
+            </table> 
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Student Information</caption>
+              <tbody>
+                  <tr>
+                      <th>Name</th>
+                      <td>{{ entity.studentFirstName }} {{ entity.studentLastName }}</td>
+                  </tr>
+                  <tr>
+                      <th>E-Number</th>
+                      <td>{{ entity.studentEnumber }}</td>
+                  </tr>
+                  <tr>
+                      <th>Phone</th>
+                      <td>{{ entity.studentPhone }}</td>
+                  </tr>
+                  <tr>
+                      <th>Email</th>
+                      <td>{{ entity.studentEmail }}</td>
+                  </tr>
+              </tbody>
+            </table>
+      </div>
+    </div>
 {% endblock %}

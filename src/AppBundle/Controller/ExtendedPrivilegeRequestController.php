@@ -29,7 +29,7 @@ class ExtendedPrivilegeRequestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:ExtendedPrivilegeRequest')->findAll();
+        $entities = $em->getRepository('AppBundle:ExtendedPrivilegeRequest')->findBy(array(), array('created'=>'DESC'));
 
         return array(
             'entities' => $entities,

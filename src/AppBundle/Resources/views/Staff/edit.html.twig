@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
-
-{% block body -%}
+{% block title %}{{ entity.firstName }} {{ entity.lastName }} &#8211; Library Staff{% endblock %}
+{% block body %}
     <h1 class="page-header">Edit {{ entity.firstName}} {{ entity.lastName }}</h1>
     <div class="row">
       <div class="col-xs-12">
@@ -8,20 +8,185 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
-        {{ form_start(edit_form) }}
-          {{ form_row(edit_form.photo) }}
-          {{ form_row(edit_form.showPhoto) }}
-          {% if edit_form.deletePhotoSubmit is defined %}
-            <p class="control-label">Current Photo</p>
-            <img src="{{ asset('uploads/profile/' ~ entity.photo) }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/>
-            {{ form_row(edit_form.deletePhotoSubmit) }}
-          {% endif %}
-          <hr/>
-        {{ form_end(edit_form) }}
+      <div class="col-xs-12 col-sm-12 col-md-8">
+        <table class="table table-striped table-responsive record_properties">
+            {{ form_start(edit_form) }}
+            <tbody>
+                <tr>
+                    <th>LDAP User</th>
+                    <td>
+                        {% if ldap_user is not null %}
+                            {{ldap_user}} 
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="btn btn-default btn-xs" href="{{ path('admin') }}">Change</a> 
+                            {% endif %}
+                        {% else %}
+                            Not Set
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="btn btn-default btn-xs" href="{{ path('admin') }}">Change</a> 
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.staffId) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.staffId) }}
+                        {{ form_errors(edit_form.staffId) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.firstName) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.firstName) }}
+                        {{ form_errors(edit_form.firstName) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.lastName) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.lastName) }}
+                        {{ form_errors(edit_form.lastName) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.employmentStatus) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.employmentStatus) }}
+                        {{ form_errors(edit_form.employmentStatus) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.jobDescription) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.jobDescription) }}
+                        {{ form_errors(edit_form.jobDescription) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.staffFunctionalArea) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.staffFunctionalArea) }}
+                        {{ form_errors(edit_form.staffFunctionalArea) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.department) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.department) }}
+                        {{ form_errors(edit_form.department) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.jobTitle) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.jobTitle) }}
+                        {{ form_errors(edit_form.jobTitle) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.staffFunctionalArea) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.staffFunctionalArea) }}
+                        {{ form_errors(edit_form.staffFunctionalArea) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.guidesUrl) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.guidesUrl) }}
+                        {{ form_errors(edit_form.guidesUrl) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.office) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.office) }}
+                        {{ form_errors(edit_form.office) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.phone) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.phone) }}
+                        {{ form_errors(edit_form.phone) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.email) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.email) }}
+                        {{ form_errors(edit_form.email) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Home Address</th>
+                    <td>
+                        <table class="table">
+                            <tr>
+                                <th>Street </th><td> {{ form_widget(edit_form.homeStreet) }}{{ form_errors(edit_form.homeStreet) }}</td>
+                            </tr>
+                            <tr>
+                                <th>City </th><td> {{ form_widget(edit_form.homeCity) }}{{ form_errors(edit_form.homeCity) }}</td>
+                            </tr>
+                            <tr>    
+                                <th>State </th><td> {{ form_widget(edit_form.homeState) }}{{ form_errors(edit_form.homeState) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Zip </th><td> {{ form_widget(edit_form.homeZip) }}{{ form_errors(edit_form.homeZip) }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.homePhone) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.homePhone) }}
+                        {{ form_errors(edit_form.homePhone) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.cellPhone) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.cellPhone) }}
+                        {{ form_errors(edit_form.cellPhone) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.selfIntro) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.selfIntro) }}
+                        {{ form_errors(edit_form.selfIntro) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form_label(edit_form.favoriteWebsites) }}</th>
+                    <td>
+                        {{ form_widget(edit_form.favoriteWebsites) }}
+                        {{ form_errors(edit_form.favoriteWebsites) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
       </div>
+      <div class="col-xs-12 col-sm-12 col-md-4">
+           <div class="panel panel-default">
+                <div class="panel-heading">Current Photo</div>
+                <div class="panel-body">
+                    {{ form_row(edit_form.photo) }}
+                    {{ form_row(edit_form.showPhoto) }}
+                    {% if edit_form.deletePhotoSubmit is defined %}
+                        <p><img src="{{ asset('uploads/profile/' ~ entity.photo) }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/></p>
+                      {{ form_row(edit_form.deletePhotoSubmit) }}
+                    {% endif %}
+                </div>
+                <div class="panel-footer">
+                    <p>
+                    {{ form_end(edit_form) }}
+                    {{ form(delete_form) }}
+                </div>
+            </div>
+      </div>
+      
     </div>
-    {{ form(delete_form) }}
-    
-</ul>
 {% endblock %}

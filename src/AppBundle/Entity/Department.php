@@ -486,5 +486,9 @@ class Department
     {
         return $this->children;
     }
+    
+    public function __toString() {
+        return $this->getName();
+    }
 }
 

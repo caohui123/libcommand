@@ -1,33 +1,35 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Extended Privilege Status{% endblock %}
 {% block body -%}
-    <h1>ExtendedPrivilegeRequestStatus list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('extendedprivilege_status_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('extendedprivilege_status_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('extendedprivilege_status_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{ path('extendedprivilege') }}"><span class="glyphicon glyphicon-th-list"></span> Extended Privilege Requests</a></li>
+        <li role="presentation" class="active"><a href="{{ path('extendedprivilege_status') }}"><span class="glyphicon glyphicon-check"></span> Statuses</a></li>
+    </ul>
+    <h1 class="page-header">Extended Privilege Statuses <span><a class="btn btn-sm btn-primary" href="{{ path('extendedprivilege_status_new') }}"><span class="glyphicon glyphicon-plus"></span> New Status</a></span></h1>
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>
+                            {{ entity.name }}
+                            {% if is_granted('ROLE_EXTENDEDPRIVILEGES_EDIT', entity) %}
+                                <a class="badge" href="{{ path('extendedprivilege_status_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_EXTENDEDPRIVILEGES_VIEW', entity) %}
+                                <a class="badge" href="{{ path('extendedprivilege_status_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                            {% endif %}
+                        </td>        
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

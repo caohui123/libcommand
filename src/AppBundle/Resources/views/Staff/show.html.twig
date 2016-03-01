@@ -1,19 +1,26 @@
 {% extends '::base.html.twig' %}
-
-{% block body -%}
-  <h1 class="page-header">{{ entity.firstName }} {{ entity.lastName }} <br> <small>{{ entity.jobTitle }} </small><span><a class="btn btn-sm btn-primary" href="{{ path('staff_edit', { 'id': entity.id }) }}" role="button" aria-label="Edit Staff Member"><span class="glyphicon glyphicon-pencil"></span> Edit Info</a></span></h1>
+{% block title %}{{ entity.firstName }} {{ entity.lastName }} &#8211; Library Staff{% endblock %}
+{% block body %}
+  <h1 class="page-header">{{ entity.firstName }} {{ entity.lastName }} <br> <small>{{ entity.jobTitle }} </small></h1>
     <div class="row">
       <div class="col-xs-12">
         <p><a class="btn btn-sm btn-primary" href="{{ path('staff') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Staff List</a></p>
       </div>
     </div>
+    {% if is_granted('ROLE_STAFF_EDIT', entity) %}
     <div class="row">
-      <div class="col-xs-12">
-        <table class="table table-striped record_properties">
+        <div class="col-xs-12">
+            <p><a class="badge" href="{{ path('staff_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Staff Member</a></p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8">
+        <table class="table table-striped table-responsive record_properties">
             <tbody>
                 <tr>
                     <th>LDAP User</th>
-                    <td>{{ ldap_user}} {% if is_granted('ROLE_ADMIN') %}<a class="btn btn-default btn-xs" href="{{ path('admin') }}">Change</a> {% endif %}</td>
+                    <td>{% if ldap_user is not null %}{{ ldap_user}}{% else %}Not Set{% endif %} </td>
                 </tr>
                 <tr>
                     <th>Staff ID</th>
@@ -71,32 +78,29 @@
                     <th>Favorite Websites</th>
                     <td>{{ entity.favoriteWebsites }}</td>
                 </tr>
-                <tr>
-                    <th>Photo</th>
-                    <td>
-                      <p>
-                        
-                        {% if entity.photo != '' %}
-                          <a href="{{ asset('uploads/profile/' ~ entity.photo) }}">View photo</a></p>
-                        {% else %}
-                          no photo uploaded
-                        {% endif %}
-                      <p>
-                        {% if entity.showPhoto == 1 %}
-                          Set to display publicly
-                        {% else %}
-                          Set to NOT display publicly
-                        {% endif %}
-                      </p>
-                    </td>
-                </tr>
             </tbody>
         </table>
       </div>
+      <div class="col-xs-12 col-sm-12 col-md-4">
+           <div class="panel panel-default">
+                <div class="panel-heading">Current Photo</div>
+                <div class="panel-body">
+                    {% if entity.photo != '' %}
+                        <img src="{{ asset('uploads/profile/' ~ entity.photo) }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/>
+                    {% else %}
+                        No photo uploaded
+                    {% endif %}
+                </div>
+                <div class="panel-footer">
+                    <p>
+                    {% if entity.showPhoto == 1 %}
+                      Set to display publicly
+                    {% else %}
+                      Set to NOT display publicly
+                    {% endif %}
+                    </p>
+                </div>
+            </div>
+      </div>
     </div>
-
-    <div class="btn-group" role="group">
-      {{ form(delete_form) }}
-    </div>
-</ul>
 {% endblock %}
