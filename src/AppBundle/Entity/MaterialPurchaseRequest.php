@@ -624,7 +624,7 @@ class MaterialPurchaseRequest
      *
      * @return MaterialPurchaseRequest
      */
-    public function setStatus(MaterialPurchaseRequestStatus $status)
+    public function setStatus(MaterialPurchaseRequestStatus $status = null)
     {
         $this->status = $status;
 

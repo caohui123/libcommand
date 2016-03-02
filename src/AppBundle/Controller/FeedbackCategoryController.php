@@ -29,7 +29,7 @@ class FeedbackCategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:FeedbackCategory')->findAll();
+        $entities = $em->getRepository('AppBundle:FeedbackCategory')->findBy(array(), array('name'=>'ASC'));
 
         return array(
             'entities' => $entities,
@@ -165,7 +165,7 @@ class FeedbackCategoryController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr'=>array('class'=>'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -240,7 +240,7 @@ class FeedbackCategoryController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('feedbackcategory_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr'=>array('class'=>'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }

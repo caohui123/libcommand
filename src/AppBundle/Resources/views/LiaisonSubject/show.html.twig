@@ -1,48 +1,83 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Liaison Subject Areas{% endblock %}
 {% block body -%}
-    <h1>LiaisonSubject</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ entity.name }}</td>
-            </tr>
-            <tr>
-                <th>Lft</th>
-                <td>{{ entity.lft }}</td>
-            </tr>
-            <tr>
-                <th>Lvl</th>
-                <td>{{ entity.lvl }}</td>
-            </tr>
-            <tr>
-                <th>Rgt</th>
-                <td>{{ entity.rgt }}</td>
-            </tr>
-            <tr>
-                <th>Root</th>
-                <td>{{ entity.root }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('liaisonsubject') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('liaisonsubject_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <h1 class="page-header">Edit {{entity.name}}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('liaisonsubject') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
+      </div>
+    </div>
+    {% if is_granted('ROLE_LIAISONSUBJECT_EDIT', entity) %}
+        <div class="row">
+            <div class="col-xs-12">
+                <p><a class="badge" href="{{ path('liaisonsubject_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Subject</a></p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Area Information</caption>
+              <tbody>
+                  <tr>
+                      <th>Title</th>
+                      <td>{{entity.name}}</td>
+                  </tr>
+                  <tr>
+                      <th>Primary Liaison</th>
+                      <td>
+                          {% if entity.primaryLiaison is not null %}
+                              {{entity.primaryLiaison}}
+                          {% else %}
+                              none
+                          {% endif %} 
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Secondary Liaison</th>
+                      <td>
+                          {% if entity.secondaryLiaison is not null %}
+                              {{entity.secondaryLiaison}}
+                          {% else %}
+                              none
+                          {% endif %} 
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Parent Subject</th>
+                      <td>
+                          {% if entity.parent is not null %}
+                              {{entity.parent}}
+                          {% else %}
+                              none (Top level)
+                          {% endif %} 
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Phone Number</th>
+                      <td>{{entity.phone}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Faculty Liaison</caption>
+              <tbody>
+                  <tr>
+                      <th>Name</th>
+                      <td>{{entity.facultyName}}</td>
+                  </tr>
+                  <tr>
+                      <th>Phone</th>
+                      <td>{{entity.facultyPhone}}</td>
+                  </tr>
+                  <tr>
+                      <th>Office</th>
+                      <td>{{entity.facultyOffice}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
 {% endblock %}

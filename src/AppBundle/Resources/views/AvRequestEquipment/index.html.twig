@@ -21,9 +21,9 @@
                         <td>
                             {{ entity.name }}
                             {% if is_granted('ROLE_AV_EDIT', entity) %}
-                                <a href="{{ path('avrequest_equipment_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('avrequest_equipment_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
                             {% elseif is_granted('ROLE_AV_VIEW', entity) %}
-                                <a href="{{ path('avrequest_equipment_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('avrequest_equipment_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
                             {% endif %}
                         </td>        
                     </tr>

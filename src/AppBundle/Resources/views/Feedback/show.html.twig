@@ -1,64 +1,124 @@
 {% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1>Feedback</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Receiveddate</th>
-                <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
-            </tr>
-            <tr>
-                <th>Body</th>
-                <td>{{ entity.body }}</td>
-            </tr>
-            <tr>
-                <th>Patronemail</th>
-                <td>{{ entity.patronEmail }}</td>
-            </tr>
-            <tr>
-                <th>Patronfirstname</th>
-                <td>{{ entity.patronFirstName }}</td>
-            </tr>
-            <tr>
-                <th>Patronlastname</th>
-                <td>{{ entity.patronLastName }}</td>
-            </tr>
-            <tr>
-                <th>Patronphone</th>
-                <td>{{ entity.patronPhone }}</td>
-            </tr>
-            <tr>
-                <th>Patronstatus</th>
-                <td>{{ entity.patronGroup }}</td>
-            </tr>
-            <tr>
-                <th>Response</th>
-                <td>{{ entity.response }}</td>
-            </tr>
-            <tr>
-                <th>Replydate</th>
-                <td>{{ entity.replyDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('feedback') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('feedback_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+{% block title %}Patron Feedback{% endblock %}
+{% block body %}
+    <h1 class="page-header">Feedback #{{entity.id}}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('feedback') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Feedback List</a></p>
+      </div>
+    </div>
+    {% if is_granted('ROLE_FEEDBACK_EDIT', entity) %}
+        <div class="row">
+            <div class="col-xs-12">
+                <p><a class="badge" href="{{ path('feedback_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Request</a></p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="row">
+              <div class="col-xs-12">
+                <table class="table table-responsive table-striped">
+                    <caption>Submission Info</caption>
+                    <tbody>
+                        <tr>
+                            <td>Feedback Type</td>
+                            <td>
+                                {% if entity.category == 'Complaint' %}
+                                  {% set alert = 'danger'%}
+                                {% elseif entity.category == 'Compliment' %}
+                                  {% set alert = 'success'%}
+                                {% elseif entity.category == 'Suggestion' %}
+                                  {% set alert = 'warning'%}
+                                {% else %}
+                                  {% set alert = 'info'%}
+                                {% endif %}
+                                <span class="alert-{{alert}}">{{ entity.category }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Categories</td>
+                            <td>
+                                {% if entity.areas is not empty %}
+                                    <ul>
+                                    {% for area in entity.areas %}
+                                        <li>{{ area.name }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    none
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Received</td>
+                            <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Reply Date</td>
+                            <td>
+                            {% if entity.replyDate is not empty %}    
+                                {{entity.replyDate|date('l n/j/y g:i A')}}</small>
+                            {% else %}
+                                No response sent to patron.
+                            {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Last Forward Date</td>
+                            <td>
+                                {% if entity.lastForwardDate is not empty %}    
+                                   {{entity.lastForwardDate|date('l n/j/y g:i A')}}
+                                {% else %}
+                                   Not forwarded
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Note</td>
+                            <td>{{entity.note}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-responsive table-striped">
+                    <caption>Patron Information</caption>
+                    <tbody>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{entity.patronFirstName}} {{entity.patronLastName}} &lt;{{entity.patronEmail}}&gt</td>
+                        </tr>
+                        <tr>
+                            <td>Group</td>
+                            <td>{{entity.patronGroup}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+          </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="row">
+              <div class="col-xs-12">
+                  <div class="panel panel-info">
+                    <div class="panel-heading">Feedback</div>
+                    <div class="panel-body">
+                        <p>{{entity.body}}</p>
+                    </div>
+                  </div>
+              </div>
+          </div>
+          {% if entity.response is not empty %}  
+          <div class="row">
+              <div class="col-xs-12">
+                  <div class="panel panel-info">
+                    <div class="panel-heading">Library Reply to Patron</div>
+                    <div class="panel-body">
+                        <p>{{entity.response}}</p>
+                    </div>
+                  </div>
+              </div>
+          </div>          
+          {% endif %}
+      </div>
+    </div>
 {% endblock %}

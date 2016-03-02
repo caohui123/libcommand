@@ -1,16 +1,15 @@
 {% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1>FeedbackCategory edit</h1>
-
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('feedbackcategory') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+{% block title %}Patron Feedback Type{% endblock %}
+{% block body %}
+    <h1 class="page-header">Edit Type: {{entity.name}}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('feedbackcategory') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="well well-lg">{{ form(edit_form) }} {{ form(delete_form) }}</div>
+      </div>
+    </div>
 {% endblock %}

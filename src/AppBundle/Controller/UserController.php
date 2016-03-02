@@ -253,6 +253,8 @@ class UserController extends Controller
 
         //update the user's permissions through the User Service
         $service = $this->get('user_service');
+        //LIAISONSUBJECT
+        $service->updatePermissions($entity, $formData['liaisonsubject'], $formData['liaisonsubject_previous']);
         //AVREQUEST
         $service->updatePermissions($entity, $formData['av_request'], $formData['av_request_previous']);
         //HOURS
@@ -293,11 +295,13 @@ class UserController extends Controller
         $service = $this->get('user_service'); //AppBundle\Services\UserService
         
         //generate the VIEW, EDIT, DELETE permissions via User Service
+        //LIAISONSUBJECT
+        $liaisonsubject_permission = $service->generateViewEditDelete($user, 'ROLE_LIAISONSUBJECT');
         //AVREQUEST
         $avrequest_permission = $service->generateViewEditDelete($user, 'ROLE_AV');
         //HOURS
         $hours_permission = $service->generateViewEditDelete($user, 'ROLE_HOURS');
-        //HOURS
+        //STAFF
         $staff_permission = $service->generateViewEditDelete($user, 'ROLE_STAFF');
         //LIBRARY DEPARTMENTS
         $department_permission = $service->generateViewEditDelete($user, 'ROLE_DEPARTMENTS');
@@ -319,6 +323,23 @@ class UserController extends Controller
           'action' => $this->generateUrl('user_permissions_update', array('id'=>$user->getId())),
           'method' => 'PUT',
         ))
+            //LIAISONSUBJECT
+            ->add('liaisonsubject', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_LIAISONSUBJECT_VIEW'=> 'View',
+                'ROLE_LIAISONSUBJECT_EDIT'=> 'Edit',
+                'ROLE_LIAISONSUBJECT_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $liaisonsubject_permission
+            ))
+            ->add('liaisonsubject_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $liaisonsubject_permission
+            ))
             //AVREQUEST
             ->add('av_request', 'choice', array(
               'choices' => array(

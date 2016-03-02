@@ -1,50 +1,73 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Patron Feedback{% endblock %}
 {% block body -%}
-    <h1>Feedback list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Receiveddate</th>
-                <th>Body</th>
-                <th>Patronemail</th>
-                <th>Patronfirstname</th>
-                <th>Patronlastname</th>
-                <th>Patronphone</th>
-                <th>Patrongroup</th>
-                <th>Response</th>
-                <th>Replydate</th>
-                <th>Forwarddate</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('feedback_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{% if entity.created %}{{ entity.created|date('l n/j/y g:i A') }}{% endif %}</td>
-                <td>{{ entity.body }}</td>
-                <td>{{ entity.patronEmail }}</td>
-                <td>{{ entity.patronFirstName }}</td>
-                <td>{{ entity.patronLastName }}</td>
-                <td>{{ entity.patronPhone }}</td>
-                <td>{{ entity.patronGroup }}</td>
-                <td>{{ entity.response }}</td>
-                <td>{% if entity.replyDate %}{{ entity.replyDate|date('l n/j/y g:i A') }}{% endif %}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('feedback_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('feedback_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="{{ path('feedback') }}"><span class="glyphicon glyphicon-comment"></span> Feedback</a></li>
+        <li role="presentation"><a href="{{ path('feedbackarea') }}"><span class="glyphicon glyphicon-th"></span> Areas</a></li>
+        <li role="presentation"><a href="{{ path('feedbackcategory') }}"><span class="glyphicon glyphicon-tasks"></span> Categories</a></li>
+    </ul>
+    <h1 class="page-header">Patron Feedback</h1>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Receiveddate</th>
+                        <th>Patron</th>
+                        <th>Categories</th>
+                        <th>Status</th>
+                        <th>Excerpt</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{{ entity.category }}</td>
+                        <td>{% if entity.created %}{{ entity.created|date('n/j/y g:i A') }}{% endif %}</td>
+                        <td>{{ entity.patronFirstName }} {{ entity.patronLastName }}</td>
+                        <td>
+                            {% if entity.areas is not empty %}
+                                <ul>
+                                {% for area in entity.areas %}
+                                    <li>{{ area.name }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                none
+                            {% endif %}
+                        </td>
+                        <td>
+                            <p>
+                                {% if entity.replyDate is not null %}
+                                <span class="glyphicon glyphicon-ok-sign text-success"></span> 
+                                {% else %}
+                                <span class="glyphicon glyphicon-remove-sign text-danger"></span> 
+                                {% endif %}
+                                Replied to Patron
+                            </p>
+                            <p>
+                                {% if entity.lastForwardDate is not null %}
+                                <span class="glyphicon glyphicon-ok-sign text-success"></span> 
+                                {% else %}
+                                <span class="glyphicon glyphicon-remove-sign text-danger"></span> 
+                                {% endif %}
+                                Forwarded
+                            </p>       
+                        </td>
+                        <td>{{ entity.body|slice(0, 50) }}...</td>
+                        <td>
+                            {% if is_granted('ROLE_FEEDBACK_EDIT', entity) %}
+                                <a class="badge" href="{{ path('feedback_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_FEEDBACK_VIEW', entity) %}
+                                <a class="badge" href="{{ path('feedback_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

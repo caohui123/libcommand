@@ -27,7 +27,9 @@ class MaterialPurchaseRequestType extends AbstractType
             ->add('publicationYear')
             ->add('edition')
             ->add('price')
-            ->add('isInCatalog')
+            ->add('isInCatalog',null,array(
+                'attr' => array('class' => 'user-status-ckbx-noajax') //bootstrapSwitch checkbox
+            ))
             ->add('mediaType', 'entity', array(
                 'class'=>'AppBundle:MediaType',
                 'query_builder'=>function(EntityRepository $er){

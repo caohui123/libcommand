@@ -29,7 +29,7 @@ class MaterialPurchaseRequestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:MaterialPurchaseRequest')->findAll();
+        $entities = $em->getRepository('AppBundle:MaterialPurchaseRequest')->findBy(array(), array('created'=>'DESC'));
 
         return array(
             'entities' => $entities,
@@ -195,7 +195,7 @@ class MaterialPurchaseRequestController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-default')));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-success')));
 
         return $form;
     }

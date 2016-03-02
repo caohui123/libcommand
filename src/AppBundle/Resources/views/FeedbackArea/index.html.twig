@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Patron Feedback Areas{% endblock %}
 {% block stylesheets %}
   {{ parent() }}
 {% endblock %}
@@ -41,9 +41,16 @@
     margin-right: 5px;
 }
 </style> 
-
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{ path('feedback') }}"><span class="glyphicon glyphicon-comment"></span> Feedback</a></li>
+        <li role="presentation" class="active"><a href="{{ path('feedbackarea') }}"><span class="glyphicon glyphicon-th"></span> Areas</a></li>
+        <li role="presentation"><a href="{{ path('feedbackcategory') }}"><span class="glyphicon glyphicon-tasks"></span> Types</a></li>
+    </ul>
     <h1 class="page-header">Feedback Areas <span><a class="btn btn-sm btn-primary" href="{{ path('feedbackarea_new') }}" role="button" aria-label="Add a new feedback area"><span class="glyphicon glyphicon-plus"></span> New Area</a></span></h1> 
-    
+    <blockquote>
+        <p>Feedback areas allow you to further categorize patron feedback submissions. For example, suppose a patron comments a new library display. You could create a "Library Displays" area.</p>
+        <p>Inside of each submission, you will be able to select which areas best suit the feedback. You are allowed to add sub-areas to main areas.</p>
+    </blockquote>
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
         {{ styled_list|raw }}

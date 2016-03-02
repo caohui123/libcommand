@@ -1,41 +1,38 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Patron Feedback Type{% endblock %}
 {% block body -%}
-    <h1>FeedbackCategory list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('feedbackcategory_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('feedbackcategory_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('feedbackcategory_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('feedbackcategory_new') }}">
-                Create a new entry
-            </a>
-        </li>
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{ path('feedback') }}"><span class="glyphicon glyphicon-comment"></span> Feedback</a></li>
+        <li role="presentation"><a href="{{ path('feedbackarea') }}"><span class="glyphicon glyphicon-th"></span> Areas</a></li>
+        <li role="presentation" class="active"><a href="{{ path('feedbackcategory') }}"><span class="glyphicon glyphicon-tasks"></span> Types</a></li>
     </ul>
+    <h1 class="page-header">Feedback Types <span><a class="btn btn-sm btn-primary" href="{{ path('feedbackcategory_new') }}" role="button" aria-label="Add a new feedback category"><span class="glyphicon glyphicon-plus"></span> New Category</a></span></h1> 
+    <blockquote>
+        <p>Feedback types are displayed to the patron on the website. Types should represent the topic of the feedback such as "Compliment" or "Complaint".</p>
+    </blockquote>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>
+                            {{ entity.name }}
+                            {% if is_granted('ROLE_FEEDBACK_EDIT', entity) %}
+                                <a class="badge" href="{{ path('feedbackcategory_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_FEEDBACK_VIEW', entity) %}
+                                <a class="badge" href="{{ path('feedbackcategory_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                            {% endif %}
+                        </td>        
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

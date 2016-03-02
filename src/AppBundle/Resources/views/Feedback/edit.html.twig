@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1 class="page-header">Edit Feedback</h1>
+{% block title %}Patron Feedback{% endblock %}
+{% block body %}
+    <h1 class="page-header">Edit Feedback #{{entity.id}}</h1>
     <div class="row">
       <div class="col-xs-12">
         <p><a class="btn btn-sm btn-primary" href="{{ path('feedback') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Feedback List</a></p>
@@ -10,40 +10,116 @@
     <blockquote>
       <p>Patrons may only be replied to <mark>once</mark> per feedback in order to prevent potential spamming. If a response has already been sent, you will see it below.</p>
     </blockquote>
-    <section id="submission_info">
-      <h2>Submission Information</h2> 
-      <dl>
-        <dt>Feedback Type</dt>
-        <dd>
-          {% if entity.category == 'Complaint' %}
-            {% set alert = 'danger'%}
-          {% elseif entity.category == 'Compliment' %}
-            {% set alert = 'success'%}
-          {% elseif entity.category == 'Suggestion' %}
-            {% set alert = 'warning'%}
-          {% else %}
-            {% set alert = 'info'%}
-          {% endif %}
-            <span class="alert-{{alert}}">{{ entity.category }}</span>
-          
-        </dd>
-        <dt>Received</dt>
-        <dd>{{ entity.created|date('l n/j/y g:i A') }}</dd>
-        <dt>Patron</dt>
-        <dd>{{entity.patronFirstName}} {{entity.patronLastName}} &lt;{{entity.patronEmail}}&gt</dd>
-        <dd>{{entity.patronPhone}}</dd>
-        <dd>Patron is {{entity.patronGroup}}</dd>
-      {% if entity.response is not empty %}
-        <dt>Response</dt>
-        <dd><em>{{entity.response}}</em></dd>
-        <dd><small>-- Sent on {{entity.replyDate|date('l n/j/y g:i A')}}</small></dd>
-      {% endif %}
-      </dl>
-    </section>
     <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-        {{ form(edit_form) }}
-        {{ form(delete_form) }}
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="row">
+              <div class="col-xs-12">
+                <table class="table table-responsive table-striped">
+                    <caption>Submission Info</caption>
+                    <tbody>
+                        <tr>
+                            <td>Feedback Type</td>
+                            <td>
+                                {% if entity.category == 'Complaint' %}
+                                  {% set alert = 'danger'%}
+                                {% elseif entity.category == 'Compliment' %}
+                                  {% set alert = 'success'%}
+                                {% elseif entity.category == 'Suggestion' %}
+                                  {% set alert = 'warning'%}
+                                {% else %}
+                                  {% set alert = 'info'%}
+                                {% endif %}
+                                <span class="alert-{{alert}}">{{ entity.category }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Categories</td>
+                            <td>
+                                {% if entity.areas is not empty %}
+                                    <ul>
+                                    {% for area in entity.areas %}
+                                        <li>{{ area.name }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    none
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Received</td>
+                            <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Reply Date</td>
+                            <td>
+                            {% if entity.replyDate is not empty %}    
+                                {{entity.replyDate|date('l n/j/y g:i A')}}</small>
+                            {% else %}
+                                No response sent to patron.
+                            {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Last Forward Date</td>
+                            <td>
+                                {% if entity.lastForwardDate is not empty %}    
+                                   {{entity.lastForwardDate|date('l n/j/y g:i A')}}
+                                {% else %}
+                                   Not forwarded
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Note</td>
+                            <td>{{entity.note}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-responsive table-striped">
+                    <caption>Patron Information</caption>
+                    <tbody>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{entity.patronFirstName}} {{entity.patronLastName}} &lt;{{entity.patronEmail}}&gt</td>
+                        </tr>
+                        <tr>
+                            <td>Group</td>
+                            <td>{{entity.patronGroup}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-xs-12">
+                  <div class="panel panel-info">
+                    <div class="panel-heading">Feedback</div>
+                    <div class="panel-body">
+                        <p>{{entity.body}}</p>
+                    </div>
+                  </div>
+              </div>
+          </div>
+          {% if entity.response is not empty %}  
+          <div class="row">
+              <div class="col-xs-12">
+                  <div class="panel panel-info">
+                    <div class="panel-heading">Library Reply to Patron</div>
+                    <div class="panel-body">
+                        <p>{{entity.response}}</p>
+                    </div>
+                  </div>
+              </div>
+          </div>          
+          {% endif %}
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <div class="well well-lg">{{ form(edit_form) }}
+           {% if is_granted('ROLE_FEEDBACK_DELETE', entity) %}
+              {{ form(delete_form) }}
+           {% endif %}
+        </div>
       </div>
     </div>
 {% endblock %}

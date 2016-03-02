@@ -813,4 +813,8 @@ class Staff
     public function getFirstLastName() {
       return $this->getLastName() . ', ' . $this->getFirstName();
     }
+    
+    public function __toString() {
+        return $this->getFirstLastName();
+    }
 }

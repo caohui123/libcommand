@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Liaison Subject Areas{% endblock %}
 {% block stylesheets %}
   {{ parent() }}
 {% endblock %}
@@ -43,7 +43,9 @@
 </style> 
 
     <h1 class="page-header">Liaison Subject Areas <span><a class="btn btn-sm btn-primary" href="{{ path('liaisonsubject_new') }}" role="button" aria-label="Add a new liaison subject"><span class="glyphicon glyphicon-plus"></span> New Subject</a></span></h1> 
-    
+    <blockquote>
+        <p>Liaison subject areas appear on the library website.</p>
+    </blockquote>
     <div class="row">
       <div class="col-xs-12">
         {{ styled_list|raw }}
