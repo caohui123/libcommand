@@ -1,41 +1,36 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Material Request Media Types{% endblock %}
 {% block body -%}
-    <h1>MediaType list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('mediatype_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('mediatype_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('mediatype_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('mediatype_new') }}">
-                Create a new entry
-            </a>
-        </li>
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{ path('materialpurchase') }}"><span class="glyphicon glyphicon-th-list"></span> Material Requests</a></li>
+        <li role="presentation" class="active"><a href="{{ path('mediatype') }}"><span class="glyphicon glyphicon-blackboard"></span> Media Types</a></li>
+        <li role="presentation"><a href="{{ path('materialpurchaserequestreason') }}"><span class="glyphicon glyphicon-blackboard"></span> Purchase Reasons</a></li>
+        <li role="presentation"><a href="{{ path('materialpurchasestatus') }}"><span class="glyphicon glyphicon-check"></span> Request Statuses</a></li>
     </ul>
+    <h1 class="page-header">Material Request Media Types <span><a class="btn btn-sm btn-primary" href="{{ path('mediatype_new') }}"><span class="glyphicon glyphicon-plus"></span> New Media</a></span></h1>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>
+                            {{ entity.name }}
+                            {% if is_granted('ROLE_MATERIALPURCHASE_EDIT', entity) %}
+                                <a class="badge" href="{{ path('mediatype_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_MATERIALPURCHASE_VIEW', entity) %}
+                                <a class="badge" href="{{ path('mediatype_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

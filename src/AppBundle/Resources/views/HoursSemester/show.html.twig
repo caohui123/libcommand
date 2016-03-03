@@ -1,54 +1,53 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library Hours: Semesters{% endblock %}
 {% block body -%}
-    <h1>HoursSemester</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Season</th>
-                <td>
-                    {% if entity.season == 0 %}
-                        Winter
-                    {% elseif entity.season == 1 %}
-                        Spring
-                    {% elseif entity.season == 2 %}
-                        Summer
-                    {% elseif entity.season == 3 %}
-                        Fall
-                    {% endif %} 
-                </td>
-            </tr>
-            <tr>
-                <th>Year</th>
-                <td>{{ entity.year }}</td>
-            </tr>
-            <tr>
-                <th>Startdate</th>
-                <td>{{ entity.startDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Enddate</th>
-                <td>{{ entity.endDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('hourssemester') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('hourssemester_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <h1 class="page-header">Semester: 
+                            {% if entity.season == 0 %}
+                                Winter
+                            {% elseif entity.season == 1 %}
+                                Spring
+                            {% elseif entity.season == 2 %}
+                                Summer
+                            {% elseif entity.season == 3 %}
+                                Fall
+                            {% endif %}    
+                            {{ entity.year }}
+    </h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('hourssemester') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Semester List</a></p>
+      </div>
+    </div>
+    {% if is_granted('ROLE_HOURS_EDIT', entity) %}
+    <div class="row">
+        <div class="col-xs-12">
+            <p><a class="badge" href="{{ path('hourssemester_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Semester</a></p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <table class="table table-responsive table-striped">
+            <tbody>
+                <tr>
+                    <th>Semester</th>
+                    <td>
+                        {% if entity.season == 0 %}
+                            Winter
+                        {% elseif entity.season == 1 %}
+                            Spring
+                        {% elseif entity.season == 2 %}
+                            Summer
+                        {% elseif entity.season == 3 %}
+                            Fall
+                        {% endif %}    
+                        {{ entity.year }}
+                    </td>
+                </tr>
+                <tr><th>Start</th><td>{{entity.startDate|date('m/d/Y')}}</td></tr>
+                <tr><th>End</th><td>{{entity.endDate|date('m/d/Y')}}</td></tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
 {% endblock %}

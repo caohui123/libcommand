@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library Hours: Areas{% endblock %}
 {% block body -%}
     <h1 class="page-header">Edit {{ entity.name }}</h1>
     <div class="row">
@@ -7,17 +7,23 @@
         <p><a class="btn btn-sm btn-primary" href="{{ path('hoursarea') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Areas</a></p>
       </div>
     </div>
+      <blockquote>
+          <p>When editing regular and special hours, the hours will save without page reload after you click the button under each day. A green check mark will appear next to the button upon successful update. The only time the page will refresh is when updating the area's name.</p>
+      </blockquote>
     <div class="row">
         <div class="col-xs-12 col-sm-5 col-md-3 col-lg-3">
             <h2>General Information</h2>
             {{ form_start(edit_form) }}  
-              {{ form_label(edit_form.name) }}
-              {{ form_errors(edit_form.name) }}
-              {{ form_widget(edit_form.name) }}
-              
+              {{ form_row(edit_form.name) }}
+              <p>
               {{ form_widget(edit_form.submit) }}
+              </p>
               {{ form_widget(edit_form._token) }}
             {{ form_end(edit_form, {'render_rest':false}) }}
+            
+            {% if is_granted('ROLE_HOURS_DELETE') %}
+                {{ form(delete_form) }}
+            {% endif %}
         </div>
     </div> 
     <div class="row">
@@ -26,6 +32,7 @@
             <div class="row">
                 <div class="col-xs-4 col-sm-3">
                     {{ form(semester_form) }} 
+                    <a href="{{ path('hourssemester') }}"><span class="glyphicon glyphicon-pencil"></span> Manage Semesters</a>
                 </div>
             </div> 
             <section id="regular_hours_container">
@@ -66,11 +73,9 @@
     <div class="row">
         <div class="col-xs-12">
             <h2>Special Hours</h2>
-            <div class="row">
-                <div class="col-xs-12">
-                    <p><a class="btn btn-sm btn-primary" href="{{ path('hoursevent_new') }}"><span class="glyphicon glyphicon-plus"></span> New Special Event</a></p>
-                </div>
-            </div>
+            <blockquote>
+                <p>Special hours must be associated with a special event. If you do not see any events in the list for a given day, you must click on the "Manage Special Events" link below and either create a new event or extend a date range of an exsiting event to include the desired date.</p>
+            </blockquote>
             <div class="row">
                 <div class="col-xs-12">
                     <p><a href="{{ path('specialhours_changeweek') }}" id="prevWeek" class="btn btn-sm btn-default glyphicon glyphicon-triangle-left"></a><span id="dynamic_daterange"></span><a href="{{ path('specialhours_changeweek') }}" id="nextWeek" class="btn btn-sm btn-default glyphicon glyphicon-triangle-right"></a></p>
@@ -83,6 +88,7 @@
                             <button type="submit" class="btn btn-default btn-sm">Go</button>
                         </form>
                     </p>
+                    <a href="{{ path('hoursevent') }}"><span class="glyphicon glyphicon-pencil"></span> Manage Special Events</a>
                 </div>
             </div>
             <section id="special_hours_container">
@@ -138,12 +144,6 @@
             </section>
         </div>
     </div>
-        
-    <div class="row">
-        <div class="col-xs-12 col-sm-5 col-md-3 col-lg-3">
-            {{ form(delete_form) }}
-        </div>
-    </div> 
 {% endblock %}
 {% block documentReady %}
     applyTimepicker(); //initialize all timepickers (function declared below)

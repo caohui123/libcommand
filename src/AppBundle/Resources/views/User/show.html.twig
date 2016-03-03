@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}LDAP Users{% endblock %}
 {% block body -%}
     <h1 class="page-header">LDAP User {{ entity.username }}</h1>
     <div class="row">
@@ -23,9 +23,6 @@
           </div>
           <div class="btn-group" role="group">
             <a class="btn btn-sm btn-default" href="{{ path('user_edit', { 'id': entity.id }) }}">Edit</a>
-          </div>
-          <div class="btn-group" role="group">
-            {{ form(delete_form) }}
           </div>
         </div>
       </div>

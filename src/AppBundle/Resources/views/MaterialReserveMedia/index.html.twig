@@ -1,41 +1,34 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Material Reserve Media{% endblock %}
 {% block body -%}
-    <h1>MaterialReserveMedia list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('materialreservemedia_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('materialreservemedia_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('materialreservemedia_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('materialreservemedia_new') }}">
-                Create a new entry
-            </a>
-        </li>
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{ path('materialreserve') }}"><span class="glyphicon glyphicon-th-list"></span> Material Reserve Requests</a></li>
+        <li role="presentation" class="active"><a href="{{ path('materialreservemedia') }}"><span class="glyphicon glyphicon-blackboard"></span> Media Types</a></li>
     </ul>
+    <h1 class="page-header">Material Reserve Media <span><a class="btn btn-sm btn-primary" href="{{ path('materialreservemedia_new') }}"><span class="glyphicon glyphicon-plus"></span> New Media</a></span></h1>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>
+                            {{ entity.name }}
+                            {% if is_granted('ROLE_MATERIALRESERVE_EDIT', entity) %}
+                                <a class="badge" href="{{ path('materialreservemedia_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_MATERIALRESERVE_VIEW', entity) %}
+                                <a class="badge" href="{{ path('materialreservemedia_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

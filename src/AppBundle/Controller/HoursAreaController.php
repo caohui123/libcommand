@@ -290,7 +290,7 @@ class HoursAreaController extends Controller
             )
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update Area'));
+        $form->add('submit', 'submit', array('label' => 'Update Area', 'attr'=>array('class'=>'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -368,7 +368,7 @@ class HoursAreaController extends Controller
             ->add('submit', 'submit', array(
                 'label' => 'Delete Area',
                 'attr' => array(
-                    'class' => 'btn-danger'
+                    'class' => 'btn btn-sm btn-danger'
                 )
             ))
             ->getForm()

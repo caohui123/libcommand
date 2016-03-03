@@ -14,6 +14,7 @@
                 <th>Office</th>
                 <th>Phone</th>
                 <th>Email</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,13 +22,6 @@
             <tr>
                 <td>
                   {{ entity.lastName }}, {{ entity.firstName }}
-                  <p>
-                      {% if is_granted('ROLE_STAFF_EDIT') %}
-                        <a class="badge" href="{{ path('staff_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-                      {% elseif is_granted('ROLE_STAFF_VIEW') %}
-                        <a class="badge" href="{{ path('staff_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
-                      {% endif %}
-                  </p>
                 </td>
                 <td>{{ entity.staffId }}</td>
                 <td>
@@ -40,6 +34,13 @@
                 <td>{{ entity.office }}</td>
                 <td>{{ entity.phone }}</td>
                 <td>{{ entity.email }}</td>
+                <td>
+                    {% if is_granted('ROLE_STAFF_EDIT') %}
+                        <a class="badge" href="{{ path('staff_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                    {% elseif is_granted('ROLE_STAFF_VIEW') %}
+                        <a class="badge" href="{{ path('staff_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

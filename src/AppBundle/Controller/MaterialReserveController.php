@@ -29,7 +29,7 @@ class MaterialReserveController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:MaterialReserve')->findAll();
+        $entities = $em->getRepository('AppBundle:MaterialReserve')->findBy(array(), array('created'=>'DESC'));
 
         return array(
             'entities' => $entities,
@@ -167,7 +167,7 @@ class MaterialReserveController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -242,7 +242,7 @@ class MaterialReserveController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('materialreserve_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
     }

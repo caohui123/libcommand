@@ -7,6 +7,9 @@
         <p><a class="btn btn-sm btn-primary" href="{{ path('staff') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Staff List</a></p>
       </div>
     </div>
+    <blockquote>
+      <p>Management of functional area options can be performed by users with Administrator access only.</p>
+    </blockquote>
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-8">
         <table class="table table-striped table-responsive record_properties">
@@ -68,6 +71,10 @@
                     <td>
                         {{ form_widget(edit_form.staffFunctionalArea) }}
                         {{ form_errors(edit_form.staffFunctionalArea) }}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <br>
+                            <a href="{{ path('admin_staffareas') }}"><span class="glyphicon glyphicon-pencil"></span> Manage functional areas</a>
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -82,13 +89,6 @@
                     <td>
                         {{ form_widget(edit_form.jobTitle) }}
                         {{ form_errors(edit_form.jobTitle) }}
-                    </td>
-                </tr>
-                <tr>
-                    <th>{{ form_label(edit_form.staffFunctionalArea) }}</th>
-                    <td>
-                        {{ form_widget(edit_form.staffFunctionalArea) }}
-                        {{ form_errors(edit_form.staffFunctionalArea) }}
                     </td>
                 </tr>
                 <tr>

@@ -1,16 +1,23 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library Hours: Special Events{% endblock %}
 {% block body -%}
-    <h1>HoursEvent edit</h1>
-
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('hoursevent') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <h1 class="page-header">Edit Event: {{entity.name}}</h1>
+    <blockquote>
+        <p>Special events must have a starting and ending date. Should you decide to amend the starting and ending date of a special event, please be aware that any special hours set outside of the new date range will be <mark>deleted</mark>. The same goes for any events that are deleted outright.</p>
+    </blockquote>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('hoursevent') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Events List</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="well well-lg">
+            {{ form(edit_form) }}
+            {% if is_granted('ROLE_HOURS_DELETE', entity) %}
+                {{ form(delete_form) }}
+            {% endif %}
+        </div>
+      </div>
+    </div>
 {% endblock %}

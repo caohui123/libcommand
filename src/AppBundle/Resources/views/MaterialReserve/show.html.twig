@@ -1,68 +1,105 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Material Reserves{% endblock %}
 {% block body -%}
-    <h1>MaterialReserve</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Semester</th>
-                <td>{{ entity.semester }}</td>
-            </tr>
-            <tr>
-                <th>Year</th>
-                <td>{{ entity.year }}</td>
-            </tr>
-            <tr>
-                <th>Course</th>
-                <td>{{ entity.course }}</td>
-            </tr>
-            <tr>
-                <th>Enrollment</th>
-                <td>{{ entity.enrollment }}</td>
-            </tr>
-            <tr>
-                <th>Instructor</th>
-                <td>{{ entity.instructor }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ entity.phone }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ entity.email }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Contentchangedby</th>
-                <td>{{ entity.contentChangedBy }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('materialreserve') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('materialreserve_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <h1 class="page-header">Material Reserve Request #{{entity.id}}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('materialreserve') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to AV List</a></p>
+      </div>
+    </div>
+    {% if is_granted('ROLE_MATERIALRESERVE_EDIT', entity) %}
+        <div class="row">
+            <div class="col-xs-12">
+                <p><a class="badge" href="{{ path('materialreserve_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Request</a></p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="row">
+              <div class="col-xs-12">
+                <table class="table table-responsive table-striped">
+                    <caption>General Information</caption>
+                    <tbody>
+                        <tr>
+                            <th>Submitted</th>
+                            <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Semester</th>
+                            <td>{{ entity.semester }} {{ entity.year }}</td>
+                        </tr>
+                        <tr>
+                            <th>Course/Event</th>
+                            <td>{{ entity.course }}</td>
+                        </tr>
+                        <tr>
+                            <th>Expected Enrollment</th>
+                            <td>{{ entity.enrollment }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+          </div>
+         <div class="row">
+              <div class="col-xs-12">
+                <table class="table table-responsive table-striped">
+                    <caption>Instructor Information</caption>
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ entity.instructor }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{ entity.phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ entity.email }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+         </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <h2>Reserve Items</h2>
+        {% for item in entity.item %} 
+         <div class="panel panel-info">
+           <div class="panel-heading">
+             <h3 class="panel-title">{{item.title}}</h3>
+           </div>
+           <div class="panel-body">
+               <table class="table table-responsive">
+                   <tbody>
+                       <tr>
+                           <th>Media Type</th>
+                           <td>{{item.materialReserveMedia}}</td>
+                       </tr>
+                       <tr>
+                           <th>Author</th>
+                           <td>{{item.author}}</td>
+                       </tr>
+                       <tr>
+                           <th>Edition</th>
+                           <td>{{item.edition}}</td>
+                       </tr>
+                       <tr>
+                           <th>Circulation Period</th>
+                           <td>
+                             {% if item.circulationHours < 24 %}
+                               {{item.circulationHours}} Hours
+                             {% else %}
+                               {{item.circulationHours / 24}} {{ item.circulationHours == 24 ? 'Day' : 'Days' }}
+                             {% endif %}
+                           </td>
+                       </tr>
+                   </tbody>
+               </table>
+           </div>
+         </div>
+        {% endfor %}
+      </div>
+    </div>
 {% endblock %}

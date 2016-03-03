@@ -109,7 +109,7 @@ class Feedback
     
     /**
      * @ORM\ManyToOne(targetEntity="PatronGroup", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="patrongroup_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="patrongroup_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $patronGroup;
     

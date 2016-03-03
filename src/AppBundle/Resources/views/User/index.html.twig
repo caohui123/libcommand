@@ -1,33 +1,45 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}LDAP Users{% endblock %}
 {% block body -%}
     <h1 class="page-header">LDAP Users</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Isactive</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.isActive }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('user_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('user_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Emich username</th>
+                        <th>Activated</th>
+                        <th>Staff Member</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{{ entity.username }}</td>
+                        <td>
+                            {% if entity.isActive %} 
+                                <span class="glyphicon glyphicon-ok-sign text-success"></span>
+                            {% else %} 
+                                <span class="glyphicon glyphicon-remove-sign text-danger"></span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if entity.staffMember %}
+                                {{entity.staffMember}}
+                            {% else %}
+                                none
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if is_granted('ROLE_ADMIN', entity) %}
+                                <a class="badge" href="{{ path('user_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

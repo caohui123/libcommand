@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}LDAP Users{% endblock %}
 {% block body -%}
     <h1 class="page-header">Edit LDAP User {{ entity.username }}</h1>
     <div class="row">
@@ -7,6 +7,14 @@
         <p><a class="btn btn-sm btn-primary" href="{{ path('admin') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Admin Panel</a></p>
       </div>
     </div>
+    <blockquote>
+        <p>
+            Associating an LDAP name with a staff member allows each user the ability to see a dashboard relating to their records when they log in.
+            If an LDAP name is not associated with a staff member, he/she will not be able add new records in the system (for example, in the Instruction Session subsystem).
+        </p>
+        <p>If you do not see the staff member listed that corresponds to the LDAP user, you must create a <a href="{{ path('staff_new') }}">new staff member</a>.</p>
+        <p>Deactivating a user will NOT delete the LDAP user nor the associated staff member nor any associated records. This will, however, completely suspend accessibility for that LDAP user.</p> 
+    </blockquote>
     <div class="row">
       <div class="col-xs-12 col-md-3">
         <div class="btn-group btn-group-vertical" role="group" aria-label="actions">

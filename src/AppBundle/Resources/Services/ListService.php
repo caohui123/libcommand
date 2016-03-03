@@ -25,7 +25,7 @@ class ListService{
       if($level == 0){
         $styled_list .= 
             //'<a href="#item-'.$parent_count.'" class="list-group-item" data-toggle="collapse"><i class="glyphicon glyphicon-chevron-right"></i>'.$entity->getTitle().'</a>';
-            '<li class="list-group-item" data-toggle="collapse">'.$entity->getTitle().'<a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
+            '<li class="list-group-item">'.$entity->getTitle().'<a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
         $styled_list .= '<div class="list-group" id="item-'.$parent_count.'">';
         
         
@@ -36,7 +36,7 @@ class ListService{
         foreach($children as $child){
           $styled_list .= 
               //'<a href="#item-'.$parent_count.'-'.$child_count.'" class="list-group-item" data-toggle="collapse"><i class="glyphicon glyphicon-chevron-right"></i>'.$child->getTitle().'</a>';
-              '<li class="list-group-item" data-toggle="collapse">'.$child->getTitle().'<a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
+              '<li class="list-group-item">'.$child->getTitle().'<a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
           $styled_list .= '<div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'">';
           
           //Grandchildren (level 3)

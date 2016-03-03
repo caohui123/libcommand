@@ -1,16 +1,36 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library Hours: Semesters{% endblock %}
 {% block body -%}
-    <h1 class="page-header">Edit Semester</h1>
-
-    {{ form(edit_form) }}
-
-    <ul class="record_actions">
-        <li>
-            <a href="{{ path('hourssemester') }}">
-                Back to the list
-            </a>
-        </li>
-        <li>{{ form(delete_form) }}</li>
-    </ul>
+    <h1 class="page-header">Edit Semester: 
+                            {% if entity.season == 0 %}
+                                Winter
+                            {% elseif entity.season == 1 %}
+                                Spring
+                            {% elseif entity.season == 2 %}
+                                Summer
+                            {% elseif entity.season == 3 %}
+                                Fall
+                            {% endif %}    
+                            {{ entity.year }}</h1>
+    <blockquote>
+        <p>Semesters must have a starting and ending date. For each area, you will be able to set <mark>regular</mark> hours for the entire semester. Special hours are taken care of through the Special Events feature.</p>
+    </blockquote>
+    <blockquote>
+        <p>Special events must have a starting and ending date. Should you decide to amend the starting and ending date of a special event, please be aware that any special hours set outside of the new date range will be <mark>deleted</mark>. The same goes for any events that are deleted outright.</p>
+    </blockquote>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('hourssemester') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Semester List</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="well well-lg">
+            {{ form(edit_form) }}
+            {% if is_granted('ROLE_HOURS_DELETE', entity) %}
+                {{ form(delete_form) }}
+            {% endif %}
+        </div>
+      </div>
+    </div>
 {% endblock %}

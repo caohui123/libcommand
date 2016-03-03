@@ -36,7 +36,6 @@ class UserType extends AbstractType
     {
         $data = $this->_staffMemberData($this->staffMember);
         $builder
-            ->add('isActive', 'checkbox', array('label'=> 'Active ', 'required'=>false, 'attr'=>array('class'=>'user-status-ckbx-noajax')))
             ->add('staffMember', 'entity', array(
               'class'=>'AppBundle:Staff',
               'query_builder'=>function(EntityRepository $er){
@@ -48,7 +47,8 @@ class UserType extends AbstractType
               'placeholder' => 'No associated user',
               'choice_label' => 'getFirstLastName', //getFirstLastName() method in Staff class
               'required'=>false
-            ))
+            ))    
+            ->add('isActive', 'checkbox', array('label'=> 'Active ', 'required'=>false, 'attr'=>array('class'=>'user-status-ckbx-noajax')))
         ;
     }
     

@@ -1,36 +1,40 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library Hours: Special Events{% endblock %}
 {% block body -%}
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{ path('hoursarea') }}"><span class="glyphicon glyphicon-th-list"></span> Areas</a></li>
+        <li role="presentation"><a href="{{ path('hourssemester') }}"><span class="glyphicon glyphicon-th-large"></span> Semesters</a></li>
+        <li role="presentation" class="active"><a href="{{ path('hoursevent') }}"><span class="glyphicon glyphicon-tags"></span> Special Events</a></li>
+    </ul>
     <h1 class="page-header">Special Events <span><a class="btn btn-sm btn-primary" href="{{ path('hoursevent_new') }}"><span class="glyphicon glyphicon-plus"></span> New Special Event</a></span></h1>
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Startdate</th>
-                <th>Enddate</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('hoursevent_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>{% if entity.startDate %}{{ entity.startDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.endDate %}{{ entity.endDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('hoursevent_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('hoursevent_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-9">
+            <table class="table table-striped table-responsive records_list">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{{ entity.name }}</td>
+                        <td>{% if entity.startDate %}{{ entity.startDate|date('m/d/Y') }}{% endif %}</td>
+                        <td>{% if entity.endDate %}{{ entity.endDate|date('m/d/Y') }}{% endif %}</td>
+                        <td>
+                            {% if is_granted('ROLE_HOURS_EDIT', entity) %}
+                                <a class="badge" href="{{ path('hoursevent_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_HOURS_VIEW', entity) %}
+                                <a class="badge" href="{{ path('hoursevent_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Show</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

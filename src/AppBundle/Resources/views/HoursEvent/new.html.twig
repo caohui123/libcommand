@@ -1,12 +1,14 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library Hours: Special Events{% endblock %}
 {% block body -%}
     <h1 class="page-header">New Special Event</h1>
     <span><a class="btn btn-sm btn-primary" href="{{ path('hoursevent') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to event list</a></span>
     <blockquote>
         <p>Special events must have a starting and ending date. Should you decide later to amend the starting and ending date of a special event, please be aware that any special hours set outside of the new date range will be <mark>deleted</mark>. The same goes for any events that are deleted outright.</p>
     </blockquote>
-    
-    {{ form(form) }}
-</ul>
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="well well-lg">{{ form(form) }}</div>
+      </div>
+    </div>
 {% endblock %}

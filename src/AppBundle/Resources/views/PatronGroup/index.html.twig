@@ -1,41 +1,32 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Patron Groups{% endblock %}
 {% block body -%}
-    <h1>PatronGroup list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Group Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('admin_patrongroup_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('admin_patrongroup_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_patrongroup_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('admin_patrongroup_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+    <h1 class="page-header">Patron Groups 
+        {% if is_granted('ROLE_ADMIN') %}
+         <span><a class="btn btn-sm btn-primary" href="{{ path('admin_patrongroup_new') }}"><span class="glyphicon glyphicon-plus"></span> New Group</a></span>
+        {% endif %}
+    </h1>            
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Group Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>
+                            {{ entity.name }}
+                            {% if is_granted('ROLE_ADMIN', entity) %}
+                                <a class="badge" href="{{ path('admin_patrongroup_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% endif %}
+                        </td>        
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endblock %}

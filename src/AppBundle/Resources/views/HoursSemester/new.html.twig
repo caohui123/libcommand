@@ -1,17 +1,16 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library Hours: Semesters{% endblock %}
 {% block body -%}
-    <h1>HoursSemester creation</h1>
-
-    {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('hourssemester') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <h1 class="page-header">New Semester</h1>
+    <span><a class="btn btn-sm btn-primary" href="{{ path('hourssemester') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to semester list</a></span>
+    <blockquote>
+        <p>Semesters must have a starting and ending date. For each area, you will be able to set <mark>regular</mark> hours for the entire semester. Special hours are taken care of through the Special Events feature.</p>
+    </blockquote>
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="well well-lg">{{ form(form) }}</div>
+      </div>
+    </div>
 {% endblock %}
 {% block documentReady %}
     $('#appbundle_hourssemester_season, #appbundle_hourssemester_year').on('change', function(){
