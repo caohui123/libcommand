@@ -1,0 +1,19 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
+{% if form.patronFirstName is defined %}
+  Dear {{ form.patronFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+
+<h1>Thank you for reporting a problem with FindText+.</h1> 
+<p>If your feedback requires a response, you should receive one shortly.</p>
+
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Your Feedback</strong></caption>
+  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Issue</td><td align="right">{{ form.comment }}</td></tr>
+</table>
+
+{% endblock %}

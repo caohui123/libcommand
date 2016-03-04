@@ -31,6 +31,11 @@ feedback:
     resource: AppBundle\Controller\FeedbackRestController
     prefix: /api/
     
+findtext:
+    type: rest
+    resource: AppBundle\Controller\FindTextRestController
+    prefix: /api/
+    
 hours:
     type: rest
     resource: AppBundle\Controller\HoursRestController
@@ -41,14 +46,15 @@ materialpurchaserequest:
     resource: AppBundle\Controller\MaterialPurchaseRequestRestController
     prefix: /api/
     
+materialreserve:
+    type: rest
+    resource: AppBundle\Controller\MaterialReserveRestController
+    prefix: /api/
+    
 news:
     type: rest
     resource: AppBundle\Controller\NewsRestController
     prefix: /api/
     
-materialreserve:
-    type: rest
-    resource: AppBundle\Controller\MaterialReserveRestController
-    prefix: /api/
     
 

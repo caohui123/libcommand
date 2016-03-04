@@ -139,7 +139,7 @@ class MaterialPurchaseRequestType extends AbstractType
             }  
         });
         
-        //Make sure the facultyEmail field contains an emich email address!
+        //Make sure the patronEmail field contains an emich email address!
         $emailValidator = function(FormEvent $event){
             $request = $event->getData();
             $form = $event->getForm();

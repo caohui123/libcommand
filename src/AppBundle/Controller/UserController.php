@@ -275,6 +275,8 @@ class UserController extends Controller
         $service->updatePermissions($entity, $formData['material_reserve'], $formData['material_reserve_previous']);
         //NEWS
         $service->updatePermissions($entity, $formData['news'], $formData['news_previous']);
+        //FINDTEXT+
+        $service->updatePermissions($entity, $formData['findtext'], $formData['findtext_previous']);
         
         //redirect to the Edit screen for the given user
         return $this->redirect($this->generateUrl('user_edit', array('id' => $userId)));
@@ -317,6 +319,8 @@ class UserController extends Controller
         $materialreserve_permission = $service->generateViewEditDelete($user, 'ROLE_MATERIALRESERVE');
         //NEWS
         $news_permission = $service->generateViewEditDelete($user, 'ROLE_NEWS');
+        //FINDTEXT+
+        $findtext_permission = $service->generateViewEditDelete($user, 'ROLE_FINDTEXT');
         
         $data = array();
         $form = $this->get('form.factory')->createNamedBuilder('user_permission_form', 'form', $data, array(
@@ -509,6 +513,23 @@ class UserController extends Controller
             ->add('news_previous', 'hidden', array(
               //need to know the previous permission level so we can remove it and replace it with the new one.
               'data' => $news_permission
+            ))
+            //FINDTEXT+
+            ->add('findtext', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_FINDTEXT_VIEW'=> 'View',
+                'ROLE_FINDTEXT_EDIT'=> 'Edit',
+                'ROLE_FINDTEXT_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $findtext_permission
+            ))
+            ->add('findtext_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $findtext_permission
             ))
             //user's ID (send along to createEditForm action)
             ->add('userId', 'hidden', array(

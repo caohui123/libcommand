@@ -1,0 +1,37 @@
+{% extends '::base.html.twig' %}
+{% block title %}FindText+ Problems{% endblock %}
+{% block body -%}
+    <h1 class="page-header">FindText+ Problems</h1>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Submitted</th>
+                        <th>Patron Name</th>
+                        <th>Patron Email</th>
+                        <th>Excerpt</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{% if entity.created %}{{ entity.created|date('n/j/y g:i A') }}{% endif %}</td>
+                        <td>{{ entity.patronFirstName }} {{ entity.patronLastName }}</td>
+                        <td>{{ entity.patronEmail }}</td>
+                        <td>{{ entity.comment|slice(0, 50) }}...</td>
+                        <td>
+                            {% if is_granted('ROLE_FINDTEXT_EDIT', entity) %}
+                                <a class="badge" href="{{ path('findtext_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_FINDTEXT_VIEW', entity) %}
+                                <a class="badge" href="{{ path('findtext_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endblock %}
