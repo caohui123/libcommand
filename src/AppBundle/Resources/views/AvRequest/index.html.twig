@@ -32,7 +32,7 @@
                             {% if entity.facultyLastName %}{{ entity.facultyLastName }}{% endif %}
                         </td>
                         <td>{% if entity.status %}{{ entity.status }}{% endif %}</td>
-                        <td>{% if entity.replyDate is not null %}<span class="glyphicon glyphicon-ok-sign"></span>{% endif %}</td>
+                        <td>{% if entity.replyDate is not null %}<span class="glyphicon glyphicon-ok-sign text-success"></span>{% endif %}</td>
                         <td>
                             {% if is_granted('ROLE_AV_EDIT', entity) %}
                                 <a class="badge" href="{{ path('avrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>

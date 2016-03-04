@@ -1,40 +1,31 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
 {% if form.facultyFirstName is defined %}
   Dear {{ form.facultyFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
 
-<h3>Thank you for your Extended Privilege Request.</h3><br>
-
-    <h4>General Information</h4>
-    <dl>
-      <dt>Request Submission</dt>
-      <dd>{{ form.created|date('l n/j/y g:i A') }}</dd>
-      <dt>Requested Privilege Expiration Date</dt>
-      <dd>{{ form.expirationDate|date('l n/j/y') }}</dd>
-    </dl>
-    
-    <h4>Student Information</h4>
-    <dl>
-      <dt>Name</dt>
-      <dd>{{ form.studentFirstName }} {{ form.studentLastName }}</dd>
-      <dt>E-Number</dt>
-      <dd>{{ form.studentEnumber }}</dd>
-      <dt>Emich Email</dt>
-      <dd>{{ form.studentEmail }}</dd>
-      <dt>Phone</dt>
-      <dd>{{ form.studentPhone }}</dd>
-    </dl>
-    <h4>Faculty Information</h4>
-    <dl>
-      <dt>Name</dt>
-      <dd>{{ form.facultyFirstName }} {{ form.facultyLastName }}</dd>
-      <dt>Department</dt>
-      <dd>{{ facultySubject }}</dd>
-      <dt>Emich Email</dt>
-      <dd>{{ form.facultyEmail }}</dd>
-      <dt>Phone</dt>
-      <dd>{{ form.facultyPhone }}</dd>
-    </dl>
---<br>
-This email was automatically generated from the EMU Extended Privilege Request System.
+<h1>Thank you for your Extended Privilege Request.</h1>
+<p>Here is a summary of your request.</p>
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>General Information</strong></caption>
+  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Privilege Expiration</td><td align="right">{{ form.expirationDate|date('l n/j/y') }}</td></tr>
+</table>
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Student Information</strong></caption>
+  <tr><td align="right">Name</td><td align="right">{{ form.studentFirstName }} {{ form.studentLastName }}</td></tr>
+  <tr><td align="right">E-Number</td><td align="right">{{ form.studentEnumber }}</td></tr>
+  <tr><td align="right">Emich Email</td><td align="right">{{ form.studentEmail }}</td></tr>
+  <tr><td align="right">Phone</td><td align="right">{{ form.studentPhone }}</td></tr>
+</table>
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Faculty Information</strong></caption>
+  <tr><td align="right">Name</td><td align="right">{{ form.facultyFirstName }} {{ form.facultyLastName }}</td></tr>
+  <tr><td align="right">Department</td><td align="right">{{ facultySubject }}</td></tr>
+  <tr><td align="right">Emich Email</td><td align="right">{{ form.facultyEmail }}</td></tr>
+  <tr><td align="right">Phone</td><td align="right">{{ form.facultyPhone }}</td></tr>
+</table>
+{% endblock %}

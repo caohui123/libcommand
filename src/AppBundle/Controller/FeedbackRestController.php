@@ -90,14 +90,19 @@ class FeedbackRestController extends FOSRestController{
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');
 
-            $message = \Swift_Message::newInstance()
+            $message = \Swift_Message::newInstance();
+            $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+            $message
                 ->setSubject('EMU Library Feedback Received')
                 ->setFrom('feedback@emulibrary.com')
                 ->setTo($entity->getPatronEmail())
                 ->setBody(
                     $this->renderView(
                         'AppBundle:Feedback/Emails:feedback.html.twig',
-                        array('form' => $request->request->all())
+                        array(
+                            'form' => $request->request->all(),
+                            'header_image' => $header_image
+                        )
                     ),
                     'text/html'
                 )

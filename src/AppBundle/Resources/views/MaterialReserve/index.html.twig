@@ -22,7 +22,7 @@
                 {% for entity in entities %}
                     <tr>
                         <td>{% if entity.created %}{{ entity.created|date('m/d/Y') }}{% endif %}</td>
-                        <td>{{ entity.semester }} {{ entity.year }}</td>
+                        <td>{{ entity.semester|capitalize }} {{ entity.year }}</td>
                         <td>{{ entity.instructor }}</td>
                         <td>{{ entity.course }}</td>
                         <td>

@@ -7,13 +7,13 @@
   Dear Patron,
 {% endif %}
 
-<h3>Thank you for your Book Request.</h3>
+<h1>Thank you for your Book Request.</h1>
 <p>You will be notified via email by a member of our staff when there is an update to the status of your request.</p>
 
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Request Information</strong></caption>
   <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
-  <tr style="color:"><td align="right">Needed By</td><td align="right">{{ form.usefulDate|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Needed By</td><td align="right">{{ form.usefulDate|date('l n/j/y g:i A') }}</td></tr>
   <tr><td align="right">Title</td><td align="right">{{ form.bookTitle }}</td></tr>
   <tr><td align="right">Author</td><td align="right">{{ form.bookAuthor }}</td></tr>
   <tr><td align="right">Call Number</td><td align="right">{{ form.bookCallNumber }}</td></tr>

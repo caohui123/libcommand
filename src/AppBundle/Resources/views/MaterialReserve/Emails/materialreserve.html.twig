@@ -1,10 +1,33 @@
-<h3>Thank you for your Material Reserve Submission. Below is a summary of your submission.</h3><br>
+{% extends "emailbase.html.twig" %}
 
-<strong>Submission summary:</strong><br>
-<dl>
-  <dt>Request Submission</dt>
-  <dd>{{ form.created|date('l n/j/y g:i A') }}</dd>
-</dl>
+{% block body %}
+    <h1>Thank you for your Media Reserve Submission</h1> 
+    <p>Below is a summary of your submission.</p>
+  
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>General Information</strong></caption>
+  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Semester</td><td align="right">{{ form.semester|capitalize }} {{ form.year }}</td></tr>
+  <tr><td align="right">Course/Event</td><td align="right">{{ form.course }}</td></tr>
+  <tr><td align="right">Expected Enrollment</td><td align="right">{{ form.enrollment }}</td></tr>
+</table>
 
---<br>
-This email was automatically generated from the EMU Faculty Material Reserve System.
+  <h2>Reserve Items</h2>
+{% for item in form.item %}
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>{{ item.title }}</strong></caption>
+  {% if item.author %}<tr><td align="right">Author</td><td align="right">{{ item.author }}</td></tr>{% endif %}
+  {% if item.edition %}<tr><td align="right">Edition</td><td align="right">{{ item.edition }}</td></tr>{% endif %}
+  <tr>
+      <td align="right">Circulation Period</td>
+      <td align="right">
+          {% if item.circulationHours < 24 %}
+            {{item.circulationHours}} Hours
+          {% else %}
+            {{item.circulationHours / 24}} {{ item.circulationHours == 24 ? 'Day' : 'Days' }}
+          {% endif %}
+      </td>
+  </tr>
+</table>
+{% endfor %}
+{% endblock %}

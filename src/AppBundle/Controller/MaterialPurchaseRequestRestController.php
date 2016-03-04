@@ -35,10 +35,10 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
   /**
      * Return all MediaItem entities
      */
-    public function getMaterialpurchaseMediaitemsAction(){
+    public function getMaterialpurchaseMediatypesAction(){
       $em = $this->getDoctrine()->getManager();
 
-      $entities = $em->getRepository('AppBundle:MediaItem')->findBy(array(), array('name' => 'ASC'));
+      $entities = $em->getRepository('AppBundle:MediaType')->findBy(array(), array('name' => 'ASC'));
       $serializer = $this->container->get('serializer');
       $serialized = $serializer->serialize($entities, 'json');
       $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
@@ -107,10 +107,10 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
               $department = $entity->getPatronDepartment()->getName();
             }
             
-            if(null == $entity->getMediaItem()){
-              $mediaItem = null;
+            if(null == $entity->getMediaType()){
+              $mediaType = null;
             } else {
-              $mediaItem = $entity->getMediaItem()->getName();
+              $mediaType = $entity->getMediaType()->getName();
             }
             
             if(null == $entity->getPatronGroup()){
@@ -126,7 +126,9 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
             }
 
             //send the requestor an email
-            $message = \Swift_Message::newInstance()
+            $message = \Swift_Message::newInstance();
+            $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+            $message
                   ->setSubject('Your Material Purchase Request at EMU Library')
                   ->setFrom('materialrequest@emulibrary.com')
                   ->setTo($entity->getPatronEmail())
@@ -136,9 +138,10 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
                             array(
                               'form' => $requestData,
                               'department' => $department,
-                              'mediaItem' => $mediaItem,
+                              'mediaType' => $mediaType,
                               'academicStatus' => $patronGroup,
                               'reason' => $reason,
+                              'header_image' => $header_image
                             )
                         ),
                         'text/html'

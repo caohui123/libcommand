@@ -29,7 +29,7 @@ class FeedbackController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:Feedback')->findAll();
+        $entities = $em->getRepository('AppBundle:Feedback')->findBy(array(), array('created'=>'DESC'));
 
         return array(
             'entities' => $entities,
@@ -199,7 +199,16 @@ class FeedbackController extends Controller
               $forwardeeEmail = $requestData['appbundle_feedback']['forwardedTo'];
               $user = $this->container->get('security.context')->getToken()->getUser();
               
-              $message = \Swift_Message::newInstance()
+              //get user first and last name from Staff (if no staff member associated with logged-in LDAP user, just use 'anonymous')
+              if(null !== $user->getStaffMember()){
+                $user_firstlast = $user->getStaffMember()->getFirstName() . ' ' . $user->getStaffMember()->getLastName();
+              } else {
+                $user_firstlast = 'anonymous';  
+              }
+              
+              $message = \Swift_Message::newInstance();
+              $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+              $message
                   ->setSubject('Fwd: EMU Library Feedback ' . $entity->getCreated()->format('d/m/Y'))
                   ->setFrom($user->getEmail())
                   ->setTo($forwardeeEmail)
@@ -209,7 +218,9 @@ class FeedbackController extends Controller
                             array(
                               'created' => $entity->getCreated(),
                               'body' => $entity->getBody(),
-                              'message' => $requestData['appbundle_feedback']['forwardedMessage']
+                              'message' => $requestData['appbundle_feedback']['forwardedMessage'],
+                              'header_image' => $header_image,
+                              'user_firstlast' => $user_firstlast
                             )
                         ),
                         'text/html'
@@ -225,7 +236,10 @@ class FeedbackController extends Controller
               
               //email the patron
               $patronEmail = $entity->getPatronEmail();
-              $message = \Swift_Message::newInstance()
+              
+              $message = \Swift_Message::newInstance();
+              $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+              $message
                   ->setSubject('Response to Your Feedback at EMU Library')
                   ->setFrom('feedback@emulibrary.com')
                   ->setTo($patronEmail)
@@ -236,6 +250,7 @@ class FeedbackController extends Controller
                               'created' => $entity->getCreated(),
                               'body' => $entity->getBody(),
                               'message' => $entity->getResponse(),
+                              'header_image' => $header_image
                             )
                         ),
                         'text/html'

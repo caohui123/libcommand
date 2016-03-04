@@ -1,43 +1,30 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
 {% if entity.patronFirstName is defined %}
   Dear {{ entity.patronFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
-
-<p>The item you requested for purchase (see full item information below) has a status update: </p>
-<p>{{ status }}</p>
-<br>
------<br><br><br>
-Your original request (received {{ entity.created|date('l n/j/y g:i A') }}):
-<h4>Material Information</h4>
-<dl>
-  <dt>Title</dt>
-  <dd>{{ entity.title }}</dd>
-  <dt>Author</dt>
-  <dd>{{ entity.author }}</dd>
-  <dt>ISBN</dt>
-  <dd>{{ entity.isbn }} </dd>
-  <dt>ISSN</dt>
-  <dd>{{ entity.issn }}</dd>
-  <dt>Publisher</dt>
-  <dd>{{ entity.publisher }}</dd>
-  <dt>Year</dt>
-  <dd>{{ entity.publicationYear }}</dd>
-  <dt>Edition</dt>
-  <dd>{{ entity.edition }}</dd>
-  <dt>Price</dt>
-  <dd>{{ entity.price }}</dd>
-  <dt>Media Type</dt>
-  <dd>{{ mediaType }}</dd>
-</dl>
-
-<h4>Other Information</h4>
-<dl>
-  <dt>Source</dt>
-  <dd>{{ entity.source }}</dd>
-  <dt>Reason to Add</dt>
-  <dd>{{ reason }} | {{ entity.reasonToAddExplain }} </dd>
-</dl>
-<br>
----<br>
-This Email was sent from the EMU Library Material Purchase Request System.
+<h1>Your Material Purchase Request Update</h1>
+<p>The item you requested for purchase has a status update.</p>
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Request Information</strong></caption>
+  <tr><td align="right">Title</td><td align="right">{{ entity.title }}</td></tr>
+  <tr><td align="right">Status</td><td align="right">{{ status }}</td></tr>
+</table>
+<hr>
+<h2>Your original request (received {{ entity.created|date('l n/j/y g:i A') }})</h2>
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Material Information</strong></caption>
+  <tr><td align="right">Title</td><td align="right">{{ entity.title }}</td></tr>
+  <tr><td align="right">Author</td><td align="right">{{ entity.author }}</td></tr>
+  <tr><td align="right">ISBN</td><td align="right">{{ entity.isbn }}</td></tr>
+  <tr><td align="right">ISSN</td><td align="right">{{ entity.issn }}</td></tr>
+  <tr><td align="right">Publisher</td><td align="right">{{ entity.publisher }}</td></tr>
+  <tr><td align="right">Year</td><td align="right">{{ entity.publicationYear }}</td></tr>
+  <tr><td align="right">Edition</td><td align="right">{{ entity.edition }}</td></tr>
+  <tr><td align="right">Price</td><td align="right">{{ entity.price|number_format(2,'.',',') }}</td></tr>
+  <tr><td align="right">Media Type</td><td align="right">{{ mediaType }}</td></tr>
+</table>
+{% endblock %}

@@ -1,16 +1,19 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
 {% if form.patronFirstName is defined %}
   Dear {{ form.patronFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
 
-<h3>Thank you for your valuable feedback to the EMU Library.</h3> If your feedback requires a response, you should receive one shortly.
+<h1>Thank you for your valuable feedback to the EMU Library.</h1> 
+<p>If your feedback requires a response, you should receive one shortly.</p>
 
-Request Summary:
-<ul>
-  <li>Received: {{ form.created|date('l n/j/y g:i A') }}</li>
-  <li>Feedback: {{ form.body }}</li>
-</ul>
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Your Feedback</strong></caption>
+  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Feedback</td><td align="right">{{ form.body }}</td></tr>
+</table>
 
----<br>
-This email was automatically generated from the EMU Library Patron Feedback System.
+{% endblock %}

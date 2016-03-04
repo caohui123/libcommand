@@ -1,11 +1,13 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
+<h1>In Response to Your Feedback...</h1>
 {{ message }}
-<br>
------<br><br><br>
-Your original feedback:
-<ul>
-  <li>Received: {{ created|date('l n/j/y g:i A') }}</li>
-  <li>Feedback: {{ body }}</li>
-</ul>
-<br>
----<br>
-This Email was sent from the EMU Library Patron Feedback System.
+<hr>
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Your Original Feedback</strong></caption>
+  <tr><td align="right">Received</td><td align="right">{{ created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Feedback</td><td align="right">{{ body }}</td></tr>
+</table>
+
+{% endblock %}

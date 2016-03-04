@@ -33,6 +33,10 @@ body {
   margin-left: 15px;
 }
 
+.sidebar-header{
+    padding-left: 15px;
+    font-weight: bold;
+}
 /* Hours areas drag and drop */
 #displayOrderList{cursor: move;}
 #displayOrderList li span { position: absolute; margin-left: -1.3em; }

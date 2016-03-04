@@ -50,7 +50,9 @@ class ExtendedPrivilegeRequestRestController extends FOSRestController{
             $serialized = $serializer->serialize($entity, 'json');
 
             $facultySubject = $entity->getFacultySubject()->getName();
-            $message = \Swift_Message::newInstance()
+            $message = \Swift_Message::newInstance();
+            $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+            $message
                 ->setSubject('Your Extended Privilege Request at EMU Library')
                 ->setFrom('extendedprivilege@emulibrary.com')
                 ->setTo($entity->getFacultyEmail())
@@ -59,7 +61,8 @@ class ExtendedPrivilegeRequestRestController extends FOSRestController{
                         'AppBundle:ExtendedPrivilegeRequest/Emails:extendedprivilegerequest.html.twig',
                         array(
                           'form' => $request->request->all(),
-                          'facultySubject' => $facultySubject
+                          'facultySubject' => $facultySubject,
+                          'header_image' => $header_image
                         )
                     ),
                     'text/html'

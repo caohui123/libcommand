@@ -48,8 +48,10 @@ class MaterialReserveRestController extends FOSRestController
 
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');
-          
-            $message = \Swift_Message::newInstance()
+            
+            $message = \Swift_Message::newInstance();
+            $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+            $message
                 ->setSubject('Your Material Reserve Submission at EMU Library')
                 ->setFrom('facultymaterialreserve@emulibrary.com')
                 ->setTo('cpuzzuol@emich.edu')
@@ -58,6 +60,7 @@ class MaterialReserveRestController extends FOSRestController
                         'AppBundle:MaterialReserve/Emails:materialreserve.html.twig',
                         array(
                           'form' => $formData['materialreserve'],
+                          'header_image' => $header_image
                         )
                     ),
                     'text/html'

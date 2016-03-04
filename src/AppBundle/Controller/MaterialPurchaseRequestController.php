@@ -245,7 +245,10 @@ class MaterialPurchaseRequestController extends Controller
               
               //email the patron
               $patronEmail = $entity->getPatronEmail();
-              $message = \Swift_Message::newInstance()
+              
+              $message = \Swift_Message::newInstance();
+              $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
+              $message
                   ->setSubject('Update to your material purchase request at EMU library')
                   ->setFrom('purchaserequest@emulibrary.com')
                   ->setTo($patronEmail)
@@ -256,7 +259,8 @@ class MaterialPurchaseRequestController extends Controller
                               'entity' => $entity,
                               'mediaType' => $mediaType,
                               'reason' => $reason,
-                              'status' => $entity->getStatus()->getName()
+                              'status' => $entity->getStatus()->getName(),
+                              'header_image' => $header_image
                             )
                         ),
                         'text/html'
