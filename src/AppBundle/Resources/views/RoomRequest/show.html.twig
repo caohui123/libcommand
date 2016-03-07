@@ -1,0 +1,105 @@
+{% extends '::base.html.twig' %}
+{% block title %}Faculty Room Requests{% endblock %}
+{% block body -%}
+    <h1 class="page-header">Room Request #{{entity.id}}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('roomrequest') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
+      </div>
+    </div>
+    {% if is_granted('ROLE_ROOMREQUEST_EDIT', entity) %}
+        <div class="row">
+            <div class="col-xs-12">
+                <p><a class="badge" href="{{ path('roomrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Request</a></p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <table class="table table-responsive table-striped">
+            <caption>Request Information</caption>
+            <tbody>
+                  <tr>
+                      <th>Received</th>
+                      <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+                  </tr>  
+                  <tr>
+                      <th>Reservation Date</th>
+                      <td>{{ entity.reserveDate|date('l n/j/y g:i A') }}</td>
+                  </tr>
+                  <tr>
+                      <th>Start</th>
+                      <td>{{ entity.startTime|date('H:i') }}</td>
+                  </tr>
+                  <tr>
+                      <th>End</th>
+                      <td>{{ entity.endTime|date('H:i') }}</td>
+                  </tr>
+                  <tr>
+                      <th>Room Type</th>
+                      <td>{% if entity.room %}{{entity.room}}{% endif %}</td>
+                  </tr>
+                  <tr>
+                      <th>Class/Event</th>
+                      <td>{{ entity.event }}</td>
+                  </tr>
+                  <tr>
+                      <th>Attendees</th>
+                      <td>{{ entity.attendees }}</td>
+                  </tr>
+                  <tr>
+                      <th>Equipment</th>
+                      <td>
+                          {% if entity.equipment %}
+                          <ul>
+                          {% for equipment in entity.equipment %}
+                              <li>{{equipment.name}}</li>
+                          {% endfor %}
+                          </ul>
+                          {% endif %}
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Other Details</th>
+                      <td>{{ entity.otherDetails }}</td>
+                  </tr>
+                  <tr>
+                      <th>Staff Note</th>
+                      <td>{{ entity.note }}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+            <table class="table table-responsive table-striped">
+              <caption>Faculty Information</caption>
+              <tbody>
+                  <tr>
+                      <th>First Name</th>
+                      <td>{{ entity.facultyFirstName }}</td>
+                  </tr>
+                  <tr>
+                      <th>Last Name</th>
+                      <td>{{ entity.facultyLastName }}</td>
+                  </tr>
+                  <tr>
+                      <th>Department</th>
+                      <td>{% if entity.facultySubject %}{{ entity.facultySubject }}{% endif %}</td>
+                  </tr>
+                  <tr>
+                      <th>Phone</th>
+                      <td>{{ entity.facultyPhone }}</td>
+                  </tr>
+                  <tr>
+                      <th>Email</th>
+                      <td>{{ entity.facultyEmail }}</td>
+                  </tr>
+                  <tr>
+                      <th>Training Needs</th>
+                      <td>{% if entity.isTrainingNeeded %}<p class="alert alert-success">REQUESTED<p>{% else %}<p class="alert alert-info">Not Requested{% endif %}</td>
+                  </tr>
+              </tbody>
+            </table>
+      </div>
+    </div>
+{% endblock %}

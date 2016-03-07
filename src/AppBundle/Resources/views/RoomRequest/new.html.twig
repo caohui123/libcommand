@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+{% block title %}Faculty Room Requests{% endblock %}
+{% block body -%}
+    <h1>New Room Request</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('roomrequest') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

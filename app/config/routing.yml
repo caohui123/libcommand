@@ -56,5 +56,10 @@ news:
     resource: AppBundle\Controller\NewsRestController
     prefix: /api/
     
+facultyroomrequest:
+    type: rest
+    resource: AppBundle\Controller\RoomRequestRestController
+    prefix: /api/
+    
     
 

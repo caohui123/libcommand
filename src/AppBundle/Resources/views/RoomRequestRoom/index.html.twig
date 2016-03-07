@@ -1,0 +1,37 @@
+{% extends '::base.html.twig' %}
+{% block title %}Faculty Room Request Room Types{% endblock %}
+{% block body -%}
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{ path('roomrequest') }}"><span class="glyphicon glyphicon-th-list"></span> Room Requests</a></li>
+        <li role="presentation"><a href="{{ path('roomrequestequipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
+        <li role="presentation" class="active"><a href="{{ path('roomrequestroom') }}"><span class="glyphicon glyphicon-th-large"></span> Room Types</a></li>
+    </ul>
+    <h1 class="page-header">Room Request Room Types  <span><a class="btn btn-sm btn-primary" href="{{ path('roomrequestroom_new') }}"><span class="glyphicon glyphicon-plus"></span> New Room Type</a></span></h1>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-responsive table-striped records_list">
+                <caption>Fixed Equipment</caption>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{{ entity.name }}</td>
+                        <td>
+                            {% if is_granted('ROLE_ROOMREQUEST_EDIT', entity) %}
+                                <a class="badge" href="{{ path('roomrequestroom_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_ROOMREQUEST_VIEW', entity) %}
+                                <a class="badge" href="{{ path('roomrequestroom_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endblock %}

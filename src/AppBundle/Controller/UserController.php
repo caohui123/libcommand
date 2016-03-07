@@ -277,6 +277,8 @@ class UserController extends Controller
         $service->updatePermissions($entity, $formData['news'], $formData['news_previous']);
         //FINDTEXT+
         $service->updatePermissions($entity, $formData['findtext'], $formData['findtext_previous']);
+        //(FACULTY) ROOM REQUEST
+        $service->updatePermissions($entity, $formData['roomrequest'], $formData['roomrequest_previous']);
         
         //redirect to the Edit screen for the given user
         return $this->redirect($this->generateUrl('user_edit', array('id' => $userId)));
@@ -321,6 +323,8 @@ class UserController extends Controller
         $news_permission = $service->generateViewEditDelete($user, 'ROLE_NEWS');
         //FINDTEXT+
         $findtext_permission = $service->generateViewEditDelete($user, 'ROLE_FINDTEXT');
+        //(FACULTY) ROOM REQUEST
+        $roomrequest_permission = $service->generateViewEditDelete($user, 'ROLE_ROOMREQUEST');
         
         $data = array();
         $form = $this->get('form.factory')->createNamedBuilder('user_permission_form', 'form', $data, array(
@@ -530,6 +534,23 @@ class UserController extends Controller
             ->add('findtext_previous', 'hidden', array(
               //need to know the previous permission level so we can remove it and replace it with the new one.
               'data' => $findtext_permission
+            ))
+            //(FACULTY) ROOM REQUEST
+            ->add('roomrequest', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_ROOMREQUEST_VIEW'=> 'View',
+                'ROLE_ROOMREQUEST_EDIT'=> 'Edit',
+                'ROLE_ROOMREQUEST_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'data' => $roomrequest_permission
+            ))
+            ->add('roomrequest_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $roomrequest_permission
             ))
             //user's ID (send along to createEditForm action)
             ->add('userId', 'hidden', array(

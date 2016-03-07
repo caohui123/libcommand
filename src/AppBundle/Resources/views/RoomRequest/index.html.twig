@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+{% block title %}Faculty Room Requests{% endblock %}
+{% block body %}
+    <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="{{ path('roomrequest') }}"><span class="glyphicon glyphicon-th-list"></span> Room Requests</a></li>
+        <li role="presentation"><a href="{{ path('roomrequestequipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
+        <li role="presentation"><a href="{{ path('roomrequestroom') }}"><span class="glyphicon glyphicon-th-large"></span> Room Types</a></li>
+    </ul>
+    <h1 class="page-header">Faculty Room Requests</h1>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-responsive table-striped records_list">
+                <thead>
+                    <tr>
+                        <th>Reserve Date</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Faculty Name</th>
+                        <th>Need Training?</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{% if entity.reserveDate %}{{ entity.reserveDate|date('n/j/y') }}{% endif %}</td>
+                        <td>{{ entity.startTime|date('g:i A') }}</td>
+                        <td>{{ entity.endTime|date('g:i A') }}</td>
+                        <td>{{ entity.facultyFirstName }} {{ entity.facultyLastName }}</td>
+                        <td>{% if entity.isTrainingNeeded %}<span class="label label-danger">YES</span>{% else %}<span class="label label-default">No</span>{% endif %}</td>
+                        <td>
+                            {% if is_granted('ROLE_ROOMREQUEST_EDIT', entity) %}
+                                <a class="badge" href="{{ path('roomrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                            {% elseif is_granted('ROLE_ROOMREQUEST_VIEW', entity) %}
+                                <a class="badge" href="{{ path('roomrequest_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endblock %}

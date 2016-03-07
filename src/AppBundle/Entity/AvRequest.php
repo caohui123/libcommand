@@ -500,7 +500,7 @@ class AvRequest
      *
      * @return AvRequest
      */
-    public function setFacultySubject(LiaisonSubject $liaisonSubject)
+    public function setFacultySubject(LiaisonSubject $liaisonSubject = null)
     {
         $this->facultySubject = $liaisonSubject;
 
