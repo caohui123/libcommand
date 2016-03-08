@@ -1,0 +1,13 @@
+{% extends "emailbase.html.twig" %}
+
+{% block body %}
+{% if entity.facultyFirstName is defined %}
+  Dear {{ entity.facultyFirstName }},
+{% else %}
+  Dear Patron,
+{% endif %}
+
+<h1>Thank you for your Room Request.</h1>
+<p>You will be notified via email by a member of our staff when there is an update to the status of your request.</p>
+{{ entity.created|date('l n/j/y g:i A') }}
+{% endblock %}

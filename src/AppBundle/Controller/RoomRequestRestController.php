@@ -10,6 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Entity\RoomRequest;
+use AppBundle\Form\RoomRequestType;
 
 class RoomRequestRestController extends FOSRestController{
 
@@ -33,7 +35,7 @@ class RoomRequestRestController extends FOSRestController{
     public function getRoomrequestFixedequipmentAction(){
       $em = $this->getDoctrine()->getManager();
 
-      $entities = $em->getRepository('AppBundle:AvRequestEquipment')->findBy(array('isMobile'=>false), array('name' => 'ASC'));
+      $entities = $em->getRepository('AppBundle:RoomRequestEquipment')->findBy(array('isMobile'=>false), array('name' => 'ASC'));
       $serializer = $this->container->get('serializer');
       $serialized = $serializer->serialize($entities, 'json');
       $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
@@ -47,7 +49,21 @@ class RoomRequestRestController extends FOSRestController{
     public function getRoomrequestMobileequipmentAction(){
       $em = $this->getDoctrine()->getManager();
 
-      $entities = $em->getRepository('AppBundle:AvRequestEquipment')->findBy(array('isMobile'=>true), array('name' => 'ASC'));
+      $entities = $em->getRepository('AppBundle:RoomRequestEquipment')->findBy(array('isMobile'=>true), array('name' => 'ASC'));
+      $serializer = $this->container->get('serializer');
+      $serialized = $serializer->serialize($entities, 'json');
+      $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+
+      return $response;
+    }
+    
+    /**
+     * Return all room types
+     */
+    public function getRoomrequestRoomtypesAction(){
+      $em = $this->getDoctrine()->getManager();
+
+      $entities = $em->getRepository('AppBundle:RoomRequestRoom')->findBy(array(), array('name' => 'ASC'));
       $serializer = $this->container->get('serializer');
       $serialized = $serializer->serialize($entities, 'json');
       $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
@@ -59,19 +75,31 @@ class RoomRequestRestController extends FOSRestController{
      * Handle an AV Request from the library website
      */
     public function postRoomrequestAction(Request $request){
-        $entity = new AvRequest();
+        $entity = new RoomRequest();
         
         $formData = $request->request->all();
         
-        /* Forms on client side must follow naming format of 'avrequest[formfieldname]' */
-        $form = $this->get('form.factory')->createNamed('avrequest', new AvRequestType(), $entity);
+        /* Forms on client side must follow naming format of 'roomrequest[formfieldname]' */
+        $form = $this->get('form.factory')->createNamed('roomrequest', new RoomRequestType(), $entity);
         $form->handleRequest($request);
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             
-            $status = $em->getRepository('AppBundle:AvRequestStatus')->findOneBy(array('name' => 'pending'));
-            $entity->setStatus($status); //set status to 'Pending'
+            foreach($requestData['roomrequest']['fixedEquipment'] as $equipment){
+                $fixedEquipment = $em->getRepository('AppBundle:RoomRequestEquipment')->find($equipment);
+                if(!$fixedEquipment){
+                    throw $this->createNotFoundException('RoomRequestEquipment entity not found.');
+                }
+                $entity->addEquipment($fixedEquipment);
+            }
+            foreach($requestData['roomrequest']['mobileEquipment'] as $equipment){
+                $mobileEquipment = $em->getRepository('AppBundle:RoomRequestEquipment')->find($equipment);
+                if(!$mobileEquipment){
+                    throw $this->createNotFoundException('RoomRequestEquipment entity not found.');
+                }
+                $entity->addEquipment($mobileEquipment);
+            }
             
             $em->persist($entity);
             $em->flush();
@@ -79,41 +107,17 @@ class RoomRequestRestController extends FOSRestController{
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');
             
-            /*
-            // creating the ACL
-            $aclProvider = $this->get('security.acl.provider');
-            $objectIdentity = ObjectIdentity::fromDomainObject($entity);
-            $acl = $aclProvider->createAcl($objectIdentity);
-
-            // retrieving the security identity of the currently logged-in user
-            $tokenStorage = $this->get('security.token_storage');
-            $users = $em->getRepository('AppBundle:User')->findAll();
-            
-            //$tokenStorage->getToken()->getUser();
-            foreach($users as $user){
-              $securityIdentity = UserSecurityIdentity::fromAccount($user);
-              
-              // grant owner access based on owner's overall permissions for this type of entity
-              $acl->insertObjectAce($securityIdentity, 0);
-              $aclProvider->updateAcl($acl);
-            }
-            */
-            
-            $facultySubject = $entity->getFacultySubject()->getName();
             $message = \Swift_Message::newInstance();
             $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
             $message
                 ->setSubject('Your Audio/Visual Request at EMU Library')
-                ->setFrom(array('avrequest@emulibrary.com' => 'EMU Library'))
+                ->setFrom(array('noreply@emulibrary' => 'EMU Library'))
                 ->setTo($entity->getFacultyEmail())
                 ->setBody(
                     $this->renderView(
-                        'AppBundle:AvRequest/Emails:avrequest.html.twig',
+                        'AppBundle:RoomRequest/Emails:roomrequest.html.twig',
                         array(
-                          'form' => $formData['avrequest'],
-                          'facultySubject' => $facultySubject,
-                          'events' => $entity->getEvent(),
-                          'equipment' => $entity->getEquipment(),
+                          'entity' => $entity,
                           'header_image' => $header_image
                         )
                     ),
@@ -122,7 +126,7 @@ class RoomRequestRestController extends FOSRestController{
             ;
             $this->get('mailer')->send($message);
             
-            return new Response($serialized, 201);
+            return new Response($serialized, 201, array('Content-Type' => 'application/json'));
         }
 
         return new Response(array(
