@@ -9,5 +9,30 @@
 
 <h1>Thank you for your Room Request.</h1>
 <p>You will be notified via email by a member of our staff when there is an update to the status of your request.</p>
-{{ entity.created|date('l n/j/y g:i A') }}
+
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Event Information</strong></caption>
+  <tr><td align="right">Event Date</td><td align="right">{{ entity.reserveDate|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Start Time</td><td align="right">{{ entity.startTime|date('g:i A') }}</td></tr>
+  <tr><td align="right">End Time</td><td align="right">{{ entity.endTime|date('g:i A') }}</td></tr>
+  <tr><td align="right">Room</td><td align="right">{{ entity.room }}</td></tr>
+  <tr><td align="right">Class/Event</td><td align="right">{{ entity.event }}</td></tr>
+  <tr><td align="right">Expected Attendance</td><td align="right">{{ entity.attendees }}</td></tr>
+  <tr><td align="right">Other Information</td><td align="right">{{ entity.otherDetails }}</td></tr>
+</table>
+<table border="0" cellpadding="10" cellspacing="1" width="100%">
+  <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Equipment</strong></caption>
+  {% if entity.equipment %}
+    {% for equipment in entity.equipment %}
+        <tr><td>{{ equipment.name }}</td></tr>
+    {% endfor %}
+    {% if entity.isTrainingNeeded %}
+        <tr><td align="right">*You requested training on this equipment.</td></tr>
+    {% else %}
+        <tr><td align="right">*You did not request training on this equipment.</td></tr>
+    {% endif %}
+  {% else %}
+      <tr><td>No equipment specified.</td></tr>
+  {% endif %}
+</table>
 {% endblock %}

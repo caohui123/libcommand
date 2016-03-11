@@ -77,7 +77,7 @@ class RoomRequestRestController extends FOSRestController{
     public function postRoomrequestAction(Request $request){
         $entity = new RoomRequest();
         
-        $formData = $request->request->all();
+        $requestData = $request->request->all();
         
         /* Forms on client side must follow naming format of 'roomrequest[formfieldname]' */
         $form = $this->get('form.factory')->createNamed('roomrequest', new RoomRequestType(), $entity);
@@ -86,19 +86,12 @@ class RoomRequestRestController extends FOSRestController{
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             
-            foreach($requestData['roomrequest']['fixedEquipment'] as $equipment){
-                $fixedEquipment = $em->getRepository('AppBundle:RoomRequestEquipment')->find($equipment);
-                if(!$fixedEquipment){
+            foreach($requestData['roomrequest']['equipment'] as $equipment){
+                $addedEquipment = $em->getRepository('AppBundle:RoomRequestEquipment')->find($equipment);
+                if(!$addedEquipment){
                     throw $this->createNotFoundException('RoomRequestEquipment entity not found.');
                 }
-                $entity->addEquipment($fixedEquipment);
-            }
-            foreach($requestData['roomrequest']['mobileEquipment'] as $equipment){
-                $mobileEquipment = $em->getRepository('AppBundle:RoomRequestEquipment')->find($equipment);
-                if(!$mobileEquipment){
-                    throw $this->createNotFoundException('RoomRequestEquipment entity not found.');
-                }
-                $entity->addEquipment($mobileEquipment);
+                $entity->addEquipment($addedEquipment);
             }
             
             $em->persist($entity);
@@ -110,7 +103,7 @@ class RoomRequestRestController extends FOSRestController{
             $message = \Swift_Message::newInstance();
             $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));
             $message
-                ->setSubject('Your Audio/Visual Request at EMU Library')
+                ->setSubject('Your Room Request at EMU Library')
                 ->setFrom(array('noreply@emulibrary' => 'EMU Library'))
                 ->setTo($entity->getFacultyEmail())
                 ->setBody(
@@ -126,12 +119,13 @@ class RoomRequestRestController extends FOSRestController{
             ;
             $this->get('mailer')->send($message);
             
-            return new Response($serialized, 201, array('Content-Type' => 'application/json'));
+            return new Response($serialized, 201);
         }
 
         return new Response(array(
             'errors' => $this->getFormErrors($form)
         ), 400);
+       
     }
     protected function getFormErrors(\Symfony\Component\Form\Form $form)
     {

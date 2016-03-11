@@ -126,7 +126,7 @@ class RoomRequest
     /**
      * @ORM\ManyToMany(targetEntity="RoomRequestEquipment", inversedBy="roomrequest")
      * @ORM\JoinTable(name="roomrequests_equipment",
-     *      joinColumns={@ORM\JoinColumn(name="roomrequest_id", referencedColumnName="id", onDelete="cascade")},
+     *      joinColumns={@ORM\JoinColumn(name="roomrequest_id", referencedColumnName="id", onDelete="cascade", nullable=true)},
      *      inverseJoinColumns={@ORM\JoinColumn(name="equipment_id", referencedColumnName="id", onDelete="cascade")},
      *      )
      */

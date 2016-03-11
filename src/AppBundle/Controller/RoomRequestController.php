@@ -37,10 +37,10 @@ class RoomRequestController extends Controller
     }
     /**
      * Creates a new RoomRequest entity.
-     *
-     * @Route("/", name="roomrequest_create")
-     * @Method("POST")
-     * @Template("AppBundle:RoomRequest:new.html.twig")
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
+     * //@Route("/", name="roomrequest_create")
+     * //@Method("POST")
+     * //@Template("AppBundle:RoomRequest:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -101,10 +101,10 @@ class RoomRequestController extends Controller
 
     /**
      * Displays a form to create a new RoomRequest entity.
-     *
-     * @Route("/new", name="roomrequest_new")
-     * @Method("GET")
-     * @Template()
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
+     * //@Route("/new", name="roomrequest_new")
+     * //@Method("GET")
+     * //@Template()
      */
     public function newAction()
     {

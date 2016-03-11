@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use AppBundle\Form\RoomRequestRoomType;
+use AppBundle\Form\RoomRequestEquipmentType;
 
 class RoomRequestType extends AbstractType
 {
@@ -33,7 +35,7 @@ class RoomRequestType extends AbstractType
             //add in these fields only if the RoomRequest is NEW
             if(!$request || null === $request->getId()){
                 $form->add('reserveDate', null, array(
-                    'widget' => 'single_text'
+                    'widget' => 'single_text',
                 ));
                 $form->add('startTime', null, array(
                     'widget' => 'single_text'
@@ -60,8 +62,8 @@ class RoomRequestType extends AbstractType
                 $form->add('attendees');
                 $form->add('facultyPhone');
                 $form->add('facultyEmail');
-                $form->add('isTrainingNeeded');
                 $form->add('otherDetails');
+                /*
                 $form->add('room', 'entity', array(
                     'class' => 'AppBundle:RoomRequestRoom',
                     'multiple' => false,
@@ -94,6 +96,17 @@ class RoomRequestType extends AbstractType
                         return $qb;
                     },
                     'mapped' => false, //fixed and mobile equipment will be added to equipment array on save
+                ));
+                 */
+                $form->add('isTrainingNeeded');
+                $form->add('room', 'entity', array(
+                    'class' => 'AppBundle:RoomRequestRoom',
+                    'multiple' => false,
+                ));
+                $form->add('equipment', 'entity', array(
+                    'class' => 'AppBundle:RoomRequestEquipment',
+                    'multiple' => true,
+                    'mapped' => false,
                 ));
             }
         });
