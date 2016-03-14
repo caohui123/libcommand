@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Access Denied{% endblock %}
+{% block body %}
+    
+    <h1 class="text-center">Insufficient Permission (403)</h1>
+    {# example security usage, see below #}
+    {% if app.user and is_granted('ROLE_UNCONFIRMED') %}
+      <h2>You have not been authenticated by an administrator yet.</h2>
+      <p>To be authenticated, contact the administrator listed below.</p>
+    {% else %}
+        <div class="row">
+            <div class="col-xs-12 text-center">
+              <p><img class="img-responsive center-block" src="{{ asset('images/you_shall_not_pass.jpg') }}" alt="Access Denied" title="Access Denied"/></p>
+              <p>But you're saying, "I really need access to this". Right? Here's who to contact:</p>
+              <p>{{ administratorName }} | {{administratorEmail}} | {{administratorPhone}}</p>
+              <p><a class="btn btn-primary btn-lg" href="{{ path("homepage") }}"><span class="glyphicon glyphicon-dashboard"></span> My Dashboard</a></p>   
+            </div>
+        </div>
+    {% endif %}
+    
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block documentReady %}
+    $('body').addClass('permission-container');
+{% endblock %}

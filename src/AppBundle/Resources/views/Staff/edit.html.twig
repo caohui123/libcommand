@@ -183,7 +183,9 @@
                 <div class="panel-footer">
                     <p>
                     {{ form_end(edit_form) }}
+                    {% if is_granted("ROLE_STAFF_DELETE") %}
                     {{ form(delete_form) }}
+                    {% endif %}
                 </div>
             </div>
       </div>

@@ -115,8 +115,6 @@ class UserController extends Controller
         $permissionForm = $this->createPermissionForm($entity);
         $permissionForm->add('submit', 'submit', array('label' => 'Update Permissions', 'attr' => array('class'=>'btn btn-sm btn-default')));
         
-        $service = $this->get('user_service');
-        
         //$fos = $this->get('fos_user.util.user_manipulator');
         //$fos->addRole($entity, 'ROLE_SUPER_ADMIN');
 

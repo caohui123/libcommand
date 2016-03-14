@@ -16,8 +16,7 @@ services:
     
     list_service:
       class: AppBundle\Resources\Services\ListService
-      arguments:
-        router: "@router"
+      arguments: [ @router, @security.authorization_checker ]
         
     email_service:
         class: AppBundle\Resources\Services\EmailService

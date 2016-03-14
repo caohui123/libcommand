@@ -29,6 +29,7 @@ framework:
     session:
         # handler_id set to null will use default session handler from php.ini
         handler_id:  ~
+        cookie_lifetime: 5400 #if 'Remember Me' not selected by user, session will last 90 minutes (5400 seconds)
     fragments:       ~
     http_method_override: true
 
@@ -38,12 +39,16 @@ twig:
     strict_variables: "%kernel.debug%"
     form_themes: 
         - bootstrap_3_layout.html.twig #tells symfony to use bootstrap 3 form themes
+    globals:
+        administratorName: "Chris Puzzuoli"
+        administratorEmail: "cpuzzuol@emich.edu"
+        administratorPhone: "7.1777"
 
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ AppBundle ]
+    bundles:        [ AppBundle, FOSUserBundle ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

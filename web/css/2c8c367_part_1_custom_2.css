@@ -40,6 +40,11 @@ body {
   }
 }
 
+/* 403 and 404 pages */
+.permission-container{
+    background: #fad65c;
+}
+
 @media (min-width: 768px) {
   .regularhours_day, .specialhours_day{
       width: 25%; 

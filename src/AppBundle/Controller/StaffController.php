@@ -27,7 +27,7 @@ class StaffController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * //@Secure(roles="ROLE_STAFF_VIEW")
+     * @Secure(roles="ROLE_STAFF_VIEW")
      */
     public function indexAction()
     {
@@ -46,7 +46,7 @@ class StaffController extends Controller
      * @Method("POST")
      * @Template("AppBundle:Staff:new.html.twig")
      * 
-     * //@Secure(roles="ROLE_STAFF_EDIT")
+     * @Secure(roles="ROLE_STAFF_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -109,7 +109,7 @@ class StaffController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * //@Secure(roles="ROLE_STAFF_EDIT")
+     * @Secure(roles="ROLE_STAFF_EDIT")
      */
     public function newAction()
     {
@@ -129,7 +129,7 @@ class StaffController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * //@Secure(roles="ROLE_STAFF_VIEW")
+     * @Secure(roles="ROLE_STAFF_VIEW")
      */
     public function showAction($id)
     {
@@ -162,7 +162,7 @@ class StaffController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * //@Secure(roles="ROLE_STAFF_EDIT")
+     * @Secure(roles="ROLE_STAFF_EDIT")
      */
     public function editAction($id)
     {
@@ -211,7 +211,7 @@ class StaffController extends Controller
      * @Method("PUT")
      * @Template("AppBundle:Staff:edit.html.twig")
      * 
-     * //@Secure(roles="ROLE_STAFF_EDIT")
+     * @Secure(roles="ROLE_STAFF_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -290,7 +290,7 @@ class StaffController extends Controller
      * @Route("/{id}", name="staff_delete")
      * @Method("DELETE")
      * 
-     * //@Secure(roles="ROLE_STAFF_DELETE")
+     * @Secure(roles="ROLE_STAFF_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

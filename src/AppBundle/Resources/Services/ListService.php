@@ -4,14 +4,17 @@ namespace AppBundle\Resources\Services;
 
 use Doctrine\ORM\EntityManager as EntityManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use AppBundle\Entity\Staff;
 
 class ListService{
   private $router;
+  private $authorizationChecker;
   
-  public function __construct(Router $router)
+  public function __construct(Router $router,  AuthorizationCheckerInterface $authorizationChecker)
   {
       $this->router = $router;
+      $this->authorizationChecker = $authorizationChecker;
   }
   
   public function staffAreasList(array $entities){    
@@ -24,7 +27,6 @@ class ListService{
       $level = $entity->getLvl();
       if($level == 0){
         $styled_list .= 
-            //'<a href="#item-'.$parent_count.'" class="list-group-item" data-toggle="collapse"><i class="glyphicon glyphicon-chevron-right"></i>'.$entity->getTitle().'</a>';
             '<li class="list-group-item">'.$entity->getTitle().'<a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
         $styled_list .= '<div class="list-group" id="item-'.$parent_count.'">';
         
@@ -74,10 +76,15 @@ class ListService{
       if($level == 0){
         $styled_list .= '
           <div class="panel panel-default">
-          <div class="panel-heading">'.$entity->getName().' <a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$entity->getId())).'">Edit</a></div>
+          <div class="panel-heading">'.$entity->getName();
+        
+        if(true === $this->authorizationChecker->isGranted('ROLE_LIAISONSUBJECT_EDIT')){
+            $styled_list .= ' <a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
+        }
+        $styled_list .= '
+          </div>
           <div class="panel-body">
-            
-
+  
           <!-- Table -->
           <table class="table">
             <thead>
@@ -104,7 +111,11 @@ class ListService{
           $faculty_office = $child->getFacultyOffice();
           
           $styled_list .= '<tr>';
-          $styled_list .= '<td><a href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$child->getId())).'">'.$child->getName().'</a></td>';
+          $styled_list .= '<td>'.$child->getName(). ' ';
+          if(true === $this->authorizationChecker->isGranted('ROLE_LIAISONSUBJECT_EDIT')){
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
+          }
+          $styled_list .= '</td>';
           $styled_list .= '<td>'.$primary_liaison.'</td>';
           $styled_list .= '<td>'.$secondary_liaison.'</td>';
           $styled_list .= '<td>'.$phone.'</td>';
@@ -123,7 +134,11 @@ class ListService{
             $faculty_office = $grandchild->getFacultyOffice();
             
             $styled_list .= '<tr>';
-            $styled_list .= '<td><span class="glyphicon glyphicon-chevron-up"></span> <a href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$grandchild->getId())).'">'.$grandchild->getName().'</a></td>';
+            $styled_list .= '<td><span class="glyphicon glyphicon-chevron-up"></span> '.$grandchild->getName().' ';
+            if(true === $this->authorizationChecker->isGranted('ROLE_LIAISONSUBJECT_EDIT')){
+                $styled_list .= '<a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$grandchild->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
+            }
+            $styled_list .= '</td>';
             $styled_list .= '<td>'.$gc_primary_liaison.'</td>';
             $styled_list .= '<td>'.$gc_secondary_liaison.'</td>';
             $styled_list .= '<td>'.$phone.'</td>';
@@ -244,7 +259,12 @@ class ListService{
       $name = $liaison->getLastName(). ', '. $liaison->getFirstName();
       $id = $liaison->getId();
 
-      $package = '<a href="'.$this->router->generate('staff_show', array('id'=>$id)).'">'.$name.'</a>';
+      
+      if(true === $this->authorizationChecker->isGranted('ROLE_STAFF_VIEW')){
+        $package = '<a href="'.$this->router->generate('staff_show', array('id'=>$id)).'">'.$name.'</a>';
+      } else {
+        $package = $name;  
+      }
     };
     
     return $package;

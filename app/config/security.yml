@@ -11,8 +11,12 @@ security:
           form_login:
               always_use_default_target_path: true
               default_target_path: /profile
+              require_previous_session: false #tutorial: https://www.codereviewvideos.com/course/getting-started-with-fosuserbundle/video/adding-remember-me-functionality-to-fosuserbundle
           logout:     true
           anonymous:  true
+          remember_me:
+              key:      "%secret%"
+              lifetime: 86400 #1 Day 
     
     # Preserve plain text password in token for refresh the user.
     # Analyze the security considerations before turn off this setting.
@@ -48,7 +52,7 @@ security:
     role_hierarchy:
         #General
         ROLE_UNCONFIRMED:  ~
-        ROLE_USER:         ROLE_UNCONFIRMED
+        ROLE_USER:         ~
         ROLE_ADMIN:        ROLE_USER
         ROLE_SUPER_ADMIN:  ROLE_ADMIN
         #LiaisonSubject
