@@ -49,7 +49,7 @@ class ExtendedPrivilegeRequestType extends AbstractType
               
               $form->add('expirationDate', 'date', array(
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd',
+                'format' => 'MM/dd/yyyy',
               ));
               $form->add('studentFirstName');
               $form->add('studentLastName');

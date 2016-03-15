@@ -50,15 +50,15 @@ class AvRequestType extends AbstractType
               
               $form->add('eventDate', 'date', array(
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd',
+                'format' => 'MM/dd/yyyy',
               ));
               $form->add('pickupDate', 'date', array(
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd HH:mm:ss',
+                'format' => 'MM/dd/yyyy HH:mm',
               ));
               $form->add('returnDate', 'date', array(
                   'widget' => 'single_text',
-                  'format' => 'yyyy-MM-dd HH:mm:ss',
+                  'format' => 'MM/dd/yyyy HH:mm',
               ));
               //AvRequestEvent entity collection
               //tutorial: http://symfony.com/doc/2.7/cookbook/form/form_collections.html

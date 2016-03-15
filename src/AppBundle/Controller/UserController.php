@@ -141,7 +141,7 @@ class UserController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class'=>'btn btn-sm btn-default')));
+        $form->add('submit', 'submit', array('label' => 'Update Association', 'attr' => array('class'=>'btn btn-sm btn-warning')));
 
         return $form;
     }
@@ -340,6 +340,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Liaison/Subject Management',
               'data' => $liaisonsubject_permission
             ))
             ->add('liaisonsubject_previous', 'hidden', array(
@@ -357,6 +358,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Audio/Visual Requests',
               'data' => $avrequest_permission
             ))
             ->add('av_request_previous', 'hidden', array(
@@ -374,6 +376,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Hours Management',
               'data' => $hours_permission
             ))
             ->add('hours_previous', 'hidden', array(
@@ -391,6 +394,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Staff Management',
               'data' => $staff_permission
             ))
             ->add('staff_previous', 'hidden', array(
@@ -408,6 +412,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Departments Management',
               'data' => $department_permission
             ))
             ->add('departments_previous', 'hidden', array(
@@ -425,6 +430,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Feedback Management',
               'data' => $feedback_permission
             ))
             ->add('feedback_previous', 'hidden', array(
@@ -442,6 +448,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Book Search Requests',
               'data' => $booksearch_permission
             ))
             ->add('book_search_request_previous', 'hidden', array(
@@ -459,6 +466,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Extended Privilege Requests',
               'data' => $extendedprivileges_permission
             ))
             ->add('extended_privileges_previous', 'hidden', array(
@@ -476,6 +484,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Material Purchase Requests',
               'data' => $materialpurchase_permission
             ))
             ->add('material_purchase_request_previous', 'hidden', array(
@@ -493,6 +502,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Faculty Material Reserve Requests',
               'data' => $materialreserve_permission
             ))
             ->add('material_reserve_previous', 'hidden', array(
@@ -510,6 +520,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'News Management',
               'data' => $news_permission
             ))
             ->add('news_previous', 'hidden', array(
@@ -527,6 +538,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'FindText+ Problems',
               'data' => $findtext_permission
             ))
             ->add('findtext_previous', 'hidden', array(
@@ -544,6 +556,7 @@ class UserController extends Controller
               'multiple' => false,
               'expanded' => true,
               'required' => true,
+              'label' => 'Faculty Room Requests',
               'data' => $roomrequest_permission
             ))
             ->add('roomrequest_previous', 'hidden', array(

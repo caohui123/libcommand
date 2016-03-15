@@ -86,6 +86,13 @@ class RoomRequestRestController extends FOSRestController{
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             
+            //set training to true or false
+            if($requestData['roomrequest']['isTrainingNeeded'] == 1){
+                $entity->setIsTrainingNeeded(1);
+            } else {
+                $entity->setIsTrainingNeeded(0);
+            }
+            
             foreach($requestData['roomrequest']['equipment'] as $equipment){
                 $addedEquipment = $em->getRepository('AppBundle:RoomRequestEquipment')->find($equipment);
                 if(!$addedEquipment){

@@ -9,8 +9,8 @@ security:
           pattern:    ^/
           fr3d_ldap:  ~
           form_login:
-              always_use_default_target_path: true
-              default_target_path: /profile
+              always_use_default_target_path: false
+              default_target_path: /  #send user to homepage after login
               require_previous_session: false #tutorial: https://www.codereviewvideos.com/course/getting-started-with-fosuserbundle/video/adding-remember-me-functionality-to-fosuserbundle
           logout:     true
           anonymous:  true

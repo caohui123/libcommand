@@ -6,7 +6,7 @@
     <h1>Library Command Center</h1>
     <p>This is the command center for all forms for the EMU Library website and intranet. You can log in using your NetID credentials. In order to obtain necessary access to forms, permission must first be given.</p>
     {% if not app.user %}
-    <p><a class="btn btn-primary btn-lg" href="#" role="button">Login &raquo;</a></p>
+    <p><a class="btn btn-primary btn-lg" href="{{path('fos_user_security_login')}}" role="button">Login &raquo;</a></p>
     {% endif %}
   </div>
 </div>
