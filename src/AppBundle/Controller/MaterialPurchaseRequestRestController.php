@@ -136,11 +136,7 @@ class MaterialPurchaseRequestRestController extends FOSRestController{
                         $this->renderView(
                             'AppBundle:MaterialPurchaseRequest/Emails:materialpurchaserequest.html.twig',
                             array(
-                              'form' => $requestData,
-                              'department' => $department,
-                              'mediaType' => $mediaType,
-                              'academicStatus' => $patronGroup,
-                              'reason' => $reason,
+                              'entity' => $entity,
                               'header_image' => $header_image
                             )
                         ),

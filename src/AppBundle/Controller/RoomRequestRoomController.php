@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\RoomRequestRoom;
 use AppBundle\Form\RoomRequestRoomType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * RoomRequestRoom controller.
@@ -24,6 +25,8 @@ class RoomRequestRoomController extends Controller
      * @Route("/", name="roomrequestroom")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class RoomRequestRoomController extends Controller
      * @Route("/", name="roomrequestroom_create")
      * @Method("POST")
      * @Template("AppBundle:RoomRequestRoom:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class RoomRequestRoomController extends Controller
      * @Route("/new", name="roomrequestroom_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class RoomRequestRoomController extends Controller
      * @Route("/{id}", name="roomrequestroom_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class RoomRequestRoomController extends Controller
      * @Route("/{id}/edit", name="roomrequestroom_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class RoomRequestRoomController extends Controller
      * @Route("/{id}", name="roomrequestroom_update")
      * @Method("PUT")
      * @Template("AppBundle:RoomRequestRoom:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +220,8 @@ class RoomRequestRoomController extends Controller
      *
      * @Route("/{id}", name="roomrequestroom_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

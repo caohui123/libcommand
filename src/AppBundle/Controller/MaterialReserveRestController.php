@@ -59,7 +59,7 @@ class MaterialReserveRestController extends FOSRestController
                     $this->renderView(
                         'AppBundle:MaterialReserve/Emails:materialreserve.html.twig',
                         array(
-                          'form' => $formData['materialreserve'],
+                          'entity' => $entity,
                           'header_image' => $header_image
                         )
                     ),

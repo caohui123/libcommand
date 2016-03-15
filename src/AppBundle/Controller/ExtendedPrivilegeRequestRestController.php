@@ -60,8 +60,7 @@ class ExtendedPrivilegeRequestRestController extends FOSRestController{
                     $this->renderView(
                         'AppBundle:ExtendedPrivilegeRequest/Emails:extendedprivilegerequest.html.twig',
                         array(
-                          'form' => $request->request->all(),
-                          'facultySubject' => $facultySubject,
+                          'entity' => $entity,
                           'header_image' => $header_image
                         )
                     ),

@@ -109,10 +109,11 @@ class AvRequestRestController extends FOSRestController{
                     $this->renderView(
                         'AppBundle:AvRequest/Emails:avrequest.html.twig',
                         array(
-                          'form' => $formData['avrequest'],
-                          'facultySubject' => $facultySubject,
-                          'events' => $entity->getEvent(),
-                          'equipment' => $entity->getEquipment(),
+                          //'form' => $formData['avrequest'],
+                          //'facultySubject' => $facultySubject,
+                          //'events' => $entity->getEvent(),
+                          //'equipment' => $entity->getEquipment(),
+                          'entity' => $entity,
                           'header_image' => $header_image
                         )
                     ),

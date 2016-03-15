@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\HoursEvent;
 use AppBundle\Form\HoursEventType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * HoursEvent controller.
@@ -24,6 +25,8 @@ class HoursEventController extends Controller
      * @Route("/", name="hoursevent")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class HoursEventController extends Controller
      * @Route("/", name="hoursevent_create")
      * @Method("POST")
      * @Template("AppBundle:HoursEvent:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class HoursEventController extends Controller
      * @Route("/new", name="hoursevent_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class HoursEventController extends Controller
      * @Route("/{id}", name="hoursevent_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class HoursEventController extends Controller
      * @Route("/{id}/edit", name="hoursevent_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class HoursEventController extends Controller
      * @Route("/{id}", name="hoursevent_update")
      * @Method("PUT")
      * @Template("AppBundle:HoursEvent:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -225,6 +238,8 @@ class HoursEventController extends Controller
      *
      * @Route("/{id}", name="hoursevent_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_HOURS_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

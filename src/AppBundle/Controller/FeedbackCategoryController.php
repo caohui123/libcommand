@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\FeedbackCategory;
 use AppBundle\Form\FeedbackCategoryType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * FeedbackCategory controller.
@@ -24,6 +25,8 @@ class FeedbackCategoryController extends Controller
      * @Route("/", name="feedbackcategory")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class FeedbackCategoryController extends Controller
      * @Route("/", name="feedbackcategory_create")
      * @Method("POST")
      * @Template("AppBundle:FeedbackCategory:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class FeedbackCategoryController extends Controller
      * @Route("/new", name="feedbackcategory_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class FeedbackCategoryController extends Controller
      * @Route("/{id}", name="feedbackcategory_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class FeedbackCategoryController extends Controller
      * @Route("/{id}/edit", name="feedbackcategory_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class FeedbackCategoryController extends Controller
      * @Route("/{id}", name="feedbackcategory_update")
      * @Method("PUT")
      * @Template("AppBundle:FeedbackCategory:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +220,8 @@ class FeedbackCategoryController extends Controller
      *
      * @Route("/{id}", name="feedbackcategory_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

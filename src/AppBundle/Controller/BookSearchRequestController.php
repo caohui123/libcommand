@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\BookSearchRequest;
 use AppBundle\Form\BookSearchRequestType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * BookSearchRequest controller.
@@ -24,6 +25,8 @@ class BookSearchRequestController extends Controller
      * @Route("/", name="booksearchrequest")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_BOOKSEARCH_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class BookSearchRequestController extends Controller
      * //@Route("/", name="booksearchrequest_create")
      * //@Method("POST")
      * //@Template("AppBundle:BookSearchRequest:new.html.twig")
+     * 
+     * //@Secure(roles="ROLE_BOOKSEARCH_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class BookSearchRequestController extends Controller
      * //@Route("/new", name="booksearchrequest_new")
      * //@Method("GET")
      * //@Template()
+     * 
+     * //@Secure(roles="ROLE_BOOKSEARCH_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class BookSearchRequestController extends Controller
      * @Route("/{id}", name="booksearchrequest_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_BOOKSEARCH_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class BookSearchRequestController extends Controller
      * @Route("/{id}/edit", name="booksearchrequest_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_BOOKSEARCH_EDIT")
      */
     public function editAction($id)
     {
@@ -179,6 +190,8 @@ class BookSearchRequestController extends Controller
      * @Route("/{id}", name="booksearchrequest_update")
      * @Method("PUT")
      * @Template("AppBundle:BookSearchRequest:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_BOOKSEARCH_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -236,6 +249,8 @@ class BookSearchRequestController extends Controller
      *
      * @Route("/{id}", name="booksearchrequest_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_BOOKSEARCH_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

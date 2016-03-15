@@ -1,8 +1,8 @@
 {% extends "emailbase.html.twig" %}
 
 {% block body %}
-{% if form.facultyFirstName is defined %}
-  Dear {{ form.facultyFirstName }},
+{% if entity.facultyFirstName is defined %}
+  Dear {{ entity.facultyFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
@@ -11,21 +11,21 @@
 <p>Here is a summary of your request.</p>
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>General Information</strong></caption>
-  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
-  <tr><td align="right">Privilege Expiration</td><td align="right">{{ form.expirationDate|date('l n/j/y') }}</td></tr>
+  <tr><td align="right">Received</td><td align="right">{{ entity.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Privilege Expiration</td><td align="right">{{ entity.expirationDate|date('l n/j/y') }}</td></tr>
 </table>
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Student Information</strong></caption>
-  <tr><td align="right">Name</td><td align="right">{{ form.studentFirstName }} {{ form.studentLastName }}</td></tr>
-  <tr><td align="right">E-Number</td><td align="right">{{ form.studentEnumber }}</td></tr>
-  <tr><td align="right">Emich Email</td><td align="right">{{ form.studentEmail }}</td></tr>
-  <tr><td align="right">Phone</td><td align="right">{{ form.studentPhone }}</td></tr>
+  <tr><td align="right">Name</td><td align="right">{{ entity.studentFirstName }} {{ entity.studentLastName }}</td></tr>
+  <tr><td align="right">E-Number</td><td align="right">{{ entity.studentEnumber }}</td></tr>
+  <tr><td align="right">Emich Email</td><td align="right">{{ entity.studentEmail }}</td></tr>
+  <tr><td align="right">Phone</td><td align="right">{{ entity.studentPhone }}</td></tr>
 </table>
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Faculty Information</strong></caption>
-  <tr><td align="right">Name</td><td align="right">{{ form.facultyFirstName }} {{ form.facultyLastName }}</td></tr>
-  <tr><td align="right">Department</td><td align="right">{{ facultySubject }}</td></tr>
-  <tr><td align="right">Emich Email</td><td align="right">{{ form.facultyEmail }}</td></tr>
-  <tr><td align="right">Phone</td><td align="right">{{ form.facultyPhone }}</td></tr>
+  <tr><td align="right">Name</td><td align="right">{{ entity.facultyFirstName }} {{ entity.facultyLastName }}</td></tr>
+  <tr><td align="right">Department</td><td align="right">{{ entity.facultySubject }}</td></tr>
+  <tr><td align="right">Emich Email</td><td align="right">{{ entity.facultyEmail }}</td></tr>
+  <tr><td align="right">Phone</td><td align="right">{{ entity.facultyPhone }}</td></tr>
 </table>
 {% endblock %}

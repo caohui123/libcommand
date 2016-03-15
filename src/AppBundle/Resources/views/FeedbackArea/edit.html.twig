@@ -9,7 +9,11 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-          <div class="well well-lg">{{ form(edit_form) }} {{ form(delete_form) }}</div>
+          <div class="well well-lg">{{ form(edit_form) }} 
+              {% if is_granted("ROLE_FEEDBACK_DELETE") %}
+              {{ form(delete_form) }}
+              {% endif %}
+          </div>    
       </div>
     </div>
 {% endblock %}

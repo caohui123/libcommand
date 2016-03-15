@@ -13,6 +13,7 @@ use AppBundle\Form\HoursAreaType;
 use AppBundle\Entity\HoursRegular;
 use AppBundle\Form\HoursRegularType;
 use AppBundle\Form\HoursSpecialType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * HoursRegular controller.
@@ -26,6 +27,8 @@ class HoursRegularController extends Controller
      *
      * @Route("/{id}", name="hoursregular_post")
      * @Method("POST")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function postAction(Request $request, $id){
         $em = $this->getDoctrine()->getManager();
@@ -79,6 +82,8 @@ class HoursRegularController extends Controller
      *
      * @Route("/bysemester", name="semester_reghours")
      * @Method("GET")
+     * 
+     * @Secure(roles="ROLE_HOURS_VIEW")
      */
     public function getHoursBySemesterAction(Request $request){
         //retreive the URL parameters

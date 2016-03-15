@@ -13,6 +13,7 @@ use AppBundle\Form\HoursSpecialType;
 use AppBundle\Form\Type\HiddenHoursAreaType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * HoursRegular controller.
@@ -74,6 +75,8 @@ class HoursSpecialController extends Controller
      *
      * @Route("/", name="hoursspecial_postcreate")
      * @Method("POST")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function postCreateAction(Request $request){
         $requestData = $request->request->all();
@@ -154,6 +157,8 @@ class HoursSpecialController extends Controller
      *
      * @Route("/{id}", name="hoursspecial_postupdate")
      * @Method("POST")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function postUpdateAction(Request $request, $id){ 
         $em = $this->getDoctrine()->getManager();
@@ -231,7 +236,7 @@ class HoursSpecialController extends Controller
      * @Route("/{id}", name="hoursspecial_delete")
      * @Method("DELETE")
      * 
-     * //@Secure(roles="ROLE_HOURS_DELETE")
+     * @Secure(roles="ROLE_HOURS_DELETE")
      */
     public function deleteAction($id)
     { 
@@ -295,6 +300,8 @@ class HoursSpecialController extends Controller
      * 
      * @Method("GET")
      * @Route("/byweek", name="specialhours_changeweek")
+     * 
+     * @Secure(roles="ROLE_HOURS_VIEW")
      */
     public function getWeekAction(Request $request){
         $date = $request->query->get('date');
@@ -333,8 +340,8 @@ class HoursSpecialController extends Controller
             
             //entity edit form
             $return['specialday_'.$dayOfWeek] = $areaService->getAreaSpecialHours($weekRange[$dayOfWeek], $area);
-            //entity delete form
-            if($specialHour){
+            //entity delete form (add only if user has DELETE permissions on hours)
+            if($specialHour && $this->get('security.authorization_checker')->isGranted('ROLE_HOURS_DELETE')){
                 $return['specialdayDelete_'.$dayOfWeek] = $areaService->getSpecialHourDeleteForm($specialHour);
             }
             

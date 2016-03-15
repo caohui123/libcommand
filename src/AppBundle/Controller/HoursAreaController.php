@@ -15,6 +15,7 @@ use AppBundle\Form\HoursRegularType;
 use AppBundle\Form\HoursSpecialType;
 use AppBundle\Resources\Services\HoursService;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * HoursArea controller.
@@ -30,6 +31,8 @@ class HoursAreaController extends Controller
      * @Route("/", name="hoursarea")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_VIEW")
      */
     public function indexAction()
     {
@@ -47,6 +50,8 @@ class HoursAreaController extends Controller
      * @Route("/", name="hoursarea_create")
      * @Method("POST")
      * @Template("AppBundle:HoursArea:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -113,6 +118,8 @@ class HoursAreaController extends Controller
      * @Route("/new", name="hoursarea_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function newAction()
     {
@@ -131,6 +138,8 @@ class HoursAreaController extends Controller
      * @Route("/{id}", name="hoursarea_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_VIEW")
      */
     public function showAction($id)
     {
@@ -156,6 +165,8 @@ class HoursAreaController extends Controller
      * @Route("/{id}/edit", name="hoursarea_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function editAction($id)
     {
@@ -221,57 +232,6 @@ class HoursAreaController extends Controller
 
         return $return;
     }
-    
-    /**
-     * 
-     * @param int $semester  The semester entity to use as criteria
-     * @param int $area      The area entity to use as criteria
-     * @param int $dayOfWeek 0-6 (Sunday-Saturday)
-     * @return $regularHoursForm
-     */
-    public function getSemesterRegularHours($semester, $area, $dayOfWeek){
-        $em = $this->getDoctrine()->getManager();
-        
-        $regularHour = $em->getRepository('AppBundle:HoursRegular')->findOneBy(array('area'=>$area, 'semester'=>$semester, 'dayOfWeek'=>$dayOfWeek));
-
-        //Help on using other Controllers as services: http://stackoverflow.com/questions/24889961/symfony-2-error-call-to-a-member-function-get-on-a-non-object
-        $hoursController = $this->get('hoursRegular_controller');
-        $regularHoursForm = $hoursController->createEditForm($regularHour);
-        
-        return $regularHoursForm->createView();
-    } 
-    
-    public function getAreaSpecialHours($date, HoursArea $area){
-        $em = $this->getDoctrine()->getManager();
-        
-        $specialHoursController = $this->get('hoursSpecial_controller');
-        $specialHour = $em->getRepository('AppBundle:HoursSpecial')->findOneBy(array('area'=>$area, 'eventDate'=> new \DateTime($date) ));
-        
-        if(!$specialHour){
-            $specialHour = new HoursSpecial();
-            $specialHoursForm = $specialHoursController->createCreateForm($specialHour, $area, new \DateTime($date));
-
-            return $specialHoursForm->createView();
-        }
-        
-        $specialHoursForm = $specialHoursController->createEditForm($specialHour, $area, new \DateTime($date));
-        
-        
-        return $specialHoursForm->createView();
-    }
-    
-    public function getSpecialHourDeleteForm(HoursSpecial $entity = null){
-        
-        //will be null if no hour exists for the given date
-        if(!$entity){
-            return null;
-        }
-        
-        $specialHoursController = $this->get('hoursSpecial_controller');
-        $specialHoursForm = $specialHoursController->createDeleteForm($entity->getId());
-        
-        return $specialHoursForm->createView();
-    }
 
     /**
     * Creates a form to edit a HoursArea entity.
@@ -300,6 +260,8 @@ class HoursAreaController extends Controller
      * @Route("/{id}", name="hoursarea_update")
      * @Method("PUT")
      * @Template("AppBundle:HoursArea:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -332,6 +294,8 @@ class HoursAreaController extends Controller
      *
      * @Route("/{id}", name="hoursarea_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_HOURS_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -380,6 +344,8 @@ class HoursAreaController extends Controller
      * 
      * @Route("/displayorder", name="displayorder_update")
      * @Method("POST")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function updateDisplayOrderAction(Request $request){
       $em = $this->getDoctrine()->getManager();
@@ -405,5 +371,70 @@ class HoursAreaController extends Controller
       $response = new Response('Area display order has been updated.', 200, array('Content-Type' => 'text/plain'));
         
       return $response;
+    }
+    
+    /**
+     * Get the regular hours for an area during a given semester on a given day of the week
+     * 
+     * @param int $semester  The semester entity to use as criteria
+     * @param int $area      The area entity to use as criteria
+     * @param int $dayOfWeek 0-6 (Sunday-Saturday)
+     * @return Form $regularHoursForm
+     */
+    public function getSemesterRegularHours($semester, $area, $dayOfWeek){
+        $em = $this->getDoctrine()->getManager();
+        
+        $regularHour = $em->getRepository('AppBundle:HoursRegular')->findOneBy(array('area'=>$area, 'semester'=>$semester, 'dayOfWeek'=>$dayOfWeek));
+
+        //Help on using other Controllers as services: http://stackoverflow.com/questions/24889961/symfony-2-error-call-to-a-member-function-get-on-a-non-object
+        $hoursController = $this->get('hoursRegular_controller');
+        $regularHoursForm = $hoursController->createEditForm($regularHour);
+        
+        return $regularHoursForm->createView();
+    } 
+    
+    /**
+     * Get the special hours for an area on a given date
+     * 
+     * @param String $date
+     * @param HoursArea $area
+     * @return Form $specialHoursForm
+     */
+    public function getAreaSpecialHours($date, HoursArea $area){
+        $em = $this->getDoctrine()->getManager();
+        
+        $specialHoursController = $this->get('hoursSpecial_controller');
+        $specialHour = $em->getRepository('AppBundle:HoursSpecial')->findOneBy(array('area'=>$area, 'eventDate'=> new \DateTime($date) ));
+        
+        if(!$specialHour){
+            $specialHour = new HoursSpecial();
+            $specialHoursForm = $specialHoursController->createCreateForm($specialHour, $area, new \DateTime($date));
+
+            return $specialHoursForm->createView();
+        }
+        
+        $specialHoursForm = $specialHoursController->createEditForm($specialHour, $area, new \DateTime($date));
+        
+        
+        return $specialHoursForm->createView();
+    }
+    
+    /**
+     * Get the special hours delete form for a SpecialHour entity
+     * 
+     * @param HoursSpecial $entity
+     * @return Form $specialHoursForm
+     */
+    public function getSpecialHourDeleteForm(HoursSpecial $entity = null){
+        
+        //will be null if no hour exists for the given date
+        if(!$entity){
+            return null;
+        }
+        
+        $specialHoursController = $this->get('hoursSpecial_controller');
+        $specialHoursForm = $specialHoursController->createDeleteForm($entity->getId());
+        
+        return $specialHoursForm->createView();
     }
 }

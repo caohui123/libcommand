@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\FeedbackArea;
 use AppBundle\Form\FeedbackAreaType;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * FeedbackArea controller.
@@ -25,6 +26,8 @@ class FeedbackAreaController extends Controller
      * @Route("/", name="feedbackarea")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_VIEW")
      */
     public function indexAction()
     {
@@ -45,6 +48,8 @@ class FeedbackAreaController extends Controller
      * @Route("/", name="feedbackarea_create")
      * @Method("POST")
      * @Template("AppBundle:FeedbackArea:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -91,6 +96,8 @@ class FeedbackAreaController extends Controller
      * @Route("/new", name="feedbackarea_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function newAction()
     {
@@ -109,6 +116,8 @@ class FeedbackAreaController extends Controller
      * @Route("/{id}", name="feedbackarea_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_VIEW")
      */
     public function showAction($id)
     {
@@ -134,6 +143,8 @@ class FeedbackAreaController extends Controller
      * @Route("/{id}/edit", name="feedbackarea_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function editAction($id)
     {
@@ -179,6 +190,8 @@ class FeedbackAreaController extends Controller
      * @Route("/{id}", name="feedbackarea_update")
      * @Method("PUT")
      * @Template("AppBundle:FeedbackArea:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -237,6 +250,8 @@ class FeedbackAreaController extends Controller
      *
      * @Route("/{id}", name="feedbackarea_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

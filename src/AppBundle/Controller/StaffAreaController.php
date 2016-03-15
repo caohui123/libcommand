@@ -13,7 +13,9 @@ use AppBundle\Resources\Services\ListService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * StaffArea controller.
+ * StaffArea controller. 
+ * 
+ * Security is controlled for all /admin/* paths by the access_control setting in security.yml.
  *
  * @Route("/admin/staffareas")
  */

@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\HoursSemester;
 use AppBundle\Form\HoursSemesterType;
 use AppBundle\Entity\HoursRegular;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * HoursSemester controller.
@@ -25,6 +26,8 @@ class HoursSemesterController extends Controller
      * @Route("/", name="hourssemester")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_VIEW")
      */
     public function indexAction()
     {
@@ -42,6 +45,8 @@ class HoursSemesterController extends Controller
      * @Route("/", name="hourssemester_create")
      * @Method("POST")
      * @Template("AppBundle:HoursSemester:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -108,6 +113,8 @@ class HoursSemesterController extends Controller
      * @Route("/new", name="hourssemester_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function newAction()
     {
@@ -126,6 +133,8 @@ class HoursSemesterController extends Controller
      * @Route("/{id}", name="hourssemester_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_VIEW")
      */
     public function showAction($id)
     {
@@ -151,6 +160,8 @@ class HoursSemesterController extends Controller
      * @Route("/{id}/edit", name="hourssemester_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function editAction($id)
     {
@@ -196,6 +207,8 @@ class HoursSemesterController extends Controller
      * @Route("/{id}", name="hourssemester_update")
      * @Method("PUT")
      * @Template("AppBundle:HoursSemester:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_HOURS_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -228,6 +241,8 @@ class HoursSemesterController extends Controller
      *
      * @Route("/{id}", name="hourssemester_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_HOURS_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

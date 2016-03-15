@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\ExtendedPrivilegeRequest;
 use AppBundle\Form\ExtendedPrivilegeRequestType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * ExtendedPrivilegeRequest controller.
@@ -24,6 +25,8 @@ class ExtendedPrivilegeRequestController extends Controller
      * @Route("/", name="extendedprivilege")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_EXTENDEDPRIVILEGES_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class ExtendedPrivilegeRequestController extends Controller
      * //@Route("/", name="extendedprivilege_create")
      * //@Method("POST")
      * //@Template("AppBundle:ExtendedPrivilegeRequest:new.html.twig")
+     * 
+     * //@Secure(roles="ROLE_EXTENDEDPRIVILEGES_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class ExtendedPrivilegeRequestController extends Controller
      * //@Route("/new", name="extendedprivilege_new")
      * //@Method("GET")
      * //@Template()
+     * 
+     * //@Secure(roles="ROLE_EXTENDEDPRIVILEGES_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class ExtendedPrivilegeRequestController extends Controller
      * @Route("/{id}", name="extendedprivilege_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_EXTENDEDPRIVILEGES_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class ExtendedPrivilegeRequestController extends Controller
      * @Route("/{id}/edit", name="extendedprivilege_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_EXTENDEDPRIVILEGES_VIEW")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class ExtendedPrivilegeRequestController extends Controller
      * @Route("/{id}", name="extendedprivilege_update")
      * @Method("PUT")
      * @Template("AppBundle:ExtendedPrivilegeRequest:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_EXTENDEDPRIVILEGES_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +220,8 @@ class ExtendedPrivilegeRequestController extends Controller
      *
      * @Route("/{id}", name="extendedprivilege_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_EXTENDEDPRIVILEGES_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

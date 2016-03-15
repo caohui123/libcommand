@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\RoomRequest;
 use AppBundle\Form\RoomRequestType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * RoomRequest controller.
@@ -24,6 +25,8 @@ class RoomRequestController extends Controller
      * @Route("/", name="roomrequest")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class RoomRequestController extends Controller
      * //@Route("/", name="roomrequest_create")
      * //@Method("POST")
      * //@Template("AppBundle:RoomRequest:new.html.twig")
+     * 
+     * //@Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -105,6 +110,8 @@ class RoomRequestController extends Controller
      * //@Route("/new", name="roomrequest_new")
      * //@Method("GET")
      * //@Template()
+     * 
+     * //@Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function newAction()
     {
@@ -123,6 +130,8 @@ class RoomRequestController extends Controller
      * @Route("/{id}", name="roomrequest_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_VIEW")
      */
     public function showAction($id)
     {
@@ -148,6 +157,8 @@ class RoomRequestController extends Controller
      * @Route("/{id}/edit", name="roomrequest_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function editAction($id)
     {
@@ -193,6 +204,8 @@ class RoomRequestController extends Controller
      * @Route("/{id}", name="roomrequest_update")
      * @Method("PUT")
      * @Template("AppBundle:RoomRequest:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -225,6 +238,8 @@ class RoomRequestController extends Controller
      *
      * @Route("/{id}", name="roomrequest_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

@@ -13,15 +13,19 @@
         <p><strong>To change the display order, drag the area boxes into their appropriate positions.</strong> The positions will be updated automatically after each drop.</p>
     </blockquote>
     <div class="row">
+      <div class="col-xs-12 col-md-5" id="alert">  
+      </div>
+    </div>
+    <div class="row">
       <div class="col-xs-12 col-md-5">
         <ul class="list-group" id="displayOrderList">
           {% for entity in entities %}
                 <li class="list-group-item" id="area_{{ entity.id }}">
-                  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span> {{ entity.name }}
+                  {% if is_granted('ROLE_HOURS_EDIT') %}<span class="ui-icon ui-icon-arrowthick-2-n-s"></span> {% endif %}{{ entity.name }}
                   {% if is_granted('ROLE_HOURS_EDIT') %}
-                      <a class="badge" href="{{ path('hoursarea_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a>
+                      <a class="badge" href="{{ path('hoursarea_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
                   {% elseif is_granted('ROLE_HOURS_VIEW') %}
-                      <a class="badge" href="{{ path('hoursarea_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Edit</span></a>
+                      <a class="badge" href="{{ path('hoursarea_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
                   {% endif %}
                 </li>
           {% endfor %}
@@ -45,9 +49,17 @@
         };
         
         $.ajax(ajaxObject)
-          .success(function(data,status,xhr){console.log(data);})
-          .fail(function(data,status,xhr){console.log(status);})
-          .always(function(data,status,xhr){console.log(status);});
+          .success(function(data,status,xhr){
+                $('#alert').html('<div class="alert alert-success" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> Areas re-ordered.</div>');
+           })
+          .fail(function(data,status,xhr){
+                if(xhr == 'Forbidden'){
+                    $('#alert').html('<div class="alert alert-warning" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> You must have edit permissions to re-order areas.</div>');
+                } else {
+                    $('#alert').html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> Error re-ordering forms. Please contact administrator.</div>');
+                }
+            })
+          .always(function(data,status,xhr){});
       }
     });
     $( "#displayOrderList" ).disableSelection();

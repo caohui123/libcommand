@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\MaterialReserve;
 use AppBundle\Form\MaterialReserveType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * MaterialReserve controller.
@@ -24,6 +25,8 @@ class MaterialReserveController extends Controller
      * @Route("/", name="materialreserve")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_VIEW")
      */
     public function indexAction()
     {
@@ -42,6 +45,8 @@ class MaterialReserveController extends Controller
      * //@Route("/", name="materialreserve_create")
      * //@Method("POST")
      * //@Template("AppBundle:MaterialReserve:new.html.twig")
+     * 
+     * //@Secure(roles="ROLE_MATERIALRESERVE_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -89,6 +94,8 @@ class MaterialReserveController extends Controller
      * //@Route("/new", name="materialreserve_new")
      * //@Method("GET")
      * //@Template()
+     * 
+     * //@Secure(roles="ROLE_MATERIALRESERVE_EDIT")
      */
     public function newAction()
     {
@@ -107,6 +114,8 @@ class MaterialReserveController extends Controller
      * @Route("/{id}", name="materialreserve_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_VIEW")
      */
     public function showAction($id)
     {
@@ -132,6 +141,8 @@ class MaterialReserveController extends Controller
      * @Route("/{id}/edit", name="materialreserve_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_EDIT")
      */
     public function editAction($id)
     {
@@ -177,6 +188,8 @@ class MaterialReserveController extends Controller
      * @Route("/{id}", name="materialreserve_update")
      * @Method("PUT")
      * @Template("AppBundle:MaterialReserve:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -209,6 +222,8 @@ class MaterialReserveController extends Controller
      *
      * @Route("/{id}", name="materialreserve_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

@@ -9,10 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\News;
 use AppBundle\Form\NewsType;
-
 use Hateoas\HateoasBuilder;
 use Hateoas\Representation\PaginatedRepresentation;
 use Hateoas\Representation\CollectionRepresentation;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * News controller.
@@ -28,6 +28,8 @@ class NewsController extends Controller
      * @Route("/", name="news")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_NEWS_VIEW")
      */
     public function indexAction()
     {
@@ -66,6 +68,8 @@ class NewsController extends Controller
      * @Route("/", name="news_create")
      * @Method("POST")
      * @Template("AppBundle:News:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_NEWS_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -113,6 +117,8 @@ class NewsController extends Controller
      * @Route("/new", name="news_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_NEWS_EDIT")
      */
     public function newAction()
     {
@@ -131,6 +137,8 @@ class NewsController extends Controller
      * @Route("/{id}", name="news_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_NEWS_VIEW")
      */
     public function showAction($id)
     {
@@ -156,6 +164,8 @@ class NewsController extends Controller
      * @Route("/{id}/edit", name="news_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_NEWS_EDIT")
      */
     public function editAction($id)
     {
@@ -201,6 +211,8 @@ class NewsController extends Controller
      * @Route("/{id}", name="news_update")
      * @Method("PUT")
      * @Template("AppBundle:News:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_NEWS_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -233,6 +245,8 @@ class NewsController extends Controller
      *
      * @Route("/{id}", name="news_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_NEWS_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

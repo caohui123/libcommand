@@ -7,6 +7,13 @@
         <p><a class="btn btn-sm btn-primary" href="{{ path('findtext') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
       </div>
     </div>
+    {% if is_granted('ROLE_FINDTEXT_EDIT', entity) %}
+        <div class="row">
+            <div class="col-xs-12">
+                <p><a class="badge" href="{{ path('findtext_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Request</a></p>
+            </div>
+        </div>
+    {% endif %}
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">

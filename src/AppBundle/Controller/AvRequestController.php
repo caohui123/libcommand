@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\AvRequest;
 use AppBundle\Form\AvRequestType;
 use AppBundle\Entity\AvRequestEvent;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * AvRequest Controller.
@@ -23,6 +24,8 @@ class AvRequestController extends Controller
      * @Route("/", name="avrequests")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_VIEW")
      */
     public function indexAction(){
       $em = $this->getDoctrine()->getManager();
@@ -40,6 +43,8 @@ class AvRequestController extends Controller
      * //@Route("/", name="avrequest_create")
      * //@Method("POST")
      * //@Template("AppBundle:AvRequest:new.html.twig")
+     * 
+     * //@Secure(roles="ROLE_AV_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -93,6 +98,8 @@ class AvRequestController extends Controller
      * //@Route("/new", name="avrequest_new")
      * //@Method("GET")
      * //@Template()
+     * 
+     * //@Secure(roles="ROLE_AV_EDIT")
      */
     public function newAction()
     {
@@ -112,6 +119,8 @@ class AvRequestController extends Controller
      * @Route("/{id}", name="avrequest_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_VIEW")
      */
     public function showAction($id)
     {
@@ -158,6 +167,8 @@ class AvRequestController extends Controller
      * @Route("/{id}/edit", name="avrequest_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_EDIT")
      */
     public function editAction($id)
     {
@@ -200,6 +211,8 @@ class AvRequestController extends Controller
      * @Route("/{id}", name="avrequest_update")
      * @Method("PUT")
      * @Template("AppBundle:AvRequest:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_AV_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -259,6 +272,8 @@ class AvRequestController extends Controller
      *
      * @Route("/{id}", name="avrequest_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_AV_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

@@ -45,7 +45,7 @@ class FindTextRestController extends FOSRestController{
                     $this->renderView(
                         'AppBundle:FindText/Emails:findtext.html.twig',
                         array(
-                            'form' => $request->request->all(),
+                            'entity' => $entity,
                             'header_image' => $header_image
                         )
                     ),

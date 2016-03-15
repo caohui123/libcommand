@@ -49,6 +49,8 @@ class LiaisonSubjectController extends Controller
      * @Route("/", name="liaisonsubject_create")
      * @Method("POST")
      * @Template("AppBundle:LiaisonSubject:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_LIAISONSUBJECT_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -95,6 +97,8 @@ class LiaisonSubjectController extends Controller
      * @Route("/new", name="liaisonsubject_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_LIAISONSUBJECT_EDIT")
      */
     public function newAction()
     {
@@ -113,6 +117,8 @@ class LiaisonSubjectController extends Controller
      * @Route("/{id}", name="liaisonsubject_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_LIAISONSUBJECT_VIEW")
      */
     public function showAction($id)
     {
@@ -138,6 +144,8 @@ class LiaisonSubjectController extends Controller
      * @Route("/{id}/edit", name="liaisonsubject_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_LIAISONSUBJECT_EDIT")
      */
     public function editAction($id)
     {
@@ -183,6 +191,8 @@ class LiaisonSubjectController extends Controller
      * @Route("/{id}", name="liaisonsubject_update")
      * @Method("PUT")
      * @Template("AppBundle:LiaisonSubject:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_LIAISONSUBJECT_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -241,6 +251,8 @@ class LiaisonSubjectController extends Controller
      *
      * @Route("/{id}", name="liaisonsubject_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_LIAISONSUBJECT_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

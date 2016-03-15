@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\MaterialPurchaseRequestReason;
 use AppBundle\Form\MaterialPurchaseRequestReasonType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * MaterialPurchaseRequestReason controller.
@@ -24,6 +25,8 @@ class MaterialPurchaseRequestReasonController extends Controller
      * @Route("/", name="materialpurchaserequestreason")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class MaterialPurchaseRequestReasonController extends Controller
      * @Route("/", name="materialpurchaserequestreason_create")
      * @Method("POST")
      * @Template("AppBundle:MaterialPurchaseRequestReason:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class MaterialPurchaseRequestReasonController extends Controller
      * @Route("/new", name="materialpurchaserequestreason_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class MaterialPurchaseRequestReasonController extends Controller
      * @Route("/{id}", name="materialpurchaserequestreason_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class MaterialPurchaseRequestReasonController extends Controller
      * @Route("/{id}/edit", name="materialpurchaserequestreason_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class MaterialPurchaseRequestReasonController extends Controller
      * @Route("/{id}", name="materialpurchaserequestreason_update")
      * @Method("PUT")
      * @Template("AppBundle:MaterialPurchaseRequestReason:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +220,8 @@ class MaterialPurchaseRequestReasonController extends Controller
      *
      * @Route("/{id}", name="materialpurchaserequestreason_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

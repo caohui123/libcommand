@@ -6,14 +6,14 @@
   
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>General Information</strong></caption>
-  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
-  <tr><td align="right">Semester</td><td align="right">{{ form.semester|capitalize }} {{ form.year }}</td></tr>
-  <tr><td align="right">Course/Event</td><td align="right">{{ form.course }}</td></tr>
-  <tr><td align="right">Expected Enrollment</td><td align="right">{{ form.enrollment }}</td></tr>
+  <tr><td align="right">Received</td><td align="right">{{ entity.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Semester</td><td align="right">{{ entity.semester|capitalize }} {{ entity.year }}</td></tr>
+  <tr><td align="right">Course/Event</td><td align="right">{{ entity.course }}</td></tr>
+  <tr><td align="right">Expected Enrollment</td><td align="right">{{ entity.enrollment }}</td></tr>
 </table>
 
   <h2>Reserve Items</h2>
-{% for item in form.item %}
+{% for item in entity.item if entity.item %}
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>{{ item.title }}</strong></caption>
   {% if item.author %}<tr><td align="right">Author</td><td align="right">{{ item.author }}</td></tr>{% endif %}

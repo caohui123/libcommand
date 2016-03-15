@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Feedback;
 use AppBundle\Form\FeedbackType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * Feedback controller.
@@ -24,6 +25,8 @@ class FeedbackController extends Controller
      * @Route("/", name="feedback")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class FeedbackController extends Controller
      * //@Route("/", name="feedback_create")
      * //@Method("POST")
      * //@Template("AppBundle:Feedback:new.html.twig")
+     * 
+     * //@Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -86,6 +91,8 @@ class FeedbackController extends Controller
      * //@Route("/new", name="feedback_new")
      * //@Method("GET")
      * //@Template()
+     * 
+     * //@Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function newAction()
     {
@@ -104,6 +111,8 @@ class FeedbackController extends Controller
      * @Route("/{id}", name="feedback_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_VIEW")
      */
     public function showAction($id)
     {
@@ -129,6 +138,8 @@ class FeedbackController extends Controller
      * @Route("/{id}/edit", name="feedback_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function editAction($id)
     {
@@ -174,6 +185,8 @@ class FeedbackController extends Controller
      * @Route("/{id}", name="feedback_update")
      * @Method("PUT")
      * @Template("AppBundle:Feedback:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -273,6 +286,8 @@ class FeedbackController extends Controller
      *
      * @Route("/{id}", name="feedback_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

@@ -9,9 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\MediaType;
 use AppBundle\Form\MediaTypeType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
- * MediaType controller.
+ * MediaType controller (for MATERIAL PURCHASE REQUESTS).
  *
  * @Route("/mediatype")
  */
@@ -24,6 +25,8 @@ class MediaTypeController extends Controller
      * @Route("/", name="mediatype")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class MediaTypeController extends Controller
      * @Route("/", name="mediatype_create")
      * @Method("POST")
      * @Template("AppBundle:MediaType:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class MediaTypeController extends Controller
      * @Route("/new", name="mediatype_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class MediaTypeController extends Controller
      * @Route("/{id}", name="mediatype_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class MediaTypeController extends Controller
      * @Route("/{id}/edit", name="mediatype_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class MediaTypeController extends Controller
      * @Route("/{id}", name="mediatype_update")
      * @Method("PUT")
      * @Template("AppBundle:MediaType:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +220,8 @@ class MediaTypeController extends Controller
      *
      * @Route("/{id}", name="mediatype_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

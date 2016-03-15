@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\MaterialPurchaseRequest;
 use AppBundle\Form\MaterialPurchaseRequestType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * MaterialPurchaseRequest controller.
@@ -24,6 +25,8 @@ class MaterialPurchaseRequestController extends Controller
      * @Route("/", name="materialpurchase")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
      */
     public function indexAction()
     {
@@ -37,10 +40,12 @@ class MaterialPurchaseRequestController extends Controller
     }
     /**
      * Creates a new MaterialPurchaseRequest entity.
-     *
-     * @Route("/", name="materialpurchase_create")
-     * @Method("POST")
-     * @Template("AppBundle:MaterialPurchaseRequest:new.html.twig")
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
+     * //@Route("/", name="materialpurchase_create")
+     * //@Method("POST")
+     * //@Template("AppBundle:MaterialPurchaseRequest:new.html.twig")
+     * 
+     * //@Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -113,10 +118,12 @@ class MaterialPurchaseRequestController extends Controller
 
     /**
      * Displays a form to create a new MaterialPurchaseRequest entity.
-     *
-     * @Route("/new", name="materialpurchase_new")
-     * @Method("GET")
-     * @Template()
+     * --ROUTE COMMENTED OUT. THIS SHOULD ONLY BE AVAILABLE THROUGH THE REST API. USE FOR TESTING ONLY!--
+     * //@Route("/new", name="materialpurchase_new")
+     * //@Method("GET")
+     * //@Template()
+     * 
+     * //@Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function newAction()
     {
@@ -135,6 +142,8 @@ class MaterialPurchaseRequestController extends Controller
      * @Route("/{id}", name="materialpurchase_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
      */
     public function showAction($id)
     {
@@ -160,6 +169,8 @@ class MaterialPurchaseRequestController extends Controller
      * @Route("/{id}/edit", name="materialpurchase_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function editAction($id)
     {
@@ -205,6 +216,8 @@ class MaterialPurchaseRequestController extends Controller
      * @Route("/{id}", name="materialpurchase_update")
      * @Method("PUT")
      * @Template("AppBundle:MaterialPurchaseRequest:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -223,19 +236,6 @@ class MaterialPurchaseRequestController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-          
-          if(null !== $entity->getMediaType()){
-            $mediaType = $entity->getMediaType()->getName();
-          } else {
-            $mediaType = '';
-          }
-          
-          if(null !== $entity->getReasonToAdd()){
-            $reason = $entity->getReasonToAdd()->getName();
-          } else {
-            $reason = '';
-          }
-          
           
             //if necessary, record the reply to the patron and the time thereof (do NOT email if status is null)
             if(isset($requestData['appbundle_materialpurchaserequest']['reply']) && trim($requestData['appbundle_materialpurchaserequest']['reply']) != '' && null !== $entity->getStatus()){
@@ -257,9 +257,6 @@ class MaterialPurchaseRequestController extends Controller
                             'AppBundle:MaterialPurchaseRequest/Emails:patronresponse.html.twig',
                             array(
                               'entity' => $entity,
-                              'mediaType' => $mediaType,
-                              'reason' => $reason,
-                              'status' => $entity->getStatus()->getName(),
                               'header_image' => $header_image
                             )
                         ),
@@ -283,6 +280,8 @@ class MaterialPurchaseRequestController extends Controller
      *
      * @Route("/{id}", name="materialpurchase_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

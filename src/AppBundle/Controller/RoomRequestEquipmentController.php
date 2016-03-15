@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\RoomRequestEquipment;
 use AppBundle\Form\RoomRequestEquipmentType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * RoomRequestEquipment controller.
@@ -24,6 +25,8 @@ class RoomRequestEquipmentController extends Controller
      * @Route("/", name="roomrequestequipment")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_VIEW")
      */
     public function indexAction()
     {
@@ -43,6 +46,8 @@ class RoomRequestEquipmentController extends Controller
      * @Route("/", name="roomrequestequipment_create")
      * @Method("POST")
      * @Template("AppBundle:RoomRequestEquipment:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -89,6 +94,8 @@ class RoomRequestEquipmentController extends Controller
      * @Route("/new", name="roomrequestequipment_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function newAction()
     {
@@ -107,6 +114,8 @@ class RoomRequestEquipmentController extends Controller
      * @Route("/{id}", name="roomrequestequipment_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_VIEW")
      */
     public function showAction($id)
     {
@@ -132,6 +141,8 @@ class RoomRequestEquipmentController extends Controller
      * @Route("/{id}/edit", name="roomrequestequipment_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function editAction($id)
     {
@@ -177,6 +188,8 @@ class RoomRequestEquipmentController extends Controller
      * @Route("/{id}", name="roomrequestequipment_update")
      * @Method("PUT")
      * @Template("AppBundle:RoomRequestEquipment:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -209,6 +222,8 @@ class RoomRequestEquipmentController extends Controller
      *
      * @Route("/{id}", name="roomrequestequipment_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

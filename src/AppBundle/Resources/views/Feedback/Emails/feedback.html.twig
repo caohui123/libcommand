@@ -1,8 +1,8 @@
 {% extends "emailbase.html.twig" %}
 
 {% block body %}
-{% if form.patronFirstName is defined %}
-  Dear {{ form.patronFirstName }},
+{% if entity.patronFirstName is defined %}
+  Dear {{ entity.patronFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
@@ -12,8 +12,8 @@
 
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Your Feedback</strong></caption>
-  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
-  <tr><td align="right">Feedback</td><td align="right">{{ form.body }}</td></tr>
+  <tr><td align="right">Received</td><td align="right">{{ entity.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Feedback</td><td align="right">{{ entity.body }}</td></tr>
 </table>
 
 {% endblock %}

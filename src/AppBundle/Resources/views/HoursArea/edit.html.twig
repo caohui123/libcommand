@@ -169,15 +169,12 @@
             .success(function(data,status,xhr) {
                     $('span.label-success, span.label-danger').remove();
                     $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>');
-                    console.log( status );
             })
             .fail(function(data,status,xhr) {
                     $('span.label-success, span.label-danger').remove();
                     $('#appbundle_hoursregular_submit', targetForm).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
-                    console.log( status );
             })
             .always(function(data,status,xhr) {
-                    console.log( status );
                     applyTimepicker();
             });
     }); 
@@ -206,8 +203,6 @@
             .fail(function(data,status,xhr) {
                     $('span.label-success, span.label-danger').remove();
                     $('#appbundle_hoursspecial_submit', targetForm).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
-                    console.log( status );
-                    console.log("dangah!");
             })
             .always(function(data,status,xhr) {
                     console.log( status );
@@ -249,18 +244,14 @@
         
         $.ajax(ajaxObject)
             .success(function(data,status,xhr) {
-                    console.log( status );
                     $('span.label-success, span.label-danger').remove();
                     $('#appbundle_hoursspecial_submit', form).after('<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>');
             })
             .fail(function(data,status,xhr) {
                     $('span.label-success, span.label-danger').remove();
                     $('#appbundle_hoursspecial_submit', form).after('<span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span>');
-                    console.log( status );
             })
             .always(function(data,status,xhr) {
-                    console.log( status );
-                    
                     /* Handle deletion of a special hour after submission */
                     $('.specialhour_delete').on('submit', function(event){
                         event.preventDefault();
@@ -314,12 +305,8 @@
                                 $('#special_hours_container').html(data); //show special hours for chosen week
                                 $('#dynamic_daterange').html(' Week of ' + $('#special_firstday').html() + ' thru ' + $('#special_lastday').html() + ' ');
                         })
-                        .fail(function(data,status,xhr) {
-                                console.log( status );
-                        })
+                        .fail(function(data,status,xhr) {})
                         .always(function(data,status,xhr) {
-                                console.log( status );
-                                
                                 /* Handle deletion of a special hour after submission */
                                 $('.specialhour_delete').on('submit', function(event){
                                     event.preventDefault();
@@ -342,11 +329,8 @@
                         });
                         
             })
-            .fail(function(data,status,xhr) {
-                    console.log( status );
-            })
+            .fail(function(data,status,xhr) {})
             .always(function(data,status,xhr) {
-                    console.log( status );
                     applyTimepicker();
             });
     };

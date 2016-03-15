@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\MaterialReserveMedia;
 use AppBundle\Form\MaterialReserveMediaType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * MaterialReserveMedia controller.
@@ -24,6 +25,8 @@ class MaterialReserveMediaController extends Controller
      * @Route("/", name="materialreservemedia")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class MaterialReserveMediaController extends Controller
      * @Route("/", name="materialreservemedia_create")
      * @Method("POST")
      * @Template("AppBundle:MaterialReserveMedia:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class MaterialReserveMediaController extends Controller
      * @Route("/new", name="materialreservemedia_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class MaterialReserveMediaController extends Controller
      * @Route("/{id}", name="materialreservemedia_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class MaterialReserveMediaController extends Controller
      * @Route("/{id}/edit", name="materialreservemedia_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_EDIT")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class MaterialReserveMediaController extends Controller
      * @Route("/{id}", name="materialreservemedia_update")
      * @Method("PUT")
      * @Template("AppBundle:MaterialReserveMedia:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +220,8 @@ class MaterialReserveMediaController extends Controller
      *
      * @Route("/{id}", name="materialreservemedia_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

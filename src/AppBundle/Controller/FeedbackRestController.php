@@ -100,7 +100,7 @@ class FeedbackRestController extends FOSRestController{
                     $this->renderView(
                         'AppBundle:Feedback/Emails:feedback.html.twig',
                         array(
-                            'form' => $request->request->all(),
+                            'entity' => $entity,
                             'header_image' => $header_image
                         )
                     ),

@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table()
  * @ORM\Entity
- * @UniqueEntity(fields={"staffId"}, message="A feedback category with that name already exists.")
+ * @UniqueEntity(fields={"name"}, message="A feedback category with that name already exists.")
  */
 class FeedbackCategory
 {

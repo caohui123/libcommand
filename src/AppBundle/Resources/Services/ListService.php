@@ -27,7 +27,7 @@ class ListService{
       $level = $entity->getLvl();
       if($level == 0){
         $styled_list .= 
-            '<li class="list-group-item">'.$entity->getTitle().'<a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
+            '<li class="list-group-item"><strong>'.$entity->getTitle().'</strong><a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
         $styled_list .= '<div class="list-group" id="item-'.$parent_count.'">';
         
         
@@ -172,8 +172,13 @@ class ListService{
       $level = $entity->getLvl();
       if($level == 0){
         $styled_list .= 
-            '<li class="list-group-item"><strong>'.$entity->getName().'</strong> <a class="badge" href="'.$this->router->generate('department_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span>Edit</span></a></li>';
-        $styled_list .= '<div class="list-group" id="item-'.$parent_count.'">';
+            '<li class="list-group-item"><strong>'.$entity->getName().'</strong>';
+        if(true === $this->authorizationChecker->isGranted('ROLE_DEPARTMENTS_EDIT')){
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a>';
+        } else {
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_show', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-eye-open"></span> Show</span></a>';
+        }
+        $styled_list .= '</li><div class="list-group" id="item-'.$parent_count.'">';
         
         
         //Children (Level 2)
@@ -182,8 +187,14 @@ class ListService{
         $child_count = 0;
         foreach($children as $child){
           $styled_list .= 
-              '<li class="list-group-item">'.$child->getName().'<a class="badge" href="'.$this->router->generate('department_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span>Edit</span></a></li>';
-          $styled_list .= '<div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'">';
+              '<li class="list-group-item">'.$child->getName();
+          if(true === $this->authorizationChecker->isGranted('ROLE_DEPARTMENTS_EDIT')){
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a>';
+          } else {
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_show', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-eye-open"></span> Show</span></a>';
+          }
+
+          $styled_list .= '</li><div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'">';
           
           $styled_list .= '</div>';
           $child_count++;
@@ -207,9 +218,13 @@ class ListService{
     foreach($entities as $entity){
       $level = $entity->getLvl();
       if($level == 0){
-        $styled_list .= 
-            '<a href="#item-'.$parent_count.'" class="list-group-item" data-toggle="collapse">'.$entity->getName().'<span class="badge" onclick="location.href=\''.$this->router->generate('feedbackarea_edit', array('id'=>$entity->getId())).'\'">Edit</span></a>';
-        $styled_list .= '<div class="list-group" id="item-'.$parent_count.'">';
+        $styled_list .= '<li class="list-group-item"><strong>'.$entity->getName().'</strong>';
+        if(true === $this->authorizationChecker->isGranted('ROLE_FEEDBACK_EDIT')){
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
+          } else {
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_show', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-eye-open"></span> Show</a>';
+          }
+        $styled_list .= '</li><div class="list-group" id="item-'.$parent_count.'">';
         
         
         //Children (Level 2)
@@ -217,21 +232,25 @@ class ListService{
         
         $child_count = 0;
         foreach($children as $child){
-          $styled_list .= 
-              '<a href="#item-'.$parent_count.'-'.$child_count.'" class="list-group-item" data-toggle="collapse">'.$child->getName().'<span class="badge" onclick="location.href=\''.$this->router->generate('feedbackarea_edit', array('id'=>$child->getId())).'\'">Edit</span></a>';
-          $styled_list .= '<div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'">';
+          $styled_list .= '<li class="list-group-item">'.$child->getName();
+          if(true === $this->authorizationChecker->isGranted('ROLE_FEEDBACK_EDIT')){
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a>';
+          } else {
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_show', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-eye-open"></span> Show</span></a>';
+          }
+          $styled_list .= '</li><div class="list-group" id="item-'.$parent_count.'-'.$child_count.'">';
           
           //Grandchildren (level 3)
-          $grandchildren = $child->getChildren();
+          /*$grandchildren = $child->getChildren();
           
           $grandchild_count = 0;
           foreach($grandchildren as $grandchild){
             $styled_list .= 
               '<a href="#" class="list-group-item">'.$grandchild->getName().'</a>';
-            $styled_list .= '<div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'-'.$grandchild_count.'">';
+            $styled_list .= '<div class="list-group" id="item-'.$parent_count.'-'.$child_count.'-'.$grandchild_count.'">';
             $styled_list .= '</div>';
             $grandchild_count++;
-          }
+          }*/
           
           $styled_list .= '</div>';
           $child_count++;

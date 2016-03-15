@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\AvRequestEquipment;
 use AppBundle\Form\AvRequestEquipmentType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * AvRequestEquipment controller.
@@ -24,6 +25,8 @@ class AvRequestEquipmentController extends Controller
      * @Route("/", name="avrequest_equipment")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class AvRequestEquipmentController extends Controller
      * @Route("/", name="avrequest_equipment_create")
      * @Method("POST")
      * @Template("AppBundle:AvRequestEquipment:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_AV_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class AvRequestEquipmentController extends Controller
      * @Route("/new", name="avrequest_equipment_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class AvRequestEquipmentController extends Controller
      * @Route("/{id}", name="avrequest_equipment_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class AvRequestEquipmentController extends Controller
      * @Route("/{id}/edit", name="avrequest_equipment_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_EDIT")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class AvRequestEquipmentController extends Controller
      * @Route("/{id}", name="avrequest_equipment_update")
      * @Method("PUT")
      * @Template("AppBundle:AvRequestEquipment:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_AV_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +220,8 @@ class AvRequestEquipmentController extends Controller
      *
      * @Route("/{id}", name="avrequest_equipment_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_AV_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

@@ -22,7 +22,7 @@
                         <td>{{ entity.bookAuthor }}</td>
                         <td>{{ entity.patronFirstName }} {{ entity.patronLastName }}</td>
                         <td>{{ entity.bookStatus|capitalize }}</td>
-                        <td>{% if entity.patronEmailed is not null %}<span class="glyphicon glyphicon-ok-sign"></span>{% endif %}</td>
+                        <td>{% if entity.patronEmailed is not null %}<span class="glyphicon glyphicon-ok-sign text-success"></span>{% endif %}</td>
                         <td>
                             {% if is_granted('ROLE_BOOKSEARCH_EDIT', entity) %}
                                 <a class="badge" href="{{ path('booksearchrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>

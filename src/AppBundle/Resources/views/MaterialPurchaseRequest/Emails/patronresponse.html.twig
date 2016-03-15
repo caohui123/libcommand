@@ -11,7 +11,7 @@
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Request Information</strong></caption>
   <tr><td align="right">Title</td><td align="right">{{ entity.title }}</td></tr>
-  <tr><td align="right">Status</td><td align="right">{{ status }}</td></tr>
+  <tr><td align="right">Status</td><td align="right">{{ entity.status }}</td></tr>
 </table>
 <hr>
 <h2>Your original request (received {{ entity.created|date('l n/j/y g:i A') }})</h2>
@@ -25,6 +25,6 @@
   <tr><td align="right">Year</td><td align="right">{{ entity.publicationYear }}</td></tr>
   <tr><td align="right">Edition</td><td align="right">{{ entity.edition }}</td></tr>
   <tr><td align="right">Price</td><td align="right">{{ entity.price|number_format(2,'.',',') }}</td></tr>
-  <tr><td align="right">Media Type</td><td align="right">{{ mediaType }}</td></tr>
+  <tr><td align="right">Media Type</td><td align="right">{{ entity.mediaType }}</td></tr>
 </table>
 {% endblock %}

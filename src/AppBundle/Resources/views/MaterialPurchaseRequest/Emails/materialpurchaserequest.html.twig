@@ -1,8 +1,8 @@
 {% extends "emailbase.html.twig" %}
 
 {% block body %}
-{% if form.patronFirstName is defined %}
-  Dear {{ form.patronFirstName }},
+{% if entity.patronFirstName is defined %}
+  Dear {{ entity.patronFirstName }},
 {% else %}
   Dear Patron,
 {% endif %}
@@ -12,35 +12,35 @@
 
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Request Information</strong></caption>
-  <tr><td align="right">Received</td><td align="right">{{ form.created|date('l n/j/y g:i A') }}</td></tr>
+  <tr><td align="right">Received</td><td align="right">{{ entity.created|date('l n/j/y g:i A') }}</td></tr>
   <tr>
       <td align="right">Notification Settings</td>
       <td align="right">
-            {% if form.notify == true %}
+            {% if entity.notify == true %}
             You asked to be informed when the title is available.
             {% else %}
             You did not ask to be informed when the title is available.
             {% endif %}
       </td>
   </tr>
-  <tr><td align="right">Source</td><td align="right">{{ source }}</td></tr>
-  <tr><td align="right">Reason to Add</td><td align="right">{{ reason }} | {{ form.reasonToAddExplain }}</td></tr>
+  <tr><td align="right">Source</td><td align="right">{{ entity.source }}</td></tr>
+  <tr><td align="right">Reason to Add</td><td align="right">{{ entity.reasonToAdd }} | {{ entity.reasonToAddExplain }}</td></tr>
 </table>
 <table border="0" cellpadding="10" cellspacing="1" width="100%">
   <caption style="background:rgb(108, 122, 137); padding:4px; color:#FFFFFF"><strong>Material Information</strong></caption>
-  <tr><td align="right">Title</td><td align="right">{{ form.title }}</td></tr>
-  <tr><td align="right">Author</td><td align="right">{{ form.author }}</td></tr>
-  <tr><td align="right">ISBN</td><td align="right">{{ form.isbn }}</td></tr>
-  <tr><td align="right">ISSN</td><td align="right">{{ form.issn }}</td></tr>
-  <tr><td align="right">Publisher</td><td align="right">{{ form.publisher }}</td></tr>
-  <tr><td align="right">Year</td><td align="right">{{ form.publicationYear }}</td></tr>
-  <tr><td align="right">Edition</td><td align="right">{{ form.edition }}</td></tr>
-  <tr><td align="right">Price</td><td align="right">{{ form.price|number_format(2,'.',',') }}</td></tr>
-  <tr><td align="right">Media Type</td><td align="right">{{ mediaType }}</td></tr>
+  <tr><td align="right">Title</td><td align="right">{{ entity.title }}</td></tr>
+  <tr><td align="right">Author</td><td align="right">{{ entity.author }}</td></tr>
+  <tr><td align="right">ISBN</td><td align="right">{{ entity.isbn }}</td></tr>
+  <tr><td align="right">ISSN</td><td align="right">{{ entity.issn }}</td></tr>
+  <tr><td align="right">Publisher</td><td align="right">{{ entity.publisher }}</td></tr>
+  <tr><td align="right">Year</td><td align="right">{{ entity.publicationYear }}</td></tr>
+  <tr><td align="right">Edition</td><td align="right">{{ entity.edition }}</td></tr>
+  <tr><td align="right">Price</td><td align="right">{{ entity.price|number_format(2,'.',',') }}</td></tr>
+  <tr><td align="right">Media Type</td><td align="right">{{ entity.mediaType }}</td></tr>
   <tr>
       <td align="right">In EMU Catalog?</td>
       <td align="right">
-            {% if form.isInCatalog == true %}
+            {% if entity.isInCatalog == true %}
             This title is in the EMU Library catalog.
             {% else %}
             This title is not in the EMU Library catalog.

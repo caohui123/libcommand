@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\FindText;
 use AppBundle\Form\FindTextType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * FindText controller.
@@ -24,6 +25,8 @@ class FindTextController extends Controller
      * @Route("/", name="findtext")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FINDTEXT_VIEW")
      */
     public function indexAction()
     {
@@ -41,6 +44,8 @@ class FindTextController extends Controller
      * //@Route("/", name="findtext_create")
      * //@Method("POST")
      * //@Template("AppBundle:FindText:new.html.twig")
+     * 
+     * //@Secure(roles="ROLE_FINDTEXT_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -87,6 +92,8 @@ class FindTextController extends Controller
      * //@Route("/new", name="findtext_new")
      * //@Method("GET")
      * //@Template()
+     * 
+     * //@Secure(roles="ROLE_FINDTEXT_EDIT")
      */
     public function newAction()
     {
@@ -105,6 +112,8 @@ class FindTextController extends Controller
      * @Route("/{id}", name="findtext_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FINDTEXT_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +139,8 @@ class FindTextController extends Controller
      * @Route("/{id}/edit", name="findtext_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_FINDTEXT_EDIT")
      */
     public function editAction($id)
     {
@@ -175,6 +186,8 @@ class FindTextController extends Controller
      * @Route("/{id}", name="findtext_update")
      * @Method("PUT")
      * @Template("AppBundle:FindText:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_FINDTEXT_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +220,8 @@ class FindTextController extends Controller
      *
      * @Route("/{id}", name="findtext_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_FINDTEXT_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {

@@ -15,6 +15,8 @@ use AppBundle\Form\PatronGroupType;
 /**
  * PatronStatus controller.
  *
+ * Security is controlled for all /admin/* paths by the access_control setting in security.yml.
+ * 
  * @Route("/admin/patrongroup")
  */
 class PatronGroupController extends Controller

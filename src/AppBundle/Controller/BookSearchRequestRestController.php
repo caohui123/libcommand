@@ -58,7 +58,7 @@ class BookSearchRequestRestController extends FOSRestController{
                     $this->renderView(
                         'AppBundle:BookSearchRequest/Emails:booksearchrequest.html.twig',
                         array(
-                            'form' => $request->request->all(),
+                            'entity' => $entity,
                             'header_image' => $header_image
                         )
                     ),

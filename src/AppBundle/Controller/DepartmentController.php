@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Department;
 use AppBundle\Form\DepartmentType;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * Department controller.
@@ -25,6 +26,8 @@ class DepartmentController extends Controller
      * @Route("/", name="department")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_DEPARTMENTS_VIEW")
      */
     public function indexAction()
     {
@@ -45,6 +48,8 @@ class DepartmentController extends Controller
      * @Route("/", name="department_create")
      * @Method("POST")
      * @Template("AppBundle:Department:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_DEPARTMENTS_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -91,6 +96,8 @@ class DepartmentController extends Controller
      * @Route("/new", name="department_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_DEPARTMENTS_EDIT")
      */
     public function newAction()
     {
@@ -109,6 +116,8 @@ class DepartmentController extends Controller
      * @Route("/{id}", name="department_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_DEPARTMENTS_VIEW")
      */
     public function showAction($id)
     {
@@ -142,6 +151,8 @@ class DepartmentController extends Controller
      * @Route("/{id}/edit", name="department_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_DEPARTMENTS_EDIT")
      */
     public function editAction($id)
     {
@@ -195,6 +206,8 @@ class DepartmentController extends Controller
      * @Route("/{id}", name="department_update")
      * @Method("PUT")
      * @Template("AppBundle:Department:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_DEPARTMENTS_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -227,6 +240,8 @@ class DepartmentController extends Controller
      *
      * @Route("/{id}", name="department_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_DEPARTMENTS_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
