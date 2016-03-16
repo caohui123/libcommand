@@ -255,7 +255,14 @@ class FeedbackCategoryController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('feedbackcategory_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr'=>array('class'=>'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this category? Any feedback which used this category will no longer reflect it.")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

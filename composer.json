@@ -26,7 +26,8 @@
         "jms/security-extra-bundle": "dev-master",
         "jms/serializer-bundle": "1.1.0",
         "simshaun/recurr": "0.6.1",
-        "willdurand/hateoas-bundle": "^1.1"
+        "willdurand/hateoas-bundle": "^1.1",
+        "knplabs/knp-paginator-bundle": "^2.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

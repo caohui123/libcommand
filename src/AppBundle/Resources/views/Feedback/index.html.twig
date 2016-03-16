@@ -7,9 +7,11 @@
         <li role="presentation"><a href="{{ path('feedbackcategory') }}"><span class="glyphicon glyphicon-tasks"></span> Categories</a></li>
     </ul>
     <h1 class="page-header">Patron Feedback</h1>
+    <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
-        <div class="col-xs-12">
-            <table class="table table-responsive table-striped records_list">
+        <div class="col-xs-12 col-sm-12 col-md-9">
+            <table class="table table-responsive table-striped tablesorter" id="jquerySortable_1">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -22,7 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for entity in entities %}
+                {% for entity in pagination %}
                     <tr>
                         <td>{{ entity.category }}</td>
                         <td>{% if entity.created %}{{ entity.created|date('n/j/y g:i A') }}{% endif %}</td>
@@ -70,4 +72,30 @@
             </table>
         </div>
     </div>
-    {% endblock %}
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    {{ include('AppBundle:Pagination:paginator.html.twig') }}
+{% endblock %}
+{% block documentReady %} 
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    $('#jquerySortable_1').tablesorter({
+        headers: {
+            3: {
+                sorter: false
+            },
+            4: {
+                sorter: false
+            },
+            5: {
+                sorter: false
+            }
+        }
+    });
+    
+    //refresh the page with the new number of records per page
+    $('#paginationMaxResults').on('change', function(){
+        var item = $(this).find(":selected").val();
+        var url = '{{path('feedback', {'maxItems': '_item'})}}';
+        
+        window.location.href = url.replace('_item',item );
+    });
+{% endblock %}

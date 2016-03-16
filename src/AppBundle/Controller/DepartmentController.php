@@ -275,7 +275,14 @@ class DepartmentController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('department_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this department? All associated departments will also be deleted. Also any staff members who belong to this department will need to be assigned a new department within the staff directory.")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

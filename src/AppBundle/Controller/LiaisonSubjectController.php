@@ -286,7 +286,14 @@ class LiaisonSubjectController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('liaisonsubject_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr'=>array('class'=>'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("WARNING! Deleting this subject will also delete any children subjects. To avoid this, please either make children subjects top-level subjects or move them under another parent subject. Are you still sure you want to delete this subject?")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

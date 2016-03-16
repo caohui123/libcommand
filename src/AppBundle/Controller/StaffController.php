@@ -29,14 +29,24 @@ class StaffController extends Controller
      * 
      * @Secure(roles="ROLE_STAFF_VIEW")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('AppBundle:Staff')->findBy(array(), array('lastName'=>'ASC'));
 
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
+
         return array(
-            'entities' => $entities,
+            'pagination' => $pagination
         );
     }
     /**
@@ -199,7 +209,6 @@ class StaffController extends Controller
             'action' => $this->generateUrl('staff_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-        //$form->add('deletePhotoSubmit', 'submit', array('label'=>'Delete Photo'));
         $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-success')));
 
         return $form;
@@ -324,7 +333,14 @@ class StaffController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('staff_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete Staff Member', 'attr' => array('class' => 'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("WARNING! You should not delete a staff member unless it is absolutely necessary. Doing so affects any record associated with this staff member. Are you sure you still want to delete this staff member?")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

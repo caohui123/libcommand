@@ -272,7 +272,14 @@ class StaffAreaController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_staffareas_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete Staff Area', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("WARNING! Deleting this staff area will also delete any children areas. To avoid this, please either make children areas top-level areas or move them under another parent area. Are you still sure you want to delete this area?")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

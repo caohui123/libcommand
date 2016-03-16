@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-9">
+        <div class="well well-lg">
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <label>Results Per Page
+                        <select id="paginationMaxResults" name="paginationMaxResults" class="form-control">
+                            <option value="5" {% if app.request.get('maxItems') == 5 %}selected{% endif %}>5</option>
+                            <option value="10" {% if app.request.get('maxItems') is empty or app.request.get('maxItems') == 10 %}selected{% endif %}>10</option>
+                            <option value="25" {% if app.request.get('maxItems') == 25 %}selected{% endif %}>25</option>
+                            <option value="50" {% if app.request.get('maxItems') == 50 %}selected{% endif %}>50</option>
+                            <option value="100" {% if app.request.get('maxItems') == 100 %}selected{% endif %}>100</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col-xs-12 col-sm-9 navigation">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

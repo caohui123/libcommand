@@ -28,14 +28,24 @@ class HoursEventController extends Controller
      * 
      * @Secure(roles="ROLE_HOURS_VIEW")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('AppBundle:HoursEvent')->findBy(array(), array('startDate'=>'DESC'));
 
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
+
         return array(
-            'entities' => $entities,
+            'pagination' => $pagination
         );
     }
     /**
@@ -273,7 +283,14 @@ class HoursEventController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('hoursevent_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr'=>array('class'=>'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete Event', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this event? This will erase all hours for all areas associated with this event.")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

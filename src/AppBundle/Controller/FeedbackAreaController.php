@@ -285,7 +285,14 @@ class FeedbackAreaController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('feedbackarea_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr'=>array('class'=>'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this area? Any feedback which used this area will no longer reflect it.")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

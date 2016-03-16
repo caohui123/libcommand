@@ -29,14 +29,24 @@ class HoursSemesterController extends Controller
      * 
      * @Secure(roles="ROLE_HOURS_VIEW")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('AppBundle:HoursSemester')->findBy(array(), array('chronOrder'=>'DESC'));
 
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
+
         return array(
-            'entities' => $entities,
+            'pagination' => $pagination
         );
     }
     /**
@@ -276,7 +286,14 @@ class HoursSemesterController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('hourssemester_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr'=>array('class'=>'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete Semester', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("WARNING! Deleting this semester will remove all regular hours for all areas within this semester\'s date range. Are you sure you still want to delete this semester?")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

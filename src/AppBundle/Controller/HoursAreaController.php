@@ -330,11 +330,13 @@ class HoursAreaController extends Controller
             ->setAction($this->generateUrl('hoursarea_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array(
-                'label' => 'Delete Area',
+                'label' => 'Delete Area', 
                 'attr' => array(
-                    'class' => 'btn btn-sm btn-danger'
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("WARNING! Before deleting this area, be 100% positive that is what you want to do. Deleting the area deletes every hour ever set for this area over all semesters. You will not be able to recover this data. Are you sure this is what you want to do?")'
+                    )
                 )
-            ))
+            )
             ->getForm()
         ;
     }

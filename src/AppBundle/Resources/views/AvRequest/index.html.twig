@@ -6,12 +6,15 @@
         <li role="presentation"><a href="{{ path('avrequest_equipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
         <li role="presentation"><a href="{{ path('avrequeststatus') }}"><span class="glyphicon glyphicon-check"></span> Statuses</a></li>
     </ul>
-    <h1 class="page-header">Audio/Visual Requests</h1>
+    <h1 class="page-header">Audio/Visual Requests</h1> 
+    <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-9">
-            <table class="table table-responsive table-striped records_list">
+            <table class="table table-responsive table-striped tablesorter" id="jquerySortable_1">
                 <thead>
                     <tr>
+                    {# sorting uses jQuery Sortable instead of KNP Pagination because KNP sorts all records, not just the ones on the current page #}
                         <th>Event Date</th>
                         <th>Pickup</th>
                         <th>Return</th>
@@ -22,8 +25,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for entity in entities %}
-                    <tr>
+                    {% for entity in pagination %}
+                    <tr {% if loop.index is odd %}class="color"{% endif %}>
                         <td>{% if entity.eventDate %}{{ entity.eventDate|date('n/j/y') }}{% endif %}</td>
                         <td>{% if entity.pickupDate %}{{ entity.pickupDate|date('n/j/y g:i A') }}{% endif %}</td>
                         <td>{% if entity.returnDate %}{{ entity.returnDate|date('n/j/y g:i A') }}{% endif %}</td>
@@ -41,9 +44,32 @@
                             {% endif %}
                         </td>
                     </tr>
-                {% endfor %}
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    {{ include('AppBundle:Pagination:paginator.html.twig') }}
+{% endblock %}
+{% block documentReady %} 
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    $('#jquerySortable_1').tablesorter({
+        headers: {
+            5: {
+                sorter: false
+            },
+            6: {
+                sorter: false
+            }
+        }
+    });
+    
+    //refresh the page with the new number of records per page
+    $('#paginationMaxResults').on('change', function(){
+        var item = $(this).find(":selected").val();
+        var url = '{{path('avrequests', {'maxItems': '_item'})}}';
+        
+        window.location.href = url.replace('_item',item );
+    });
 {% endblock %}

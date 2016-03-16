@@ -255,7 +255,14 @@ class AvRequestEquipmentController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('avrequest_equipment_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-small btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this equipment?")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

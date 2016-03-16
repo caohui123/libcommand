@@ -92,7 +92,7 @@ class StaffType extends AbstractType
             // If no path is passed to the form, the data is "null".
             // There should be no delete button present if there is no photo path present
             if(!$staff || null !== $staff->getPhoto()){
-                $form->add('deletePhotoSubmit', 'submit', array('label'=>'Delete Photo', 'attr' => array('class' => 'btn btn-sm btn-warning')));
+                $form->add('deletePhotoSubmit', 'submit', array('label'=>'Delete Photo', 'attr' => array('class' => 'btn btn-sm btn-warning', 'onclick' => 'return confirm("Are you sure you want to delete this user\'s staff photo?")')));
             }
         });
     }

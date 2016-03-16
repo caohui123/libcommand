@@ -255,7 +255,14 @@ class MediaTypeController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('mediatype_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr'=>array('class' => 'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this media type?")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

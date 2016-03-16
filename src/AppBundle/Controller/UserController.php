@@ -25,14 +25,24 @@ class UserController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('AppBundle:User')->findAll();
 
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
+
         return array(
-            'entities' => $entities,
+            'pagination' => $pagination
         );
     }
     /**
@@ -183,7 +193,7 @@ class UserController extends Controller
     }
     /**
      * Deletes a User entity.
-     *
+     * 
      * @Route("/{id}", name="user_delete")
      * @Method("DELETE")
      */
@@ -219,7 +229,14 @@ class UserController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('user_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("DO NOT DELETE LDAP USERS UNLESS YOU ARE POSITIVE THAT IS WHAT YOU WANT TO DO! Are you sure you want to delete this user?")'
+                    )
+                )
+            )
             ->getForm()
         ;
     }

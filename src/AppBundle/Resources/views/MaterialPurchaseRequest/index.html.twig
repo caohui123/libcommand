@@ -8,9 +8,11 @@
         <li role="presentation"><a href="{{ path('materialpurchasestatus') }}"><span class="glyphicon glyphicon-check"></span> Request Statuses</a></li>
     </ul>
     <h1 class="page-header">Material Purchase Requests</h1>
+    <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <table class="table table-responsive table-striped records_list">
+        <div class="col-xs-12 col-sm-12 col-md-9">
+            <table class="table table-responsive table-striped tablesorter" id="jquerySortable_1">
                 <thead>
                     <tr>
                         <th>Submitted</th>
@@ -21,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for entity in entities %}
+                {% for entity in pagination %}
                     <tr>
                         <td>{% if entity.created %}{{ entity.created|date('n/j/y') }}{% endif %}</td>
                         <td>{{ entity.patronFirstName }} {{ entity.patronLastName }}</td>
@@ -40,4 +42,24 @@
             </table>
         </div>
     </div>
-    {% endblock %}
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    {{ include('AppBundle:Pagination:paginator.html.twig') }}
+{% endblock %}
+{% block documentReady %} 
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    $('#jquerySortable_1').tablesorter({
+        headers: {
+            4: {
+                sorter: false
+            },
+        }
+    });
+    
+    //refresh the page with the new number of records per page
+    $('#paginationMaxResults').on('change', function(){
+        var item = $(this).find(":selected").val();
+        var url = '{{path('materialpurchase', {'maxItems': '_item'})}}';
+        
+        window.location.href = url.replace('_item',item );
+    });
+{% endblock %}
