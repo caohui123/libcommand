@@ -1,0 +1,70 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Extended Privilege Request #{{entity.id}}{% endblock %}
+{% block body %}
+<h1>Extended Privilege Request #{{entity.id}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Sumbssion Information</caption>
+        <tbody>
+            <tr>
+                <th>Received</th>
+                <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+            </tr>
+            <tr>
+                <th>Privilege Expiration</th>
+                <td>{{ entity.expirationDate|date('l n/j/y') }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ entity.note }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ entity.status }}</td>
+            </tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Faculty Information</caption>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.facultyFirstName }} {{ entity.facultyLastName }}</td>
+            </tr>
+            <tr>
+                <th>Department</th>
+                <td>{{ entity.facultySubject }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.facultyPhone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.facultyEmail }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Student Information</caption>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.studentFirstName }} {{ entity.studentLastName }}</td>
+            </tr>
+            <tr>
+                <th>E-Number</th>
+                <td>{{ entity.studentEnumber }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.studentPhone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.studentEmail }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -27,9 +27,11 @@
                         <td>{% if entity.patronEmailed is not null %}<span class="glyphicon glyphicon-ok-sign text-success"></span>{% endif %}</td>
                         <td>
                             {% if is_granted('ROLE_BOOKSEARCH_EDIT', entity) %}
-                                <a class="badge" href="{{ path('booksearchrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('booksearchrequest_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('booksearchrequest_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% elseif is_granted('ROLE_BOOKSEARCH_VIEW', entity) %}
-                                <a class="badge" href="{{ path('booksearchrequest_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('booksearchrequest_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('booksearchrequest_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>
                     </tr>

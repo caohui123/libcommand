@@ -1,0 +1,27 @@
+/* Printer Friendly Pages */
+.libcommand-print-table{
+    margin: 20px 10px;
+    border: 1px solid #EEEEEE;
+}
+.libcommand-print-table-650{
+    width:650px;
+}
+.libcommand-print-table caption{
+    background: #333333;
+    color: #ffffff;
+    font-weight:bold;
+}
+.libcommand-print-table tr:nth-child(odd){
+    background: #EEEEEE;
+}
+
+.libcommand-print-table tr > th, .libcommand-print-table tr > td{
+    text-align: right;
+    padding:3px;
+}
+
+@media print{
+    .print-btn{
+        display:none;
+    }   
+}

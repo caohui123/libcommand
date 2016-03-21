@@ -1,0 +1,25 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Feedback Area{% endblock %}
+{% block body %}
+<h1>Feedback Area: {{entity.name}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Area Information</caption>
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td>{{entity.name}}</td>
+            </tr>
+            <tr>
+                <td>Parent Area</td>
+                <td>
+                  {% if entity.parent is not null %}  
+                    {{entity.parent}}
+                  {% else %}
+                      none
+                  {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+{% endblock %}

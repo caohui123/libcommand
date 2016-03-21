@@ -3,9 +3,12 @@
 {% block body -%}
     <h1 class="page-header">Edit Equipment: {{entity.name}}</h1>
     <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('avrequest_equipment') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
-      </div>
+        <div class="col-xs-12 col-sm-4">
+            <p><a class="btn btn-sm btn-primary" href="{{ path('avrequest_equipment') }}" aria-label="Back to AV Equipment List"><span class="glyphicon glyphicon-arrow-left"></span></a><p>
+        </div>
+        <div class="col-xs-12 col-sm-8 text-right" role="toolbar" aria-label="options-toolbar">
+            <p><a class="btn btn-sm btn-default" target="_blank" href="{{ path('avrequest_equipment_print', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-print"></span></a></p>
+        </div>
     </div>
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">

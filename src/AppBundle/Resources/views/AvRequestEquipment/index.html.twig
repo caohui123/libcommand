@@ -13,17 +13,20 @@
                 <thead>
                     <tr>
                         <th>Equipment</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for entity in entities %}
                     <tr>
+                        <td>{{ entity.name }}</td>
                         <td>
-                            {{ entity.name }}
                             {% if is_granted('ROLE_AV_EDIT', entity) %}
-                                <a class="badge" href="{{ path('avrequest_equipment_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('avrequest_equipment_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('avrequest_equipment_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% elseif is_granted('ROLE_AV_VIEW', entity) %}
-                                <a class="badge" href="{{ path('avrequest_equipment_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('avrequest_equipment_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('avrequest_equipment_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>        
                     </tr>

@@ -305,4 +305,28 @@ class BookSearchRequestController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly BookSearchRequest entity.
+     *
+     * @Route("/{id}/print", name="booksearchrequest_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_BOOKSEARCH_EDIT")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:BookSearchRequest')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find BookSearchRequest entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

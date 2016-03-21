@@ -266,4 +266,28 @@ class AvRequestStatusController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly AvRequestStatus entity.
+     *
+     * @Route("/{id}/print", name="avrequeststatus_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_EDIT")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:AvRequestStatus')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AvRequestStatus entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

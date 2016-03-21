@@ -286,4 +286,36 @@ class DepartmentController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly Department entity.
+     *
+     * @Route("/{id}/print", name="department_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_DEPARTMENTS_EDIT")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em2 = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('AppBundle:Department')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Department entity.');
+        }
+        
+        //find staff who belong to this department (or any of this department's child departments)
+        $members = $em2->createQuery('
+            SELECT s FROM AppBundle:Staff s WHERE s.department = ANY (SELECT d FROM AppBundle:Department d WHERE d.id = :entity OR d.parent = :entity) ORDER BY s.lastName ASC
+            ')->setParameter('entity', $entity)
+            ->getResult();
+
+        return array(
+            'entity'      => $entity,
+            'members'     => $members
+        );
+    }
 }

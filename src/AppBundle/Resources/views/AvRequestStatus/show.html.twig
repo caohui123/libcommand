@@ -3,17 +3,18 @@
 {% block body %}
     <h1 class="page-header">Status: {{entity.name}}</h1>
     <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('avrequeststatus') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
-      </div>
-    </div>
-    {% if is_granted('ROLE_AV_EDIT', entity) %}
-    <div class="row">
-        <div class="col-xs-12">
-            <p><a class="badge" href="{{ path('avrequeststatus_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Status</a></p>
+        <div class="col-xs-12 col-sm-4">
+            <p><a class="btn btn-sm btn-primary" href="{{ path('avrequeststatus') }}" aria-label="Back to AV Status List"><span class="glyphicon glyphicon-arrow-left"></span></a></p>
+        </div>
+        <div class="col-xs-12 col-sm-8 text-right" role="toolbar" aria-label="options-toolbar">
+            <p>
+                {% if is_granted('ROLE_AV_EDIT', entity) %}
+                <a class="btn btn-sm btn-default" href="{{ path('avrequeststatus_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                {% endif %}
+                <a class="btn btn-sm btn-default" target="_blank" href="{{ path('avrequeststatus_print', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-print"></span></a>
+            </p>
         </div>
     </div>
-    {% endif %}
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">

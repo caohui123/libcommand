@@ -1,0 +1,63 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}{{entity.name}} Department{% endblock %}
+{% block body %}
+<h1>{{entity.name}} Department</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Department Information</caption>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>
+                    {{entity.name}}
+                </td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>
+                    {{ entity.phone }}
+                </td>
+            </tr>
+            <tr>
+                <th>Fax</th>
+                <td>
+                    {{ entity.fax }}
+                </td>
+            </tr>
+            <tr>
+                <th>Fax</th>
+                <td>
+                    {{ entity.fax }}
+                </td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>
+                    {{ entity.description }}
+                </td>
+            </tr>
+            {% if entity.parent is not null %}
+            <tr>
+                <th>Parent Department</th>
+                <td>
+                    {{ entity.parent }}
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table> 
+    <div>
+        {% if members is empty %}
+        <p class="alert alert-info">There are no staff members in this department.</p>
+        {% else %}
+            <p><strong>{{entity.name}} Staff</strong></p>
+            <ul>
+            {% for member in members %}
+                <li>
+                    {{ member.lastName }}, {{ member.firstName }}
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -298,6 +298,30 @@ class FeedbackAreaController extends Controller
     }
     
     /**
+     * Displays a printer-friendly FeedbackArea entity.
+     *
+     * @Route("/{id}/print", name="feedbackarea_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:FeedbackArea')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find FeedbackArea entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
+    
+    /**
      * Returns the 'lvl' field of a feebackArea
      *
      * @Route("/parent/{id}", name="feedbackarea_parentlvl")
@@ -317,4 +341,5 @@ class FeedbackAreaController extends Controller
       $response = new Response($areaId, 200, array('Content-Type' => 'text/plain'));
       return $response;
     }
+    
 }

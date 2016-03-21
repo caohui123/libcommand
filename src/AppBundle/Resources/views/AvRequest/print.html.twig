@@ -1,0 +1,134 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Audio/Visual Request #{{entity.id}}{% endblock %}
+{% block body %}
+<h1>Audio/Visual Request #{{entity.id}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Status</caption>
+        <tbody>
+            <tr>
+                <th>Status</th>
+                <td>{{entity.status}}</td>
+            </tr>
+            <tr>
+                <th>Patron Last Emailed</th>
+                {% if entity.replyDate is not null %}
+                <td>{{entity.replyDate|date('l n/j/y g:i A')}}</td>
+                {% else %}
+                <td>Never</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Last Updated</th>
+                <td>
+                    {% if entity.updated == entity.created %}
+                        Never
+                    {% else %}
+                        {{entity.updated|date('l n/j/y g:i A')}}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Original Submission</th>
+                <td>{{entity.created|date('l n/j/y g:i A')}}</td>
+            </tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+      <caption>Request Information</caption>
+      <tbody>
+            <tr>
+                <th>Submitted</th>
+                <td>{{entity.created|date('l n/j/y g:i A')}}</td>
+            </tr>
+            <tr>
+                <th>Pickup Date</th>
+                <td>{{entity.pickupDate|date('l n/j/y g:i A')}}</td>
+            </tr>
+            <tr>
+                <th>Return Date</th>
+                <td>{{entity.returnDate|date('l n/j/y g:i A')}}</td>
+            </tr>
+            <tr>
+                <th>Attendees</th>
+                <td>{{entity.attendees}}</td>
+            </tr>
+            <tr>
+                <th>Special Instructions</th>
+                <td>{{entity.specialInstruction}}</td>
+            </tr>
+            <tr>
+                <th>Note (visible to staff only)</th>
+                <td>{{entity.note}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Locations/Times</caption>
+        <thead>
+            <tr>
+                <th>Location</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in entity.event if event %}
+            <tr><td>{{event.location}}</td><td>{{event.time|date('g:i A')}}</td></tr>
+        {% else %}
+            <tr><td colspan="2"><p class="alert alert-warning">No event locations specified.</p></td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Equipment</caption>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for equip in entity.equipment if equip %}
+            <tr><td>{{equip.equipment}}</td><td>{{equip.quantity}}</td></tr>
+        {% else %}
+            <tr><td colspan="2"><p class="alert alert-warning">No equipment specified.</p></td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Faculty/Student Information</caption>
+        <tbody>
+            <tr>
+                <td>Faculty Name</td>
+                <td>{{entity.facultyFirstName}} {{entity.facultyLastName}}</td>
+            </tr>
+            <tr>
+                <td>Department</td>
+                <td>{{entity.facultySubject}}</td>
+            </tr>
+            <tr>
+                <td>Phone</td>
+                <td>{{entity.facultyPhone}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{entity.facultyEmail}}</td>
+            </tr>
+            <tr>
+                <td>Course/Event</td>
+                <td>{{entity.course}}</td>
+            </tr>
+            <tr>
+                <td>Student Name</td>
+                <td>{{entity.studentName}}</td>
+            </tr>
+            <tr>
+                <td>E-Number</td>
+                <td>{{entity.studentEnumber}}</td>
+            </tr>
+      </tbody>
+    </table>
+{% endblock %}

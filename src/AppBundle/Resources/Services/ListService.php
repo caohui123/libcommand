@@ -161,7 +161,7 @@ class ListService{
     
     return $styled_list;
   }
-  
+   
   public function libraryDepartmentsList(array $entities){    
     $styled_list = '';
     $styled_list .= '<div class="just-padding"><div class="list-group list-group-root well">';
@@ -174,9 +174,9 @@ class ListService{
         $styled_list .= 
             '<li class="list-group-item"><strong>'.$entity->getName().'</strong>';
         if(true === $this->authorizationChecker->isGranted('ROLE_DEPARTMENTS_EDIT')){
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a>';
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_print', array('id'=>$entity->getId())).'" aria-label="print"><span class="glyphicon glyphicon-print"></span></a><a class="badge" href="'.$this->router->generate('department_edit', array('id'=>$entity->getId())).'" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>';
         } else {
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_show', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-eye-open"></span> Show</span></a>';
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_show', array('id'=>$entity->getId())).'" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a><a class="badge" href="'.$this->router->generate('department_print', array('id'=>$entity->getId())).'" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>';
         }
         $styled_list .= '</li><div class="list-group" id="item-'.$parent_count.'">';
         
@@ -189,9 +189,9 @@ class ListService{
           $styled_list .= 
               '<li class="list-group-item">'.$child->getName();
           if(true === $this->authorizationChecker->isGranted('ROLE_DEPARTMENTS_EDIT')){
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a>';
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_print', array('id'=>$entity->getId())).'" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a><a class="badge" href="'.$this->router->generate('department_edit', array('id'=>$child->getId())).'" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>';
           } else {
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_show', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-eye-open"></span> Show</span></a>';
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('department_print', array('id'=>$entity->getId())).'" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a><a class="badge" href="'.$this->router->generate('department_show', array('id'=>$child->getId())).'" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>';
           }
 
           $styled_list .= '</li><div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'">';
@@ -220,9 +220,9 @@ class ListService{
       if($level == 0){
         $styled_list .= '<li class="list-group-item"><strong>'.$entity->getName().'</strong>';
         if(true === $this->authorizationChecker->isGranted('ROLE_FEEDBACK_EDIT')){
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_print', array('id'=>$entity->getId())).'" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a><a class="badge" href="'.$this->router->generate('feedbackarea_edit', array('id'=>$entity->getId())).'" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>';
           } else {
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_show', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-eye-open"></span> Show</a>';
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_print', array('id'=>$entity->getId())).'" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a><a class="badge" href="'.$this->router->generate('feedbackarea_show', array('id'=>$child->getId())).'" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>';
           }
         $styled_list .= '</li><div class="list-group" id="item-'.$parent_count.'">';
         
@@ -234,9 +234,9 @@ class ListService{
         foreach($children as $child){
           $styled_list .= '<li class="list-group-item">'.$child->getName();
           if(true === $this->authorizationChecker->isGranted('ROLE_FEEDBACK_EDIT')){
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a>';
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_print', array('id'=>$child->getId())).'" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a><a class="badge" href="'.$this->router->generate('feedbackarea_edit', array('id'=>$child->getId())).'" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>';
           } else {
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_show', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-eye-open"></span> Show</span></a>';
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('feedbackarea_print', array('id'=>$child->getId())).'" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a><a class="badge" href="'.$this->router->generate('feedbackarea_show', array('id'=>$child->getId())).'" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>';
           }
           $styled_list .= '</li><div class="list-group" id="item-'.$parent_count.'-'.$child_count.'">';
           

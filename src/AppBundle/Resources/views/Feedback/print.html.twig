@@ -1,0 +1,100 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Patron Feedback #{{entity.id}}{% endblock %}
+{% block body %}
+<h1>Patron Feedback #{{entity.id}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Submission Info</caption>
+        <tbody>
+            <tr>
+                <td>Feedback Type</td>
+                <td>
+                    {% if entity.category == 'Complaint' %}
+                      {% set alert = 'danger'%}
+                    {% elseif entity.category == 'Compliment' %}
+                      {% set alert = 'success'%}
+                    {% elseif entity.category == 'Suggestion' %}
+                      {% set alert = 'warning'%}
+                    {% else %}
+                      {% set alert = 'info'%}
+                    {% endif %}
+                    <span class="alert-{{alert}}">{{ entity.category }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Categories</td>
+                <td>
+                    {% if entity.areas is not empty %}
+                        <ul>
+                        {% for area in entity.areas %}
+                            <li>{{ area.name }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        none
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Received</td>
+                <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+            </tr>
+            <tr>
+                <td>Reply Date</td>
+                <td>
+                {% if entity.replyDate is not empty %}    
+                    {{entity.replyDate|date('l n/j/y g:i A')}}</small>
+                {% else %}
+                    No response sent to patron.
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Last Forward Date</td>
+                <td>
+                    {% if entity.lastForwardDate is not empty %}    
+                       {{entity.lastForwardDate|date('l n/j/y g:i A')}}
+                    {% else %}
+                       Not forwarded
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Note</td>
+                <td>{{entity.note}}</td>
+            </tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Patron Information</caption>
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td>{{entity.patronFirstName}} {{entity.patronLastName}} &lt;{{entity.patronEmail}}&gt</td>
+            </tr>
+            <tr>
+                <td>Group</td>
+                <td>{{entity.patronGroup}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Patron Feedback</caption>
+        <tbody>
+            <tr>
+                <td style="text-align:left">{{entity.body}}</td>
+            </tr>
+        </tbody>
+    </table>
+            
+    {% if entity.response is not empty %}  
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Library Response</caption>
+        <tbody>
+            <tr>
+                <td style="text-align:left">{{entity.response}}</td>
+            </tr>
+        </tbody>
+    </table>        
+    {% endif %}
+{% endblock %}

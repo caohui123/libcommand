@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}{% endblock %}</title>
+    {% block stylesheets %}
+    {% stylesheets 'bundles/app/css/printer-friendly.css' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}{% endblock %}
+  </body>
+  <script>
+      window.print(); //load printing options immediately on page load
+  </script>
+</html>

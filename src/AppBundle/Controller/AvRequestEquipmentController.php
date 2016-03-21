@@ -266,4 +266,28 @@ class AvRequestEquipmentController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly AvRequestEquipment entity.
+     *
+     * @Route("/{id}/print", name="avrequest_equipment_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_AV_EDIT")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:AvRequestEquipment')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AvRequestEquipment entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

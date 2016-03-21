@@ -342,4 +342,28 @@ class FeedbackController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly Feedback entity.
+     *
+     * @Route("/{id}/print", name="feedback_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_FEEDBACK_EDIT")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:Feedback')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Feedback entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

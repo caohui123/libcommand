@@ -1,0 +1,76 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Book Search Request #{{entity.id}}{% endblock %}
+{% block body %}
+<h1>Book Search Request #{{entity.id}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Request Status</caption>
+        <tbody>
+            <tr>
+                <th>Submission</th>
+                <td>{{entity.created|date('l n/j/y g:i A')}}</td>
+            </tr>
+            <tr>
+                <th>Book Useful Until</th>
+                <td>{{entity.usefulDate|date('n/j/y')}}</td>
+            </tr>
+            <tr>
+                <th>Response Status</th>
+                <td>
+                    {% if entity.patronEmailed|date('Y-m-d H:i:s') != '0000-00-00 00:00:00'|date('Y-m-d H:i:s') %}
+                      Patron was replied to on {{entity.patronEmailed|date('l n/j/y g:i A')}}.
+                    {% else %}
+                      Patron has not yet been replied to.
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{entity.note}}</td>
+            </tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Book Information</caption>
+        <tbody>
+            <tr>
+                <th>Title</th>
+                <td>{{entity.bookTitle}}</td>
+            </tr>
+            <tr>
+                <th>Author</th>
+                <td>{{entity.bookAuthor}}</td>
+            </tr>
+            <tr>
+                <th>Call Number</th>
+                <td>{{entity.bookCallNumber}}</td>
+            </tr>
+            <tr>
+                <th>Book Status</th>
+                <td>{% if entity.bookStatus is not null %}{{entity.bookStatus|capitalize}}{%endif%}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Patron Information</caption>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{entity.patronFirstName}} {{entity.patronLastName}}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{entity.patronEmail}}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{entity.patronPhone}}</td>
+            </tr>
+            <tr>
+                <th>E-Number</th>
+                <td>{{entity.patronEnumber}}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

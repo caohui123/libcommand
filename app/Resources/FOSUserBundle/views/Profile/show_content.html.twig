@@ -1,6 +1,128 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 <div class="fos_user_user_show">
-    <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
-    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+<!-- If LDAP user is associated with a Staff entity -->
+{% if user.staffMember %}
+    <h1 class="page-header">{{ user.staffMember.firstName }} {{ user.staffMember.lastName }} <br> <small>{{ user.staffMember.jobTitle }} </small></h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('homepage') }}"><span class="glyphicon glyphicon-home"></span> Home</a></p>
+      </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12">
+            {% if is_granted('ROLE_STAFF_EDIT') %}
+            <p><a class="badge" href="{{ path('staff_edit', { 'id': user.staffMember.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit My Information</a></p>
+            {% else %}
+            <p class="alert alert-info" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Need something changed? Please contact <strong>{{ administratorName }}</strong> at {{ administratorPhone }} or {{ administratorEmail }}.</p> 
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8">
+        <table class="table table-striped table-responsive record_properties">
+            <tbody>
+                <tr>
+                    <th>Staff ID</th>
+                    <td>{{ user.staffMember.staffId }}</td>
+                </tr>
+                <tr>
+                    <th>Employment Status</th>
+                    <td>
+                        {{ user.staffMember.employmentStatus }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Job Description</th>
+                    <td>{{ user.staffMember.jobDescription }}</td>
+                </tr>
+                <tr>
+                    <th>Functional Area</th>
+                    <td>{{ user.staffMember.staffFunctionalArea }}</td>
+                </tr>
+                <tr>
+                    <th>LibGuides URL</th>
+                    <td>{{ user.staffMember.guidesUrl }}</td>
+                </tr>
+                <tr>
+                    <th>Office</th>
+                    <td>{{ user.staffMember.office }}</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td>{{ user.staffMember.phone }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.staffMember.email }}</td>
+                </tr>
+                <tr>
+                    <th>Home Address</th>
+                    <td>{{ user.staffMember.homeStreet }}, {{ user.staffMember.homeCity }}, {{ user.staffMember.homeState }} {{ user.staffMember.homeZip }}</td>
+                </tr>
+                <tr>
+                    <th>Home Phone</th>
+                    <td>{{ user.staffMember.homePhone }}</td>
+                </tr>
+                <tr>
+                    <th>Cell Phone</th>
+                    <td>{{ user.staffMember.cellPhone }}</td>
+                </tr>
+                <tr>
+                    <th>Bio</th>
+                    <td>{{ user.staffMember.selfIntro }}</td>
+                </tr>
+                <tr>
+                    <th>Favorite Websites</th>
+                    <td>{{ user.staffMember.favoriteWebsites }}</td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4">
+           <div class="panel panel-default">
+                <div class="panel-heading">Current Photo</div>
+                <div class="panel-body">
+                    {% if user.staffMember.photo != '' %}
+                        <img src="{{ asset('uploads/profile/' ~ user.staffMember.photo) }}" alt="A photo of {{ user.staffMember.firstName}} {{ user.staffMember.lastName }}" title="A photo of {{ user.staffMember.firstName}} {{ user.staffMember.lastName }}"/>
+                    {% else %}
+                        No photo uploaded
+                    {% endif %}
+                </div>
+                <div class="panel-footer">
+                    <p>
+                    {% if user.staffMember.showPhoto == 1 %}
+                      Set to display publicly
+                    {% else %}
+                      Set to NOT display publicly
+                    {% endif %}
+                    </p>
+                </div>
+            </div>
+      </div>
+    </div>
+    
+
+<!-- If LDAP user is NOT associated with a Staff entity -->
+{% else %}
+    <h1 class="page-header">{{ user.username }}</h1>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><a class="btn btn-sm btn-primary" href="{{ path('homepage') }}"><span class="glyphicon glyphicon-home"></span> Home</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="alert alert-warning" role="alert"><p><span class="glyphicon glyphicon-warning-sign"></span> <strong>Your LDAP account is not associated with a staff member.</strong></p>
+              <p>While you can still use the system without this association, you will not be able to utilize the customized dashboard or any tools where staff assoication is necessary.</p>
+              <p>Please contact <strong>{{ administratorName }}</strong> at {{ administratorPhone }} or {{ administratorEmail }}.</p>
+          </div>
+      </div>
+    </div>
+{% endif %}
 </div>
+
+
+
+

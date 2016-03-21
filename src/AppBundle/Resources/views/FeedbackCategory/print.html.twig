@@ -1,0 +1,15 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Patron Feedback Type{% endblock %}
+{% block body %}
+<h1>Patron Feedback Type: {{entity.name}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Type Information</caption>
+        <tbody>
+            <tr>
+                <td><strong>Type</strong></td>
+                <td>{{entity.name}}</td>
+            </tr>
+        </tbody>
+    </table> 
+{% endblock %}

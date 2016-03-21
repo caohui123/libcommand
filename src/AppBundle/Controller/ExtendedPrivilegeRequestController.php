@@ -276,4 +276,28 @@ class ExtendedPrivilegeRequestController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly ExtendedPrivilegeRequest entity.
+     *
+     * @Route("/{id}/print", name="extendedprivilege_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_EXTENDEDPRIVILEGES_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:ExtendedPrivilegeRequest')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find ExtendedPrivilegeRequest entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }
