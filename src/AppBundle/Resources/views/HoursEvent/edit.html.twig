@@ -1,15 +1,19 @@
 {% extends '::base.html.twig' %}
 {% block title %}Library Hours: Special Events{% endblock %}
 {% block body -%}
-    <h1 class="page-header">Edit Event: {{entity.name}}</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Edit Event: ' ~ entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <blockquote>
         <p>Special events must have a starting and ending date. Should you decide to amend the starting and ending date of a special event, please be aware that any special hours set outside of the new date range will be <mark>deleted</mark>. The same goes for any events that are deleted outright.</p>
     </blockquote>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('hoursevent') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Events List</a></p>
-      </div>
-    </div>
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('hoursevent') } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="well well-lg">

@@ -6,7 +6,11 @@
         <li role="presentation"><a href="{{ path('hourssemester') }}"><span class="glyphicon glyphicon-th-large"></span> Semesters</a></li>
         <li role="presentation" class="active"><a href="{{ path('hoursevent') }}"><span class="glyphicon glyphicon-tags"></span> Special Events</a></li>
     </ul>
-    <h1 class="page-header">Special Events <span><a class="btn btn-sm btn-primary" href="{{ path('hoursevent_new') }}"><span class="glyphicon glyphicon-plus"></span> New Special Event</a></span></h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Library Hours: Special Events', 'newbutton' : true, 'newpath' : path('hoursevent_new'), 'newpathlabel' : 'New Special Event' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Events</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
@@ -28,9 +32,9 @@
                         <td>{% if entity.endDate %}{{ entity.endDate|date('m/d/Y') }}{% endif %}</td>
                         <td>
                             {% if is_granted('ROLE_HOURS_EDIT', entity) %}
-                                <a class="badge" href="{{ path('hoursevent_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('hoursevent_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
                             {% elseif is_granted('ROLE_HOURS_VIEW', entity) %}
-                                <a class="badge" href="{{ path('hoursevent_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Show</a>
+                                <a class="badge" href="{{ path('hoursevent_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-pencil"></span></a>
                             {% endif %}
                         </td>
                     </tr>

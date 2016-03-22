@@ -1,0 +1,12 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Patron Group{% endblock %}
+{% block body %}
+<h1>Patron Group: {{entity.name}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Group</caption>
+        <tbody>
+            <tr><th>Group</th><td>{{entity.name}}</td></tr>
+        </tbody>
+    </table> 
+{% endblock %}

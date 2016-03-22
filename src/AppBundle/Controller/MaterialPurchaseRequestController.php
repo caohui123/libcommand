@@ -336,4 +336,28 @@ class MaterialPurchaseRequestController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a form to edit an existing MaterialPurchaseRequest entity.
+     *
+     * @Route("/{id}/print", name="materialpurchase_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:MaterialPurchaseRequest')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MaterialPurchaseRequest entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

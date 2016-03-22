@@ -1,19 +1,15 @@
 {% extends '::base.html.twig' %}
 {% block title %}Material Purchase Request Reasons{% endblock %}
-{% block body -%}  
-    <h1 class="page-header">{{entity.name}}</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('materialpurchaserequestreason') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
-      </div>
-    </div>
-    {% if is_granted('ROLE_MATERIALPURCHASE_EDIT', entity) %}
-    <div class="row">
-        <div class="col-xs-12">
-            <p><a class="badge" href="{{ path('materialpurchaserequestreason_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Reason</a></p>
-        </div>
-    </div>
-    {% endif %}
+{% block body -%}
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('materialpurchaserequestreason'), 'editpath' : path('materialpurchaserequestreason_edit', { 'id': entity.id }), 'printpath' : path('materialpurchaserequestreason_print', { 'id': entity.id }), 'editrole' : 'ROLE_MATERIALPURCHASE_EDIT'} %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">

@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 {% block title %}Audio/Visual Request{% endblock %}
 {% block body %}
-    <h1 class="page-header">Edit AV Request #{{entity.id}}</h1>
-    <div class="row">
-        <div class="col-xs-12 col-sm-4">
-            <p><a class="btn btn-sm btn-primary" href="{{ path('avrequests') }}" aria-label="Back to AV List"><span class="glyphicon glyphicon-arrow-left"></span></a></p>
-        </div>
-        <div class="col-xs-12 col-sm-8 text-right" role="toolbar" aria-label="options-toolbar">
-                <p><a class="btn btn-sm btn-default" target="_blank" href="{{ path('avrequest_print', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-print"></span></a></p>
-        </div>
-    </div>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Edit AV Request #' ~ entity.id } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('avrequests'), 'printpath' : path('avrequest_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
           <table class="table table-responsive table-striped">

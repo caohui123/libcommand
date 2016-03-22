@@ -1,7 +1,11 @@
 {% extends '::base.html.twig' %}
 {% block title %}FindText+ Problems{% endblock %}
 {% block body -%}
-    <h1 class="page-header">FindText+ Problems</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'FindText+ Problems' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Problems</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
@@ -25,9 +29,11 @@
                         <td>{{ entity.comment|slice(0, 50) }}...</td>
                         <td>
                             {% if is_granted('ROLE_FINDTEXT_EDIT', entity) %}
-                                <a class="badge" href="{{ path('findtext_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('findtext_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('findtext_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% elseif is_granted('ROLE_FINDTEXT_VIEW', entity) %}
-                                <a class="badge" href="{{ path('findtext_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('findtext_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('findtext_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>
                     </tr>

@@ -5,7 +5,11 @@
         <li role="presentation" class="active"><a href="{{ path('materialreserve') }}"><span class="glyphicon glyphicon-th-list"></span> Material Reserve Requests</a></li>
         <li role="presentation"><a href="{{ path('materialreservemedia') }}"><span class="glyphicon glyphicon-blackboard"></span> Media Types</a></li>
     </ul>
-    <h1 class="page-header">Material Reserves</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Material Reserves' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
@@ -29,9 +33,11 @@
                         <td>{{ entity.course }}</td>
                         <td>
                             {% if is_granted('ROLE_MATERIALRESERVE_EDIT', entity) %}
-                                <a class="badge" href="{{ path('materialreserve_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('materialreserve_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('materialreserve_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% elseif is_granted('ROLE_MATERIALRESERVE_VIEW', entity) %}
-                                <a class="badge" href="{{ path('materialreserve_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('materialreserve_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('materialreserve_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>
                     </tr>

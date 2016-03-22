@@ -1,0 +1,92 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Library Staff{% endblock %}
+{% block body %}
+<h1>Library Staff: {{entity.firstName}} {{entity.lastName}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Staff Information</caption>
+        <tbody>
+            <tr>
+                <th>LDAP User</th>
+                <td>{% if ldap_user is not null %}{{ ldap_user}}{% else %}Not Set{% endif %} </td>
+            </tr>
+            <tr>
+                <th>Staff ID</th>
+                <td>{{ entity.staffId }}</td>
+            </tr>
+            <tr>
+                <th>Employment Status</th>
+                <td>
+                  {{ entity.employmentStatus }}
+                </td>
+            </tr>
+            <tr>
+                <th>Job Description</th>
+                <td>{{ entity.jobDescription }}</td>
+            </tr>
+            <tr>
+                <th>Functional Area</th>
+                <td>{{ entity.staffFunctionalArea }}</td>
+            </tr>
+            <tr>
+                <th>LibGuides URL</th>
+                <td>{{ entity.guidesUrl }}</td>
+            </tr>
+            <tr>
+                <th>Office</th>
+                <td>{{ entity.office }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.phone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.email }}</td>
+            </tr>
+            <tr>
+                <th>Home Address</th>
+                <td>{{ entity.homeStreet }}, {{ entity.homeCity }}, {{ entity.homeState }} {{ entity.homeZip }}</td>
+            </tr>
+            <tr>
+                <th>Home Phone</th>
+                <td>{{ entity.homePhone }}</td>
+            </tr>
+            <tr>
+                <th>Cell Phone</th>
+                <td>{{ entity.cellPhone }}</td>
+            </tr>
+            <tr>
+                <th>Bio</th>
+                <td>{{ entity.selfIntro }}</td>
+            </tr>
+            <tr>
+                <th>Favorite Websites</th>
+                <td>{{ entity.favoriteWebsites }}</td>
+            </tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+      <caption>Current Photo</caption>
+      <tbody>
+            <tr>
+                <td style="text-align:left">
+                    {% if entity.photo != '' %}
+                        <img width="200px" height="200px" src="{{ asset('uploads/profile/' ~ entity.photo) }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/>
+                    {% else %}
+                        No photo uploaded
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    {% if entity.showPhoto == 1 %}
+                      Set to display publicly
+                    {% else %}
+                      Set to NOT display publicly
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

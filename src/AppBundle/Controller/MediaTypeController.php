@@ -266,4 +266,28 @@ class MediaTypeController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly MediaType entity.
+     *
+     * @Route("/{id}/print", name="mediatype_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:MediaType')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MediaType entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

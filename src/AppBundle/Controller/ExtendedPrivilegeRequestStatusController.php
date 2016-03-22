@@ -274,7 +274,7 @@ class ExtendedPrivilegeRequestStatusController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_EXTENDEDPRIVILEGES_EDIT")
+     * @Secure(roles="ROLE_EXTENDEDPRIVILEGES_VIEW")
      */
     public function printAction($id)
     {

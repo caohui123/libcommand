@@ -6,7 +6,11 @@
         <li role="presentation" class="active"><a href="{{ path('avrequest_equipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
         <li role="presentation"><a href="{{ path('avrequeststatus') }}"><span class="glyphicon glyphicon-check"></span> Statuses</a></li>
     </ul>
-    <h1 class="page-header">AV Request Equipment <span><a class="btn btn-sm btn-primary" href="{{ path('avrequest_equipment_new') }}"><span class="glyphicon glyphicon-plus"></span> New Equipment</a></span></h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'AV Request Equipment', 'newbutton' : true, 'newpath' : path('avrequest_equipment_new'), 'newpathlabel' : 'New Equipment' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <div class="row">
         <div class="col-xs-12">
             <table class="table table-responsive table-striped records_list">

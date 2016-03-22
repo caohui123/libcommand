@@ -299,6 +299,30 @@ class LiaisonSubjectController extends Controller
     }
     
     /**
+     * Displays a printer-friendly LiaisonSubject entity.
+     *
+     * @Route("/{id}/print", name="liaisonsubject_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_LIAISONSUBJECT_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:LiaisonSubject')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find LiaisonSubject entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
+    
+    /**
      * Returns the 'lvl' field of a liaisonSubject
      *
      * @Route("/parent/{id}", name="liaisonsubject_parentlvl")

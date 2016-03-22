@@ -1,12 +1,14 @@
 {% extends '::base.html.twig' %}
 {% block title %}AV Request Equipment{% endblock %}
 {% block body -%}
-    <h1 class="page-header">New AV Request Equipment</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('avrequest_equipment') }}" aria-label="Back to AV Equipment List"><span class="glyphicon glyphicon-arrow-left"></span></a></p>
-      </div>
-    </div>
+    {# Page Header #}
+    {% set headingvars = {'headingcontent' : 'New AV Request Equipment' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set vars = {'basepath' : path('avrequest_equipment')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
+    
     <div class="row">
       <div class="col-xs-12">
           <div class="well well-lg">{{ form(form) }}</div>

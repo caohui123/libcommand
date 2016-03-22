@@ -1,19 +1,15 @@
 {% extends '::base.html.twig' %}
 {% block title %}Patron Groups{% endblock %}
 {% block body -%}
-    <h1 class="page-header">{{entity.name}}</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('admin_patrongroup') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
-      </div>
-    </div>
-    {% if is_granted('ROLE_ADMIN', entity) %}
-    <div class="row">
-        <div class="col-xs-12">
-            <p><a class="badge" href="{{ path('admin_patrongroup_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Group</a></p>
-        </div>
-    </div>
-    {% endif %}
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('admin_patrongroup'), 'editpath' : path('admin_patrongroup_edit', { 'id': entity.id }), 'printpath' : path('admin_patrongroup_print', { 'id': entity.id }), 'editrole' : 'ROLE_ADMIN'} %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">

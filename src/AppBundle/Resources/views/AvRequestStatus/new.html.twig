@@ -1,12 +1,15 @@
 {% extends '::base.html.twig' %}
 {% block title %}AV Request Status{% endblock %}
 {% block body -%}
-    <h1 class="page-header">New AV Request Status</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('avrequeststatus') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
-      </div>
-    </div>
+
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New AV Request Status' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('avrequeststatus')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
+
     <div class="row">
       <div class="col-xs-12">
           <div class="well well-lg">{{ form(form) }}</div>

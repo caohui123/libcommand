@@ -1,0 +1,90 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Material Purchase Request{% endblock %}
+{% block body %}
+<h1>Material Purchase Request: #{{entity.id}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Request Information</caption>
+        <tbody>
+            <tr>
+                <th>Status</th>
+                <td>{% if entity.status %}{{ entity.status }}{% else %}New Request{% endif %}</td>
+            </tr>
+            <tr>
+                <td>Received</td>
+                <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+            </tr>
+            <tr>
+                <td>Patron</td>
+                <td>
+                    {{entity.patronFirstName}} {{entity.patronLastName}} &lt;{{entity.patronEmail}}&gt <br>
+                    Group: {{entity.patronGroup}} <br>
+                    Department: {{entity.patronDepartment}}
+                </td>
+            </tr>
+            <tr>
+                <td>Reason to Add</td>
+                <td>{{entity.reasonToAdd}} | {{entity.reasonToAddExplain}}</td>
+            </tr>
+            <tr>
+                <td>Notification Preferences</td>
+                <td>
+                    {% if entity.notify == 1 and entity.notifiedDate is empty %}
+                      <span class="alert-success">Patron wants to be notified of status changes.</span>
+                    {% elseif entity.notifiedDate is not empty %}
+                        <strong>Responded to patron</strong><br>
+                        <em>{{entity.reply}}</em><br>
+                        <small>-- Sent on {{entity.notifiedDate|date('l n/j/y g:i A')}}</small>
+                    {% else %}
+                      <span class="alert-warning">Patron does NOT want to be notified of status changes.</span>            
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Item Information</caption>
+        <tbody>
+            <tr>
+                <td>Media Type</td>
+                <td>{{entity.mediaType}}</td>
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td>{{entity.title}}</td>
+            </tr>
+            <tr>
+                <td>Author</td>
+                <td>{{entity.author}}</td>
+            </tr>
+            <tr>
+                <td>ISBN</td>
+                <td>{{entity.isbn}}</td>
+            </tr>
+            <tr>
+                <td>ISSN</td>
+                <td>{{entity.issn}}</td>
+            </tr>
+            <tr>
+                <td>Publisher (Year)</td>
+                <td>{{entity.publisher}} ({{entity.publicationYear}})</td>
+            </tr>
+            <tr>
+                <td>Edition</td>
+                <td>{{entity.edition}}</td>
+            </tr>
+            <tr>
+                <td>Price</td>
+                <td>${{entity.price|number_format(2,'.',',')}}</td>
+            </tr>
+            <tr>
+                <td>Item Source</td>
+                <td>{{entity.source}}</td>
+            </tr>
+            <tr>
+                <td>In Library Catalog?</td>
+                <td>{% if entity.isInCatalog %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table> 
+{% endblock %}

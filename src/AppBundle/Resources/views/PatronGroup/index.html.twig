@@ -1,26 +1,28 @@
 {% extends '::base.html.twig' %}
 {% block title %}Patron Groups{% endblock %}
 {% block body -%}
-    <h1 class="page-header">Patron Groups 
-        {% if is_granted('ROLE_ADMIN') %}
-         <span><a class="btn btn-sm btn-primary" href="{{ path('admin_patrongroup_new') }}"><span class="glyphicon glyphicon-plus"></span> New Group</a></span>
-        {% endif %}
-    </h1>            
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Patron Groups', 'newbutton' : true, 'newpath' : path('admin_patrongroup_new'), 'newpathlabel' : 'New Group' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <div class="row">
         <div class="col-xs-12">
             <table class="table table-responsive table-striped records_list">
                 <thead>
                     <tr>
                         <th>Group Title</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for entity in entities %}
                     <tr>
+                        <td>{{ entity.name }}</td>
                         <td>
-                            {{ entity.name }}
                             {% if is_granted('ROLE_ADMIN', entity) %}
-                                <a class="badge" href="{{ path('admin_patrongroup_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('admin_patrongroup_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('admin_patrongroup_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>        
                     </tr>

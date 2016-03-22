@@ -313,7 +313,7 @@ class BookSearchRequestController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_BOOKSEARCH_EDIT")
+     * @Secure(roles="ROLE_BOOKSEARCH_VIEW")
      */
     public function printAction($id)
     {

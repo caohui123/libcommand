@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block body -%}
-    <h1 class="page-header">Liaison Subject Areas <span><a class="btn btn-sm btn-primary" href="{{ path('liaisonsubject_new') }}" role="button" aria-label="Add a new liaison subject"><span class="glyphicon glyphicon-plus"></span> New Subject</a></span></h1> 
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Liaison Subject Areas', 'newbutton' : true, 'newpath' : path('liaisonsubject_new'), 'newpathlabel' : 'New Subject' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <blockquote>
         <p>Liaison subject areas appear on the library website.</p>
     </blockquote>

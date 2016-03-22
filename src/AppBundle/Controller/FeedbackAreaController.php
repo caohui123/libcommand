@@ -304,7 +304,7 @@ class FeedbackAreaController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_FEEDBACK_EDIT")
+     * @Secure(roles="ROLE_FEEDBACK_VIEW")
      */
     public function printAction($id)
     {

@@ -6,7 +6,11 @@
         <li role="presentation"><a href="{{ path('feedbackarea') }}"><span class="glyphicon glyphicon-th"></span> Areas</a></li>
         <li role="presentation"><a href="{{ path('feedbackcategory') }}"><span class="glyphicon glyphicon-tasks"></span> Categories</a></li>
     </ul>
-    <h1 class="page-header">Patron Feedback</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Patron Feedback' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">

@@ -6,7 +6,11 @@
         <li role="presentation"><a href="{{ path('hourssemester') }}"><span class="glyphicon glyphicon-th-large"></span> Semesters</a></li>
         <li role="presentation"><a href="{{ path('hoursevent') }}"><span class="glyphicon glyphicon-tags"></span> Special Events</a></li>
     </ul>
-    <h1 class="page-header">Library Hours: Areas <span><a class="btn btn-sm btn-primary" href="{{ path('hoursarea_new') }}"><span class="glyphicon glyphicon-plus"></span> New Area</a></span></h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Library Hours: Areas', 'newbutton' : true, 'newpath' : path('hoursarea_new'), 'newpathlabel' : 'New Area' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <blockquote>
         <p>To edit the general information, regular hours, or special hours for an area, click "Edit" next to the desired area. To create a new area, select the "New Area" button above.</p>
         <p>Areas are displayed on the website in the order in which they appear here.</p>

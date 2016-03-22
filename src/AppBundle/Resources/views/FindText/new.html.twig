@@ -1,7 +1,14 @@
 {% extends '::base.html.twig' %}
 {% block title %}FindText+ Problems{% endblock %}
 {% block body -%}
-    <h1>New FindText+ Problem</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New FindText+ Problem' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('findtext')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
     {{ form(form) }}
 

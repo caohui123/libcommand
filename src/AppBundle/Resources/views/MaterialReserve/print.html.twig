@@ -1,0 +1,79 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Material Reserve{% endblock %}
+{% block body %}
+<h1>Material Reserve Request #{{entity.id}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>General Information</caption>
+        <tbody>
+            <tr>
+                <th>Submitted</th>
+                <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+            </tr>
+            <tr>
+                <th>Semester</th>
+                <td>{{ entity.semester }} {{ entity.year }}</td>
+            </tr>
+            <tr>
+                <th>Course/Event</th>
+                <td>{{ entity.course }}</td>
+            </tr>
+            <tr>
+                <th>Expected Enrollment</th>
+                <td>{{ entity.enrollment }}</td>
+            </tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Instructor Information</caption>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.instructor }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.phone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% if entity.item is not empty %}
+        <h2>Reserve Items</h2>
+        {% for item in entity.item %} 
+        <table class="libcommand-print-table libcommand-print-table-650">
+            <caption>{{item.title}}</caption>
+            <tbody>
+                <tr>
+                    <th>Media Type</th>
+                    <td>{{item.materialReserveMedia}}</td>
+                </tr>
+                <tr>
+                    <th>Author</th>
+                    <td>{{item.author}}</td>
+                </tr>
+                <tr>
+                    <th>Edition</th>
+                    <td>{{item.edition}}</td>
+                </tr>
+                <tr>
+                    <th>Circulation Period</th>
+                    <td>
+                      {% if item.circulationHours < 24 %}
+                        {{item.circulationHours}} Hours
+                      {% else %}
+                        {{item.circulationHours / 24}} {{ item.circulationHours == 24 ? 'Day' : 'Days' }}
+                      {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% endfor %}
+    {% else %}
+        <p>There were no items associated with this request.</p>
+    {% endif %}
+{% endblock %}

@@ -266,4 +266,28 @@ class RoomRequestRoomController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly RoomRequestRoom entity.
+     *
+     * @Route("/{id}/print", name="roomrequestroom_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_ROOMREQUEST_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:RoomRequestRoom')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find RoomRequestRoom entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

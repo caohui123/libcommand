@@ -255,4 +255,26 @@ class PatronGroupController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly PatronGroup entity.
+     *
+     * @Route("/{id}/print", name="admin_patrongroup_print")
+     * @Method("GET")
+     * @Template()
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:PatronGroup')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PatronGroup entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

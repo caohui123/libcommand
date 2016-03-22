@@ -6,7 +6,11 @@
         <li role="presentation"><a href="{{ path('roomrequestequipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
         <li role="presentation"><a href="{{ path('roomrequestroom') }}"><span class="glyphicon glyphicon-th-large"></span> Room Types</a></li>
     </ul>
-    <h1 class="page-header">Faculty Room Requests</h1>
+
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Faculty Room Requests' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
@@ -32,9 +36,11 @@
                         <td>{% if entity.isTrainingNeeded %}<span class="label label-danger">YES</span>{% else %}<span class="label label-default">No</span>{% endif %}</td>
                         <td>
                             {% if is_granted('ROLE_ROOMREQUEST_EDIT', entity) %}
-                                <a class="badge" href="{{ path('roomrequest_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('roomrequest_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('roomrequest_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% elseif is_granted('ROLE_ROOMREQUEST_VIEW', entity) %}
-                                <a class="badge" href="{{ path('roomrequest_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('roomrequest_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('roomrequest_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>
                     </tr>

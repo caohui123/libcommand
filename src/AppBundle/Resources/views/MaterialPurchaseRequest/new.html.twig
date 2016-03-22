@@ -1,15 +1,14 @@
 {% extends '::base.html.twig' %}
 {% block title %}Material Purchase Requests{% endblock %}
 {% block body -%}
-    <h1>New Material Purchase Request</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New Material Purchase Request' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('materialpurchase')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
     {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('materialpurchase') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
 {% endblock %}

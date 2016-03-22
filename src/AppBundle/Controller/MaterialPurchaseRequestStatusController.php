@@ -266,4 +266,28 @@ class MaterialPurchaseRequestStatusController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly MaterialPurchaseRequestStatus entity.
+     *
+     * @Route("/{id}/print", name="materialpurchasestatus_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:MaterialPurchaseRequestStatus')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MaterialPurchaseRequestStatus entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

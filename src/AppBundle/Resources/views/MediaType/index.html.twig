@@ -7,24 +7,31 @@
         <li role="presentation"><a href="{{ path('materialpurchaserequestreason') }}"><span class="glyphicon glyphicon-blackboard"></span> Purchase Reasons</a></li>
         <li role="presentation"><a href="{{ path('materialpurchasestatus') }}"><span class="glyphicon glyphicon-check"></span> Request Statuses</a></li>
     </ul>
-    <h1 class="page-header">Material Request Media Types <span><a class="btn btn-sm btn-primary" href="{{ path('mediatype_new') }}"><span class="glyphicon glyphicon-plus"></span> New Media</a></span></h1>
+   
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Material Request Media Types', 'newbutton' : true, 'newpath' : path('mediatype_new'), 'newpathlabel' : 'New Media' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <table class="table table-responsive table-striped records_list">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Media Type</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for entity in entities %}
                     <tr>
+                        <td>{{ entity.name }}</td>
                         <td>
-                            {{ entity.name }}
                             {% if is_granted('ROLE_MATERIALPURCHASE_EDIT', entity) %}
-                                <a class="badge" href="{{ path('mediatype_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('mediatype_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('mediatype_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% elseif is_granted('ROLE_MATERIALPURCHASE_VIEW', entity) %}
-                                <a class="badge" href="{{ path('mediatype_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('mediatype_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('mediatype_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>
                     </tr>

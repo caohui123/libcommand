@@ -242,6 +242,30 @@ class MaterialPurchaseRequestReasonController extends Controller
 
         return $this->redirect($this->generateUrl('materialpurchaserequestreason'));
     }
+    
+    /**
+     * Displays a printer-friendly MaterialPurchaseRequestReason entity.
+     *
+     * @Route("/{id}/print", name="materialpurchaserequestreason_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALPURCHASE_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:MaterialPurchaseRequestReason')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MaterialPurchaseRequestReason entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 
     /**
      * Creates a form to delete a MaterialPurchaseRequestReason entity by id.

@@ -6,7 +6,11 @@
         <li role="presentation"><a href="{{ path('feedbackarea') }}"><span class="glyphicon glyphicon-th"></span> Areas</a></li>
         <li role="presentation" class="active"><a href="{{ path('feedbackcategory') }}"><span class="glyphicon glyphicon-tasks"></span> Types</a></li>
     </ul>
-    <h1 class="page-header">Feedback Types <span><a class="btn btn-sm btn-primary" href="{{ path('feedbackcategory_new') }}" role="button" aria-label="Add a new feedback category"><span class="glyphicon glyphicon-plus"></span> New Category</a></span></h1> 
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Feedback Types', 'newbutton' : true, 'newpath' : path('feedbackcategory_new'), 'newpathlabel' : 'New Category' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <blockquote>
         <p>Feedback types are displayed to the patron on the website. Types should represent the topic of the feedback such as "Compliment" or "Complaint".</p>
     </blockquote>

@@ -1,12 +1,16 @@
 {% extends '::base.html.twig' %}
 {% block title %}Material Purchase Requests{% endblock %}
 {% block body -%}
-    <h1 class="page-header">Edit Purchase Request #{{entity.id}}</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('materialpurchase') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
-      </div>
-    </div>
+      
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Edit Purchase Request #' ~ entity.id } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('materialpurchase'), 'printpath' : path('materialpurchase_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
+    
+    
     <blockquote>
       <p>Patrons may only be emailed <mark>once</mark> per request in order to prevent potential spamming. If you fill out a response in the "reply" field, the patron will be responded to on update. If a response has already been sent, you will see it below. Additonally, if a patron specified that they did NOT want to be informed of updates, the "reply" field will not show.</p>
     </blockquote>

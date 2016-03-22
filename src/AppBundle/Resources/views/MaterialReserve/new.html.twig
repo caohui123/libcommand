@@ -1,7 +1,14 @@
 {% extends '::base.html.twig' %}
 {% block title %}Material Reserves{% endblock %}
 {% block body -%}
-    <h1 class="page-header">New Material Reserve Request</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New Material Reserve Request' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('materialreserve')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
     {{ form_start(form) }}
       <fieldset>
@@ -12,13 +19,6 @@
       </fieldset>
     {{ form_end(form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('materialreserve') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
 {% endblock %}
 {% block documentReady %}
   

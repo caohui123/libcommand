@@ -1,0 +1,16 @@
+{# 
+Page header <h1></h1> 
+Variables used in this page are declared in the including twig file.
+If 'newbutton' is set to true, include a button to add a new entity along with the header
+#}
+
+{% if newpathlabel is not defined %}
+    {% set newpathlabel = 'New' %}
+{% endif %}
+
+<h1 class="page-header">{{ headingcontent }}
+    {% if newbutton is defined and newbutton %}
+        <span><a class="btn btn-sm btn-primary" href="{{ newpath }}" aria-labelledby="{{ newpathlabel }}"><span class="glyphicon glyphicon-plus"></span> {{ newpathlabel }}</a></span>
+    {% endif %}
+</h1>
+

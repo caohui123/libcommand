@@ -242,6 +242,28 @@ class UserController extends Controller
     }
     
     /**
+     * Displays a printer-friendly User entity.
+     *
+     * @Route("/{id}/print", name="user_print")
+     * @Method("GET")
+     * @Template()
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:User')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
+    
+    /**
      * Displays a form to edit an existing User entity.
      *
      * @Route("/{id}/editPermission", name="user_permissions_update")

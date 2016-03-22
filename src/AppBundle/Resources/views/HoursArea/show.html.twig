@@ -1,22 +1,19 @@
 {% extends '::base.html.twig' %}   
 {% block title %}Library Hours: Areas{% endblock %}
 {% block body %}
-    <h1 class="page-header">Area: {{entity.name}}</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('hoursarea') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Areas</a></p>
-      </div>
-    </div>
+      
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Area: ' ~ entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
       <blockquote>
-          <p>To view and edit hours for this area, click the "edit area" button below (you must have proper permissions).
+          <p>To view and edit hours for this area, click the pencil icon below (you must have proper permissions).
       </blockquote>
-    {% if is_granted('ROLE_HOURS_EDIT', entity) %}
-    <div class="row">
-        <div class="col-xs-12">
-            <p><a class="badge" href="{{ path('hoursarea_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Area</a></p>
-        </div>
-    </div>
-    {% endif %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('hoursarea'), 'editpath' : path('hoursarea_edit', { 'id': entity.id }), 'editrole' : 'ROLE_HOURS_EDIT' } %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">

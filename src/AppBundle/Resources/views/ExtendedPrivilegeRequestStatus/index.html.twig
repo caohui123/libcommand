@@ -5,7 +5,10 @@
         <li role="presentation"><a href="{{ path('extendedprivilege') }}"><span class="glyphicon glyphicon-th-list"></span> Extended Privilege Requests</a></li>
         <li role="presentation" class="active"><a href="{{ path('extendedprivilege_status') }}"><span class="glyphicon glyphicon-check"></span> Statuses</a></li>
     </ul>
-    <h1 class="page-header">Extended Privilege Statuses <span><a class="btn btn-sm btn-primary" href="{{ path('extendedprivilege_status_new') }}"><span class="glyphicon glyphicon-plus"></span> New Status</a></span></h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Extended Privilege Statuses', 'newbutton' : true, 'newpath' : path('extendedprivilege_status_new'), 'newpathlabel' : 'New Status' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
     
     <div class="row">
         <div class="col-xs-12">

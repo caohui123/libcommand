@@ -285,6 +285,28 @@ class StaffAreaController extends Controller
     }
     
     /**
+     * Displays a printer-friendly StaffArea entity.
+     *
+     * @Route("/{id}/print", name="admin_staffareas_print")
+     * @Method("GET")
+     * @Template()
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:StaffArea')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find StaffArea entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
+    
+    /**
      * Returns the 'lvl' field of a staffArea
      *
      * @Route("/parent/{id}", name="staffarea_parentlvl")

@@ -1,7 +1,14 @@
 {% extends '::base.html.twig' %}
 {% block title %}Extended Privilege Request{% endblock %}
 {% block body %}
-    <h1>New Extended Privilege Request</h1>
+
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New Extended Privilege Request' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('extendedprivilege')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
     {{ form(form) }}
 

@@ -5,7 +5,11 @@
         <li role="presentation" class="active"><a href="{{ path('extendedprivilege') }}"><span class="glyphicon glyphicon-th-list"></span> Extended Privilege Requests</a></li>
         <li role="presentation"><a href="{{ path('extendedprivilege_status') }}"><span class="glyphicon glyphicon-check"></span> Statuses</a></li>
     </ul>
-    <h1 class="page-header">Extended Privilege Requests</h1>
+
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Extended Privilege Requests' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">

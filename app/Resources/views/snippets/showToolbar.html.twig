@@ -1,0 +1,17 @@
+{# for inclusion in show.html.twig files...variables declared in those files are used below #} 
+<div class="row">
+    <div class="col-xs-12 col-sm-4">
+        <p><a class="btn btn-sm btn-primary" href="{{ basepath }}" aria-label="Back to List"><span class="glyphicon glyphicon-arrow-left"></span></a></p>
+    </div>
+    <div class="col-xs-12 col-sm-8 text-right" role="toolbar" aria-label="options-toolbar">
+        <p>
+            {% if is_granted(editrole, entity) %}
+            <a class="btn btn-sm btn-default" href="{{ editpath }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+            {% endif %}
+            
+            {% if printpath is defined %}
+            <a class="btn btn-sm btn-default" target="_blank" href="{{ printpath }}" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+            {% endif %}
+        </p>
+    </div>
+</div>

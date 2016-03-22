@@ -1,0 +1,43 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}LDAP User{% endblock %}
+{% block body %}
+<h1>LDAP User {{entity.username}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Status</caption>
+        <tbody>
+            <tr>
+                <th>Associated Staff Member</th>
+                <td>
+                    {% if entity.staffMember %}
+                        {{entity.staffMember.firstName}} {{entity.staffMember.lastName}}
+                    {% else %}
+                        No associated staff member.
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Email Address</th>
+                <td>
+                    {{ entity.email }}
+                </td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                {% if entity.isActive %}
+                    This user is active.
+                {% else %}
+                    This user is inactive.
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Last Login</th>
+                <td>
+                    {{ entity.lastLogin|date('n/j/y g:i A') }} <br><i>(as of {{ "now"|date('n/j/y g:i A') }})<i>
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+{% endblock %}

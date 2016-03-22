@@ -266,4 +266,28 @@ class MaterialReserveMediaController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly MaterialReserveMedia entity.
+     *
+     * @Route("/{id}/print", name="materialreservemedia_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_MATERIALRESERVE_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:MaterialReserveMedia')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MaterialReserveMedia entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

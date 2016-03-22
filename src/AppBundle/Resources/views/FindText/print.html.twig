@@ -1,0 +1,22 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}FindText+ Issue{% endblock %}
+{% block body %}
+<h1>FindText+ Issue: #{{entity.id}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Submission Info</caption>
+        <tbody>
+            <tr><th>Received</th><td>{{ entity.created|date('l n/j/y g:i A') }}</td></tr>
+            <tr><th>Patron</th><td>{{ entity.patronFirstName }} {{ entity.patronLastName }}</td></tr>
+            <tr><th>Email</th><td>{{ entity.patronEmail }}</td></tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Issue</caption>
+        <tbody>
+            <tr>
+                <td style="text-align: left">{{entity.comment}}</td>
+            </tr>
+        </tbody>
+    </table> 
+{% endblock %}

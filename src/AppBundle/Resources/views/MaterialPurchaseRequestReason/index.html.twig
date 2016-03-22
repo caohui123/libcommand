@@ -7,7 +7,10 @@
         <li role="presentation" class="active"><a href="{{ path('materialpurchaserequestreason') }}"><span class="glyphicon glyphicon-blackboard"></span> Purchase Reasons</a></li>
         <li role="presentation"><a href="{{ path('materialpurchasestatus') }}"><span class="glyphicon glyphicon-check"></span> Request Statuses</a></li>
     </ul>
-    <h1 class="page-header">Material Purchase Request Reasons <span><a class="btn btn-sm btn-primary" href="{{ path('materialpurchaserequestreason_new') }}"><span class="glyphicon glyphicon-plus"></span> New Reason</a></span></h1>
+ 
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Material Purchase Request Reasons', 'newbutton' : true, 'newpath' : path('materialpurchaserequestreason_new'), 'newpathlabel' : 'New Reason' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
     
     <blockquote>
         <p>Request pruchase reasons are presented to the patron. The patron can supply an additional explanation along with the reasons created here.</p>
@@ -18,17 +21,20 @@
                 <thead>
                     <tr>
                         <th>Reason</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for entity in entities %}
                     <tr>
+                        <td>{{ entity.name }}</td>
                         <td>
-                            {{ entity.name }}
                             {% if is_granted('ROLE_MATERIALPURCHASE_EDIT', entity) %}
-                                <a class="badge" href="{{ path('materialpurchaserequestreason_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-                            {% elseif is_granted('ROLE_MATERIALPURCHASE_VIEW', entity) %}
-                                <a class="badge" href="{{ path('materialpurchaserequestreason_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('materialpurchaserequestreason_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('materialpurchaserequestreason_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                            {% elseif is_granted('ROLE_AV_VIEW', entity) %}
+                                <a class="badge" href="{{ path('materialpurchaserequestreason_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('materialpurchaserequestreason_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>
                     </tr>

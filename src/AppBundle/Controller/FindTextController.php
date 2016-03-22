@@ -276,4 +276,28 @@ class FindTextController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly FindText entity.
+     *
+     * @Route("/{id}/print", name="findtext_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_FINDTEXT_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:FindText')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find FindText entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
 }

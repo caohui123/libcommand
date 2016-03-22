@@ -1,7 +1,13 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-    <h1>AvRequest creation</h1>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New AV Request' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('avrequests')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
     {{ form_start(form) }}
       <fieldset>
@@ -17,14 +23,7 @@
         </ul>
       </fieldset>
     {{ form_end(form) }}
-    
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('avrequests') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+
 {% endblock %}
 {% block documentReady %}
   

@@ -274,7 +274,7 @@ class AvRequestEquipmentController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_AV_EDIT")
+     * @Secure(roles="ROLE_AV_VIEW")
      */
     public function printAction($id)
     {

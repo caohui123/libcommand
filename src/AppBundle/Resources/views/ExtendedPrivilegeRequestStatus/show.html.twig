@@ -1,20 +1,15 @@
 {% extends '::base.html.twig' %}
 {% block title %}Extended Privilege Status{% endblock %}
 {% block body -%}
-    <h1 class="page-header">Status: {{entity.name}}</h1>
-    <div class="row">
-        <div class="col-xs-12 col-sm-4">
-            <p><a class="btn btn-sm btn-primary" href="{{ path('extendedprivilege_status') }}" aria-label="Back to Status List"><span class="glyphicon glyphicon-arrow-left"></span></a></p>
-        </div>
-        <div class="col-xs-12 col-sm-8 text-right" role="toolbar" aria-label="options-toolbar">
-            <p>
-                {% if is_granted('ROLE_EXTENDEDPRIVILEGES_EDIT', entity) %}
-                <a class="btn btn-sm btn-default" href="{{ path('extendedprivilege_status_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                {% endif %}
-                <a class="btn btn-sm btn-default" target="_blank" href="{{ path('extendedprivilege_status_print', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-print"></span></a>
-            </p>
-        </div>
-    </div>
+           
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Status: ' ~ entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('extendedprivilege_status'), 'editpath' : path('extendedprivilege_status_edit', { 'id': entity.id }), 'printpath' : path('extendedprivilege_status_print', { 'id': entity.id }), 'editrole' : 'ROLE_EXTENDEDPRIVILEGES_EDIT'} %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">

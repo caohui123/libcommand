@@ -1,30 +1,24 @@
 {% extends '::base.html.twig' %}
 {% block title %}Library Hours: Semesters{% endblock %}
 {% block body -%}
-    <h1 class="page-header">Semester: 
-                            {% if entity.season == 0 %}
-                                Winter
-                            {% elseif entity.season == 1 %}
-                                Spring
-                            {% elseif entity.season == 2 %}
-                                Summer
-                            {% elseif entity.season == 3 %}
-                                Fall
-                            {% endif %}    
-                            {{ entity.year }}
-    </h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('hourssemester') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to Semester List</a></p>
-      </div>
-    </div>
-    {% if is_granted('ROLE_HOURS_EDIT', entity) %}
-    <div class="row">
-        <div class="col-xs-12">
-            <p><a class="badge" href="{{ path('hourssemester_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Semester</a></p>
-        </div>
-    </div>
-    {% endif %}
+    {% if entity.season == 0 %}
+        {% set season = 'Winter' %}
+    {% elseif entity.season == 1 %}
+        {% set season = 'Spring' %}
+    {% elseif entity.season == 2 %}
+        {% set season = 'Summer' %}
+    {% elseif entity.season == 3 %}
+        {% set season = 'Fall' %}
+    {% endif %}    
+                            
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Semester: ' ~ season ~ ' ' ~ entity.year } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('hourssemester'), 'editpath' : path('hourssemester_edit', { 'id': entity.id }), 'editrole' : 'ROLE_HOURS_EDIT' } %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">
@@ -32,15 +26,7 @@
                 <tr>
                     <th>Semester</th>
                     <td>
-                        {% if entity.season == 0 %}
-                            Winter
-                        {% elseif entity.season == 1 %}
-                            Spring
-                        {% elseif entity.season == 2 %}
-                            Summer
-                        {% elseif entity.season == 3 %}
-                            Fall
-                        {% endif %}    
+                        {{ season }}   
                         {{ entity.year }}
                     </td>
                 </tr>

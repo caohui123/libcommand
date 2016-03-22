@@ -1,19 +1,15 @@
 {% extends '::base.html.twig' %}
-{% block title %}Faculty Room Request Room Types{% endblock %}
+{% block title %}Faculty Room Types{% endblock %}
 {% block body -%}  
-    <h1 class="page-header">{{entity.name}}</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('roomrequestroom') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
-      </div>
-    </div>
-    {% if is_granted('ROLE_ROOMREQUEST_EDIT', entity) %}
-    <div class="row">
-        <div class="col-xs-12">
-            <p><a class="badge" href="{{ path('roomrequestroom_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit Equipment</a></p>
-        </div>
-    </div>
-    {% endif %}
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Faculty Room Type: ' ~ entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('roomrequestroom'), 'editpath' : path('roomrequestroom_edit', { 'id': entity.id }), 'printpath' : path('roomrequestroom_print', { 'id': entity.id }), 'editrole' : 'ROLE_ROOMREQUEST_EDIT'} %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">

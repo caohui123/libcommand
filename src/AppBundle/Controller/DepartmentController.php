@@ -294,7 +294,7 @@ class DepartmentController extends Controller
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_DEPARTMENTS_EDIT")
+     * @Secure(roles="ROLE_DEPARTMENTS_VIEW")
      */
     public function printAction($id)
     {

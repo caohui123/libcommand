@@ -5,44 +5,10 @@
 {% endblock %}
 
 {% block body -%}
-  
-<style>
-.just-padding {
-    padding: 15px;
-}
 
-.list-group.list-group-root {
-    padding: 0;
-    overflow: hidden;
-}
-
-.list-group.list-group-root .list-group {
-    margin-bottom: 0;
-}
-
-.list-group.list-group-root .list-group-item {
-    border-radius: 0;
-    border-width: 1px 0 0 0;
-}
-
-.list-group.list-group-root > .list-group-item:first-child {
-    border-top-width: 0;
-}
-
-.list-group.list-group-root > .list-group > .list-group-item {
-    padding-left: 30px;
-}
-
-.list-group.list-group-root > .list-group > .list-group > .list-group-item {
-    padding-left: 45px;
-}
-
-.list-group-item .glyphicon {
-    margin-right: 5px;
-}
-</style> 
-
-    <h1 class="page-header">Staff Areas <span><a class="btn btn-sm btn-primary" href="{{ path('admin_staffareas_new') }}" role="button" aria-label="Add a new staff area"><span class="glyphicon glyphicon-plus"></span> New Area</a></span></h1> 
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Staff Areas', 'newbutton' : true, 'newpath' : path('admin_staffareas_new'), 'newpathlabel' : 'New Area' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
     
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">

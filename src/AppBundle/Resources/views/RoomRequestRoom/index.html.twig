@@ -1,12 +1,16 @@
 {% extends '::base.html.twig' %}
-{% block title %}Faculty Room Request Room Types{% endblock %}
+{% block title %}Faculty Room Types{% endblock %}
 {% block body -%}
     <ul class="nav nav-pills">
         <li role="presentation"><a href="{{ path('roomrequest') }}"><span class="glyphicon glyphicon-th-list"></span> Room Requests</a></li>
         <li role="presentation"><a href="{{ path('roomrequestequipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
         <li role="presentation" class="active"><a href="{{ path('roomrequestroom') }}"><span class="glyphicon glyphicon-th-large"></span> Room Types</a></li>
     </ul>
-    <h1 class="page-header">Room Request Room Types  <span><a class="btn btn-sm btn-primary" href="{{ path('roomrequestroom_new') }}"><span class="glyphicon glyphicon-plus"></span> New Room Type</a></span></h1>
+
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Faculty Room Types', 'newbutton' : true, 'newpath' : path('roomrequestroom_new'), 'newpathlabel' : 'New Room Type' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <table class="table table-responsive table-striped records_list">
@@ -23,9 +27,11 @@
                         <td>{{ entity.name }}</td>
                         <td>
                             {% if is_granted('ROLE_ROOMREQUEST_EDIT', entity) %}
-                                <a class="badge" href="{{ path('roomrequestroom_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('roomrequestroom_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('roomrequestroom_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% elseif is_granted('ROLE_ROOMREQUEST_VIEW', entity) %}
-                                <a class="badge" href="{{ path('roomrequestroom_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('roomrequestroom_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('roomrequestroom_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>
                     </tr>

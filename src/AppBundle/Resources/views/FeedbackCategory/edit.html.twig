@@ -1,15 +1,15 @@
 {% extends '::base.html.twig' %}
 {% block title %}Patron Feedback Type{% endblock %}
 {% block body %}
-    <h1 class="page-header">Edit Type: {{entity.name}}</h1>
-    <div class="row">
-        <div class="col-xs-12 col-sm-4">
-            <p><a class="btn btn-sm btn-primary" href="{{ path('feedbackcategory') }}" aria-label="Back to Feedback Type List"><span class="glyphicon glyphicon-arrow-left"></span></a></p>
-        </div>
-        <div class="col-xs-12 col-sm-8 text-right" role="toolbar" aria-label="options-toolbar">
-                <p><a class="btn btn-sm btn-default" target="_blank" href="{{ path('feedbackcategory_print', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-print"></span></a></p>
-        </div>
-    </div>
+        
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Edit Type: ' ~ entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('feedbackcategory'), 'printpath' : path('feedbackcategory_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
       <div class="col-xs-12">
           <div class="well well-lg">{{ form(edit_form) }} 

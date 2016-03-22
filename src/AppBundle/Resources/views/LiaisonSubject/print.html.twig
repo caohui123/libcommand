@@ -1,0 +1,66 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Liaison Subject{% endblock %}
+{% block body %}
+<h1>Liaison Subject: #{{entity.name}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Area Information</caption>
+        <tbody>
+            <tr>
+                <th>Title</th>
+                <td>{{entity.name}}</td>
+            </tr>
+            <tr>
+                <th>Primary Liaison</th>
+                <td>
+                    {% if entity.primaryLiaison is not null %}
+                        {{entity.primaryLiaison}}
+                    {% else %}
+                        none
+                    {% endif %} 
+                </td>
+            </tr>
+            <tr>
+                <th>Secondary Liaison</th>
+                <td>
+                    {% if entity.secondaryLiaison is not null %}
+                        {{entity.secondaryLiaison}}
+                    {% else %}
+                        none
+                    {% endif %} 
+                </td>
+            </tr>
+            <tr>
+                <th>Parent Subject</th>
+                <td>
+                    {% if entity.parent is not null %}
+                        {{entity.parent}}
+                    {% else %}
+                        none (Top level)
+                    {% endif %} 
+                </td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td>{{entity.phone}}</td>
+            </tr>
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Faculty Liaison</caption>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{entity.facultyName}}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{entity.facultyPhone}}</td>
+            </tr>
+            <tr>
+                <th>Office</th>
+                <td>{{entity.facultyOffice}}</td>
+            </tr>
+        </tbody>
+    </table> 
+{% endblock %}

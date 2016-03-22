@@ -344,4 +344,31 @@ class StaffController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Displays a printer-friendly Staff entity.
+     *
+     * @Route("/{id}/print", name="staff_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_STAFF_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:Staff')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Staff entity.');
+        }
+         
+        $ldap_user = $em->getRepository('AppBundle:User')->findOneBy( array('staffMember'=>$entity) );
+        
+        return array(
+            'entity'      => $entity,
+            'ldap_user'   => $ldap_user,
+        );
+    }
 }

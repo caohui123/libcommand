@@ -1,0 +1,12 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Material Purchase Request Status{% endblock %}
+{% block body %}
+<h1>Material Purchase Status: {{entity.name}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Purchase Status</caption>
+        <tbody>
+            <tr><th>Status</th><td>{{entity.name}}</td></tr>
+        </tbody>
+    </table> 
+{% endblock %}

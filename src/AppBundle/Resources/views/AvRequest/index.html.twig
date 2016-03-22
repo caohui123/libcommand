@@ -6,7 +6,11 @@
         <li role="presentation"><a href="{{ path('avrequest_equipment') }}"><span class="glyphicon glyphicon-blackboard"></span> Equipment</a></li>
         <li role="presentation"><a href="{{ path('avrequeststatus') }}"><span class="glyphicon glyphicon-check"></span> Statuses</a></li>
     </ul>
-    <h1 class="page-header">Audio/Visual Requests</h1> 
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Audio/Visual Requests' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">

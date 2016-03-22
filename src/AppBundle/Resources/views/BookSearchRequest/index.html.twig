@@ -1,7 +1,11 @@
 {% extends '::base.html.twig' %}
 {% block title %}Book Search Requests{% endblock %}
 {% block body -%}
-    <h1 class="page-header">Book Search Requests</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Book Search Requests' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">

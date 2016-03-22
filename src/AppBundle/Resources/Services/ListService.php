@@ -27,7 +27,7 @@ class ListService{
       $level = $entity->getLvl();
       if($level == 0){
         $styled_list .= 
-            '<li class="list-group-item"><strong>'.$entity->getTitle().'</strong><a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
+            '<li class="list-group-item"><strong>'.$entity->getTitle().'</strong><a class="badge" aria-label="print" href="'.$this->router->generate('admin_staffareas_print', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-print"></span></span></a><a class="badge" aria-label="edit" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span></span></a></li>';
         $styled_list .= '<div class="list-group" id="item-'.$parent_count.'">';
         
         
@@ -37,8 +37,7 @@ class ListService{
         $child_count = 0;
         foreach($children as $child){
           $styled_list .= 
-              //'<a href="#item-'.$parent_count.'-'.$child_count.'" class="list-group-item" data-toggle="collapse"><i class="glyphicon glyphicon-chevron-right"></i>'.$child->getTitle().'</a>';
-              '<li class="list-group-item">'.$child->getTitle().'<a class="badge" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</span></a></li>';
+              '<li class="list-group-item">'.$child->getTitle().'<a class="badge" aria-label="print" href="'.$this->router->generate('admin_staffareas_print', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-print"></span></span></a><a class="badge" aria-label="edit" href="'.$this->router->generate('admin_staffareas_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span></span></a></li>';
           $styled_list .= '<div class="list-group collapse" id="item-'.$parent_count.'-'.$child_count.'">';
           
           //Grandchildren (level 3)
@@ -79,7 +78,7 @@ class ListService{
           <div class="panel-heading">'.$entity->getName();
         
         if(true === $this->authorizationChecker->isGranted('ROLE_LIAISONSUBJECT_EDIT')){
-            $styled_list .= ' <a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$entity->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
+            $styled_list .= ' | <a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$entity->getId())).'" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a> <a class="badge" target="_blank" href="'.$this->router->generate('liaisonsubject_print', array('id'=>$entity->getId())).'" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>';
         }
         $styled_list .= '
           </div>
@@ -94,6 +93,7 @@ class ListService{
                 <th>Secondary Liaison</th>
                 <th>Phone Number</th>
                 <th>Faculty Liaison</th>
+                <th>Actions</th>
               </tr>
             </thead>
         ';
@@ -111,15 +111,17 @@ class ListService{
           $faculty_office = $child->getFacultyOffice();
           
           $styled_list .= '<tr>';
-          $styled_list .= '<td>'.$child->getName(). ' ';
-          if(true === $this->authorizationChecker->isGranted('ROLE_LIAISONSUBJECT_EDIT')){
-            $styled_list .= '<a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$child->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
-          }
-          $styled_list .= '</td>';
+          $styled_list .= '<td>'.$child->getName(). '</td>';
           $styled_list .= '<td>'.$primary_liaison.'</td>';
           $styled_list .= '<td>'.$secondary_liaison.'</td>';
           $styled_list .= '<td>'.$phone.'</td>';
           $styled_list .= '<td>'.$faculty_liaison.'<br>'.$faculty_phone.'<br>'.$faculty_office.'</td>';
+          $styled_list .= '<td>';
+          if(true === $this->authorizationChecker->isGranted('ROLE_LIAISONSUBJECT_EDIT')){
+            $styled_list .= '<a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$child->getId())).'" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>';
+          }
+          $styled_list .= '<a class="badge" target="_blank" href="'.$this->router->generate('liaisonsubject_print', array('id'=>$child->getId())).'" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>';
+          $styled_list .= '</td>';
           $styled_list .= '</tr>';
           
           //Grand Children (Level 3)
@@ -134,15 +136,17 @@ class ListService{
             $faculty_office = $grandchild->getFacultyOffice();
             
             $styled_list .= '<tr>';
-            $styled_list .= '<td><span class="glyphicon glyphicon-chevron-up"></span> '.$grandchild->getName().' ';
-            if(true === $this->authorizationChecker->isGranted('ROLE_LIAISONSUBJECT_EDIT')){
-                $styled_list .= '<a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$grandchild->getId())).'"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
-            }
-            $styled_list .= '</td>';
+            $styled_list .= '<td><span class="glyphicon glyphicon-chevron-up"></span> '.$grandchild->getName().'</td>';
             $styled_list .= '<td>'.$gc_primary_liaison.'</td>';
             $styled_list .= '<td>'.$gc_secondary_liaison.'</td>';
             $styled_list .= '<td>'.$phone.'</td>';
             $styled_list .= '<td>'.$faculty_liaison.'<br>'.$faculty_phone.'<br>'.$faculty_office.'</td>';
+            $styled_list .= '<td>';
+            if(true === $this->authorizationChecker->isGranted('ROLE_LIAISONSUBJECT_EDIT')){
+              $styled_list .= '<a class="badge" href="'.$this->router->generate('liaisonsubject_edit', array('id'=>$grandchild->getId())).'" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>';
+            }
+            $styled_list .= '<a class="badge" target="_blank" href="'.$this->router->generate('liaisonsubject_print', array('id'=>$grandchild->getId())).'" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>';
+            $styled_list .= '</td>';
             $styled_list .= '</tr>';
             
             $grandchild_count++;

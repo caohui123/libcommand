@@ -1,0 +1,88 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Faculty Room Request{% endblock %}
+{% block body %}
+<h1>Faculty Room Request #{{entity.id}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Request Information</caption>
+        <tbody>
+              <tr>
+                  <th>Received</th>
+                  <td>{{ entity.created|date('l n/j/y g:i A') }}</td>
+              </tr>  
+              <tr>
+                  <th>Reservation Date</th>
+                  <td>{{ entity.reserveDate|date('l n/j/y g:i A') }}</td>
+              </tr>
+              <tr>
+                  <th>Start</th>
+                  <td>{{ entity.startTime|date('H:i') }}</td>
+              </tr>
+              <tr>
+                  <th>End</th>
+                  <td>{{ entity.endTime|date('H:i') }}</td>
+              </tr>
+              <tr>
+                  <th>Room Type</th>
+                  <td>{% if entity.room %}{{entity.room}}{% endif %}</td>
+              </tr>
+              <tr>
+                  <th>Class/Event</th>
+                  <td>{{ entity.event }}</td>
+              </tr>
+              <tr>
+                  <th>Attendees</th>
+                  <td>{{ entity.attendees }}</td>
+              </tr>
+              <tr>
+                  <th>Equipment</th>
+                  <td>
+                      {% if entity.equipment %}
+                      <ul>
+                      {% for equipment in entity.equipment %}
+                          <li>{{equipment.name}}</li>
+                      {% endfor %}
+                      </ul>
+                      {% endif %}
+                  </td>
+              </tr>
+              <tr>
+                  <th>Other Details</th>
+                  <td>{{ entity.otherDetails }}</td>
+              </tr>
+              <tr>
+                  <th>Staff Note</th>
+                  <td>{{ entity.note }}</td>
+              </tr>
+          </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Faculty Information</caption>
+        <tbody>
+            <tr>
+                <th>First Name</th>
+                <td>{{ entity.facultyFirstName }}</td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td>{{ entity.facultyLastName }}</td>
+            </tr>
+            <tr>
+                <th>Department</th>
+                <td>{% if entity.facultySubject %}{{ entity.facultySubject }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.facultyPhone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.facultyEmail }}</td>
+            </tr>
+            <tr>
+                <th>Training Needs</th>
+                <td>{% if entity.isTrainingNeeded %}<p class="alert alert-success">REQUESTED<p>{% else %}<p class="alert alert-info">Not Requested{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Media Type{% endblock %}
+{% block body %}
+<h1>Media Type: {{entity.name}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Media Type</caption>
+        <tbody>
+            <tr><th>Media Type</th><td>{{entity.name}}</td></tr>
+        </tbody>
+    </table> 
+{% endblock %}

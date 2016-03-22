@@ -1,12 +1,15 @@
 {% extends '::base.html.twig' %}
 {% block title %}FindText+ Problems{% endblock %}
 {% block body -%}
-    <h1 class="page-header">Edit FindText+ Problem #{{entity.id}}</h1>
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a class="btn btn-sm btn-primary" href="{{ path('findtext') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a></p>
-      </div>
-    </div>
+    
+    {# Page heading #}
+    {% set headingvars = {'headingcontent' : 'Edit FindText+ Problem #' ~ entity.id } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolvars = {'basepath' : path('findtext'), 'printpath' : path('findtext_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolvars %}
+    
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <table class="table table-responsive table-striped">

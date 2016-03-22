@@ -7,7 +7,11 @@
         <li role="presentation"><a href="{{ path('materialpurchaserequestreason') }}"><span class="glyphicon glyphicon-blackboard"></span> Purchase Reasons</a></li>
         <li role="presentation"><a href="{{ path('materialpurchasestatus') }}"><span class="glyphicon glyphicon-check"></span> Request Statuses</a></li>
     </ul>
-    <h1 class="page-header">Material Purchase Requests</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Material Purchase Requests' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
@@ -31,9 +35,11 @@
                         <td>{{ entity.title }}</td>
                         <td>
                             {% if is_granted('ROLE_MATERIALPURCHASE_EDIT', entity) %}
-                                <a class="badge" href="{{ path('materialpurchase_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                                <a class="badge" href="{{ path('materialpurchase_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('materialpurchase_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% elseif is_granted('ROLE_MATERIALPURCHASE_VIEW', entity) %}
-                                <a class="badge" href="{{ path('materialpurchase_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+                                <a class="badge" href="{{ path('materialpurchase_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('materialpurchase_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                             {% endif %}
                         </td>
                     </tr>

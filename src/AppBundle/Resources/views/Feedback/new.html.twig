@@ -1,7 +1,14 @@
 {% extends '::base.html.twig' %}
 {% block title %}Patron Feedback{% endblock %}
 {% block body -%}
-    <h1>New Feedback</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New Feedback' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('feedback')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
     {{ form(form) }}
 
