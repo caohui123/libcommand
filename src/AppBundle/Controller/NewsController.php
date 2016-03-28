@@ -31,35 +31,24 @@ class NewsController extends Controller
      * 
      * @Secure(roles="ROLE_NEWS_VIEW")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:News')->findAll();
+        $entities = $em->getRepository('AppBundle:News')->findBy(array(), array('created' => 'DESC'));
         
-        /*return array(
-            'entities' => $entities,
-        );*/
-        
-        $paginatedCollection = new PaginatedRepresentation(
-            new CollectionRepresentation(
-                $entities,  
-                'news_stories', // embedded rel
-                'news_stories'  // xml element name
-            ),
-            'news_list', // route
-            array(), // route parameters
-            1,       // page number
-            20,      // limit
-            4,       // total pages
-            'page',  // page route parameter name, optional, defaults to 'page'
-            'limit', // limit route parameter name, optional, defaults to 'limit'
-            false,   // generate relative URIs, optional, defaults to `false`
-            75       // total collection size, optional, defaults to `null`
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
         );
-        
+
         return array(
-            'paginatedCollection' => $paginatedCollection,
+            'pagination' => $pagination
         );
     }
     /**
@@ -79,6 +68,7 @@ class NewsController extends Controller
 
         if ($form->isValid()) {
             $entity->setAuthor($this->get('security.context')->getToken()->getUser()); //set the author as the user who made the entity
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -229,6 +219,12 @@ class NewsController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            
+            //erase an emergency level (string) if the News is no longer marked as an emergency
+            if(0 == $entity->getEmergency() && null !== $entity->getEmergencyLevel()){
+                $entity->setEmergencyLevel(null);
+            }
+            $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('news_edit', array('id' => $id)));
@@ -290,5 +286,29 @@ class NewsController extends Controller
             )
             ->getForm()
         ;
+    }
+    
+    /**
+     * Displays a printer-friendly News entity.
+     *
+     * @Route("/{id}/print", name="news_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_NEWS_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:News')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find News entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
     }
 }

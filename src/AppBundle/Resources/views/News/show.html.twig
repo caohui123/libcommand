@@ -1,52 +1,42 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library News{% endblock %}
 {% block body -%}
-    <h1>News</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ entity.title }}</td>
-            </tr>
-            <tr>
-                <th>Body</th>
-                <td>{{ entity.body }}</td>
-            </tr>
-            <tr>
-                <th>Hidden</th>
-                <td>{{ entity.hidden }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Contentchangedby</th>
-                <td>{{ entity.contentChangedBy }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('news') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('news_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Library News: ' ~ entity.title } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('news'), 'editpath' : path('news_edit', { 'id': entity.id }), 'printpath' : path('news_print', { 'id': entity.id }), 'editrole' : 'ROLE_NEWS_EDIT'} %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <table class="table table-responsive table-striped">
+            <tbody>
+                <tr>
+                    <th>Title</th>
+                    <td>{{ entity.title }}</td>
+                </tr>
+                <tr>
+                    <th>Content</th>
+                    <td>{{ entity.body }}</td>
+                </tr>
+                <tr>
+                    <th>Created</th>
+                    <td>{{ entity.created|date('l n/j/y g:i A') }} by {{ entity.author }}</td>
+                </tr>
+                <tr>
+                    <th>Updated</th>
+                    <td>
+                        {% if date(entity.updated) != date(entity.created) %}
+                            {{ entity.updated|date('l n/j/y g:i A')  }} {% if entity.contentChangedBy is defined %} by {{ entity.contentChangedBy }} {% endif %}
+                        {% else %}
+                            Never
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
 {% endblock %}

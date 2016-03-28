@@ -1,9 +1,58 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library News{% endblock %}
 {% block body -%}
-    <h1>News list</h1>
-    {{ dump(paginatedCollection) }}
-    {% for entity in paginatedCollection.inline.resources %}
-      {{ entity.title }}
-    {% endfor %}
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Library News', 'newbutton' : true, 'newpath' : path('news_new'), 'newpathlabel' : 'New News' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-responsive table-striped records_list"  id="jquerySortable_1">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in pagination %}
+                    <tr>
+                        <td>{{ entity.title }}</td>
+                        <td>
+                            {% if is_granted('ROLE_NEWS_EDIT', entity) %}
+                                <a class="badge" href="{{ path('news_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('news_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                            {% elseif is_granted('ROLE_NEWS_VIEW', entity) %}
+                                <a class="badge" href="{{ path('news_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('news_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    {{ include('AppBundle:Pagination:paginator.html.twig') }}
+{% endblock %}
+{% block documentReady %} 
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    $('#jquerySortable_1').tablesorter({
+        headers: {
+            1: {
+                sorter: false
+            },
+        }
+    });
+    
+    //refresh the page with the new number of records per page
+    $('#paginationMaxResults').on('change', function(){
+        var item = $(this).find(":selected").val();
+        var url = '{{path('news', {'maxItems': '_item'})}}';
+        
+        window.location.href = url.replace('_item',item );
+    });
 {% endblock %}

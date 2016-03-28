@@ -1,16 +1,103 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library News{% endblock %}
 {% block body -%}
-    <h1>News edit</h1>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Edit News: ' ~ entity.title } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('news'), 'printpath' : path('news_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
 
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('news') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    {{ form_start(edit_form) }}
+        <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8">
+            {{ form_row(edit_form.title) }}
+            {{ form_row(edit_form.teaser) }}
+            {{ form_row(edit_form.body) }}
+            <hr>
+            {{ form_row(edit_form.hidden) }}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4">
+            <div class="well well-lg">
+                <h2 class="text-center"><span class="glyphicon glyphicon-warning-sign text-danger"></span> Alert Settings</h2>
+                {{ form_row(edit_form.emergency) }}
+                <div id="emergency_level_container">
+                {{ form_row(edit_form.emergencyLevel) }}
+                </div>
+            </div>
+            <div class="well well-lg">
+                <h2 class="text-center"><span class="glyphicon glyphicon-time text-info"></span> Timed Posting Settings</h2>
+                {{ form_row(edit_form.delayedPost) }}
+                <div class="row" id="delayed_post_container">
+                    {{ form_row(edit_form.displayStart) }}
+                    {{ form_row(edit_form.displayEnd) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(edit_form) }}
+    
+    {{ form(delete_form) }}
+{% endblock %}
+{% block documentReady %}
+    var now = new Date();
+    
+    //datetimepicker plugin 
+    $('#appbundle_news_displayStart').datetimepicker({
+        format: 'm/d/Y g:i A',
+        onShow:function( ct ){
+            this.setOptions({
+                minDate: now,
+                minTime: now,
+                maxDate:$('#appbundle_news_displayEnd').val()?$('#appbundle_news_displayEnd').val():false
+            })
+        },
+    });
+    $('#appbundle_news_displayEnd').datetimepicker({
+        format: 'm/d/Y g:i A',
+        onShow:function( ct ){
+            this.setOptions({
+                minDate:$('#appbundle_news_displayStart').val()?$('#appbundle_news_displayStart').val():false
+            })
+        },
+    });
+    
+    //if either the start or end time have a value on page load, toggle the Delayed Timer switch
+    if($('#appbundle_news_displayStart').val() || $('#appbundle_news_displayEnd').val()){
+        $('#appbundle_news_delayedPost').bootstrapSwitch({   
+                size: 'mini',
+                onText: 'I',
+                offText: 'O',
+                state: true
+              });
+        $('#delayed_post_container').show();
+    }
+    
+    //hide the emergency categories if there are no errors and the emergency button is not checked
+    if( !$('#emergency_level_container > div.form-group').hasClass('has-error') && !$('#appbundle_news_emergency').is(':checked') ){
+        $('#emergency_level_container').hide();
+    }
+    
+    //hide the start and end times if there are no errors and the delay button is not checked
+    if( !$('#delayed_post_container div.form-group').hasClass('has-error') && !$('#appbundle_news_displayStart').val() && !$('#appbundle_news_displayEnd').val()){
+        $('#delayed_post_container').hide();
+    }
+    
+    
+    $('#appbundle_news_emergency').on('switchChange.bootstrapSwitch', function(e){
+        if( $(this).is(':checked') ){
+            $('#emergency_level_container').slideDown();
+        } else {
+            $('#emergency_level_container').slideUp();
+        }
+    });
+    
+    $('#appbundle_news_delayedPost').on('switchChange.bootstrapSwitch', function(e){
+        if( $(this).is(':checked') ){
+            $('#delayed_post_container').slideDown();
+        } else {
+            $('#delayed_post_container').slideUp();
+        }
+    });
 {% endblock %}

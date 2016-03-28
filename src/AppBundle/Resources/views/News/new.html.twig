@@ -1,15 +1,89 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Library News{% endblock %}
 {% block body -%}
-    <h1>News creation</h1>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New News' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('news')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8">
+            {{ form_row(form.title) }}
+            {{ form_row(form.teaser) }}
+            {{ form_row(form.body) }}
+            <hr>
+            {{ form_row(form.hidden) }}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4">
+            <div class="well well-lg">
+                <h2 class="text-center"><span class="glyphicon glyphicon-warning-sign text-danger"></span> Alert Settings</h2>
+                {{ form_row(form.emergency) }}
+                <div id="emergency_level_container">
+                {{ form_row(form.emergencyLevel) }}
+                </div>
+            </div>
+            <div class="well well-lg">
+                <h2 class="text-center"><span class="glyphicon glyphicon-time text-info"></span> Timed Posting Settings</h2>
+                {{ form_row(form.delayedPost) }}
+                <div class="row" id="delayed_post_container">
+                    {{ form_row(form.displayStart) }}
+                    {{ form_row(form.displayEnd) }}
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    {{ form_end(form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('news') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% endblock %}
+{% block documentReady %}
+    var now = new Date();
+    
+    //datetimepicker plugin 
+    $('#appbundle_news_displayStart').datetimepicker({
+        format: 'm/d/Y g:i A',
+        onShow:function( ct ){
+            this.setOptions({
+                minDate: now,
+                minTime: now,
+                maxDate:jQuery('#appbundle_news_displayEnd').val()?jQuery('#appbundle_news_displayEnd').val():false
+            })
+        },
+    });
+    $('#appbundle_news_displayEnd').datetimepicker({
+        format: 'm/d/Y g:i A',
+        onShow:function( ct ){
+            this.setOptions({
+                minDate:jQuery('#appbundle_news_displayStart').val()?jQuery('#appbundle_news_displayStart').val():false
+            })
+        },
+    });
+    
+    if( !$('#emergency_level_container > div.form-group').hasClass('has-error') ){
+        $('#emergency_level_container').hide();
+    }
+    
+    if( !$('#delayed_post_container div.form-group').hasClass('has-error') ){
+        $('#delayed_post_container').hide();
+    }
+    
+    $('#appbundle_news_emergency').on('switchChange.bootstrapSwitch', function(e){
+        if( $(this).is(':checked') ){
+            $('#emergency_level_container').slideDown();
+        } else {
+            $('#emergency_level_container').slideUp();
+        }
+    });
+    
+    $('#appbundle_news_delayedPost').on('switchChange.bootstrapSwitch', function(e){
+        if( $(this).is(':checked') ){
+            $('#delayed_post_container').slideDown();
+        } else {
+            $('#delayed_post_container').slideUp();
+        }
+    });
 {% endblock %}

@@ -8,6 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * News
@@ -59,13 +60,45 @@ class News
      * @Serializer\Exclude //exclude from API calls 
      */
     private $author;
-
+    
+    /**
+     * @var \DateTime $displayStart
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $displayStart;
+    
+    /**
+     * @var \DateTime $displayEnd
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $displayEnd;
+    
     /**
      * @var boolean
      *
      * @ORM\Column(name="hidden", type="boolean")
      */
     private $hidden;
+    
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="emergency", type="boolean")
+     */
+    private $emergency;
+    
+    /**
+     * @var string 
+     *
+     * @ORM\Column(name="emergencyLevel", type="string", length=50, nullable=true)
+     */
+    private $emergencyLevel;
+    
+    //UNMAPPED! used only for validation (getter and setter below)
+    private $delayedPost;
     
     /**
      * @var \DateTime $created
@@ -198,6 +231,70 @@ class News
     {
         return $this->author;
     }
+    
+    /**
+     * Get displayStart
+     *
+     * @return \DateTime
+     */
+    public function getDisplayStart()
+    {
+        return $this->displayStart;
+    }
+    public function setDisplayStart($displayStart = null)
+    {
+        $this->displayStart = $displayStart;
+        
+        return $this;
+    }
+    
+    /**
+     * Get displayEnd
+     *
+     * @return \DateTime
+     */
+    public function getDisplayEnd()
+    {
+        return $this->displayEnd;
+    }
+    public function setDisplayEnd($displayEnd = null)
+    {
+        $this->displayEnd = $displayEnd;
+        
+        return $this;
+    }
+    
+    /**
+     * Get emergency
+     *
+     * @return bool
+     */
+    public function getEmergency()
+    {
+        return $this->emergency;
+    }
+    public function setEmergency($emergency)
+    {
+        $this->emergency = $emergency;
+        
+        return $this;
+    }
+    
+    /**
+     * Get emergencyLevel
+     *
+     * @return string
+     */
+    public function getEmergencyLevel()
+    {
+        return $this->emergencyLevel;
+    }
+    public function setEmergencyLevel($emergencyLevel)
+    {
+        $this->emergencyLevel = $emergencyLevel;
+        
+        return $this;
+    }
 
     /**
      * Set hidden
@@ -221,6 +318,22 @@ class News
     public function getHidden()
     {
         return $this->hidden;
+    }
+    
+    /**
+     * Get delayedPost
+     *
+     * @return string
+     */
+    public function getDelayedPost()
+    {
+        return $this->delayedPost;
+    }
+    public function setDelayedPost($delayedPost)
+    {
+        $this->delayedPost = $delayedPost;
+        
+        return $this;
     }
     
     /**
@@ -269,6 +382,25 @@ class News
         $this->contentChangedBy = $changedby;
         
         return $this;
+    }
+    
+    /**
+     *  Custom validation for emergency News entities
+     *  
+     *  @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context){
+        if(1 == $this->getEmergency() && null === $this->getEmergencyLevel()){
+            $context->buildViolation('You must specify the type of alert. If this is not an alert bulletin, please uncheck the box above.')
+                    ->atPath('emergencyLevel')
+                    ->addViolation();
+        }
+        
+        if( 1 == $this->getDelayedPost() && null === $this->getDisplayStart() ){
+            $context->buildViolation('Since this is a delayed post, you must at least enter a start time. Otherwise, switch this option off above.')
+                    ->atPath('displayStart')
+                    ->addViolation();
+        }
     }
 }
 

@@ -1,0 +1,33 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Library News{% endblock %}
+{% block body %}
+<h1>Library News: {{entity.title}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Story Details</caption>
+        <tbody>
+            <tr>
+                <th>Title</th>
+                <td>{{entity.title}}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ entity.body }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.created|date('l n/j/y g:i A') }} by {{ entity.author }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>
+                    {% if date(entity.updated) != date(entity.created) %}
+                        {{ entity.updated|date('l n/j/y g:i A')  }} {% if entity.contentChangedBy is defined %} by {{ entity.contentChangedBy }} {% endif %}
+                    {% else %}
+                        Never
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+{% endblock %}
