@@ -97,8 +97,15 @@ class News
      */
     private $emergencyLevel;
     
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $photo;
+    
     //UNMAPPED! used only for validation (getter and setter below)
     private $delayedPost;
+    
+    private $currentPhoto;
     
     /**
      * @var \DateTime $created
@@ -124,7 +131,6 @@ class News
      * @Serializer\Exclude //exclude from API calls 
      */
     private $contentChangedBy;
-
 
     /**
      * Get id
@@ -334,6 +340,55 @@ class News
         $this->delayedPost = $delayedPost;
         
         return $this;
+    }
+    
+    /**
+     * Set photo
+     *
+     * @param string $photo
+     *
+     * @return News
+     */
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * Get photo
+     *
+     * @return string
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+    
+    
+    /**
+     * Set currentPhoto
+     *
+     * @param string $currentPhoto
+     *
+     * @return Staff
+     */
+    public function setCurrentPhoto($currentPhoto)
+    {
+        $this->currentPhoto = $currentPhoto;
+
+        return $this;
+    }
+
+    /**
+     * Get currentPhoto
+     *
+     * @return string
+     */
+    public function getCurrentPhoto()
+    {
+        return $this->currentPhoto;
     }
     
     /**

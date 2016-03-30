@@ -180,7 +180,7 @@
                     {{ form_row(edit_form.photo) }}
                     {{ form_row(edit_form.showPhoto) }}
                     {% if edit_form.deletePhotoSubmit is defined %}
-                        <p><img src="{{ asset('uploads/profile/' ~ entity.photo) }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/></p>
+                        <p><img src="{{ asset('uploads/profile/' ~ entity.photo) | imagine_filter('medium') }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/></p>
                       {{ form_row(edit_form.deletePhotoSubmit) }}
                     {% endif %}
                 </div>
@@ -190,6 +190,7 @@
                     {% if is_granted("ROLE_STAFF_DELETE") %}
                     {{ form(delete_form) }}
                     {% endif %}
+                    </p>
                 </div>
             </div>
       </div>

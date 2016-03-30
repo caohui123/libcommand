@@ -15,8 +15,21 @@
             {{ form_row(edit_form.title) }}
             {{ form_row(edit_form.teaser) }}
             {{ form_row(edit_form.body) }}
+            {{ form_row(edit_form.photo) }}
+            {% if edit_form.deletePhotoSubmit is defined %}
+                <p><img src="{{ asset('uploads/news/' ~ entity.photo) | imagine_filter('web_story') }}" alt="Story photo" title="Story photo"/></p>
+              {{ form_row(edit_form.deletePhotoSubmit) }}
+            {% endif %}
+            {# button will appear here via javascript if an image from the loop is selected #}
+            <div class="row">
+                <div class="col-xs-12 col-sm-6" id="make-current-image"></div>
+            </div>
+            {% for image in images %}
+                <img class="thumbnail-photo-select" id="{{ image.relativePathname }}" src="{{ asset('uploads/news/' ~ image.relativePathname) | imagine_filter('thumb') }}" alt="Story photo" title="Story photo"/>
+            {% endfor %}
             <hr>
             {{ form_row(edit_form.hidden) }}
+            {{ form_row(edit_form.submit) }}
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4">
             <div class="well well-lg">

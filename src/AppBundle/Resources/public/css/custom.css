@@ -22,6 +22,11 @@ body {
 #displayOrderList{cursor: move;}
 #displayOrderList li span { position: absolute; margin-left: -1.3em; }
 
+/* Thumbnail image border toggle */
+.blue-thumbnail-select-border{
+    border: 3px solid #0074d9;
+}
+
 @media screen and (min-width: 0) {
   .navbar-toggle {
     display: block; /* force showing the toggle */

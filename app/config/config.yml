@@ -170,4 +170,34 @@ knp_paginator:
         distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig    # sliding pagination controls template
-        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template    
+        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template   
+        
+#LIIP Image Editor
+liip_imagine:
+    resolvers:
+       default:
+          web_path: ~
+
+    filter_sets:
+        cache: ~
+        thumb:
+            quality: 75
+            filters:
+                thumbnail: { size: [80, 60], mode: outbound }
+        small:
+            quality: 75
+            filters:
+                thumbnail: { size: [120, 90], mode: outbound }
+        medium:
+            quality: 100
+            filters:
+                thumbnail: { size: [280, 210], mode: outbound }
+        large:
+            quality: 100
+            filters:
+                thumbnail: { size: [400, 300], mode: outbound }
+        web_story:
+            quality: 100
+            filters:
+                thumbnail: { size: [400, 250], mode: outbound }
+              

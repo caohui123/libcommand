@@ -67,7 +67,6 @@ class StaffController extends Controller
         if ($form->isValid()) {
             $files = $request->files->all();
             $photo = $files['appbundle_staff']['photo'];
-            //$photo = $entity->getPhoto();
             
             // Generate a unique name for the file before saving it
             $fileName = md5(uniqid()).'.'.$photo->guessExtension();

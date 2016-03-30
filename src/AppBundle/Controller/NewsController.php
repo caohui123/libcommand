@@ -13,6 +13,8 @@ use Hateoas\HateoasBuilder;
 use Hateoas\Representation\PaginatedRepresentation;
 use Hateoas\Representation\CollectionRepresentation;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * News controller.
@@ -21,7 +23,6 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
  */
 class NewsController extends Controller
 {
-
     /**
      * Lists all News entities.
      *
@@ -68,6 +69,19 @@ class NewsController extends Controller
 
         if ($form->isValid()) {
             $entity->setAuthor($this->get('security.context')->getToken()->getUser()); //set the author as the user who made the entity
+            
+            $files = $request->files->all();
+            $photo = $files['appbundle_news']['photo'];
+            
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$photo->guessExtension();
+            
+            // Move the photo to the directory where they are stored
+            $photosDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/news';
+            $photo->move($photosDir, $fileName);
+            
+            // Update the 'photo' property to store the file name instead of its contents
+            $entity->setPhoto($fileName);
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -166,6 +180,9 @@ class NewsController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find News entity.');
         }
+        
+        $imageService = $this->get('image_service');
+        $images = $imageService->findDirectoryImages($this->get('kernel')->getRootDir() . '/../web/uploads/news');
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -174,6 +191,7 @@ class NewsController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'images' => $images
         );
     }
 
@@ -191,7 +209,7 @@ class NewsController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class'=>'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -206,13 +224,19 @@ class NewsController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $requestData = $request->request->all();
+        var_dump($requestData);
+        /*$em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:News')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find News entity.');
         }
+        
+        //news photo directory
+        $photosDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/news/';
+        $existingPhotoName = $entity->getPhoto();
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
@@ -224,6 +248,39 @@ class NewsController extends Controller
             if(0 == $entity->getEmergency() && null !== $entity->getEmergencyLevel()){
                 $entity->setEmergencyLevel(null);
             }
+            
+            $files = $request->files->all();
+            //check to see if there was an existing photo
+            if($existingPhotoName != ''){
+              $photoPath = $photosDir . $existingPhotoName;
+            } 
+            //if main submit button was clicked
+            if($editForm->get('submit')->isClicked()){
+
+              //check to see if there is a new photo
+              if($files['appbundle_news']['photo'] != null){
+                //new photo? add it to the profile directory.
+                $photo = $files['appbundle_news']['photo'];
+                $fileName = md5(uniqid()).'.'.$photo->getClientOriginalExtension();
+                $photo->move($photosDir, $fileName);
+                $entity->setPhoto($fileName);
+              }
+             
+              //if there is an existing photo but not a new one, retain the old file's name in the database
+              if($files['appbundle_news']['photo'] == null && $existingPhotoName != ''){
+                $entity->setPhoto($existingPhotoName); //retain old photo name
+              }
+            } 
+            
+            //if delete photo submit button is clicked
+            if($editForm->has('deletePhotoSubmit') && $editForm->get('deletePhotoSubmit')->isClicked()){
+              if(isset($photoPath) && file_exists($photoPath)){
+                //remove the image from the directory
+                $fs = new FileSystem();
+                $fs->remove($photoPath);
+              }
+            }
+            
             $em->persist($entity);
             $em->flush();
 
@@ -235,6 +292,8 @@ class NewsController extends Controller
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
+         
+         */
     }
     /**
      * Deletes a News entity.
