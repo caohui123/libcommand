@@ -22,8 +22,8 @@ services:
         class: AppBundle\Resources\Services\EmailService
         arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
         
-    image_service:
-        class: AppBundle\Resources\Services\ImageService
+    document_service:
+        class: AppBundle\Resources\Services\DocumentService
         arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
         
     form.type.permisssion:

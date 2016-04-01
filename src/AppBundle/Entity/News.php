@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use AppBundle\Entity\Document;
 
 /**
  * News
@@ -98,14 +99,14 @@ class News
     private $emergencyLevel;
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Document", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $photo;
+    private $image;
     
     //UNMAPPED! used only for validation (getter and setter below)
     private $delayedPost;
-    
-    private $currentPhoto;
+   
     
     /**
      * @var \DateTime $created
@@ -343,52 +344,27 @@ class News
     }
     
     /**
-     * Set photo
+     * Set image
      *
-     * @param string $photo
+     * @param \AppBundle\Entity\Document $image
      *
      * @return News
      */
-    public function setPhoto($photo)
+    public function setImage(Document $image = null)
     {
-        $this->photo = $photo;
+        $this->image = $image;
 
         return $this;
     }
 
     /**
-     * Get photo
+     * Get image
      *
-     * @return string
+     * @return \AppBundle\Entity\Document
      */
-    public function getPhoto()
+    public function getImage()
     {
-        return $this->photo;
-    }
-    
-    
-    /**
-     * Set currentPhoto
-     *
-     * @param string $currentPhoto
-     *
-     * @return Staff
-     */
-    public function setCurrentPhoto($currentPhoto)
-    {
-        $this->currentPhoto = $currentPhoto;
-
-        return $this;
-    }
-
-    /**
-     * Get currentPhoto
-     *
-     * @return string
-     */
-    public function getCurrentPhoto()
-    {
-        return $this->currentPhoto;
+        return $this->image;
     }
     
     /**

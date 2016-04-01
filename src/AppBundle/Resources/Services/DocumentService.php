@@ -6,8 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Filesystem\Filesystem;
+use AppBundle\Entity\Document;
 
-class ImageService{
+class DocumentService{
   
   protected $em;
   protected $container;
@@ -23,16 +26,23 @@ class ImageService{
   }
   
   /**
-   * Use the Symfony Finder component to find all images in a directory
+   * Routes a Document entity to its appropriate directory based on the 'category' value
    * 
-   * @param string $directoryPath
-   * @return Finder
+   * @param AppBundle\Entity $entity
+   * @return 
    */
-  public function findDirectoryImages($directoryPath){
-        $finder = new Finder();
-        $images = $finder->files()->in($directoryPath);
+  public function directoryRouter(Document $entity, $category){
+        //route the document to its appropriate directory
+        switch( $category ){
+            case 'news':
+                $entity->setSubDir('news');
+                break;
+            case 'profile':
+                $entity->setSubDir('profile');
+                break;
+        };
         
-        return $images;
+        return;
   }
   
 }

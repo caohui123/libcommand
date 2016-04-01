@@ -1,0 +1,3 @@
+{% for entity in entities %}
+    <label><input type="radio" name="cover_image" id="image_{{ entity.path }}" value="{{ entity.id }}" class="thumbnail-photo-select" /> <img class="thumbnail-photo-select" id="{{ entity.path }}" src="{{ asset('uploads/news/' ~ entity.path) | imagine_filter('thumb') }}" alt="{{ entity.name }}" title="{{ entity.name }}"/></label>
+{% endfor %}

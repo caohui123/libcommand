@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class NewsType extends AbstractType
 {
@@ -60,11 +61,6 @@ class NewsType extends AbstractType
                 'label' => 'Terminate Public Display (leave blank to display indefinitely)',
                 'required' => false
             ))
-            ->add('photo', 'file', array(
-              'required' => false,
-              'data_class' => null,
-              'label' => 'Story Image for Website (please use a 450 px x 250 px .JPG)'
-            ))
             ->add('hidden', null, array(
               'label' => 'Hide this news story (overrides timed display settings).',
               'attr' => array(
@@ -73,7 +69,6 @@ class NewsType extends AbstractType
             ))
         ;
         
-         //add in these fields only if the HoursSpecial object is new using an event listener
         $builder->addEventListener(\Symfony\Component\Form\FormEvents::PRE_SET_DATA, function(\Symfony\Component\Form\FormEvent $event){
             $news = $event->getData();
             $form = $event->getForm();
@@ -81,8 +76,8 @@ class NewsType extends AbstractType
             // check for the exsitence of a current photo path
             // If no path is passed to the form, the data is "null".
             // There should be no delete button present if there is no photo path present
-            if(!$news || null !== $news->getPhoto()){
-                $form->add('deletePhotoSubmit', 'submit', array('label'=>'Delete Image', 'attr' => array('class' => 'btn btn-sm btn-warning', 'onclick' => 'return confirm("Are you sure you want to delete this image?")')));
+            if(!$news || null !== $news->getImage()){
+                $form->add('removeCoverPhotoSubmit', 'submit', array('label'=>'Remove Cover Image', 'attr' => array('class' => 'btn btn-sm btn-warning')));
             }
         });
     }

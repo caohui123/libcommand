@@ -44,9 +44,12 @@ body {
 #displayOrderList{cursor: move;}
 #displayOrderList li span { position: absolute; margin-left: -1.3em; }
 
-/* Thumbnail image border toggle */
+/* Thumbnail images */
 .blue-thumbnail-select-border{
     border: 3px solid #0074d9;
+}
+input.thumbnail-photo-select{
+    visibility: hidden;
 }
 
 @media screen and (min-width: 0) {

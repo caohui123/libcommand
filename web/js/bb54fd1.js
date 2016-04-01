@@ -78,27 +78,13 @@ $(document).ready(function(){
    /**
     * Creates a blue box around the currently selected thumbnail photo (example: News/edit.html.twig)
     */
-   $('.thumbnail-photo-select').on('click', function(e){
+   $(document).on('click', 'img.thumbnail-photo-select', function(e){
         $(this).toggleClass('blue-thumbnail-select-border');
         $('.thumbnail-photo-select').not($(this)).each(function(){
           $(this).removeClass('blue-thumbnail-select-border');
         })
-        
-        //check to see if there are any selected images...
-        if(isImageSelected('.blue-thumbnail-select-border')){
-            //...if so, display the button for selecting the photo as the new image for the entity
-            $('div#make-current-image').html('<p class="alert alert-info">This image will replace the current one upon updating. To cancel, click the image again.</p><input type="hidden" name="new_image" value="'+ $(this).attr('id') +'" />');
-        } else {
-            $('div#make-current-image').html('');
-        }
    });
-   
-    function isImageSelected(css_class){
-        if($(css_class).length > 0){
-            return true;
-        }
-        return;
-   }
+
 });
 
 

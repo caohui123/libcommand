@@ -15,18 +15,25 @@
             {{ form_row(edit_form.title) }}
             {{ form_row(edit_form.teaser) }}
             {{ form_row(edit_form.body) }}
-            {{ form_row(edit_form.photo) }}
-            {% if edit_form.deletePhotoSubmit is defined %}
-                <p><img src="{{ asset('uploads/news/' ~ entity.photo) | imagine_filter('web_story') }}" alt="Story photo" title="Story photo"/></p>
-              {{ form_row(edit_form.deletePhotoSubmit) }}
+            <div class="form-group">
+                <label class="control-label">Current Cover Image</label>
+            {% if entity.image %}
+                <p><img src="{{ asset('uploads/news/' ~ entity.image.path) | imagine_filter('web_story') }}" alt="{{ entity.image.path }}" title="{{ entity.image.path }}"/></p>
+                {{ form_row(edit_form.removeCoverPhotoSubmit) }}
+            {% else %}
+                <p class="alert alert-info">No cover image selected. Pick one below.</p>
             {% endif %}
+            </div>
             {# button will appear here via javascript if an image from the loop is selected #}
             <div class="row">
                 <div class="col-xs-12 col-sm-6" id="make-current-image"></div>
             </div>
-            {% for image in images %}
-                <img class="thumbnail-photo-select" id="{{ image.relativePathname }}" src="{{ asset('uploads/news/' ~ image.relativePathname) | imagine_filter('thumb') }}" alt="Story photo" title="Story photo"/>
-            {% endfor %}
+            <div class="form-group" id="thumbnails-list-container">
+                <label class="control-label">Other Cover Images</label>
+                <p>Click on the image you wish to use. It will be set as the cover image when you update the form.</p>
+                <p>Don't see the image you're looking for? Navigate to the <a href="#new-image-form-container">New Image</a> form below to add one.</p>
+                {{ render(controller("AppBundle:News:imageThumbnails")) }}
+            </div>
             <hr>
             {{ form_row(edit_form.hidden) }}
             {{ form_row(edit_form.submit) }}
@@ -50,6 +57,19 @@
         </div>
     </div>
     {{ form_end(edit_form) }}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8" id="new-image-message">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8" id="new-image-form-container">
+            <div class=" well well-lg">
+            <h2><span class="glyphicon glyphicon-camera text-info"></span> New Image</h2>
+            <p>For optimal display on the website, please make cover images <mark>435px wide by 260 px tall</mark>.</p>
+            {{ form(image_form) }}
+            </div>
+        </div>
+    </div>
     
     {{ form(delete_form) }}
 {% endblock %}
@@ -112,5 +132,40 @@
         } else {
             $('#delayed_post_container').slideUp();
         }
+    });
+    
+    //process new image
+    $('#image_upload_form').submit(function(e){
+    
+        var formData = new FormData(this);
+        
+        ajaxObject = {
+            url: '{{ path('medialibrary_upload_ajax') }}',
+            type: 'POST',
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: formData
+        };
+
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+                    $('#new-image-form-container').hide();
+                    $('#new-image-message').html('<p class="alert alert-success">The image was successfully uploaded. You can now select it from the thumbnail list above.</p>');
+                    
+                    $.get("{{ path("news_image_thumbnails") }}", function(data) {
+                        $("#thumbnails-list-container").html(data);
+                    });
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+                    $('#new-image-message').html('<p class="alert alert-danger">'+ data.responseText +'</p>');
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+            }); 
+            
+        return false;
     });
 {% endblock %}
