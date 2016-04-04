@@ -151,7 +151,7 @@ class NewsController extends Controller
     public function imageThumbnailsAction(){
         $em = $this->getDoctrine()->getManager();
         
-        $entities = $em->getRepository('AppBundle:Document')->findBy(array('category' => 'news'), array('created' => 'DESC'));
+        $entities = $em->getRepository('AppBundle:Document')->findBy(array('subdir' => 'news'), array('created' => 'DESC'));
         
         if(!$entities){
             throw $this->createNotFoundException('No News entities found.');
@@ -238,7 +238,7 @@ class NewsController extends Controller
                 'id' => 'image_upload_form'
             )
         ));
-        $form->add('category', 'hidden', array(
+        $form->add('subdir', 'hidden', array(
             'data' => 'news'
         ));
         $form->add('newimage_ajax', 'submit', array('label' => 'Upload', 'attr' => array('class'=>'btn btn-sm btn-info')));

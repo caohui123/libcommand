@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+{% block title %}Media Library{% endblock %}
+{% block body -%}
+        
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Edit ' ~ entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('medialibrary'), 'printpath' : path('medialibrary_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
+    
+    
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="well well-lg">
+              {{ form_start(edit_form) }} 
+                {{ form_row(edit_form.name) }}
+                <div id="hidden-fields-container">
+                    {{ form_row(edit_form.file) }}
+                </div>
+              {{ form_end(edit_form) }} 
+              {# if is_granted("ROLE_MEDIALIBRARY_DELETE") #}
+              {{ form(delete_form) }}
+              {# endif #}
+          </div> 
+      </div>
+    </div>
+    {% include 'snippets/documentOptions.html.twig' %}
+{% endblock %}
+
+{% block documentReady %}
+    //hide the form elements in this container
+    $('#hidden-fields-container').hide();
+  {{ parent() }}
+{% endblock %}

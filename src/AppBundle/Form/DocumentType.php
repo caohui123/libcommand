@@ -17,7 +17,7 @@ class DocumentType extends AbstractType
     {
         $builder
             ->add('name', null, array(
-                'label' => 'Image Name'
+                'label' => 'Media Title'
             ))
             ->add('file', null, array(
                 'label' => 'Image (.jpg only)',

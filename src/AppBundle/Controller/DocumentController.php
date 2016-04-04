@@ -52,10 +52,6 @@ class DocumentController extends Controller
        if ($form->isValid()) {
            $em = $this->getDoctrine()->getManager();
            
-           //send the document to its appropriate directory
-           $documentService = $this->get('document_service');
-           $documentService->directoryRouter($entity, $request->request->get('appbundle_document')['category'] );
-           
            $em->persist($entity);
            $em->flush();
 
@@ -79,7 +75,6 @@ class DocumentController extends Controller
             $entity = new Document();
             $entity->setSubDir('news');
             $entity->setName($requestData['appbundle_document']['name']);
-            $entity->setCategory($requestData['appbundle_document']['category']);
             $entity->setFile($requestFiles['appbundle_document']['file']);
 
             $em = $this->getDoctrine()->getManager();
@@ -125,12 +120,13 @@ class DocumentController extends Controller
             'action' => $this->generateUrl('medialibrary_upload'),
             'method' => 'POST',
         ));
-        $form->add('category', 'choice', array(
+        $form->add('subdir', 'choice', array(
            'choices' => array(
                'News Cover' => 'news',
                'Profile Photo' => 'profile'
            ),
-           'choices_as_values' => true
+           'choices_as_values' => true,
+            'label' => 'Category'
         ));
         $form->add('submit', 'submit', array('label' => 'Upload'));
 
@@ -156,6 +152,165 @@ class DocumentController extends Controller
 
         return array(
             'entity'      => $entity,
+            'directory'   => '/' . $entity->getWebPath()
+        );
+    }
+    
+    /**
+     * Displays a form to edit an existing Document entity.
+     *
+     * @Route("/{id}/edit", name="medialibrary_edit")
+     * @Method("GET")
+     * @Template()
+     */
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:Document')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Document entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+            'directory'   => '/' . $entity->getWebPath()
+        );
+    }
+
+    /**
+    * Creates a form to edit a Document entity.
+    *
+    * @param Document $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createEditForm(Document $entity)
+    {
+        $form = $this->createForm(new DocumentType(), $entity, array(
+            'action' => $this->generateUrl('medialibrary_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+        $form->add('subdir', 'hidden', array(
+           'data' => $entity->getSubDir()
+        ));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr'=>array('class'=>'btn btn-sm btn-success')));
+
+        return $form;
+    }
+    
+    /**
+     * Edits an existing Document entity.
+     *
+     * @Route("/{id}", name="medialibrary_update")
+     * @Method("PUT")
+     * @Template("AppBundle:Document:edit.html.twig")
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:Document')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Document entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('medialibrary_edit', array('id' => $id)));
+        }
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
+    
+    /**
+     * Deletes a Document entity.
+     *
+     * @Route("/{id}", name="medialibrary_delete")
+     * @Method("DELETE")
+     * 
+     * //@Secure(roles="ROLE_MEDIALIBRARY_DELETE")
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $form = $this->createDeleteForm($id);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('AppBundle:Document')->find($id);
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find News entity.');
+            }
+            
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('news'));
+    }
+
+    /**
+     * Creates a form to delete a News entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('medialibrary_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array(
+                'label' => 'Delete', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this document?")'
+                    )
+                )
+            )
+            ->getForm()
+        ;
+    }
+    
+    /**
+     * Displays a printer-friendly Document entity.
+     *
+     * @Route("/{id}/print", name="medialibrary_print")
+     * @Method("GET")
+     * @Template()
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:Document')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Document entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+            'directory'   => '/' . $entity->getWebPath()
         );
     }
     

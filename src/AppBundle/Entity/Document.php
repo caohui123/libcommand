@@ -47,17 +47,15 @@ class Document
     private $path;
     
     /**
-     * @var string
-     *
-     * @ORM\Column(name="category", type="string", length=30)
-     */
-    private $category;
-    
-    /**
      * @Assert\File(maxSize="30000000")
      */
     private $file;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="subdirectory", type="string", length=255)
+     */
     private $subdir;
     
     private $temp;
@@ -142,30 +140,6 @@ class Document
     public function getPath()
     {
         return $this->path;
-    }
-    
-    /**
-     * Set category
-     *
-     * @param string $category
-     *
-     * @return Document
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return string
-     */
-    public function getCategory()
-    {
-        return $this->category;
     }
     
     /**
