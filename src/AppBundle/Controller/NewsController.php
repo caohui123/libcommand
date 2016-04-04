@@ -9,8 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\News;
 use AppBundle\Form\NewsType;
-use AppBundle\Entity\Document;
-use AppBundle\Form\DocumentType;
+use AppBundle\Entity\Image;
+use AppBundle\Form\ImageType;
 use Hateoas\HateoasBuilder;
 use Hateoas\Representation\PaginatedRepresentation;
 use Hateoas\Representation\CollectionRepresentation;
@@ -77,8 +77,8 @@ class NewsController extends Controller
             $entity->setAuthor($this->get('security.context')->getToken()->getUser()); //set the author as the user who made the entity
             
             if(isset($requestData['cover_image'])){
-                //Just to be sure, check that the image (Document entity) exists
-                $image = $em->getRepository('AppBundle:Document')->find($requestData['cover_image']);
+                //Just to be sure, check that the image (Image entity) exists
+                $image = $em->getRepository('AppBundle:Image')->find($requestData['cover_image']);
           
                 if(!$image){
                 
@@ -131,7 +131,7 @@ class NewsController extends Controller
         $entity = new News();
         $form   = $this->createCreateForm($entity);
         
-        $image = new Document();
+        $image = new Image();
         $imageForm = $this->createImageForm($image);
 
         return array(
@@ -151,7 +151,7 @@ class NewsController extends Controller
     public function imageThumbnailsAction(){
         $em = $this->getDoctrine()->getManager();
         
-        $entities = $em->getRepository('AppBundle:Document')->findBy(array('subdir' => 'news'), array('created' => 'DESC'));
+        $entities = $em->getRepository('AppBundle:Image')->findBy(array('subdir' => 'news'), array('created' => 'DESC'));
         
         if(!$entities){
             throw $this->createNotFoundException('No News entities found.');
@@ -211,7 +211,7 @@ class NewsController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
         
-        $image = new Document();
+        $image = new Image();
         $imageForm = $this->createImageForm($image);
 
         return array(
@@ -223,16 +223,16 @@ class NewsController extends Controller
     }
     
     /**
-    * Creates a form to create a Document entity.
+    * Creates a form to create an Image entity.
     *
-    * @param Document $entity The entity
+    * @param Image $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createImageForm(Document $entity)
+    private function createImageForm(Image $entity)
     {
-        $form = $this->createForm(new DocumentType(), $entity, array(
-            'action' => $this->generateUrl('medialibrary_upload'),
+        $form = $this->createForm(new ImageType(), $entity, array(
+            'action' => $this->generateUrl('medialibrary_image_upload'),
             'method' => 'POST',
             'attr' => array(
                 'id' => 'image_upload_form'
@@ -297,8 +297,8 @@ class NewsController extends Controller
             }
           
             if(isset($requestData['cover_image'])){
-                //Just to be sure, check that the image (Document entity) exists
-                $image = $em->getRepository('AppBundle:Document')->find($requestData['cover_image']);
+                //Just to be sure, check that the image (Image entity) exists
+                $image = $em->getRepository('AppBundle:Image')->find($requestData['cover_image']);
           
                 if(!$image){
                 

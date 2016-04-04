@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Media Library{% endblock %}
+{% block title %}Images &#8211; Media Library{% endblock %}
 {% block body -%}
         
     {# Page Heading #}
@@ -7,7 +7,7 @@
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
     
     {# Back button and print button #}
-    {% set toolbarvars = {'basepath' : path('medialibrary'), 'printpath' : path('medialibrary_print', { 'id': entity.id }) } %}
+    {% set toolbarvars = {'basepath' : path('medialibrary_image') } %}
     {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
     
     
@@ -20,13 +20,13 @@
                     {{ form_row(edit_form.file) }}
                 </div>
               {{ form_end(edit_form) }} 
-              {# if is_granted("ROLE_MEDIALIBRARY_DELETE") #}
+              {% if is_granted("ROLE_MEDIALIBRARY_DELETE") %}
               {{ form(delete_form) }}
-              {# endif #}
+              {% endif %}
           </div> 
       </div>
     </div>
-    {% include 'snippets/documentOptions.html.twig' %}
+    {% include 'snippets/imageOptions.html.twig' %}
 {% endblock %}
 
 {% block documentReady %}

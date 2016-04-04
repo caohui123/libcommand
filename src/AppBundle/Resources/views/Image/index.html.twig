@@ -1,16 +1,15 @@
 {% extends '::base.html.twig' %}
-{% block title %}Media Library{% endblock %}
+{% block title %}Images &#8211; Media Library{% endblock %}
 {% block body -%}
     <ul class="nav nav-pills">
-        <li role="presentation" class="active"><a href="{{ path('medialibrary') }}"><span class="glyphicon glyphicon-th-list"></span> All Media</a></li>
-        <li role="presentation"><a href="{{ path('medialibrary_image') }}"><span class="glyphicon glyphicon-camera"></span> Images</a></li>
+        <li role="presentation"><a href="{{ path('medialibrary') }}"><span class="glyphicon glyphicon-th-list"></span> All Media</a></li>
+        <li role="presentation" class="active"><a href="{{ path('medialibrary_image') }}"><span class="glyphicon glyphicon-camera"></span> Images</a></li>
         <li role="presentation"><a href="#"><span class="glyphicon glyphicon-file"></span> Files</a></li>
     </ul>
     
     {# Page Heading #}
-    {% set headingvars = {'headingcontent' : 'Media Library', 'newbutton' : false} %}
+    {% set headingvars = {'headingcontent' : 'Media Library: Images', 'newbutton' : true, 'newpath' : path('medialibrary_image_new'), 'newpathlabel' : 'New Image' } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
-
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
@@ -19,39 +18,22 @@
                 <thead>
                     <tr>
                         <th><span class="sr-only">Thumbnail</span></th>
-                        <th>Name</th>
-                        <th>Type</th>
+                        <th>Image Title</th>
                         <th>Uploaded</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for entity in pagination %}
-                    {# Utilize the Document Service (connected to twig in config.yml) to determine the file extension#}
-                    {% set isImage = false %}
-                    {% set documentTypeFn = documentService.documentType(entity.path) %}
-                    {% if( documentTypeFn == 'jpeg' or documentTypeFn == 'jpeg' or documentTypeFn == 'png' or documentTypeFn == 'gif') %}
-                        {% set documentType = 'Image' %}
-                        {% set documentRoute = 'medialibrary_image' %}
-                        {% set isImage = true %}
-                    {% else %}
-                        {% set documentType = 'Unknown' %}
-                        {% set documentRoute = 'medialibrary' %}
-                    {% endif %}
                     <tr>
-                        <td>
-                            {% if isImage %}
-                            <img src="{{ asset('uploads/' ~ entity.subdir ~ '/' ~ entity.path) | imagine_filter('thumb') }}" alt="{{ entity.path }}" title="{{ entity.path }}"/>
-                            {% endif %}
-                        </td>
+                        <td><img src="{{ asset('uploads/' ~ entity.subdir ~ '/' ~ entity.path) | imagine_filter('thumb') }}" alt="{{ entity.path }}" title="{{ entity.path }}"/></td>
                         <td>{{ entity.name }}</td>
-                        <td>{{ documentType }}</td>
                         <td>{{ entity.created|date('n/j/y') }}</td>
                         <td>
                             {% if is_granted('ROLE_MEDIALIBRARY_EDIT', entity) %}
-                                <a class="badge" href="{{ path(documentRoute ~ '_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="badge" href="{{ path('medialibrary_image_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
                             {% elseif is_granted('ROLE_MEDIALIBRARY_VIEW', entity) %}
-                                <a class="badge" href="{{ path(documentRoute ~ '_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('medialibrary_image_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
                             {% endif %}
                         </td>
                     </tr>

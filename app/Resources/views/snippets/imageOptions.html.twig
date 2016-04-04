@@ -1,0 +1,6 @@
+{% if entity.subdir == 'news'  %}
+    <img src="{{ directory | imagine_filter('web_story') }}" alt="{{ entity.name }}" title="{{ entity.name }}" />
+{% elseif entity.subdir == 'profile' %}
+    <img src="{{ directory | imagine_filter('thumb') }}" alt="{{ entity.name }}" title="{{ entity.name }}"  />
+{% endif %}
+<a class="btn btn-info" href="{{ directory }}" target="_blank"><span class="glyphicon glyphicon-camera"></span> View Original</a>

@@ -1,0 +1,30 @@
+{% extends '::base.html.twig' %}
+{% block title %}Images &#8211; Media Library{% endblock %}
+{% block body -%}
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : entity.name } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('medialibrary_image'), 'editpath' : path('medialibrary_image_edit', { 'id': entity.id }), 'editrole' : 'ROLE_MEDIALIBRARY_EDIT'} %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <table class="table table-responsive table-striped">
+                <caption>Status</caption>
+                <tbody>
+                    <tr>
+                        <td>Image Title</td>
+                        <td>{{entity.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Uploaded</td>
+                        <td>{{entity.created|date('n/j/y')}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'snippets/imageOptions.html.twig' %}
+{% endblock %}

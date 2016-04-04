@@ -43,6 +43,7 @@ twig:
         administratorName: "Chris Puzzuoli"
         administratorEmail: "cpuzzuol@emich.edu"
         administratorPhone: "7.1777"
+        documentService: "@document_service"
 
 # Assetic Configuration
 assetic:

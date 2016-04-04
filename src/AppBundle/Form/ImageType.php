@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Image;
 
-class DocumentType extends AbstractType
+class ImageType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -36,7 +36,7 @@ class DocumentType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Document'
+            'data_class' => 'AppBundle\Entity\Image'
         ));
     }
 
@@ -45,6 +45,6 @@ class DocumentType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_document';
+        return 'appbundle_image';
     }
 }

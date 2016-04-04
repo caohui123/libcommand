@@ -7,44 +7,60 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use AppBundle\Entity\Document;
-use AppBundle\Form\DocumentType;
+use AppBundle\Entity\Image;
+use AppBundle\Form\ImageType;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Controller\Interfaces\DocumentControllerInterface;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * Document controller.
  *
- * @Route("/medialibrary")
+ * @Route("/medialibrary/image")
  */
-class DocumentController extends Controller
+class ImageController extends Controller implements DocumentControllerInterface
 {
 
     /**
      * Lists all Document entities.
      *
-     * @Route("/", name="medialibrary")
+     * @Route("/", name="medialibrary_image")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MEDIALIBRARY_VIEW")
      */
-    public function indexAction()
-    {
+    public function indexAction(Request $request)
+    { 
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('AppBundle:Document')->findAll();
+        
+        $entities = $em->getRepository('AppBundle:Image')->findBy(array(), array('created' => 'DESC'));
+        
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
 
         return array(
-            'entities' => $entities,
+            'pagination' => $pagination
         );
     }
     
     /**
-     * @Route("/", name="medialibrary_upload")
+     * @Route("/", name="medialibrary_image_upload")
      * @Method("POST")
-     * @Template("AppBundle:Document:new.html.twig")
+     * @Template("AppBundle:Image:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_MEDIALIBRARY_EDIT")
     */
     public function createAction(Request $request)
     {
-       $entity = new Document();
+       $entity = new Image();
        $form = $this->createCreateForm($entity);
 
        $form->handleRequest($request);
@@ -55,7 +71,7 @@ class DocumentController extends Controller
            $em->persist($entity);
            $em->flush();
 
-           return $this->redirect($this->generateUrl('medialibrary_show', array('id' => $entity->getId())));
+           return $this->redirect($this->generateUrl('medialibrary_image_show', array('id' => $entity->getId())));
        }
 
        return array('form' => $form->createView());
@@ -64,18 +80,20 @@ class DocumentController extends Controller
     /**
      * @Route("/ajaxupload", name="medialibrary_upload_ajax")
      * @Method("POST")
-     * @Template("AppBundle:Document:new.html.twig")
+     * @Template("AppBundle:Image:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_MEDIALIBRARY_EDIT, ROLE_NEWS_EDIT")
     */
     public function createAjaxAction(Request $request)
     {
         $requestData = $request->request->all();
         $requestFiles = $request->files->all();
       
-        if("image/jpeg" == $requestFiles['appbundle_document']['file']->getMimeType()){
-            $entity = new Document();
+        if("image/jpeg" == $requestFiles['appbundle_image']['file']->getMimeType()){
+            $entity = new Image();
             $entity->setSubDir('news');
-            $entity->setName($requestData['appbundle_document']['name']);
-            $entity->setFile($requestFiles['appbundle_document']['file']);
+            $entity->setName($requestData['appbundle_image']['name']);
+            $entity->setFile($requestFiles['appbundle_image']['file']);
 
             $em = $this->getDoctrine()->getManager();
 
@@ -89,16 +107,17 @@ class DocumentController extends Controller
     }
     
     /**
-     * Displays a form to create a new Document entity.
+     * Displays a form to create a new Image entity.
      *
-     * @Route("/new", name="medialibrary_new")
+     * @Route("/new", name="medialibrary_image_new")
      * @Method("GET")
      * @Template()
      * 
+     * @Secure(roles="ROLE_MEDIALIBRARY_EDIT")
      */
     public function newAction()
     {
-        $entity = new Document();
+        $entity = new Image();
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -108,16 +127,16 @@ class DocumentController extends Controller
     }
     
     /**
-     * Creates a form to create a Document entity.
+     * Creates a form to create a Image entity.
      *
      * @param Document $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Document $entity)
+    private function createCreateForm(Image $entity)
     {
-        $form = $this->createForm(new DocumentType(), $entity, array(
-            'action' => $this->generateUrl('medialibrary_upload'),
+        $form = $this->createForm(new ImageType(), $entity, array(
+            'action' => $this->generateUrl('medialibrary_image_upload'),
             'method' => 'POST',
         ));
         $form->add('subdir', 'choice', array(
@@ -134,20 +153,22 @@ class DocumentController extends Controller
     }
 
     /**
-     * Finds and displays a Document entity.
+     * Finds and displays a Image entity.
      *
-     * @Route("/{id}", name="medialibrary_show")
+     * @Route("/{id}", name="medialibrary_image_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MEDIALIBRARY_VIEW")
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Document')->find($id);
+        $entity = $em->getRepository('AppBundle:Image')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Document entity.');
+            throw $this->createNotFoundException('Unable to find Image entity.');
         }
 
         return array(
@@ -157,20 +178,22 @@ class DocumentController extends Controller
     }
     
     /**
-     * Displays a form to edit an existing Document entity.
+     * Displays a form to edit an existing Image entity.
      *
-     * @Route("/{id}/edit", name="medialibrary_edit")
+     * @Route("/{id}/edit", name="medialibrary_image_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MEDIALIBRARY_EDIT")
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Document')->find($id);
+        $entity = $em->getRepository('AppBundle:Image')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Document entity.');
+            throw $this->createNotFoundException('Unable to find Image entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -185,16 +208,16 @@ class DocumentController extends Controller
     }
 
     /**
-    * Creates a form to edit a Document entity.
+    * Creates a form to edit a Image entity.
     *
-    * @param Document $entity The entity
+    * @param Image $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Document $entity)
+    private function createEditForm(Image $entity)
     {
-        $form = $this->createForm(new DocumentType(), $entity, array(
-            'action' => $this->generateUrl('medialibrary_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new ImageType(), $entity, array(
+            'action' => $this->generateUrl('medialibrary_image_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
         $form->add('subdir', 'hidden', array(
@@ -206,20 +229,22 @@ class DocumentController extends Controller
     }
     
     /**
-     * Edits an existing Document entity.
+     * Edits an existing Image entity.
      *
-     * @Route("/{id}", name="medialibrary_update")
+     * @Route("/{id}", name="medialibrary_image_update")
      * @Method("PUT")
-     * @Template("AppBundle:Document:edit.html.twig")
+     * @Template("AppBundle:Image:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_MEDIALIBRARY_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Document')->find($id);
+        $entity = $em->getRepository('AppBundle:Image')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Document entity.');
+            throw $this->createNotFoundException('Unable to find Image entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -240,12 +265,12 @@ class DocumentController extends Controller
     }
     
     /**
-     * Deletes a Document entity.
+     * Deletes an Image entity.
      *
-     * @Route("/{id}", name="medialibrary_delete")
+     * @Route("/{id}", name="medialibrary_image_delete")
      * @Method("DELETE")
      * 
-     * //@Secure(roles="ROLE_MEDIALIBRARY_DELETE")
+     * @Secure(roles="ROLE_MEDIALIBRARY_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -254,21 +279,21 @@ class DocumentController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:Document')->find($id);
+            $entity = $em->getRepository('AppBundle:Image')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find News entity.');
+                throw $this->createNotFoundException('Unable to find Image entity.');
             }
             
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('news'));
+        return $this->redirect($this->generateUrl('medialibrary_image'));
     }
 
     /**
-     * Creates a form to delete a News entity by id.
+     * Creates a form to delete an Image entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -277,13 +302,13 @@ class DocumentController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('medialibrary_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('medialibrary_image_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array(
                 'label' => 'Delete', 
                 'attr' => array(
                     'class' => 'btn btn-sm btn-danger',
-                    'onclick' => 'return confirm("Are you sure you want to delete this document?")'
+                    'onclick' => 'return confirm("Are you sure you want to delete this image?")'
                     )
                 )
             )
@@ -292,20 +317,22 @@ class DocumentController extends Controller
     }
     
     /**
-     * Displays a printer-friendly Document entity.
+     * Displays a printer-friendly Image entity.
      *
-     * @Route("/{id}/print", name="medialibrary_print")
+     * @Route("/{id}/print", name="medialibrary_image_print")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MEDIALIBRARY_VIEW")
      */
     public function printAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Document')->find($id);
+        $entity = $em->getRepository('AppBundle:Image')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Document entity.');
+            throw $this->createNotFoundException('Unable to find Image entity.');
         }
 
         return array(

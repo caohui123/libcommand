@@ -45,4 +45,15 @@ class DocumentService{
         return;
   }
   
+  /**
+   * Used in twig templates to determine the type of file based on the extension
+   * 
+   * @param String $path 
+   * @return String $type
+   */
+  public function documentType($path){
+      $path_exp = explode('.', $path);
+      $type = $path_exp[1];
+      return $type;
+  }
 }
