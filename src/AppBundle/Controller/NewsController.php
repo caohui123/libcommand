@@ -285,6 +285,9 @@ class NewsController extends Controller
             throw $this->createNotFoundException('Unable to find News entity.');
         }
 
+        $image = new Image();
+        $imageForm = $this->createImageForm($image);
+        
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
@@ -294,6 +297,12 @@ class NewsController extends Controller
             //erase an emergency level (string) if the News is no longer marked as an emergency
             if(0 == $entity->getEmergency() && null !== $entity->getEmergencyLevel()){
                 $entity->setEmergencyLevel(null);
+            }
+            
+            //erase delay start and end time if the delay button is not clicked
+            if(false == $entity->getDelayedPost()){
+                $entity->setDisplayStart(null);
+                $entity->setDisplayEnd(null);
             }
           
             if(isset($requestData['cover_image'])){
@@ -321,6 +330,7 @@ class NewsController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'image_form'  => $imageForm->createView(),
         );
     }
     /**

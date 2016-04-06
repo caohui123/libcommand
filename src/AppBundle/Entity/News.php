@@ -19,6 +19,24 @@ use AppBundle\Entity\Document;
  * 
  * @Serializer\XmlRoot("news")
  * @Hateoas\Relation("self", href="expr('/api/news/' ~ object.getId())")
+ * @Hateoas\Relation(
+ *     "originalImage",
+ *     href = "expr('/uploads/news/' ~ object.getImage().getPath())",
+ *     embedded = "expr(object.getImage())",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getImage() === null)")
+ * )
+ * @Hateoas\Relation(
+ *     "newsImage",
+ *     href = "expr('/media/cache/web_story/uploads/news/' ~ object.getImage().getPath())",
+ *     embedded = "expr(object.getImage())",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getImage() === null)")
+ * )
+ * @Hateoas\Relation(
+ *     "thumbnailImage",
+ *     href = "expr('/media/cache/thumb/uploads/news/' ~ object.getImage().getPath())",
+ *     embedded = "expr(object.getImage())",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getImage() === null)")
+ * )
  */
 class News
 {
@@ -63,6 +81,14 @@ class News
     private $author;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="delayed_post", type="boolean")
+     */
+    private $delayedPost;
+   
+    
+    /**
      * @var \DateTime $displayStart
      *
      * @ORM\Column(type="datetime", nullable=true)
@@ -83,7 +109,6 @@ class News
      */
     private $hidden;
     
-    
     /**
      * @var boolean
      *
@@ -101,12 +126,9 @@ class News
     /**
      * @ORM\ManyToOne(targetEntity="Document", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinColumn(name="document_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $image;
-    
-    //UNMAPPED! used only for validation (getter and setter below)
-    private $delayedPost;
-   
     
     /**
      * @var \DateTime $created
@@ -242,7 +264,7 @@ class News
     /**
      * Get displayStart
      *
-     * @return \DateTime
+     * @return bool
      */
     public function getDisplayStart()
     {
@@ -274,7 +296,7 @@ class News
     /**
      * Get emergency
      *
-     * @return bool
+     * @return boolean
      */
     public function getEmergency()
     {
@@ -330,7 +352,7 @@ class News
     /**
      * Get delayedPost
      *
-     * @return string
+     * @return boolean
      */
     public function getDelayedPost()
     {

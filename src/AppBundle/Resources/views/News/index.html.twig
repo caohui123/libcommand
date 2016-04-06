@@ -14,6 +14,7 @@
                     <tr>
                         <th>Title</th>
                         <th>Visible to Public</th>
+                        <th>Alert Set</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -24,6 +25,13 @@
                         <td>
                             {% if entity.hidden == 0 %}
                                 <span class="label label-success">YES</span>
+                            {% else %}
+                                <span class="label label-default">No</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if entity.emergency == 1 %}
+                                <span class="label label-danger">YES</span>
                             {% else %}
                                 <span class="label label-default">No</span>
                             {% endif %}
@@ -50,7 +58,7 @@
     //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
     $('#jquerySortable_1').tablesorter({
         headers: {
-            1: {
+            3: {
                 sorter: false
             },
         }

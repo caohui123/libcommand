@@ -53,12 +53,14 @@ class NewsRestController extends FOSRestController{
     public function getNewspaginationinfoAction($results_per_page){
         $em = $this->getDoctrine()->getManager();
         
-        $qb = $em->createQueryBuilder('n');
-        $qb->select('count(n.id)');
-        $qb->from('AppBundle:News', 'n');
+        $entities = $em->getRepository('AppBundle:News')->findBy( array('hidden' => 0) );
         
-        $num_records = $qb->getQuery()->getSingleScalarResult();
-        
+        if(!$entities){
+            $num_records = 0;
+        } else {
+            $num_records = $this->__tabulateRecords($entities);
+        }
+
         $response = new JsonResponse();
         $response->setData(array(
               'num_pages' => ceil($num_records/$results_per_page),
@@ -77,8 +79,16 @@ class NewsRestController extends FOSRestController{
      */
     public function getNewsAction($id){
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AppBundle:News')->find($id);
+        
+        $qb = $em->createQueryBuilder('n');
+        $qb->select('n');
+        $qb->from('AppBundle:News', 'n');
+        $qb->where('n.id = :id');
+        $qb->andWhere('n.hidden = :hidden');
+        $qb->setParameter('id', $id);
+        $qb->setParameter('hidden', 0);
+        
+        $entity = $qb->getQuery()->getOneOrNullResult();
         
         if(!$entity){
           throw $this->createNotFoundException('That news article was not found.');
@@ -89,5 +99,62 @@ class NewsRestController extends FOSRestController{
         $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
         
         return $response;
+    }
+    
+    /**
+     * Get all news stories marked as emergencies.
+     * 
+     * @return Response
+     */
+    public function getNewsemergenciesAction(){
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:News')->findBy( array('emergency' => 1, 'hidden' => 0), array('created' => 'DESC') );
+
+        if (!$entity) {
+            new Response('No alerts or emergencies at this time.', 403, array('Content-Type' => 'application/json'));
+        }
+        
+        $serializer = $this->container->get('serializer');
+        $serialized = $serializer->serialize($entity, 'json');
+        $response = new Response($serialized, 200, array('Content-Type' => 'application/json'));
+        
+        return $response;
+    }
+    
+    /**
+     * Count the number of records depending on if the news is on a delayed timer and if it should be currently displayed. 
+     * 
+     * @param array $entities  An array of News entities
+     * @return int $num_records  The number of currently-displayed records,
+     */
+    private function __tabulateRecords($entities){
+        $num_records = 0;
+        foreach($entities as $entity){
+            //if the post is delayed
+            if(1 == $entity->getDelayedPost()){
+                $start = $entity->getDisplayStart();
+                $end = $entity->getDisplayEnd();
+                $now = new \DateTime();
+                
+                //if start time is not null
+                if(null !== $start){
+                    //if story's start time is in the past and end time not set
+                    if($start <= $now && null === $end){
+                        $num_records++;
+                    }
+                    //if story's start time is in the past and end time is set and in the future
+                    if($start <= $now && $end >= $now){
+                        $num_records++;
+                    }
+                } else {
+                    $num_records++;
+                }
+            } else {
+                $num_records++;
+            }            
+        }
+        
+        return $num_records;
     }
 }

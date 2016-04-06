@@ -200,5 +200,5 @@ liip_imagine:
         web_story:
             quality: 100
             filters:
-                thumbnail: { size: [400, 250], mode: outbound }
+                thumbnail: { size: [580, 270], mode: outbound }
               

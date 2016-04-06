@@ -21,8 +21,6 @@
                 <p>Don't see the image you're looking for? Navigate to the <a href="#new-image-form-container">New Image</a> form below to add one.</p>
                 {{ render(controller("AppBundle:News:imageThumbnails")) }}
             </div>
-            <hr>
-            {{ form_row(form.hidden) }}
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4">
             <div class="well well-lg">
@@ -39,6 +37,7 @@
                     {{ form_row(form.displayStart) }}
                     {{ form_row(form.displayEnd) }}
                 </div>
+                {{ form_row(form.hidden) }}
             </div>
             {{form_row(form.submit)}}
         </div>
@@ -53,7 +52,7 @@
         <div class="col-xs-12 col-sm-12 col-md-8" id="new-image-form-container">
             <div class=" well well-lg">
             <h2><span class="glyphicon glyphicon-camera text-info"></span> New Image</h2>
-            <p>For optimal display on the website, please make cover images <mark>435px wide by 260 px tall</mark>.</p>
+            <p>For optimal display on the website, please make cover images <mark>580px wide by 270px tall</mark>.</p>
             {{ form(image_form) }}
             </div>
         </div>
