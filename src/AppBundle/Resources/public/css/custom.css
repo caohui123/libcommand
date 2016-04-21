@@ -30,6 +30,12 @@ input.thumbnail-photo-select{
     visibility: hidden;
 }
 
+#thumbnail_image_list_container{
+  overflow: auto;
+  width: 200px;
+  height: 500px;
+}
+
 @media screen and (min-width: 0) {
   .navbar-toggle {
     display: block; /* force showing the toggle */

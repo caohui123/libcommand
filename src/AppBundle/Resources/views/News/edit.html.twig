@@ -157,4 +157,16 @@
             
         return false;
     });
+    
+    /*
+    $('.thumbnail_image_list_container').libraryImageSlider({
+        color: 'blue'
+    });
+    */
+    
+    // Uses the jQuery thumbnail scroller (http://manos.malihu.gr/jquery-thumbnail-scroller/)
+    $("#thumbnail_image_list_container").mThumbnailScroller({
+        axis: "x",
+        type: "click-thumb"
+    });
 {% endblock %}

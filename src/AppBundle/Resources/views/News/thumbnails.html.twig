@@ -1,3 +1,12 @@
-{% for entity in entities %}
+{# for entity in entities %}
     <label><input type="radio" name="cover_image" id="image_{{ entity.path }}" value="{{ entity.id }}" class="thumbnail-photo-select" /> <img class="thumbnail-photo-select" id="{{ entity.path }}" src="{{ asset('uploads/news/' ~ entity.path) | imagine_filter('thumb') }}" alt="{{ entity.name }}" title="{{ entity.name }}"/></label>
-{% endfor %}
+{% endfor #}
+<div id="thumbnail_image_list_container">
+    <ul id="thumbnail_image_list">
+        {% for entity in entities %}
+        <li class="thumbnail_image_list_item">
+            <label><input type="radio" name="cover_image" id="image_{{ entity.path }}" value="{{ entity.id }}" class="thumbnail-photo-select" /> <img class="thumbnail-photo-select" id="{{ entity.path }}" src="{{ asset('uploads/news/' ~ entity.path) | imagine_filter('thumb') }}" alt="{{ entity.name }}" title="{{ entity.name }}"/></label>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
