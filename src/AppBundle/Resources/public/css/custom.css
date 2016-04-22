@@ -28,12 +28,13 @@ body {
 }
 input.thumbnail-photo-select{
     visibility: hidden;
+    width:0;
 }
 
 #thumbnail_image_list_container{
   overflow: auto;
-  width: 200px;
-  height: 500px;
+  max-width: 98%;
+  height: auto;
 }
 
 @media screen and (min-width: 0) {

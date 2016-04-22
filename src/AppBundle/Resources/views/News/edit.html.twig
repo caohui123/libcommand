@@ -31,7 +31,7 @@
             <div class="form-group" id="thumbnails-list-container">
                 <label class="control-label">Other Cover Images</label>
                 <p>Click on the image you wish to use. It will be set as the cover image when you update the form.</p>
-                <p>Don't see the image you're looking for? Navigate to the <a href="#new-image-form-container">New Image</a> form below to add one.</p>
+                <p>Don't see the image you're looking for? Navigate to the <a href="#new-image-form-container">New Image</a> form below to add one. Also be sure to use the scrolling arrows, which will appear if there are more images that aren't shown in the slider.</p>
                 {{ render(controller("AppBundle:News:imageThumbnails")) }}
             </div>
             <hr>
@@ -167,6 +167,7 @@
     // Uses the jQuery thumbnail scroller (http://manos.malihu.gr/jquery-thumbnail-scroller/)
     $("#thumbnail_image_list_container").mThumbnailScroller({
         axis: "x",
-        type: "click-thumb"
+        type: "click-thumb",
+        theme: "emulibrary"
     });
 {% endblock %}
