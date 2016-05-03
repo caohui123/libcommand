@@ -19,7 +19,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table()
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
- * @ORM\HasLifecycleCallbacks
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="class_name", type="string")
  * @ORM\DiscriminatorMap({

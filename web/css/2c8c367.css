@@ -50,12 +50,13 @@ body {
 }
 input.thumbnail-photo-select{
     visibility: hidden;
+    width:0;
 }
 
 #thumbnail_image_list_container{
   overflow: auto;
-  width: 200px;
-  height: 500px;
+  max-width: 98%;
+  height: auto;
 }
 
 @media screen and (min-width: 0) {
@@ -1601,7 +1602,7 @@ CONTENTS:
 
 	.mTS-buttons-out{
 		padding: 6px;
-		background: #000;
+		background: #fff;
 	}
 
 	.mTS-buttons-out .mTSButtonIcon{ fill: #000; }
@@ -1656,6 +1657,43 @@ CONTENTS:
 	.mTS-hover-full .mTS_horizontal .mTSThumbContainer:last-child{ margin-right: 40px; }
 
 	/* ---------------------------------------- */
+        
+        /* theme: "emulibrary" */        
+        .mTS-emulibrary{
+		padding: 6px;
+		background: #eee;
+	}
+
+	.mTS-emulibrary .mTSButtonIcon{ fill: #ddd; }
+
+	.mTS-emulibrary .mTSButton{
+		background-color: rgba(255,0,0,.5);
+		width: 36px;
+		height: 36px;
+		line-height: 42px;
+		padding: 5px;
+                -moz-border-radius: 48px;
+                -webkit-border-radius: 48px;
+                border-radius: 48px;
+	}
+	
+	.mTS-emulibrary .mTSButton.mTS-hidden{
+		height: 0;
+		width: 0;
+		padding: 0;
+	}
+
+	.mTS-emulibrary .mTS_vertical .mTSThumbContainer{ margin: 6px 0; }
+
+	.mTS-emulibrary .mTS_vertical .mTSThumbContainer:first-child{ margin-top: 0; }
+
+	.mTS-emulibrary .mTS_vertical .mTSThumbContainer:last-child{ margin-bottom: 0; }
+
+	.mTS-emulibrary .mTS_horizontal .mTSThumbContainer{ margin: 0 3px; }
+
+	.mTS-emulibrary .mTS_horizontal .mTSThumbContainer:first-child{ margin-left: 0; }
+
+	.mTS-emulibrary .mTS_horizontal .mTSThumbContainer:last-child{ margin-right: 0; }
 .ui-timepicker-wrapper {
 	overflow-y: auto;
 	height: 150px;

@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>GroupInstruction creation</h1>
+    <blockquote>
+        <p>You may only add instructions for yourself. Additionally, only you will be able to edit or delete your instruction session details.</p>
+    </blockquote>
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('groupinstruction') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}
+{% block documentReady %}
+    $('#appbundle_groupinstruction_startTime').timepicker({ 'timeFormat': 'h:i a' });
+    $('#appbundle_groupinstruction_endTime').timepicker({ 'timeFormat': 'h:i a' });
+    {{ parent() }}
+{% endblock %}

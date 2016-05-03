@@ -1,0 +1,15 @@
+{# The 422 Error code means Unprocessable Entity. In this system, this message is thrown from the 'NoAssociatedStaffException' #}
+{% extends 'base.html.twig' %}
+{% block title %}Access Denied{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12 text-center">
+        <h1>No Associated Staff Member</h1>
+        <p>Your NetID is not associated with a staff member in this system. You must resolve this issue before using this feature. Please contact the administrator below to connect your NetID with your staff information. It won't take long!</p>
+        <p>{{ administratorName }} | {{administratorEmail}} | {{administratorPhone}}</p>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block documentReady %}
+{% endblock %}

@@ -5,7 +5,13 @@
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'Patron Groups', 'newbutton' : true, 'newpath' : path('admin_patrongroup_new'), 'newpathlabel' : 'New Group' } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
-    
+    <div class="row">
+        <div class="col-xs-12">
+            <blockquote>
+                <p>Patron Groups are used in various forms such as Patron Feedback.</p>
+            </blockquote>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-12">
             <table class="table table-responsive table-striped records_list">
