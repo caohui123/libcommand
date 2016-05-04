@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\User;
 
 /**
  * Instruction
@@ -16,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\DiscriminatorColumn(name="class_name", type="string")
  * @ORM\DiscriminatorMap({
  *  "AppBundle\Entity\GroupInstruction"     = "AppBundle\Entity\GroupInstruction",
+ *  "AppBundle\Entity\IndividualInstruction" = "AppBundle\Entity\IndividualInstruction",
  * })
  */
 abstract class Instruction
@@ -68,11 +70,25 @@ abstract class Instruction
      * @ORM\JoinColumn(name="program_id", referencedColumnName="id")
      */
     private $program;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="level", type="string", length=20)
+     */
+    private $level;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="levelDescription", type="text", nullable=true)
+     */
+    private $levelDescription;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="note", type="text")
+     * @ORM\Column(name="note", type="text", nullable=true)
      */
     private $note;
     
@@ -83,6 +99,15 @@ abstract class Instruction
      * @ORM\Column(type="datetime")
      */
     private $created;
+    
+    /**
+     * @var User $createdBy
+     *
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(referencedColumnName="id")
+     */
+    private $createdBy;
 
     /**
      * @var \DateTime $updated
@@ -93,10 +118,20 @@ abstract class Instruction
     private $updated;
     
     /**
-     * @var string $contentChangedBy
+     * @var User $updatedBy
      *
-     * @ORM\Column(name="content_changed_by", type="string", nullable=true)
-     * @Gedmo\Blameable(on="change", field={"course", "instructionDate", "startTime", "endTime"})
+     * @Gedmo\Blameable(on="update")
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(referencedColumnName="id")
+     */
+    private $updatedBy;
+    
+    /**
+     * @var User $contentChangedBy
+     *
+     * @Gedmo\Blameable(on="change", field={"course", "instructionDate", "startTime", "endTime", "level", "levelDescription", "note", "program"})
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(referencedColumnName="id")
      */
     private $contentChangedBy;
 
@@ -230,7 +265,55 @@ abstract class Instruction
     {
         return $this->endTime;
     }
+    
+    /**
+     * Set level
+     *
+     * @param string $level
+     *
+     * @return Instruction
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
 
+        return $this;
+    }
+
+    /**
+     * Get level
+     *
+     * @return string
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * Set levelDescription
+     *
+     * @param string $levelDescription
+     *
+     * @return Instruction
+     */
+    public function setLevelDescription($levelDescription)
+    {
+        $this->levelDescription = $levelDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get levelDescription
+     *
+     * @return string
+     */
+    public function getLevelDescription()
+    {
+        return $this->levelDescription;
+    }
+    
     /**
      * Set note
      *
@@ -270,6 +353,21 @@ abstract class Instruction
         
         return $this;
     }
+    
+    /**
+     * Get createdBy
+     * @return User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+    public function setCreatedBy(User $createdBy)
+    {
+        $this->createdBy = $createdBy;
+        
+        return $this;
+    }
 
     /**
      * Get updated
@@ -286,21 +384,41 @@ abstract class Instruction
         
         return $this;
     }
+    
+    /**
+     * Get updatedBy
+     *
+     * @return User
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+    public function setUpdatedBy(User $updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+        
+        return $this;
+    }
 
     /**
      * Get contentChangedBy
      *
-     * @return string
+     * @return User
      */
     public function getContentChangedBy()
     {
         return $this->contentChangedBy;
     }
-    public function setContentChangedBy($changedby)
+    public function setContentChangedBy(User $changedby)
     {
         $this->contentChangedBy = $changedby;
         
         return $this;
     }
+    
+    /**
+     * Get owner
+     */
 }
 

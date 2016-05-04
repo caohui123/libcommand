@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>IndividualInstruction</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Client</th>
+                <td>{{ entity.client }}</td>
+            </tr>
+            <tr>
+                <th>Interaction</th>
+                <td>{{ entity.interaction }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('individualinstruction') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('individualinstruction_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

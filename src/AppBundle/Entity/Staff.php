@@ -204,6 +204,15 @@ class Staff
     private $department;
     
     /**
+     * A collection of Instruction entities (group and individual instruction sessions). 
+     * Orphan removal means that when a Staff is deleted, all associated entities (i.e. insturction sessions with a foreign key relationship to this Staff)
+     * will also be deleted! 
+     * 
+     * @ORM\OneToMany(targetEntity="Instruction", mappedBy="librarian", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $instructions;
+    
+    /**
      * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
@@ -231,6 +240,10 @@ class Staff
     private $contentChangedBy;
     
     private $currentPhoto;
+    
+    public function __construct() {
+        $this->instructions = new ArrayCollection();
+    }
     
     /**
      * Set currentPhoto
@@ -793,6 +806,30 @@ class Staff
     public function getDepartment()
     {
         return $this->department;
+    }
+    
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\Instruction $instruction
+     *
+     * @return Staff
+     */
+    public function setInstruction(\AppBundle\Entity\Instruction $instruction)
+    {
+        $this->instructions[] = $instruction;
+
+        return $this;
+    }
+    
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInstructions()
+    {
+        return $this->instructions;
     }
     
     public function getCreated()

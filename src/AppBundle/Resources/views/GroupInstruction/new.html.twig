@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>GroupInstruction creation</h1>
+    <h1>New Group Instruction</h1>
     <blockquote>
         <p>You may only add instructions for yourself. Additionally, only you will be able to edit or delete your instruction session details.</p>
     </blockquote>
@@ -16,7 +16,18 @@
 </ul>
 {% endblock %}
 {% block documentReady %}
-    $('#appbundle_groupinstruction_startTime').timepicker({ 'timeFormat': 'h:i a' });
-    $('#appbundle_groupinstruction_endTime').timepicker({ 'timeFormat': 'h:i a' });
+    var now = new Date();
+    
+    /* Datepicker */
+    //datetimepicker plugin 
+    $('#appbundle_groupinstruction_instructionDate').datetimepicker({
+        format: 'm/d/Y',
+        timepicker: false,
+        onShow:function( ct ){
+            this.setOptions({
+                minDate: now,
+            })
+        },
+    });
     {{ parent() }}
 {% endblock %}

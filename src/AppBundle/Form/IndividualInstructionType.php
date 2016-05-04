@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use AppBundle\Entity\Staff;
 
-class GroupInstructionType extends AbstractType
+class IndividualInstructionType extends AbstractType
 {
     private $manager;
     private $staff; 
@@ -37,9 +37,8 @@ class GroupInstructionType extends AbstractType
                     return $qb;
                 },
             ))
-            ->add('instructor')
+            ->add('client')
             ->add('course')
-            ->add('attendance')
             ->add('instructionDate', 'date', array(
                 'widget' => 'single_text',
                 'format' => 'MM/dd/yyyy',
@@ -50,25 +49,34 @@ class GroupInstructionType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'choices' => array(
-                    '100-200' => '100-200',
-                    '300-400' => '300-400',
+                    'undergrad' => 'Undergraduate',
                     'grad' => 'Graduate',
-                    'high school' => 'High School',
+                    'staff' => 'Staff',
+                    'faculty' => 'Faculty',
                     'other' => 'Other'
                 ),
+                'label' => 'Academic Status'
             ))
             ->add('levelDescription', 'text', array(
                 'required' => false,
-                'label' => 'Expanded description of instruction level (optional)'
+                'label' => 'Expanded description of academic status (optional)'
+            ))
+            ->add('interaction', 'choice', array(
+                'multiple' => false,
+                'expanded' => true,
+                'choices' => array(
+                    'person' => 'In Person',
+                    'online' => 'Online',
+                    'phone' => 'Phone',
+                ),
             ))
             ->add('note', null, array(
                 'required' => false
             ))
         ;
-        
+                
         $builder->get('librarian')
                 ->addModelTransformer(new DataTransformer\StaffToIntTransformer($this->manager));
-        
     }
     
     /**
@@ -77,8 +85,7 @@ class GroupInstructionType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\GroupInstruction',
-            'allow_extra_fields' => true
+            'data_class' => 'AppBundle\Entity\IndividualInstruction'
         ));
     }
 
@@ -87,6 +94,6 @@ class GroupInstructionType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_groupinstruction';
+        return 'appbundle_individualinstruction';
     }
 }

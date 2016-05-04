@@ -28,13 +28,6 @@ class GroupInstruction extends Instruction
     private $attendance;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="level", type="string", length=50)
-     */
-    private $level;
-
-    /**
      * Set instructor
      *
      * @param string $instructor
@@ -80,30 +73,6 @@ class GroupInstruction extends Instruction
     public function getAttendance()
     {
         return $this->attendance;
-    }
-
-    /**
-     * Set level
-     *
-     * @param string $level
-     *
-     * @return GroupInstruction
-     */
-    public function setLevel($level)
-    {
-        $this->level = $level;
-
-        return $this;
-    }
-
-    /**
-     * Get level
-     *
-     * @return string
-     */
-    public function getLevel()
-    {
-        return $this->level;
     }
 }
 

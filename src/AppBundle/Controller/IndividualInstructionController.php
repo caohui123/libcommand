@@ -7,22 +7,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use AppBundle\Entity\GroupInstruction;
-use AppBundle\Form\GroupInstructionType;
+use AppBundle\Entity\IndividualInstruction;
+use AppBundle\Form\IndividualInstructionType;
 use AppBundle\Exception\NoAssociatedStaffException;
 
 /**
- * GroupInstruction controller.
+ * IndividualInstruction controller.
  *
- * @Route("/groupinstruction")
+ * @Route("/individualinstruction")
  */
-class GroupInstructionController extends Controller
+class IndividualInstructionController extends Controller
 {
 
     /**
-     * Lists all GroupInstruction entities.
+     * Lists all IndividualInstruction entities.
      *
-     * @Route("/", name="groupinstruction")
+     * @Route("/", name="individualinstruction")
      * @Method("GET")
      * @Template()
      */
@@ -30,22 +30,22 @@ class GroupInstructionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:GroupInstruction')->findAll();
+        $entities = $em->getRepository('AppBundle:IndividualInstruction')->findAll();
 
         return array(
             'entities' => $entities,
         );
     }
     /**
-     * Creates a new GroupInstruction entity.
+     * Creates a new IndividualInstruction entity.
      *
-     * @Route("/", name="groupinstruction_create")
+     * @Route("/", name="individualinstruction_create")
      * @Method("POST")
-     * @Template("AppBundle:GroupInstruction:new.html.twig")
+     * @Template("AppBundle:IndividualInstruction:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity = new GroupInstruction();
+        $entity = new IndividualInstruction();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -54,7 +54,7 @@ class GroupInstructionController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('groupinstruction_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('individualinstruction_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -64,13 +64,13 @@ class GroupInstructionController extends Controller
     }
 
     /**
-     * Creates a form to create a GroupInstruction entity.
+     * Creates a form to create a IndividualInstruction entity.
      *
-     * @param GroupInstruction $entity The entity
+     * @param IndividualInstruction $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(GroupInstruction $entity)
+    private function createCreateForm(IndividualInstruction $entity)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         
@@ -78,8 +78,8 @@ class GroupInstructionController extends Controller
             throw new NoAssociatedStaffException();
         }
         
-        $form = $this->createForm(new GroupInstructionType($this->getDoctrine()->getManager(), $currentUser->getStaffMember()), $entity, array(
-            'action' => $this->generateUrl('groupinstruction_create'),
+        $form = $this->createForm(new IndividualInstructionType($this->getDoctrine()->getManager(), $currentUser->getStaffMember()), $entity, array(
+            'action' => $this->generateUrl('individualinstruction_create'),
             'method' => 'POST',
         ));
 
@@ -89,15 +89,15 @@ class GroupInstructionController extends Controller
     }
 
     /**
-     * Displays a form to create a new GroupInstruction entity.
+     * Displays a form to create a new IndividualInstruction entity.
      *
-     * @Route("/new", name="groupinstruction_new")
+     * @Route("/new", name="individualinstruction_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new GroupInstruction();
+        $entity = new IndividualInstruction();
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -107,9 +107,9 @@ class GroupInstructionController extends Controller
     }
 
     /**
-     * Finds and displays a GroupInstruction entity.
+     * Finds and displays a IndividualInstruction entity.
      *
-     * @Route("/{id}", name="groupinstruction_show")
+     * @Route("/{id}", name="individualinstruction_show")
      * @Method("GET")
      * @Template()
      */
@@ -117,10 +117,10 @@ class GroupInstructionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:GroupInstruction')->find($id);
+        $entity = $em->getRepository('AppBundle:IndividualInstruction')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find GroupInstruction entity.');
+            throw $this->createNotFoundException('Unable to find IndividualInstruction entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -132,9 +132,9 @@ class GroupInstructionController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing GroupInstruction entity.
+     * Displays a form to edit an existing IndividualInstruction entity.
      *
-     * @Route("/{id}/edit", name="groupinstruction_edit")
+     * @Route("/{id}/edit", name="individualinstruction_edit")
      * @Method("GET")
      * @Template()
      */
@@ -142,10 +142,10 @@ class GroupInstructionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:GroupInstruction')->find($id);
+        $entity = $em->getRepository('AppBundle:IndividualInstruction')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find GroupInstruction entity.');
+            throw $this->createNotFoundException('Unable to find IndividualInstruction entity.');
         }
         
         $this->denyAccessUnlessGranted('edit', $entity, 'Unauthorized Access!');
@@ -161,13 +161,13 @@ class GroupInstructionController extends Controller
     }
 
     /**
-    * Creates a form to edit a GroupInstruction entity.
+    * Creates a form to edit a IndividualInstruction entity.
     *
-    * @param GroupInstruction $entity The entity
+    * @param IndividualInstruction $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(GroupInstruction $entity)
+    private function createEditForm(IndividualInstruction $entity)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         
@@ -175,8 +175,8 @@ class GroupInstructionController extends Controller
             throw new NoAssociatedStaffException();
         }
         
-        $form = $this->createForm(new GroupInstructionType($this->getDoctrine()->getManager(), $currentUser->getStaffMember()), $entity, array(
-            'action' => $this->generateUrl('groupinstruction_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new IndividualInstructionType($this->getDoctrine()->getManager(), $currentUser->getStaffMember()), $entity, array(
+            'action' => $this->generateUrl('individualinstruction_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -185,23 +185,21 @@ class GroupInstructionController extends Controller
         return $form;
     }
     /**
-     * Edits an existing GroupInstruction entity.
+     * Edits an existing IndividualInstruction entity.
      *
-     * @Route("/{id}", name="groupinstruction_update")
+     * @Route("/{id}", name="individualinstruction_update")
      * @Method("PUT")
-     * @Template("AppBundle:GroupInstruction:edit.html.twig")
+     * @Template("AppBundle:IndividualInstruction:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:GroupInstruction')->find($id);
+        $entity = $em->getRepository('AppBundle:IndividualInstruction')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find GroupInstruction entity.');
+            throw $this->createNotFoundException('Unable to find IndividualInstruction entity.');
         }
-        
-        $this->denyAccessUnlessGranted('edit', $entity, 'Unauthorized Access!');
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
@@ -210,7 +208,7 @@ class GroupInstructionController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('groupinstruction_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('individualinstruction_edit', array('id' => $id)));
         }
 
         return array(
@@ -220,9 +218,9 @@ class GroupInstructionController extends Controller
         );
     }
     /**
-     * Deletes a GroupInstruction entity.
+     * Deletes a IndividualInstruction entity.
      *
-     * @Route("/{id}", name="groupinstruction_delete")
+     * @Route("/{id}", name="individualinstruction_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -232,21 +230,21 @@ class GroupInstructionController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:GroupInstruction')->find($id);
+            $entity = $em->getRepository('AppBundle:IndividualInstruction')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find GroupInstruction entity.');
+                throw $this->createNotFoundException('Unable to find IndividualInstruction entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('groupinstruction'));
+        return $this->redirect($this->generateUrl('individualinstruction'));
     }
 
     /**
-     * Creates a form to delete a GroupInstruction entity by id.
+     * Creates a form to delete a IndividualInstruction entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -255,7 +253,7 @@ class GroupInstructionController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('groupinstruction_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('individualinstruction_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

@@ -69,7 +69,7 @@ class StaffArea
     private $children;
     
     /**
-     * @ORM\OneToMany(targetEntity="Staff", mappedBy="staffFunctionalArea", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Staff", mappedBy="staffFunctionalArea", cascade={"persist"})
      */
     private $users;
 

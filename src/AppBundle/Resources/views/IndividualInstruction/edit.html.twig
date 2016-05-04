@@ -1,13 +1,13 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>GroupInstruction edit</h1>
+    <h1>IndividualInstruction edit</h1>
 
     {{ form(edit_form) }}
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('groupinstruction') }}">
+        <a href="{{ path('individualinstruction') }}">
             Back to the list
         </a>
     </li>
@@ -19,7 +19,7 @@
     
     /* Datepicker */
     //datetimepicker plugin 
-    $('#appbundle_groupinstruction_instructionDate').datetimepicker({
+    $('#appbundle_individualinstruction_instructionDate').datetimepicker({
         format: 'm/d/Y',
         timepicker: false,
         onShow:function( ct ){
