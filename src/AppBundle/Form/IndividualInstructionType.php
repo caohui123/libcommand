@@ -45,6 +45,18 @@ class IndividualInstructionType extends AbstractType
             ))
             ->add('startTime', 'time')
             ->add('endTime', 'time')
+            ->add('program', 'entity', array(
+                'class' => 'AppBundle:LiaisonSubject',
+                'query_builder'=>function(EntityRepository $er){
+                  $qb = $er->createQueryBuilder('ls');
+                  $qb
+                    ->orderBy('ls.root, ls.lvl, ls.name', 'ASC')
+                    ->getQuery();
+                  return $qb;
+                },
+                'property' => 'indentedTitle',
+                'label' => 'Program'
+            ))
             ->add('level', 'choice', array(
                 'multiple' => false,
                 'expanded' => true,

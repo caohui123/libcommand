@@ -1,0 +1,54 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Individual Instruction Sessions{% endblock %}
+{% block body %}
+<h1>Individual Session by {{entity.librarian.firstName}} {{entity.librarian.lastName}} | {{entity.instructionDate|date('n/j/y')}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Session Details</caption>
+        <tbody>
+            <tr>
+                <th>Client</th>
+                <td>{{ entity.client }}</td>
+            </tr>
+            <tr>
+                <th>Program</th>
+                <td>{{entity.program}}</td>
+            </tr>
+            <tr>
+                <th>Level</th>
+                <td>
+                    {{ entity.level|capitalize }}
+                    {% if entity.levelDescription %}
+                        ({{ entity.levelDescription}})
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Interaction</th>
+                <td>{{ entity.interaction|capitalize }}</td>
+            </tr>
+            <tr>
+                <th>Start</th>
+                <td>{{ entity.startTime|date('g:i A') }}</td>
+            </tr>
+            <tr>
+                <th>End</th>
+                <td>{{ entity.endTime|date('g:i A') }}</td>
+            </tr>
+            <tr>
+                <th>Notes</th>
+                <td>{{ entity.note }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>
+                    {% if date(entity.updated) != date(entity.created) %}
+                        {{ entity.updated|date('l n/j/y g:i A')  }} {% if entity.contentChangedBy is defined %} by {{ entity.contentChangedBy }} {% endif %}
+                    {% else %}
+                        Never
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+{% endblock %}

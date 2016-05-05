@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\User;
+use AppBundle\Entity\LiaisonSubject;
 
 /**
  * Instruction
@@ -264,6 +265,30 @@ abstract class Instruction
     public function getEndTime()
     {
         return $this->endTime;
+    }
+    
+    /**
+     * Set program (LiaisonSubject)
+     *
+     * @param \AppBundle\Entity\LiaisonSubject $subject
+     *
+     * @return Instruction
+     */
+    public function setProgram(LiaisonSubject $subject)
+    {
+        $this->program = $subject;
+
+        return $this;
+    }
+
+    /**
+     * Get program (LiaisonSubject)
+     *
+     * @return \AppBundle\Entity\LiaisonSubject
+     */
+    public function getProgram()
+    {
+        return $this->program;
     }
     
     /**

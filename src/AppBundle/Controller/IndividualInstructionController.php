@@ -26,14 +26,26 @@ class IndividualInstructionController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:IndividualInstruction')->findAll();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $entities = $em->getRepository('AppBundle:IndividualInstruction')->findBy(array('createdBy' => $currentUser), array('instructionDate' => 'DESC'));
+
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
 
         return array(
-            'entities' => $entities,
+            'pagination' => $pagination
         );
     }
     /**
@@ -180,7 +192,7 @@ class IndividualInstructionController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -255,8 +267,38 @@ class IndividualInstructionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('individualinstruction_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete',
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this session?")'
+                    )
+                ))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Displays a printer-friendly IndividualInstruction entity.
+     *
+     * @Route("/{id}/print", name="individualinstruction_print")
+     * @Method("GET")
+     * @Template()
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:IndividualInstruction')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find IndividualInstruction entity.');
+        }
+        
+        $this->denyAccessUnlessGranted('edit', $entity, 'Unauthorized Access!');
+
+        return array(
+            'entity'      => $entity,
+        );
     }
 }

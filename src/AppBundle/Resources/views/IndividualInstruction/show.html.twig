@@ -1,36 +1,69 @@
 {% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1>IndividualInstruction</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Client</th>
-                <td>{{ entity.client }}</td>
-            </tr>
-            <tr>
-                <th>Interaction</th>
-                <td>{{ entity.interaction }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('individualinstruction') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('individualinstruction_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+{% block title %}Individual Instruction Sessions{% endblock %}
+{% block body %}
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Individual Instruction #' ~ entity.id } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('individualinstruction'), 'editpath' : path('individualinstruction_edit', { 'id': entity.id }), 'printpath' : path('individualinstruction_print', { 'id': entity.id }), 'editrole' : 'IS_AUTHENTICATED_FULLY' } %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Date and Time</caption>
+              <tbody>
+                  <tr>
+                      <th>Instruction Date</th>
+                      <td>{{ entity.instructionDate|date('l n/j/y') }}</td>
+                  </tr>
+                    <tr>
+                        <th>Start</th>
+                        <td>{{ entity.startTime|date('g:i A') }}</td>
+                    </tr>
+                    <tr>
+                        <th>End</th>
+                        <td>{{ entity.endTime|date('g:i A') }}</td>
+                    </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+          <table class="table table-responsive table-striped">
+              <caption>Session Details</caption>
+              <tbody>
+                    <tr>
+                        <th>Client</th>
+                        <td>{{ entity.client }}</td>
+                    </tr>
+                    <tr>
+                        <th>Program</th>
+                        <td>{{entity.program}}</td>
+                    </tr>
+                    <tr>
+                        <th>Course</th>
+                        <td>{{entity.course}}</td>
+                    </tr>
+                    <tr>
+                        <th>Level</th>
+                        <td>
+                            {{ entity.level|capitalize }}
+                            {% if entity.levelDescription %}
+                                ({{ entity.levelDescription}})
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Interaction</th>
+                        <td>{{ entity.interaction }}</td>
+                    </tr>
+                    <tr>
+                        <th>Notes</th>
+                        <td>{{ entity.note }}</td>
+                    </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
 {% endblock %}

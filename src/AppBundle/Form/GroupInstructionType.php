@@ -46,6 +46,18 @@ class GroupInstructionType extends AbstractType
             ))
             ->add('startTime', 'time')
             ->add('endTime', 'time')
+            ->add('program', 'entity', array(
+                'class' => 'AppBundle:LiaisonSubject',
+                'query_builder'=>function(EntityRepository $er){
+                  $qb = $er->createQueryBuilder('ls');
+                  $qb
+                    ->orderBy('ls.root, ls.lvl, ls.name', 'ASC')
+                    ->getQuery();
+                  return $qb;
+                },
+                'property' => 'indentedTitle',
+                'label' => 'Program'
+            ))
             ->add('level', 'choice', array(
                 'multiple' => false,
                 'expanded' => true,
@@ -59,7 +71,7 @@ class GroupInstructionType extends AbstractType
             ))
             ->add('levelDescription', 'text', array(
                 'required' => false,
-                'label' => 'Expanded description of instruction level (optional)'
+                'label' => 'Level description (optional)'
             ))
             ->add('note', null, array(
                 'required' => false

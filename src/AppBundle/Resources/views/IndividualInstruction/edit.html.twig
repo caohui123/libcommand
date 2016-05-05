@@ -1,18 +1,66 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Individual Instruction Sessions{% endblock %}
 {% block body -%}
-    <h1>IndividualInstruction edit</h1>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Edit Individual Instruction #' ~ entity.id } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('individualinstruction'), 'printpath' : path('individualinstruction_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
 
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('individualinstruction') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    {{ form_start(edit_form) }}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(edit_form.librarian) }}
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(edit_form.client) }}
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(edit_form.interaction) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-lg">
+                        {{ form_row(edit_form.level) }}
+                        {{ form_row(edit_form.levelDescription) }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(edit_form.program) }}
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(edit_form.course) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(edit_form.note) }}
+                </div>
+            </div>
+            {{ form_row(edit_form.submit) }}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4">
+            <div class="well well-lg">
+                <h2 class="text-center"><span class="glyphicon glyphicon-calendar"></span> Date and Time Settings</h2>
+                {{ form_row(edit_form.instructionDate) }}
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        {{ form_row(edit_form.startTime) }}
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        {{ form_row(edit_form.endTime) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(edit_form) }}    
+    {{ form(delete_form) }}
 {% endblock %}
 {% block documentReady %}
     var now = new Date();

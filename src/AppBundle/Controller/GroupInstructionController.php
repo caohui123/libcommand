@@ -26,14 +26,26 @@ class GroupInstructionController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        $entities = $em->getRepository('AppBundle:GroupInstruction')->findAll();
+        $entities = $em->getRepository('AppBundle:GroupInstruction')->findBy(array('createdBy' => $currentUser), array('instructionDate' => 'DESC'));
+
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
 
         return array(
-            'entities' => $entities,
+            'pagination' => $pagination
         );
     }
     /**
@@ -180,7 +192,7 @@ class GroupInstructionController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -257,8 +269,38 @@ class GroupInstructionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('groupinstruction_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete',
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this session?")'
+                    )
+                ))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Displays a printer-friendly GroupInstruction entity.
+     *
+     * @Route("/{id}/print", name="groupinstruction_print")
+     * @Method("GET")
+     * @Template()
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:GroupInstruction')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find GroupInstruction entity.');
+        }
+        
+        $this->denyAccessUnlessGranted('edit', $entity, 'Unauthorized Access!');
+
+        return array(
+            'entity'      => $entity,
+        );
     }
 }

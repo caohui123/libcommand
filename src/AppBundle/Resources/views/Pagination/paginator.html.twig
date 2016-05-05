@@ -1,3 +1,6 @@
+{% if paginator is not defined %}
+    {% set paginator = pagination %}
+{% endif %}
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-9">
         <div class="well well-lg">
@@ -14,7 +17,7 @@
                     </label>
                 </div>
                 <div class="col-xs-12 col-sm-9 navigation">
-                    {{ knp_pagination_render(pagination) }}
+                    {{ knp_pagination_render(paginator) }}
                 </div>
             </div>
         </div>

@@ -1,45 +1,84 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Group Instruction Sessions{% endblock %}
 {% block body -%}
-    <h1>GroupInstruction list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Instructor</th>
-                <th>Attendance</th>
-                <th>Level</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('groupinstruction_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.instructor }}</td>
-                <td>{{ entity.attendance }}</td>
-                <td>{{ entity.level }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('groupinstruction_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('groupinstruction_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('groupinstruction_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+    <nav id="instruction-navigation" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav nav-pills">
+            <li role="presentation"><a href="{{ path('instruction') }}"><span class="glyphicon glyphicon-dashboard"></span> My Instruction Dashboard</a></li>
+            <li role="presentation" class="active"><a href="{{ path('groupinstruction') }}">My Group Sessions</a></li>
+            <li role="presentation"><a href="{{ path('individualinstruction') }}">My Individual Sessions</a></li>
+        </ul>
+        <ul class="nav nav-pills navbar-right">
+            <li role="presentation"><a href="{# path('individualinstruction') #}"><span class="glyphicon glyphicon-search"></span> Search Sessions</a></li>
+        </ul>
+    </nav>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Group Instruction Sessions', 'newbutton' : true, 'newpath' : path('groupinstruction_new'), 'newpathlabel' : 'New Group Instruction' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+                      
+    <p class="badge">{{ pagination.getPaginationData.totalCount }} Group Sessions</p>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-responsive table-striped records_list" id="jquerySortable_1">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>Course</th>
+                        <th>Attendance</th>
+                        <th>Level</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in pagination %}
+                    <tr>
+                        <td>{{ entity.instructionDate|date('n/j/y') }}</td>
+                        <td>{{ entity.startTime|date('g:i A') }}</td>
+                        <td>{{ entity.course }}</td>
+                        <td>{{ entity.attendance }}</td>
+                        <td>
+                            {% if entity.level == 'grad' %}
+                                Graduate 
+                            {% elseif entity.level == 'high school' %}
+                                High School
+                            {% else %}
+                                {{ entity.level|capitalize }}
+                            {% endif %}
+                            {% if entity.levelDescription %}
+                                ({{ entity.levelDescription}})
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="badge" href="{{ path('groupinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a class="badge" href="{{ path('groupinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    {% include('AppBundle:Pagination:paginator.html.twig') %}
     {% endblock %}
+{% block documentReady %} 
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    $('#jquerySortable_1').tablesorter({
+        headers: {
+            5: {
+                sorter: false
+            },
+        }
+    });
+    
+    //refresh the page with the new number of records per page
+    $('#paginationMaxResults').on('change', function(){
+        var item = $(this).find(":selected").val();
+        var url = '{{path('groupinstruction', {'maxItems': '_item'})}}';
+        
+        window.location.href = url.replace('_item',item );
+    });
+    {{ parent() }}
+{% endblock %}

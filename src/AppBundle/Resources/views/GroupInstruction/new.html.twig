@@ -1,19 +1,69 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Group Instruction Sessions{% endblock %}
 {% block body -%}
-    <h1>New Group Instruction</h1>
-    <blockquote>
-        <p>You may only add instructions for yourself. Additionally, only you will be able to edit or delete your instruction session details.</p>
-    </blockquote>
-    {{ form(form) }}
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New Group Instruction' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('groupinstruction')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('groupinstruction') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <blockquote>
+        <p>You may only add instructions for yourself. Additionally, only you will be able to edit and delete your own instruction session details.</p>
+    </blockquote>
+
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(form.librarian) }}
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(form.attendance) }}
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(form.instructor) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-lg">
+                        {{ form_row(form.level) }}
+                        {{ form_row(form.levelDescription) }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(form.program) }}
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(form.course) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(form.note) }}
+                </div>
+            </div>
+            {{ form_row(form.submit) }}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4">
+            <div class="well well-lg">
+                <h2 class="text-center"><span class="glyphicon glyphicon-calendar"></span> Date and Time Settings</h2>
+                {{ form_row(form.instructionDate) }}
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        {{ form_row(form.startTime) }}
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        {{ form_row(form.endTime) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}    
 {% endblock %}
 {% block documentReady %}
     var now = new Date();

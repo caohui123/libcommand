@@ -1,0 +1,58 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Instruction</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Course</th>
+                <td>{{ entity.course }}</td>
+            </tr>
+            <tr>
+                <th>Instructiondate</th>
+                <td>{{ entity.instructionDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Starttime</th>
+                <td>{{ entity.startTime }}</td>
+            </tr>
+            <tr>
+                <th>Endtime</th>
+                <td>{{ entity.endTime }}</td>
+            </tr>
+            <tr>
+                <th>Level</th>
+                <td>{{ entity.level }}</td>
+            </tr>
+            <tr>
+                <th>Leveldescription</th>
+                <td>{{ entity.levelDescription }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ entity.note }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('instruction') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}
