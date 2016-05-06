@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -35,24 +36,22 @@ class InstructionController extends Controller
         }
         
         // GROUP instructions for logged in user
-        $groupEntities = $em->getRepository('AppBundle:GroupInstruction')->findBy(array('createdBy' => $currentUser), array('instructionDate' => 'DESC'));
+        $entities = $em->getRepository('AppBundle:Instruction')->findBy(array('createdBy' => $currentUser), array('instructionDate' => 'DESC'));
 
-        // INDIVIDUAL instructions for logged in user
-        $individualEntities = $em->getRepository('AppBundle:IndividualInstruction')->findBy(array('createdBy' => $currentUser), array('instructionDate' => 'DESC'));
-        
         $requestData = $request->query->all();
         isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
       
         $paginator  = $this->get('knp_paginator');
-        $groupPagination = $paginator->paginate(
-            $groupEntities, /* query NOT result */
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,
             $maxItems/*limit per page*/
         );
 
         return array(
-            'group_pagination' => $groupPagination,
-            //'individual_pagination' => $individualPagination
+            'pagination' => $pagination,
+            'filter' => 'filter-all', //varable for ajax pagination purposes in the view
+            'paginationPath' => 'instruction'
         );
     }
 

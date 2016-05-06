@@ -78,26 +78,6 @@ class AvRequestRestController extends FOSRestController{
             $serializer = $this->get('serializer');
             $serialized = $serializer->serialize($entity, 'json');
             
-            /*
-            // creating the ACL
-            $aclProvider = $this->get('security.acl.provider');
-            $objectIdentity = ObjectIdentity::fromDomainObject($entity);
-            $acl = $aclProvider->createAcl($objectIdentity);
-
-            // retrieving the security identity of the currently logged-in user
-            $tokenStorage = $this->get('security.token_storage');
-            $users = $em->getRepository('AppBundle:User')->findAll();
-            
-            //$tokenStorage->getToken()->getUser();
-            foreach($users as $user){
-              $securityIdentity = UserSecurityIdentity::fromAccount($user);
-              
-              // grant owner access based on owner's overall permissions for this type of entity
-              $acl->insertObjectAce($securityIdentity, 0);
-              $aclProvider->updateAcl($acl);
-            }
-            */
-            
             $facultySubject = $entity->getFacultySubject()->getName();
             $message = \Swift_Message::newInstance();
             $header_image = $message->embed(\Swift_Image::fromPath($this->container->get('kernel')->locateResource('@AppBundle/Resources/public/images/email_banner_640x75.jpg')));

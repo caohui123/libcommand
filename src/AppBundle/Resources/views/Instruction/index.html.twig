@@ -17,58 +17,14 @@
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6">
-            <p><span><a class="btn btn-sm btn-primary" href="{{ path('groupinstruction_new') }}" aria-labelledby="New group instruction"><span class="glyphicon glyphicon-plus"></span> New Group Instruction</a></span></p>
-            <p class="badge">{{ group_pagination.getPaginationData.totalCount }} Group Sessions</p>
-            <p>Page {{group_pagination.getPaginationData.current}} of {{group_pagination.getPaginationData.pageCount}}</p>
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <table class="table table-responsive table-striped records_list" id="jquerySortable_1">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Start Time</th>
-                                <th>Course</th>
-                                <th>Attendance</th>
-                                <th>Level</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for entity in group_pagination %}
-                            <tr>
-                                <td>{{ entity.instructionDate|date('n/j/y') }}</td>
-                                <td>{{ entity.startTime|date('g:i A') }}</td>
-                                <td>{{ entity.course }}</td>
-                                <td>{{ entity.attendance }}</td>
-                                <td>
-                                    {% if entity.level == 'grad' %}
-                                        Graduate 
-                                    {% elseif entity.level == 'high school' %}
-                                        High School
-                                    {% else %}
-                                        {{ entity.level|capitalize }}
-                                    {% endif %}
-                                    {% if entity.levelDescription %}
-                                        ({{ entity.levelDescription}})
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <a class="badge" href="{{ path('groupinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
-                                    <a class="badge" href="{{ path('groupinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    
-                    <p>Page {{group_pagination.getPaginationData.current}} of {{group_pagination.getPaginationData.pageCount}}</p>
-                    {% include 'AppBundle:Pagination:paginator.html.twig' with {'paginator':group_pagination} %}
-                </div>
-            </div>
-        </div> <!-- #END Group Instruction -->
+            <section id="instruction-container">
+                {% include 'AppBundle:Instruction:results.html.twig' %}
+            </section>
+        </div>
     </div>
-    {% endblock %}
+{% endblock %}
 {% block documentReady %} 
+    
     //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
     $('#jquerySortable_1').tablesorter({
         headers: {
@@ -82,11 +38,70 @@
     });
     
     //refresh the page with the new number of records per page
-    $('#paginationMaxResults').on('change', function(){
-        var item = $(this).find(":selected").val();
-        var url = '{{path('instruction', {'maxItems': '_item'})}}';
+    $(document).on('change', '#paginationMaxResults', function(){
+        var maxItems = $('#paginationMaxResults').find(":selected").val();
+        var $currentTab = $('ul#instruction-filter-list').find('li.active > a');
         
-        window.location.href = url.replace('_item',item );
+        var filterType = $currentTab.attr('id'); //pass the type of filter based on the currently-selected tab
+        
+        getInstructionSessions(maxItems, filterType);
     });
+    
+    //Handle session filtering (all, group, individual)
+    $(document).on('click', '.filter-sessions', function(e){
+        e.preventDefault();
+        
+        var maxItems = $('#paginationMaxResults').find(":selected").val();
+        var filterType = $(this).attr('id');
+        
+        getInstructionSessions(maxItems, filterType);
+    });
+    
+    //AJAX Pagination using KNP Pagination
+    $(document).on('click', 'ul.pagination a', function(e){
+        e.preventDefault();
+        
+        var href = $(this).attr('href')
+        var pattern = "page=";
+        var pageNumber = href.substr(href.indexOf(pattern) + pattern.length, href.length); //get the page number only (e.g. page=2 becomes 2)
+
+        var maxItems = $('#paginationMaxResults').find(":selected").val();
+        var $currentTab = $('ul#instruction-filter-list').find('li.active > a');
+        
+        var filterType = $currentTab.attr('id'); //pass the type of filter based on the currently-selected tab
+        
+        getInstructionSessions(maxItems, filterType, pageNumber)
+    });
+    
+    /**
+     * Sends the filtered instruction sessions AJAX request to the server.
+     * Refreshes the section#instruction-container
+     *
+     * @var int maxItems  How many items to show per page?
+     * @var String filterType  'filter-all', 'filter-group', or 'filter-indivdual'
+     * @var int pageNumber  The current pagination page (optional; will default to page 1 if no value passed)
+     */
+    function getInstructionSessions(maxItems, filterType, pageNumber){
+        ajaxObject = {
+            url: '/internalapi/filterinstructions',
+            data: {
+                filter: filterType,
+                maxItems: maxItems,
+                page: pageNumber,
+            },
+            type: 'GET',
+        };
+
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                $('#instruction-container').html(data);
+            })
+            .fail(function(data,status,xhr) {
+                console.log("NUUUUP!");
+            })
+            .always(function(data,status,xhr) {
+                console.log("DONE!");
+            });
+    }
     {{ parent() }}
 {% endblock %}

@@ -17,6 +17,10 @@
                     </label>
                 </div>
                 <div class="col-xs-12 col-sm-9 navigation">
+                    {% if paginationPath is defined %}
+                        {# i.e. AppBundle:Instruction:results.html.twig #}
+                        {% do paginator.setUsedRoute(paginationPath) %}
+                    {% endif %}
                     {{ knp_pagination_render(paginator) }}
                 </div>
             </div>

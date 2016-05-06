@@ -3,13 +3,7 @@
 parameters:
 #    parameter_name: value
 
-services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
-#  logout_listener:
-#    class: UserBundle\Resources\utilities\LogoutListener
-        
+services:        
     user_service:
       class: AppBundle\Resources\Services\UserService
       arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @fos_user.util.user_manipulator ]

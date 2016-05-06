@@ -29,6 +29,11 @@ extendedprivilege:
     resource: AppBundle\Controller\ExtendedPrivilegeRequestRestController
     prefix: /api/
     
+facultyroomrequest:
+    type: rest
+    resource: AppBundle\Controller\RoomRequestRestController
+    prefix: /api/
+    
 feedback:
     type: rest
     resource: AppBundle\Controller\FeedbackRestController
@@ -44,6 +49,11 @@ hours:
     resource: AppBundle\Controller\HoursRestController
     prefix: /api/
     
+instruction:
+    type: rest
+    resource: AppBundle\Controller\InstructionRestController
+    prefix: /internalapi/
+    
 materialpurchaserequest:
     type: rest
     resource: AppBundle\Controller\MaterialPurchaseRequestRestController
@@ -57,11 +67,6 @@ materialreserve:
 news:
     type: rest
     resource: AppBundle\Controller\NewsRestController
-    prefix: /api/
-    
-facultyroomrequest:
-    type: rest
-    resource: AppBundle\Controller\RoomRequestRestController
     prefix: /api/
     
     
