@@ -62,6 +62,11 @@ $(document).ready(function(){
           $(this).removeClass('blue-thumbnail-select-border');
         })
    });
+   
+   /**
+    * Search Instruction sessions (i.e. "AppBundle:Instruction:index.html.twig")
+    */
+   
 
 });
 

@@ -1,24 +1,30 @@
 {% extends '::base.html.twig' %}
 {% block title %}My Instruction Sessions{% endblock %}
 {% block body -%}
-    <nav id="instruction-navigation" class="collapse navbar-collapse">
+    <nav id="instruction-navigation" class="navbar">
         <ul class="nav navbar-nav nav-pills">
             <li role="presentation" class="active"><a href="{{ path('instruction') }}"><span class="glyphicon glyphicon-dashboard"></span> My Instruction Dashboard</a></li>
             <li role="presentation"><a href="{{ path('groupinstruction') }}">My Group Sessions</a></li>
             <li role="presentation"><a href="{{ path('individualinstruction') }}">My Individual Sessions</a></li>
         </ul>
-        <ul class="nav nav-pills navbar-right">
-            <li role="presentation"><a href="{# path('individualinstruction') #}"><span class="glyphicon glyphicon-search"></span> Search Sessions</a></li>
-        </ul>
+        {% include 'AppBundle:Instruction:search.html.twig' %}
     </nav>
-        
+            
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'My Instruction Sessions', 'newbutton' : false } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Flash message in case a filter search wasn't properly formatted/submitted. #}
+    {% for flash_message in app.session.flashBag.get('flash-danger') %}
+        <div class="alert alert-danger">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6">
             <section id="instruction-container">
-                {% include 'AppBundle:Instruction:results.html.twig' %}
+                {% include 'AppBundle:Instruction:results-ajax.html.twig' %}
             </section>
         </div>
     </div>
@@ -103,5 +109,18 @@
                 console.log("DONE!");
             });
     }
+    
+    $('.instruction-search-container').on('click', function(e){
+        e.stopPropagation();
+    });
+    
+    $('#instruction-filter-tabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    });
+    $('#myTabs a[href="#searchbox-all-tabpane"]').tab('show') // Select tab by name
+    $('#myTabs a[href="#searchbox-group-tabpane"]').tab('show') // Select tab by name
+    $('#myTabs a[href="#searchbox-individual-tabpane"]').tab('show'); // Select tab by name
+    
     {{ parent() }}
 {% endblock %}

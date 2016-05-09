@@ -37,27 +37,6 @@ input.thumbnail-photo-select{
   height: auto;
 }
 
-@media screen and (min-width: 0) {
-  .navbar-toggle {
-    display: block; /* force showing the toggle */
-  }
-}
-
-@media screen and (min-width: 480px) {
-  .regularhours_day, .specialhours_day{
-      width: 100%; 
-      float: none
-  }
-  
-  .regularhours_day h3{
-      font-size: 18px;
-  }
-  
-  #appbundle_hoursregular_submit{
-      margin-right:2%;
-  }
-}
-
 /* 403 and 404 pages */
 .permission-container{
     background: #fad65c;
@@ -134,10 +113,42 @@ input.thumbnail-photo-select{
     margin-right: 5px;
 }
 
+@media screen and (min-width: 0) {
+  .navbar-toggle {
+    display: block; /* force showing the toggle */
+  }
+  
+  .instruction-search-container{
+      width:95%;
+      background:#EEEEEE; 
+      padding: 10px; 
+      margin:10px;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .regularhours_day, .specialhours_day{
+      width: 100%; 
+      float: none
+  }
+  
+  .regularhours_day h3{
+      font-size: 18px;
+  }
+  
+  #appbundle_hoursregular_submit{
+      margin-right:2%;
+  }
+}
+
 @media screen and (min-width: 768px) {
   .regularhours_day, .specialhours_day{
       width: 25%; 
       float: left
+  }
+  
+  .instruction-search-container{
+      width:500px;
   }
 }
 

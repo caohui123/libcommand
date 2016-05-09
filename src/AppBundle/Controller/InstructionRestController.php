@@ -17,7 +17,7 @@ class InstructionRestController extends FOSRestController
 {
 
     /**
-     * Filter Instruction entites by criteria.
+     * Filter Instruction entites by criteria (REST method... non-REST located in AppBundle:Instruction:createSearchInstructionFormAction).
      */
     public function getFilterinstructionsAction(Request $request)
     {
