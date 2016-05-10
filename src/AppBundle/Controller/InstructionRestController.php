@@ -56,7 +56,46 @@ class InstructionRestController extends FOSRestController
         $templateData = array('pagination' => $pagination, 'filter' => $filter, 'paginationPath' => 'instruction');
         
         $view = $this->view($entities, 200)
-                ->setTemplate("AppBundle:Instruction:results.html.twig")
+                ->setTemplate("AppBundle:Instruction:results-ajax.html.twig")
+                ->setTemplateData($templateData)
+                ->setFormat('html')
+                ;
+        
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Take preliminary instruction filter criteria (all/individual/group, date range)
+     * and get the appropriate InstructionSearchType form. Pass that form to a template for layout.
+     */
+    public function getInstructionsearchformAction(Request $request){
+        $requestData = $request->query->all();
+        
+        $instructionService = $this->get('instruction_controller');
+        
+        $searchForm = $instructionService->createSearchInstructionForm($requestData['form']['instructionType'], $requestData['form']['dateRange']);
+        
+        $templateData = array('search_form' => $searchForm->createView());
+        
+        $view = $this->view(array(), 200)
+                ->setTemplate("AppBundle:Instruction:snippets/searchform.html.twig")
+                ->setTemplateData($templateData)
+                ->setFormat('html')
+                ;
+        
+        return $this->handleView($view);
+    }
+    
+    public function getInstructionpreliminaryformAction(){
+        
+        $instructionService = $this->get('instruction_controller');
+        
+        $searchForm = $instructionService->createPreliminarySearchInstructionForm();
+        
+        $templateData = array('search_form' => $searchForm->createView());
+        
+        $view = $this->view(array(), 200)
+                ->setTemplate("AppBundle:Instruction:snippets/searchform.html.twig")
                 ->setTemplateData($templateData)
                 ->setFormat('html')
                 ;

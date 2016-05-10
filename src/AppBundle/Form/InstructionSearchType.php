@@ -5,9 +5,9 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
-use AppBundle\Entity\Staff;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class InstructionSearchType extends AbstractType
 {    
@@ -16,7 +16,9 @@ class InstructionSearchType extends AbstractType
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {   
+        $criteria = array('instructionType' => $options['data']['instructionType'], 'filterCriteria' => $options['data']['filterCriteria']);
+        
         $builder    
             ->add('librarian', 'entity', array(
                 'class' => 'AppBundle:Staff',
@@ -46,18 +48,117 @@ class InstructionSearchType extends AbstractType
                 'required' => false,
                 'label' => 'Program'
             ))
-            ->add('startDate', 'date', array(
-                'html5' => false,
-                'widget' => 'single_text',
-                'label' => 'From'
+            //pass along the instruction type and filter criteria strings for processing
+            ->add('instructionType', 'hidden', array(
+                'data' => $criteria['instructionType']
             ))
-            ->add('endDate', 'date', array(
-                'html5' => false,
-                'widget' => 'single_text',
-                'label' => 'To',
-                'required' => false,
+            ->add('filterCriteria', 'hidden', array(
+                'data' => $criteria['filterCriteria']
             ))
             ;
+            
+            // Reads the criteria variable passed into the form (declared above) to add additional fields
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($criteria){
+                $form = $event->getForm();
+
+                if($criteria['filterCriteria'] == 'fiscal'){
+                    $form->add('fiscalYear', 'choice', array(
+                        'choices' => array(
+                            2016 => '2016-2017',
+                            2015 => '2015-2016',
+                        ),
+                        'placeholder' => 'All Years',
+                        'label' => 'Fiscal Year (Jul-Jun)',
+                    ));
+                }
+                
+                if($criteria['filterCriteria'] == 'academic'){
+                    $form->add('academicYear', 'choice', array(
+                        'choices' => array(
+                            2016 => '2016-2017',
+                            2015 => '2015-2016',
+                        ),
+                        'placeholder' => 'All Years',
+                        'label' => 'Academic Year (Sept-Aug)',
+                    ));
+                }
+                
+                if($criteria['filterCriteria'] == 'calendar'){
+                    $form->add('calendarYear', 'choice', array(
+                        'choices' => array(
+                            2017 => '2017',
+                            2016 => '2016',
+                            2015 => '2015',
+                        ),
+                        'placeholder' => 'All Years',
+                        'label' => 'Calendar Year',
+                    ));
+                }
+                
+                if($criteria['filterCriteria'] == 'semester'){
+                    $form->add('semester', 'choice', array(
+                        'choices' => array(
+                            'winter' => 'Winter',
+                            'spring' => 'Spring',
+                            'summer' => 'Summer',
+                            'fall' => 'Fall',
+                        ),
+                    ));       
+                    $form->add('year', 'choice', array(
+                        'choices' => array(
+                            2017 => '2017',
+                            2016 => '2016',
+                            2015 => '2015',
+                        ),
+                    ));
+                }
+                
+                if($criteria['filterCriteria'] == 'custom'){
+                    $form->add('startDate', 'date', array(
+                        'html5' => false,
+                        'widget' => 'single_text',
+                        'format' => 'MM/dd/yyyy',
+                        'label' => 'From'
+                    ));
+                    $form->add('endDate', 'date', array(
+                        'html5' => false,
+                        'widget' => 'single_text',
+                        'format' => 'MM/dd/yyyy',
+                        'label' => 'To',
+                        'required' => false,
+                    ));
+                }
+                
+                if($criteria['instructionType'] == 'group'){
+                    $form->add('level', 'choice', array(
+                        'multiple' => false,
+                        'expanded' => true,
+                        'choices' => array(
+                            '100-200' => '100-200',
+                            '300-400' => '300-400',
+                            'grad' => 'Graduate',
+                            'high school' => 'High School',
+                            'other' => 'Other'
+                        ),
+                        'required' => false,
+                    ));
+                }
+                if($criteria['instructionType'] == 'individual'){
+                    $form->add('level', 'choice', array(
+                        'multiple' => false,
+                        'expanded' => true,
+                        'choices' => array(
+                            'undergrad' => 'Undergraduate',
+                            'grad' => 'Graduate',
+                            'staff' => 'Staff',
+                            'faculty' => 'Faculty',
+                            'other' => 'Other'
+                        ),
+                        'label' => 'Academic Status',
+                        'required' => false,
+                    ));
+                }
+            });
     }
     
     /**
@@ -68,6 +169,7 @@ class InstructionSearchType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => null,
             'csrf_protection' => false,
+            'allow_extra_fields' => true,
         ));
     }
 

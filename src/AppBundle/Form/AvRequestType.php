@@ -128,7 +128,7 @@ class AvRequestType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\AvRequest',
             'csrf_protection' => false,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ));
     }
 

@@ -103,24 +103,12 @@
                 $('#instruction-container').html(data);
             })
             .fail(function(data,status,xhr) {
-                console.log("NUUUUP!");
+                console.log("Failed to load instruction data!");
             })
             .always(function(data,status,xhr) {
                 console.log("DONE!");
             });
     }
-    
-    $('.instruction-search-container').on('click', function(e){
-        e.stopPropagation();
-    });
-    
-    $('#instruction-filter-tabs a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-    });
-    $('#myTabs a[href="#searchbox-all-tabpane"]').tab('show') // Select tab by name
-    $('#myTabs a[href="#searchbox-group-tabpane"]').tab('show') // Select tab by name
-    $('#myTabs a[href="#searchbox-individual-tabpane"]').tab('show'); // Select tab by name
-    
+
     {{ parent() }}
 {% endblock %}

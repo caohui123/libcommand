@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    var now = new Date(); //the current date (useful for datetimepickers)
+    
     /**
      * Checkboxes using Bootstrap Switch library
     */
@@ -64,10 +66,100 @@ $(document).ready(function(){
    });
    
    /**
-    * Search Instruction sessions (i.e. "AppBundle:Instruction:index.html.twig")
+    * Search Instruction sessions (i.e. "AppBundle:Instruction:snippets/search.html.twig")
     */
-   
+    $('.instruction-search-container').on('click', function(e){
+        e.stopPropagation();
+    });
+    
+    $('#instruction-filter-tabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    });
+    
+    $('#date-criteria-tabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    });
+    
+    /**
+     * Handle insturction search submission
+     */
+     $('#preliminary-instruction-criteria-form').on('submit', function(e){
+        e.preventDefault();
+        
+        loadSearchForm($(this)); 
+     });
+     
+    /**
+     * Handle clicking of back button on instruction search form to return to the preliminary search form
+     */
+     function goBackToPreliminaryForm(){
+        ajaxObject = {
+            url: '/internalapi/instructionpreliminaryform',
+            type: 'GET',
+        };
 
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                $('#instruction-search-container').html(data);
+            })
+            .fail(function(data,status,xhr) {
+                console.log("Failed to load preliminary form!");
+            })
+            .always(function(data,status,xhr) {
+                $('#preliminary-instruction-criteria-form').on('submit', function(e){
+                    e.preventDefault();
+
+                    loadSearchForm($(this)); 
+                });
+            });
+     }
+     
+     /**
+      * Handle loading of instruction search form
+      */
+     function loadSearchForm(form){
+        ajaxObject = {
+            url: '/internalapi/instructionsearchform',
+            data: form.serialize(),
+            type: 'GET',
+        };
+
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                $('#instruction-search-container').html(data);
+                
+                //initialize datetimepicker plugins for start and end date 
+                $('#instrsearch_startDate').datetimepicker({
+                    format: 'm/d/Y',
+                    timepicker: false,
+                    onShow:function( ct ){
+                        this.setOptions({
+                            maxDate:$('#instrsearch_endDate').val()?$('#instrsearch_endDate').val():false
+                        })
+                    },
+                });
+                $('#instrsearch_endDate').datetimepicker({
+                    format: 'm/d/Y',
+                    timepicker: false,
+                    onShow:function( ct ){
+                        this.setOptions({
+                            minDate:$('#instrsearch_startDate').val()?$('#instrsearch_startDate').val():false
+                        })
+                    },
+                });
+                
+                // Back button pressed
+                $('#instrsearch_back').on('click', function(e){
+                    goBackToPreliminaryForm();
+                });
+            })
+            .fail(function(data,status,xhr) {
+                console.log("Failed to load filtered form!");
+            })
+            .always(function(data,status,xhr) {});
+     }
 });
 
 

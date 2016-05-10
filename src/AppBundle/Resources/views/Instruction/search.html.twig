@@ -1,19 +1,12 @@
+{# JQuery/Ajax for this form located in Resources/public/js/common.js #}
+
 <ul class="nav navbar-nav navbar-right" id="search-instruction-list">
     <li class="dropdown search-instruction-dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-search"></span> Search Instructions <span class="caret"></span></a>
       <ul class="dropdown-menu">
         <li class="instruction-search-listitem">
-            <div class="instruction-search-container">
-                <ul class="nav nav-tabs nav-justified" id="instruction-filter-tabs">
-                    <li role="presentation" class="active"><a href="#searchbox-all-tabpane" id="searchbox-all" class="searchbox-sessions" aria-controls="searchbox-all-tabpane" role="tab" data-toggle="tab">All</a></li>
-                    <li role="presentation" class=""><a href="#searchbox-group-tabpane" id="searchbox-group" class="searchbox-sessions" aria-controls="searchbox-group-tabpane" role="tab" data-toggle="tab">Group</a></li>
-                    <li role="presentation" class=""><a href="#searchbox-individual-tabpane" id="searchbox-individual" class="searchbox-sessions" aria-controls="searchbox-individual-tabpane" role="tab" data-toggle="tab">Individual</a></li>
-                </ul>
-                <div id="search-instrction-tab-content" class="tab-content">
-                    <div role="tabpanel" class="tab-pane fade in active" id="searchbox-all-tabpane" aria-labelledby="all-tab">{{ render(controller('AppBundle:Instruction:searchInstruction' )) }}</div>
-                    <div role="tabpanel" class="tab-pane fade" id="searchbox-group-tabpane" aria-labelledby="group-tab">B</div>
-                    <div role="tabpanel" class="tab-pane fade" id="searchbox-individual-tabpane" aria-labelledby="individual-tab">C</div>
-                </div>   
+            <div class="instruction-search-container" id="instruction-search-container">
+                {{ form(search_form) }}  
             </div>
         </li>
       </ul>

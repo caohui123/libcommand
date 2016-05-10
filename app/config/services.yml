@@ -76,4 +76,8 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
            
-    
+    #This is the InstructionController
+    instruction_controller:
+        class: AppBundle\Controller\InstructionController
+        calls: 
+            - [ setContainer, [ @service_container ]]
