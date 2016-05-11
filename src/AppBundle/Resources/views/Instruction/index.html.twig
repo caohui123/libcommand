@@ -20,28 +20,55 @@
             {{ flash_message }}
         </div>
     {% endfor %}
-    
+    <div class="dropdown" id="new-instruction-dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Add Instruction
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="newInstructionDropdown">
+          <li><a href="{{ path('groupinstruction_new') }}">Group</a></li>
+          <li><a href="{{ path('individualinstruction_new') }}">Individual</a></li>
+        </ul>
+    </div>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6">
-            <section id="instruction-container">
+            <section id="instruction-data">
+                <h2>Recent Sessions</h2>
+                <p>This is a display of your most recent <mark>personal</mark> insturction sessions. 
+                    To perform a filtered search of sessions by librarian, instruction type, or date range, use the "Search Instructions" feature in the toolbar above.</p>
+                <div id="instruction-container">
                 {% include 'AppBundle:Instruction:results-ajax.html.twig' %}
+                </div>
+            </section>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <section id="stats-data">
+                <h2>Statistics</h2>
+                {{ dump(statistics) }}
+                <p>This is an overview of the number of instruction sessions you have given over different time frames. 
+                    Note that these results do NOT include any sessions that you may have already logged which will occur in the future.</p>
+                <ul class="nav nav-tabs" id="statTabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#mystats" aria-controls="mystats" role="tab" data-toggle="tab">Me</a></li>
+                    <li role="presentation"><a href="#allstats" aria-controls="mystats" role="tab" data-toggle="tab">Everybody</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="mystats">
+                        <ul>
+                            <li>Last 3 Months: {{statistics.last3Months}}/{{statistics.allMonths}}</li>
+                            <li>Last 6 Months: {{statistics.last6Months}}/{{statistics.allMonths}}</li>
+                            <li>Last 9 Months: {{statistics.last9Months}}/{{statistics.allMonths}}</li>
+                            <li>Last 12 Months: {{statistics.last12Months}}/{{statistics.allMonths}}</li>
+                        </ul>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="allstats">all</div>
+                </div>
             </section>
         </div>
     </div>
 {% endblock %}
 {% block documentReady %} 
     
-    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
-    $('#jquerySortable_1').tablesorter({
-        headers: {
-            5: {
-                sorter: false
-            },
-            6: {
-                sorter: false
-            }
-        }
-    });
+    initializeTablesort();
     
     //refresh the page with the new number of records per page
     $(document).on('change', '#paginationMaxResults', function(){
@@ -101,6 +128,7 @@
         $.ajax(ajaxObject)
             .success(function(data,status,xhr) {
                 $('#instruction-container').html(data);
+                initializeTablesort();
             })
             .fail(function(data,status,xhr) {
                 console.log("Failed to load instruction data!");
@@ -109,6 +137,25 @@
                 console.log("DONE!");
             });
     }
-
+    
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    function initializeTablesort(){
+        $('#jquerySortable_1').tablesorter({
+            headers: {
+                5: {
+                    sorter: false
+                },
+                6: {
+                    sorter: false
+                }
+            }
+        });
+    }
+    
+    //Statistics tab panels
+    $('#statTabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
     {{ parent() }}
 {% endblock %}

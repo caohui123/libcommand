@@ -45,8 +45,8 @@ class InstructionSearchType extends AbstractType
                 },
                 'property' => 'indentedTitle',
                 'placeholder' => 'All Programs',
+                'label' => 'Program',
                 'required' => false,
-                'label' => 'Program'
             ))
             //pass along the instruction type and filter criteria strings for processing
             ->add('instructionType', 'hidden', array(
@@ -63,34 +63,21 @@ class InstructionSearchType extends AbstractType
 
                 if($criteria['filterCriteria'] == 'fiscal'){
                     $form->add('fiscalYear', 'choice', array(
-                        'choices' => array(
-                            2016 => '2016-2017',
-                            2015 => '2015-2016',
-                        ),
-                        'placeholder' => 'All Years',
+                        'choices' => $this->generateYears(),
                         'label' => 'Fiscal Year (Jul-Jun)',
                     ));
                 }
                 
                 if($criteria['filterCriteria'] == 'academic'){
                     $form->add('academicYear', 'choice', array(
-                        'choices' => array(
-                            2016 => '2016-2017',
-                            2015 => '2015-2016',
-                        ),
-                        'placeholder' => 'All Years',
+                        'choices' => $this->generateYears(),
                         'label' => 'Academic Year (Sept-Aug)',
                     ));
                 }
                 
                 if($criteria['filterCriteria'] == 'calendar'){
                     $form->add('calendarYear', 'choice', array(
-                        'choices' => array(
-                            2017 => '2017',
-                            2016 => '2016',
-                            2015 => '2015',
-                        ),
-                        'placeholder' => 'All Years',
+                        'choices' => $this->generateYears(false),
                         'label' => 'Calendar Year',
                     ));
                 }
@@ -105,11 +92,7 @@ class InstructionSearchType extends AbstractType
                         ),
                     ));       
                     $form->add('year', 'choice', array(
-                        'choices' => array(
-                            2017 => '2017',
-                            2016 => '2016',
-                            2015 => '2015',
-                        ),
+                        'choices' => $this->generateYears(false),
                     ));
                 }
                 
@@ -179,5 +162,38 @@ class InstructionSearchType extends AbstractType
     public function getName()
     {
         return 'instrsearch';
+    }
+    
+    /**
+     * Generate a list of years for criteria choices
+     * @param bool $range  True = "2015-2016" format; False = "2016" format
+     * @param int $startYear
+     * @param int $endYear
+     * @return array $range 
+     */
+    private function generateYears($range = true, $startYear = 2015, $endYear = null){
+        $years_arr = array();
+        
+        $currentYear = date('Y'); //string
+        $currentMonth = date('m');
+        
+        if($endYear != null){
+            for($i = $endYear; $i >= $startYear; $i--){
+                $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
+            }
+        } else {
+            //show next year if it's May or later
+            if($currentMonth >= 5){
+                for($i = $currentYear; $i >= $startYear; $i--){
+                    $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
+                }
+            } else {
+                for($i = $currentYear - 1; $i >= $startYear; $i--){
+                    $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
+                }
+            }
+        }
+        
+        return $years_arr;
     }
 }

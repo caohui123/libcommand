@@ -50,6 +50,10 @@ services:
         class: AppBundle\Resources\Services\HoursService
         arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
         
+    instruction_service:
+        class: AppBundle\Resources\Services\InstructionService
+        arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
+        
     #This is the HoursRegularController
     hoursRegular_controller:
         class: AppBundle\Controller\HoursRegularController

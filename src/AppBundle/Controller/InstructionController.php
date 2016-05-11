@@ -38,7 +38,9 @@ class InstructionController extends Controller
             throw new NoAssociatedStaffException();
         }
         
-        // GROUP instructions for logged in user
+        $currentStaffMember = $currentUser->getStaffMember();
+        
+        // ALL instructions for logged in user
         $entities = $em->getRepository('AppBundle:Instruction')->findBy(array('createdBy' => $currentUser), array('instructionDate' => 'DESC'));
 
         $requestData = $request->query->all();
@@ -54,11 +56,16 @@ class InstructionController extends Controller
         //Instruction preliminary search form 
         $searchForm = $this->createPreliminarySearchInstructionForm();
         
+        //Use the Instruction Service to get user instruction statistic counts
+        $instructionService = $this->get('instruction_service');
+        $statistics = $instructionService->generateStaffRecentInstructionStatistics($currentStaffMember);
+        
         return array(
             'pagination' => $pagination,
             'filter' => 'filter-all', //varable for ajax pagination purposes in the view
             'paginationPath' => 'instruction',
             'search_form' => $searchForm->createView(),
+            'statistics' => $statistics,
         );
     }
 
@@ -149,8 +156,8 @@ class InstructionController extends Controller
         $searchForm->handleRequest($request);
         
         if($searchForm->isValid()){
-            
-            $matchingEntities = $this->getInstructionsByCriteria($searchForm->getData());
+            $instructionService = $this->get('instruction_service');
+            $matchingEntities = $instructionService->getInstructionsByCriteria($searchForm->getData());
             
             $paginator  = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
@@ -162,9 +169,13 @@ class InstructionController extends Controller
             //Instruction preliminary search form 
             $searchForm = $this->createPreliminarySearchInstructionForm();
             
+            //Prepare submitted filters for display on results page
+            $filters = $instructionService->formatFilters($requestData['instrsearch']);
+            
             return array(
                 'pagination' => $pagination,
-                'requestData' => $searchForm->getData(),
+                'filters' => $filters,
+                'requestData' => $requestData,
                 'search_form' => $searchForm->createView(),
             );
         }
@@ -177,134 +188,6 @@ class InstructionController extends Controller
         return $this->redirectToRoute("instruction");
     }
     
-    /**
-     * Return a list of Instruction entites based on the criteria from the search form
-     * 
-     * @var array $criteria  Form data with criteria.
-     * @return array
-     */
-    protected function getInstructionsByCriteria($criteria){
-        $options = array();
-        
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $query = "SELECT i FROM ";
-        
-        // ALL/GROUP/INDIVIDUAL INSTRUCTION FILTER
-        if(isset($criteria['instructionType'])){
-            switch($criteria['instructionType']){
-                case 'group':
-                    $query .= "AppBundle:GroupInstruction i ";
-                    break;
-                case 'individual':
-                    $query .= "AppBundle:IndividualInstruction i ";
-                    break;
-                default:
-                    $query .= "AppBundle:Instruction i ";
-                    break;
-            }
-        } else {
-            $query .= "AppBundle:Instruction i ";
-        }
-        
-        $query .= "WHERE i.id IS NOT NULL ";
-        
-        //LIBRARIAN
-        if(isset($criteria['librarian'])){
-            if($criteria['librarian'] instanceof \AppBundle\Entity\Staff && $criteria['librarian'] != null){
-                $options['librarian'] = $criteria['librarian'];
-                $query .= "AND i.librarian = :librarian ";
-            }
-        }
-        
-        //PROGRAM
-        if(isset($criteria['program'])){
-            if($criteria['program'] instanceof \AppBundle\Entity\LiaisonSubject && $criteria['program'] != null){
-                $options['program'] = $criteria['program'];
-                $query .= "AND i.program = :program ";
-            }
-        }
-        
-        //FISCAL YEAR
-        if(isset($criteria['fiscalYear'])){
-            if($criteria['fiscalYear'] != null){
-                $options['firstYear'] = new \DateTime($criteria['fiscalYear'] . '-07-01');
-                $options['secondYear'] = new \DateTime($criteria['fiscalYear'] + 1 . '-06-30');
-                $query .= "AND i.instructionDate >= :firstYear AND i.instructionDate <= :secondYear ";
-            }
-        }
-        
-        //ACADEMIC YEAR
-        if(isset($criteria['academicYear'])){
-            if($criteria['academicYear'] != null){
-                $options['firstYear'] = new \DateTime($criteria['academicYear'] . '-09-01');
-                $options['secondYear'] = new \DateTime($criteria['academicYear'] + 1 . '-08-31');
-                $query .= "AND i.instructionDate >= :firstYear AND i.instructionDate <= :secondYear ";
-            }
-        }
-        
-        //ACADEMIC YEAR
-        if(isset($criteria['calendarYear'])){
-            if($criteria['calendarYear'] != null){
-                $options['startOfYear'] = new \DateTime($criteria['calendarYear'] . '-01-01');
-                $options['endOfYear'] = new \DateTime($criteria['calendarYear'] . '-12-31');
-                $query .= "AND i.instructionDate >= :startOfYear AND i.instructionDate <= :endOfYear ";
-            }
-        }
-        
-        //ACADEMIC YEAR
-        if(isset($criteria['semester'])){
-            if($criteria['semester'] != null){
-                switch($criteria['semester']){
-                    case 'winter':
-                        $options['startOfSemester'] = new \DateTime($criteria['year'] . '-01-01');
-                        $options['endOfSemester'] = new \DateTime($criteria['year'] . '-04-30');
-                        $query .= "AND i.instructionDate >= :startOfSemester AND i.instructionDate <= :endOfSemester ";
-                        break;
-                    case 'spring':
-                        $options['startOfSemester'] = new \DateTime($criteria['year'] . '-05-01');
-                        $options['endOfSemester'] = new \DateTime($criteria['year'] . '-06-30');
-                        $query .= "AND i.instructionDate >= :startOfSemester AND i.instructionDate <= :endOfSemester ";
-                        break;
-                    case 'summer':
-                        $options['startOfSemester'] = new \DateTime($criteria['year'] . '-07-01');
-                        $options['endOfSemester'] = new \DateTime($criteria['year'] . '-08-31');
-                        $query .= "AND i.instructionDate >= :startOfSemester AND i.instructionDate <= :endOfSemester ";
-                        break;
-                    case 'fall':
-                        $options['startOfSemester'] = new \DateTime($criteria['year'] . '-09-01');
-                        $options['endOfSemester'] = new \DateTime($criteria['year'] . '-12-31');
-                        $query .= "AND i.instructionDate >= :startOfSemester AND i.instructionDate <= :endOfSemester ";
-                        break;
-                }
-            }
-        }
-        
-        //CUSTOM START AND END DATE
-        if( isset($criteria['startDate']) && isset($criteria['endDate']) ){
-            if( ($criteria['startDate'] instanceof \DateTime && $criteria['startDate'] != null) && ($criteria['endDate'] instanceof \DateTime && $criteria['endDate'] != null) ){
-                //start and end date set
-                $options['instructionStartDate'] = $criteria['startDate'];
-                $options['instructionEndDate'] = $criteria['endDate'];
-                $query .= "AND i.instructionDate >= :instructionStartDate AND i.instructionDate <= :instructionEndDate ";
-            } else if ( ($criteria['startDate'] instanceof \DateTime && $criteria['startDate'] != null) && ( !($criteria['endDate'] instanceof \DateTime) || $criteria['endDate'] == null) ){
-                // start date set but NOT end date
-                $options['instructionStartDate'] = $criteria['startDate'];
-                $query .= "AND i.instructionDate >= :instructionStartDate ";
-            } else if ( ( !($criteria['startDate'] instanceof \DateTime) || $criteria['startDate'] == null) && ( $criteria['endDate'] instanceof \DateTime && $criteria['endDate'] != null) ) {
-                // end date set but NOT start date
-                $options['instructionEndDate'] = $criteria['endDate'];
-                $query .= "AND i.instructionDate <= :instructionEndDate ";
-            }
-        }
-
-        $query .= " ORDER BY i.instructionDate DESC";
-
-        $qb = $em->createQuery($query)->setParameters($options);
-        
-        return $qb->getResult();
-    }
-
     /**
      * Finds and displays a Instruction entity.
      *

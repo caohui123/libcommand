@@ -1,6 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block title %}Instruction Session Search Results{% endblock %}
 {% block body -%}
+    
     <nav id="instruction-navigation" class="navbar">
         <ul class="nav navbar-nav nav-pills">
             <li role="presentation" class="active"><a href="{{ path('instruction') }}"><span class="glyphicon glyphicon-dashboard"></span> My Instruction Dashboard</a></li>
@@ -11,8 +12,21 @@
     </nav>
             
     {# Page Heading #}
-    {% set headingvars = {'headingcontent' : 'Instruction Session Search Results', 'newbutton' : false } %}
+    {% set headingvars = {'headingcontent' : 'Instruction Search Results', 'newbutton' : false } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    <div class="row" id="search-filters">
+        <div class="col-xs-12">
+            <p><strong>Filters:</strong>
+            {% if filters|length == 0 %}
+                No Filters
+            {% else %}
+                {% for filter in filters %}
+                    <span class="label label-default">{{ filter }}</span>
+                {% endfor %}
+            {% endif %}
+            </p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-12">
             <section id="instruction-container">
@@ -20,6 +34,14 @@
             </section>
         </div>
     </div>
+            {#
+            <div class="row">
+                <div class="col-xs-5">
+                 
+                {{dump(requestData)}}
+                </div>
+            </div>
+            #}
 {% endblock %}
 {% block documentReady %} 
     
