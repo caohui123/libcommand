@@ -41,7 +41,7 @@ class InstructionController extends Controller
         $currentStaffMember = $currentUser->getStaffMember();
         
         // ALL instructions for logged in user
-        $entities = $em->getRepository('AppBundle:Instruction')->findBy(array('createdBy' => $currentUser), array('instructionDate' => 'DESC'));
+        $entities = $em->getRepository('AppBundle:Instruction')->findBy(array('librarian' => $currentStaffMember), array('instructionDate' => 'DESC'));
 
         $requestData = $request->query->all();
         isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
@@ -58,14 +58,18 @@ class InstructionController extends Controller
         
         //Use the Instruction Service to get user instruction statistic counts
         $instructionService = $this->get('instruction_service');
-        $statistics = $instructionService->generateStaffRecentInstructionStatistics($currentStaffMember);
+        $individual_statistics = $instructionService->generateStaffRecentInstructionStatistics($currentStaffMember);
+        $group_statistics = $instructionService->generateStaffRecentInstructionStatistics();
+        $most_recent_instruction = $instructionService->getMostRecentInsturction($currentStaffMember);
         
         return array(
             'pagination' => $pagination,
             'filter' => 'filter-all', //varable for ajax pagination purposes in the view
             'paginationPath' => 'instruction',
             'search_form' => $searchForm->createView(),
-            'statistics' => $statistics,
+            'individual_statistics' => $individual_statistics,
+            'group_statistics' => $group_statistics,
+            'most_recent_instruction' => $most_recent_instruction,
         );
     }
 

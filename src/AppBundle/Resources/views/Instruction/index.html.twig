@@ -11,7 +11,7 @@
     </nav>
             
     {# Page Heading #}
-    {% set headingvars = {'headingcontent' : 'My Instruction Sessions', 'newbutton' : false } %}
+    {% set headingvars = {'headingcontent' : app.user.staffMember.firstName ~ ' ' ~ app.user.staffMember.lastName  ~ '\'s Instruction Sessions', 'newbutton' : false } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
     
     {# Flash message in case a filter search wasn't properly formatted/submitted. #}
@@ -33,7 +33,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6">
             <section id="instruction-data">
-                <h2>Recent Sessions</h2>
+                <h2>Ledger</h2>
                 <p>This is a display of your most recent <mark>personal</mark> insturction sessions. 
                     To perform a filtered search of sessions by librarian, instruction type, or date range, use the "Search Instructions" feature in the toolbar above.</p>
                 <div id="instruction-container">
@@ -44,24 +44,66 @@
         <div class="col-xs-12 col-sm-12 col-md-6">
             <section id="stats-data">
                 <h2>Statistics</h2>
-                {{ dump(statistics) }}
-                <p>This is an overview of the number of instruction sessions you have given over different time frames. 
+                <p>This is an overview of the number of group and individual instruction sessions during different time frames. 
                     Note that these results do NOT include any sessions that you may have already logged which will occur in the future.</p>
-                <ul class="nav nav-tabs" id="statTabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#mystats" aria-controls="mystats" role="tab" data-toggle="tab">Me</a></li>
-                    <li role="presentation"><a href="#allstats" aria-controls="mystats" role="tab" data-toggle="tab">Everybody</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="mystats">
-                        <ul>
-                            <li>Last 3 Months: {{statistics.last3Months}}/{{statistics.allMonths}}</li>
-                            <li>Last 6 Months: {{statistics.last6Months}}/{{statistics.allMonths}}</li>
-                            <li>Last 9 Months: {{statistics.last9Months}}/{{statistics.allMonths}}</li>
-                            <li>Last 12 Months: {{statistics.last12Months}}/{{statistics.allMonths}}</li>
-                        </ul>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6"> 
+                        <article id="my-insturction-statistics">
+                            <h3>My Sessions</h3>
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Last 3 Months</h4>
+                                    <p class="list-group-item-text"><span class="lead">{{individual_statistics.last3Months}}</span> / {{individual_statistics.allMonths}}</p>
+                                </div>
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Last 6 Months</h4>
+                                    <p class="list-group-item-text"><span class="lead">{{individual_statistics.last6Months}}</span> / {{individual_statistics.allMonths}}</p>
+                                </div>
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Last 9 Months</h4>
+                                    <p class="list-group-item-text"><span class="lead">{{individual_statistics.last9Months}}</span> / {{individual_statistics.allMonths}}</p>
+                                </div>
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Last 12 Months</h4>
+                                    <p class="list-group-item-text"><span class="lead">{{individual_statistics.last12Months}}</span> / {{individual_statistics.allMonths}}</p>
+                                </div>
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Most Recent Session</h4>
+                                    <p class="list-group-item-text">
+                                        {% if most_recent_session.client is defined %}
+                                        <a href="{{ path('individualinstruction_show', { 'id': most_recent_instruction.id }) }}" aria-label="show">{{most_recent_instruction.instructionDate|date('l n/j/y')}}</a>
+                                        {% else %}
+                                        <a href="{{ path('groupinstruction_show', { 'id': most_recent_instruction.id }) }}" aria-label="show">{{most_recent_instruction.instructionDate|date('l n/j/y')}}</a>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="allstats">all</div>
-                </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <article id="all-insturction-statistics">
+                            <h3>Everybody Else</h3>
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Last 3 Months</h4>
+                                    <p class="list-group-item-text"><span class="lead">{{group_statistics.last3Months}}</span> / {{group_statistics.allMonths}}</p>
+                                </div>
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Last 6 Months</h4>
+                                    <p class="list-group-item-text"><span class="lead">{{group_statistics.last6Months}}</span> / {{group_statistics.allMonths}}</p>
+                                </div>
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Last 9 Months</h4>
+                                    <p class="list-group-item-text"><span class="lead">{{group_statistics.last9Months}}</span> / {{group_statistics.allMonths}}</p>
+                                </div>
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Last 12 Months</h4>
+                                    <p class="list-group-item-text"><span class="lead">{{group_statistics.last12Months}}</span> / {{group_statistics.allMonths}}</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>    
             </section>
         </div>
     </div>

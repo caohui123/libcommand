@@ -286,7 +286,7 @@ class InstructionService{
     }
     
     
-    public function generateStaffRecentInstructionStatistics(Staff $staff){
+    public function generateStaffRecentInstructionStatistics(Staff $staff = null){
         $now = new \DateTime();
         $last3Months = clone $now;
         $last3Months->sub(new \DateInterval('P3M'));
@@ -312,18 +312,21 @@ class InstructionService{
         );
     }
     /**
-     * Get a count of staff instructions for a given time frame
+     * Get a count of staff instructions for a given time frame. Pass null to $staff to get all instructions for a time frame.
      * 
      * @param int $id
      * @param DateTime $startDate
      * @param DateTime $endDate
-     * @throws type
      */
-    private function __getStaffInstructionCountByTimeFrame(Staff $staff, \DateTime $startDate = null, \DateTime $endDate = null){        
+    private function __getStaffInstructionCountByTimeFrame(Staff $staff = null, \DateTime $startDate = null, \DateTime $endDate = null){        
         $options = array();
         
-        $options['staff'] = $staff;
-        $query = "SELECT COUNT(i.id) FROM AppBundle\Entity\Instruction i WHERE i.librarian = :staff ";
+        $query = "SELECT COUNT(i.id) FROM AppBundle\Entity\Instruction i WHERE i.id IS NOT NULL ";
+        
+        if($staff != null){
+            $options['staff'] = $staff;
+            $query .= "AND i.librarian = :staff ";
+        }
         
         if($startDate != null && $endDate != null){
             $options['startDate'] = $startDate;
@@ -342,5 +345,22 @@ class InstructionService{
         $qb = $this->em->createQuery($query)->setParameters($options);
         
         return $qb->getSingleScalarResult();
+    }
+    
+    /**
+     * Get the most recent instruction session for a staff member (provided that instruction session is not in the future).
+     * @param Staff $staff
+     * @return AppBundle:Entity:Instruction 
+     */
+    public function getMostRecentInsturction(Staff $staff){
+        $options = array();
+        $options['staff'] = $staff;
+        $options['now'] = new \DateTime();
+        
+        $query = "SELECT i FROM AppBundle\Entity\Instruction i WHERE i.instructionDate <= :now AND i.librarian = :staff ORDER BY i.instructionDate DESC";
+        
+        $qb = $this->em->createQuery($query)->setParameters($options)->setMaxResults(1);
+        
+        return $qb->getOneOrNullResult();
     }
 }

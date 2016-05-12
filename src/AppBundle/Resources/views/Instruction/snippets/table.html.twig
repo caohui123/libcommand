@@ -1,4 +1,4 @@
-<p class="badge">{{ pagination.getPaginationData.totalCount }} Sessions</p>
+<p><span class="badge">{{ pagination.getPaginationData.totalCount }}</span> Sessions</p>
 <p>Page {{ pagination.getPaginationData.current }} of {{ pagination.getPaginationData.pageCount }}</p>
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
@@ -32,12 +32,14 @@
                     </td>    
                     <td>
                         {# these entities could be GROUP or INSTRUCTION, so figure out which before creating edit buttons #}
-                        {% if entity.client is defined %}
-                        <a class="badge" href="{{ path('individualinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a class="badge" href="{{ path('individualinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
-                        {% else %}
-                        <a class="badge" href="{{ path('groupinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a class="badge" href="{{ path('groupinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                        {% if entity.librarian == app.user.staffMember %}
+                            {% if entity.client is defined %}
+                            <a class="badge" href="{{ path('individualinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a class="badge" href="{{ path('individualinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                            {% else %}
+                            <a class="badge" href="{{ path('groupinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a class="badge" href="{{ path('groupinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                            {% endif %}
                         {% endif %}
                     </td>
 
