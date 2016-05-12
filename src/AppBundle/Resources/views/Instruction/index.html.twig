@@ -20,6 +20,7 @@
             {{ flash_message }}
         </div>
     {% endfor %}
+    <button class="btn btn-success" id="generateCsv">Generate CSV</button>
     <div class="dropdown" id="new-instruction-dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           Add Instruction
@@ -199,5 +200,23 @@
         e.preventDefault()
         $(this).tab('show')
     })
+    
+    $('#generateCsv').on('click', function(e){
+        ajaxObject = {
+            url: '{{ path('get_instruction_download') }}',
+            type: 'GET',
+        };
+
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                console.log("MADE THE CSV");
+            })
+            .fail(function(data,status,xhr) {
+                console.log("DID NOT MAKE THE CSV");
+            })
+            .always(function(data,status,xhr) {
+                console.log("CSV FUNCTION RAN!");
+            });
+    });
     {{ parent() }}
 {% endblock %}
