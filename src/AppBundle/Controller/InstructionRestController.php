@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Instruction;
 use Ddeboer\DataImport\Writer\CsvWriter;
-use AppBundle\Resources\DdeboerImportBundle\DateTimeToStringValueConverter;
+use Ddeboer\DataImport\Reader\DbalReader;
 
 /**
  * Instruction REST controller.
@@ -103,46 +103,5 @@ class InstructionRestController extends FOSRestController
                 ;
         
         return $this->handleView($view);
-    }
-    
-    /**
-     * Utilizes the ddeboer data import bundle to convert Instruction entites into CSV files.
-     * 
-     * @return Response
-     */
-    public function getInstructionDownloadAction(){
-        /*$reader = new \Ddeboer\DataImport\Reader\ArrayReader(
-            array(
-                array(
-                    'first',        // This is for the CSV header
-                    'last',
-                ),
-                array(
-                    'first' => 'Ramsay',
-                    'last' => 'Bolton',
-                )
-            )
-        );*/
-        $reader = new \Ddeboer\DataImport\Reader\DoctrineReader($this->getDoctrine()->getManager(), 'AppBundle\Entity\Instruction');
-        
-        $workflow = new \Ddeboer\DataImport\Workflow($reader);
-        
-        $file = fopen($this->get('kernel')->getRootDir() . '/../web/csv/dungbeatle.csv', 'w');
-        $writer = new CsvWriter(',', '"', $file);
-        $workflow->addWriter($writer);
-        
-        //Convert DateTime to String
-        $io_service = $this->get('importexport_service');
-        
-        $workflow->addValueConverter('instructionDate', $io_service->convertDateTimeToString());
-        $workflow->addValueConverter('created', $io_service->convertDateTimeToString());
-        $workflow->addValueConverter('updated', $io_service->convertDateTimeToString());
-        $workflow->addValueConverter('startTime', $io_service->convertDateTimeToString());
-        $workflow->addValueConverter('endTime', $io_service->convertDateTimeToString());
-        $workflow->process();
-        
-        $response = new Response('Ran the CSV thing.', 200, array('Content-Type' => 'application/json'));
-
-        return $response;
     }
 }

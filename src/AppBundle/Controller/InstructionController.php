@@ -12,6 +12,10 @@ use AppBundle\Entity\Instruction;
 use Doctrine\ORM\EntityRepository;
 use AppBundle\Form\InstructionSearchType;
 use AppBundle\Entity\GroupInstruction;
+use Ddeboer\DataImport\Writer\CsvWriter;
+use Ddeboer\DataImport\Reader\DbalReader;
+use Ddeboer\DataImport\Workflow;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Instruction controller.
@@ -145,6 +149,16 @@ class InstructionController extends Controller
     }
     
     /**
+     * Create CSV generation form.
+     * 
+     * @param array $filters  The criteria filters for CSV generation
+     * @return \Symfony\Component\Form\Form The form
+     */
+    public function createCsvInstructionForm($filters){
+        
+    }
+    
+    /**
      * Show search results.
      * 
      * @Route("/instructionsearch/results", name="instruction_results")
@@ -161,8 +175,8 @@ class InstructionController extends Controller
         
         if($searchForm->isValid()){
             $instructionService = $this->get('instruction_service');
-            $matchingEntities = $instructionService->getInstructionsByCriteria($searchForm->getData());
             
+            $matchingEntities = $instructionService->getInstructionsByCriteria($searchForm->getData());
             $paginator  = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
                 $matchingEntities, /* query NOT result */
@@ -176,10 +190,13 @@ class InstructionController extends Controller
             //Prepare submitted filters for display on results page
             $filters = $instructionService->formatFilters($requestData['instrsearch']);
             
+            //Serialize entities for use in CSV generation on results page
+            //$serializer = $this->container->get('serializer');
+            //$serialized_entities = $serializer->serialize($matchingEntities, 'json');
+            
             return array(
                 'pagination' => $pagination,
                 'filters' => $filters,
-                'requestData' => $requestData,
                 'search_form' => $searchForm->createView(),
             );
         }
@@ -190,6 +207,42 @@ class InstructionController extends Controller
             'Search was invalid. Please try again.'
         );
         return $this->redirectToRoute("instruction");
+    }
+    
+    /**
+     * Downloads instruction entities based on specific criteria.
+     *
+     * @Route("/csv", name="instruction_csv")
+     * @Method("POST")
+     * @Template()
+     */
+    public function downloadCsvAction(Request $request){
+        /*
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Instruction'); 
+        $query = $repository->createQueryBuilder('s'); 
+        $query->orderBy('s.id', 'DESC'); 
+        $data = $query->getQuery()->getResult(); 
+        */
+        
+        $requestData = $request->request->all();
+        $serialized_entities = $requestData['Entities'];
+        
+        //$serializer = $this->get('serializer');
+        //$entities = $serializer->deserialize($serialized_entities, 'AppBundle\Entity\GroupInstruction', 'json');
+        
+        $filename = "export_".date("Y_m_d_His").".csv"; 
+
+        $response = $this->render('AppBundle:Admin:csvfile.html.twig', array('data' => $entities, 'row_headers' => array('Instruction Date', 'Staff', 'Start', 'End', 'Program', 'Course', 'Note'))); 
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response; 
     }
     
     /**

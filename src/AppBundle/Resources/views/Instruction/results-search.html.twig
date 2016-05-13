@@ -1,7 +1,6 @@
 {% extends '::base.html.twig' %}
 {% block title %}Instruction Session Search Results{% endblock %}
 {% block body -%}
-    
     <nav id="instruction-navigation" class="navbar">
         <ul class="nav navbar-nav nav-pills">
             <li role="presentation" class="active"><a href="{{ path('instruction') }}"><span class="glyphicon glyphicon-dashboard"></span> My Instruction Dashboard</a></li>
@@ -10,7 +9,7 @@
         </ul>
         {% include 'AppBundle:Instruction:search.html.twig' %}
     </nav>
-            
+    <button class="btn btn-success" id="generateCsv">Generate CSV</button>
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'Instruction Search Results', 'newbutton' : false } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
@@ -125,6 +124,28 @@
     $('#myTabs a[href="#searchbox-all-tabpane"]').tab('show') // Select tab by name
     $('#myTabs a[href="#searchbox-group-tabpane"]').tab('show') // Select tab by name
     $('#myTabs a[href="#searchbox-individual-tabpane"]').tab('show'); // Select tab by name
+    
+    var entities = '{{ pagination|serialize('json') }}';
+    $('#generateCsv').on('click', function(e){
+        ajaxObject = {
+            url: '{{ path('instruction_csv') }}',
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify({ Entities: entities }),
+            dataType:"json",
+        };
+
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                console.log("MADE THE CSV");
+            })
+            .fail(function(data,status,xhr) {
+                console.log("DID NOT MAKE THE CSV");
+            })
+            .always(function(data,status,xhr) {
+                console.log("CSV FUNCTION RAN!");
+            });
+    });
     
     {{ parent() }}
 {% endblock %}

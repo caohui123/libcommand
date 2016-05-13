@@ -96,7 +96,7 @@ $(document).ready(function(){
      */
      function goBackToPreliminaryForm(){
         ajaxObject = {
-            url: '/internalapi/instructionpreliminaryform',
+            url: 'internalapi/instructionpreliminaryform',
             type: 'GET',
         };
 
@@ -121,7 +121,7 @@ $(document).ready(function(){
       */
      function loadSearchForm(form){
         ajaxObject = {
-            url: '/internalapi/instructionsearchform',
+            url: 'internalapi/instructionsearchform',
             data: form.serialize(),
             type: 'GET',
         };
