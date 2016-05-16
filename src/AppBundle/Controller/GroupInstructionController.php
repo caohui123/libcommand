@@ -303,4 +303,19 @@ class GroupInstructionController extends Controller
             'entity'      => $entity,
         );
     }
+    
+    /**
+     * Displays a printer-friendly GroupInstruction entity.
+     *
+     * @Route("/yearly/print", name="groupinstruction_yearly_print")
+     * @Method("GET")
+     * @Template()
+     */
+    public function printYearlyAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+
+        return null;
+    }
 }

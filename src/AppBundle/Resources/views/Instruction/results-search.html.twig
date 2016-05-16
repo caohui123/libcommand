@@ -9,13 +9,14 @@
         </ul>
         {% include 'AppBundle:Instruction:search.html.twig' %}
     </nav>
-    <button class="btn btn-success" id="generateCsv">Generate CSV</button>
+    
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'Instruction Search Results', 'newbutton' : false } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
     <blockquote>
         <p>Note: You will only be shown editing and print options for your own instruction sessions.</p>
     </blockquote>
+    <p class="text-right"><a href="{{ path('instruction_csv', {'entities': entity_ids, 'filters': filters}) }}" target="_blank" class="btn btn-info" id="generateCsv"><span class="glyphicon glyphicon-download"></span> CSV</a></p>
     <div class="row" id="search-filters">
         <div class="col-xs-12">
             <p><strong>Filters:</strong>
@@ -32,61 +33,7 @@
     <div class="row">
         <div class="col-xs-12">
             <section id="instruction-container">
-                <p><span class="badge">{{ pagination.getPaginationData.totalCount }}</span> Matching Sessions</p>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <table class="table table-responsive table-striped records_list" id="jquerySortable_1">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Start Time</th>
-                                    <th>Librarian</th>
-                                    <th>Course</th>
-                                    <th>Level</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for entity in pagination %}
-                                <tr>
-                                    <td>{{ entity.instructionDate|date('n/j/y') }}</td>
-                                    <td>{{ entity.startTime|date('g:i A') }}</td>
-                                    <td>{{ entity.librarian.lastName }}, {{ entity.librarian.firstName }}</td>
-                                    <td>{{ entity.course }}</td>
-                                    <td>
-                                        {% if entity.level == 'grad' %}
-                                            Graduate 
-                                        {% elseif entity.level == 'high school' %}
-                                            High School
-                                        {% else %}
-                                            {{ entity.level|capitalize }}
-                                        {% endif %}
-                                        {% if entity.levelDescription %}
-                                            ({{ entity.levelDescription}})
-                                        {% endif %}
-                                    </td>    
-                                    <td>
-                                        {# these entities could be GROUP or INSTRUCTION, so figure out which before creating edit buttons #}
-                                        {% if entity.librarian == app.user.staffMember %}
-                                            {% if entity.client is defined %}
-                                            <a class="badge" href="{{ path('individualinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
-                                            <a class="badge" href="{{ path('individualinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
-                                            {% else %}
-                                            <a class="badge" href="{{ path('groupinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
-                                            <a class="badge" href="{{ path('groupinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
-                                            {% endif %}
-                                        {% endif %}
-                                    </td>
-
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-
-                        <p>Page {{ pagination.getPaginationData.current }} of {{ pagination.getPaginationData.pageCount }}</p>
-                        {% include 'AppBundle:Pagination:paginator.html.twig' %}
-                    </div>
-                </div>
+                {% include 'AppBundle:Instruction:snippets/table.html.twig' %}
             </section>
         </div>
     </div>
@@ -124,28 +71,6 @@
     $('#myTabs a[href="#searchbox-all-tabpane"]').tab('show') // Select tab by name
     $('#myTabs a[href="#searchbox-group-tabpane"]').tab('show') // Select tab by name
     $('#myTabs a[href="#searchbox-individual-tabpane"]').tab('show'); // Select tab by name
-    
-    var entities = '{{ pagination|serialize('json') }}';
-    $('#generateCsv').on('click', function(e){
-        ajaxObject = {
-            url: '{{ path('instruction_csv') }}',
-            type: 'POST',
-            contentType: "application/json",
-            data: JSON.stringify({ Entities: entities }),
-            dataType:"json",
-        };
-
-        $.ajax(ajaxObject)
-            .success(function(data,status,xhr) {
-                console.log("MADE THE CSV");
-            })
-            .fail(function(data,status,xhr) {
-                console.log("DID NOT MAKE THE CSV");
-            })
-            .always(function(data,status,xhr) {
-                console.log("CSV FUNCTION RAN!");
-            });
-    });
     
     {{ parent() }}
 {% endblock %}

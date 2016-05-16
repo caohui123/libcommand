@@ -20,7 +20,7 @@
             {{ flash_message }}
         </div>
     {% endfor %}
-    <a href="#" class="btn btn-success" id="generateCsv">Generate CSV</a>
+    
     <div class="dropdown" id="new-instruction-dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           Add Instruction
@@ -100,6 +100,23 @@
                                 <div class="list-group-item">
                                     <h4 class="list-group-item-heading">Last 12 Months</h4>
                                     <p class="list-group-item-text"><span class="lead">{{group_statistics.last12Months}}</span> / {{group_statistics.allMonths}}</p>
+                                </div>
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">Yearly Group Instruction Reports</h4>
+                                    <div class="well well-lg">
+                                        <div class="row">
+                                            {{ form_start(yearly_report_form, {'method': 'POST', 'action': path('generate_yearly_group_instruction') }) }}
+                                            <div class="col-xs-12 col-sm-5">
+                                                {{ form_row(yearly_report_form.yearType) }}
+                                            </div>
+                                            <div class="col-xs-12 col-sm-7">
+                                                {{ form_row(yearly_report_form.year) }}
+                                                {{ form_row(yearly_report_form.submit) }}
+                                            </div>
+                                            {{ form_end(yearly_report_form) }}
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                             </div>
                         </article>

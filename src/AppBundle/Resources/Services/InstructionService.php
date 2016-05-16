@@ -34,14 +34,14 @@ class InstructionService{
         //LIBRARIAN NAME
         if(array_key_exists('librarian', $rawFilters)){         
             if($rawFilters['librarian'] != ''){
-                $filters['librarian'] = $this->getStaffById($rawFilters['librarian']);
+                $filters['librarian'] = $this->__getStaffById($rawFilters['librarian']);
             }
         } 
         
         //PROGRAM NAME
         if(array_key_exists('program', $rawFilters)){       
             if($rawFilters['program'] != ''){
-                $filters['program'] = $this->getProgramById($rawFilters['program']);
+                $filters['program'] = $this->__getProgramById($rawFilters['program']);
             }
         } 
         
@@ -92,44 +92,6 @@ class InstructionService{
     }
     
     /**
-     * Get a staff member by id (used in formatFilters())
-     * 
-     * @param type $id
-     * @return string
-     * @throws CreateNotFoundException
-     */
-    public function getStaffById($id){
-       
-        $entity = $this->em->getRepository('AppBundle\Entity\Staff')->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Staff entity.');
-        }
-        
-        $staff = $entity->getFirstName() . ' ' . $entity->getLastName();
-        
-        return $staff;
-    }
-    
-    /**
-     * Get a program (LiaisonSubject) by id (used in formatFilters())
-     * 
-     * @param int $id
-     * @return string
-     * @throws CreateNotFoundException
-     */
-    public function getProgramById($id){
-
-        $entity = $this->em->getRepository('AppBundle\Entity\LiaisonSubject')->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find LiaisonSubject entity.');
-        }
-        
-        $program = $entity->getName();
-        
-        return $program;
-    }
-    
-    /**
      * Format the instruction type for display.
      * 
      * @param string $raw
@@ -152,7 +114,7 @@ class InstructionService{
     }
     
     /**
-     * Return a list of Instruction entites based on the criteria from the search form
+     * Return a list of Instruction entites based on the criteria from the search form.
      * 
      * @var array $criteria  Form data with criteria.
      * @return array
@@ -285,7 +247,12 @@ class InstructionService{
         return $qb->getResult();
     }
     
-    
+    /**
+     * Based on the staff member, generate a count of the instructions over a certain period of time.
+     * 
+     * @param Staff $staff
+     * @return array
+     */
     public function generateStaffRecentInstructionStatistics(Staff $staff = null){
         $now = new \DateTime();
         $last3Months = clone $now;
@@ -311,6 +278,158 @@ class InstructionService{
             'allMonths' => $countStatsAllMonths,
         );
     }
+    
+    /**
+     * Get the most recent instruction session for a staff member (provided that instruction session is not in the future).
+     * @param Staff $staff
+     * @return AppBundle:Entity:Instruction 
+     */
+    public function getMostRecentInsturction(Staff $staff){
+        $options = array();
+        $options['staff'] = $staff;
+        $options['now'] = new \DateTime();
+        
+        // Uses Symfony's QUERY BUILDER (as opposed to standard DQL queries used in other functions in this service)
+        $repo = $this->em->getRepository('AppBundle\Entity\Instruction');
+        $query = $repo->createQueryBuilder('i')
+                    ->where('i.instructionDate <= :now AND i.librarian = :staff')
+                    ->orderBy('i.instructionDate', 'DESC')
+                    ->setParameter('now', new \DateTime())
+                    ->setParameter('staff', $staff)
+                    ->setMaxResults(1)
+                    ->getQuery();
+        
+        return $query->getOneOrNullResult();
+    }
+    
+    /**
+     * Get group instructions count by month for a specific staff member or all staff members
+     * 
+     * @param DateTime $month
+     * @param Staff $staff
+     */
+    public function getGroupInstructionsByMonth(\DateTime $month, $level = null, Staff $staff = null){
+        $nextMonth = clone $month;
+        $nextMonth->add(new \DateInterval('P1M'));
+
+        // Uses Symfony's QUERY BUILDER
+        $repo = $this->em->getRepository('AppBundle\Entity\GroupInstruction');
+        $query = $repo->createQueryBuilder('i')
+                    ->select('count(i.id)')
+                    ->where('i.instructionDate >= :startDate AND i.instructionDate < :endDate')
+                    ->orderBy('i.instructionDate', 'DESC')
+                    ->setParameter('startDate', $month)
+                    ->setParameter('endDate', $nextMonth)
+                        ;
+        if($level != null){          
+            $query
+                ->andWhere('i.level = :level')
+                ->setParameter('level', $level);
+        }
+        
+        return $query->getQuery()->getSingleScalarResult();
+    }
+    
+    /**
+     * Get group instruction total attendance by month for a specific staff member or all staff members
+     * 
+     * @param DateTime $month
+     * @param Staff $staff
+     */
+    public function getGroupInstructionAttendanceByMonth(\DateTime $month, $level = null, Staff $staff = null){
+        $nextMonth = clone $month;
+        $nextMonth->add(new \DateInterval('P1M'));
+
+        // Uses Symfony's QUERY BUILDER
+        $repo = $this->em->getRepository('AppBundle\Entity\GroupInstruction');
+        $query = $repo->createQueryBuilder('i')
+                    ->select('sum(i.attendance)')
+                    ->where('i.instructionDate >= :startDate AND i.instructionDate < :endDate')
+                    ->setParameter('startDate', $month)
+                    ->setParameter('endDate', $nextMonth)
+                    ;
+        
+        if($level != null){          
+            $query
+                ->andWhere('i.level = :level')
+                ->setParameter('level', $level);
+        }
+        
+        return $query->getQuery()->getSingleScalarResult();
+    }
+    
+
+    /**
+     * Generate a list of years for criteria choices
+     * @param bool $range  True = "2015-2016" format; False = "2016" format
+     * @param int $startYear
+     * @param int $endYear
+     * @return array $range 
+     */
+    public function generateYears($range = true, $startYear = 2015, $endYear = null){
+        $years_arr = array();
+        
+        $currentYear = date('Y'); //string
+        $currentMonth = date('m');
+        
+        if($endYear != null){
+            for($i = $endYear; $i >= $startYear; $i--){
+                $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
+            }
+        } else {
+            //show next year if it's May or later
+            if($currentMonth >= 5){
+                for($i = $currentYear; $i >= $startYear; $i--){
+                    $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
+                }
+            } else {
+                for($i = $currentYear - 1; $i >= $startYear; $i--){
+                    $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
+                }
+            }
+        }
+        
+        return $years_arr;
+    }
+    
+    /**
+     * Get a staff member by id (used in formatFilters())
+     * 
+     * @param type $id
+     * @return string
+     * @throws CreateNotFoundException
+     */
+    private function __getStaffById($id){
+       
+        $entity = $this->em->getRepository('AppBundle\Entity\Staff')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Staff entity.');
+        }
+        
+        $staff = $entity->getFirstName() . ' ' . $entity->getLastName();
+        
+        return $staff;
+    }
+    
+    /**
+     * Get a program (LiaisonSubject) by id (used in formatFilters())
+     * 
+     * @param int $id
+     * @return string
+     * @throws CreateNotFoundException
+     */
+    private function __getProgramById($id){
+
+        $entity = $this->em->getRepository('AppBundle\Entity\LiaisonSubject')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find LiaisonSubject entity.');
+        }
+        
+        $program = $entity->getName();
+        
+        return $program;
+    }
+    
     /**
      * Get a count of staff instructions for a given time frame. Pass null to $staff to get all instructions for a time frame.
      * 
@@ -345,22 +464,5 @@ class InstructionService{
         $qb = $this->em->createQuery($query)->setParameters($options);
         
         return $qb->getSingleScalarResult();
-    }
-    
-    /**
-     * Get the most recent instruction session for a staff member (provided that instruction session is not in the future).
-     * @param Staff $staff
-     * @return AppBundle:Entity:Instruction 
-     */
-    public function getMostRecentInsturction(Staff $staff){
-        $options = array();
-        $options['staff'] = $staff;
-        $options['now'] = new \DateTime();
-        
-        $query = "SELECT i FROM AppBundle\Entity\Instruction i WHERE i.instructionDate <= :now AND i.librarian = :staff ORDER BY i.instructionDate DESC";
-        
-        $qb = $this->em->createQuery($query)->setParameters($options)->setMaxResults(1);
-        
-        return $qb->getOneOrNullResult();
     }
 }

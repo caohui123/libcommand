@@ -8,9 +8,17 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use AppBundle\Resources\Services\InstructionService;
 
 class InstructionSearchType extends AbstractType
 {    
+    private $instruction_service;
+    
+    // Need to use a function from the instruction service, so pass it in from the calling controller.
+    public function __construct(InstructionService $instruction_service) {
+        $this->instruction_service = $instruction_service;
+    }
+    
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -63,21 +71,21 @@ class InstructionSearchType extends AbstractType
 
                 if($criteria['filterCriteria'] == 'fiscal'){
                     $form->add('fiscalYear', 'choice', array(
-                        'choices' => $this->generateYears(),
+                        'choices' => $this->instruction_service->generateYears(),
                         'label' => 'Fiscal Year (Jul-Jun)',
                     ));
                 }
                 
                 if($criteria['filterCriteria'] == 'academic'){
                     $form->add('academicYear', 'choice', array(
-                        'choices' => $this->generateYears(),
+                        'choices' => $this->instruction_service->generateYears(),
                         'label' => 'Academic Year (Sept-Aug)',
                     ));
                 }
                 
                 if($criteria['filterCriteria'] == 'calendar'){
                     $form->add('calendarYear', 'choice', array(
-                        'choices' => $this->generateYears(false),
+                        'choices' => $this->instruction_service->generateYears(false),
                         'label' => 'Calendar Year',
                     ));
                 }
@@ -92,7 +100,7 @@ class InstructionSearchType extends AbstractType
                         ),
                     ));       
                     $form->add('year', 'choice', array(
-                        'choices' => $this->generateYears(false),
+                        'choices' => $this->instruction_service->generateYears(false),
                     ));
                 }
                 
@@ -162,38 +170,5 @@ class InstructionSearchType extends AbstractType
     public function getName()
     {
         return 'instrsearch';
-    }
-    
-    /**
-     * Generate a list of years for criteria choices
-     * @param bool $range  True = "2015-2016" format; False = "2016" format
-     * @param int $startYear
-     * @param int $endYear
-     * @return array $range 
-     */
-    private function generateYears($range = true, $startYear = 2015, $endYear = null){
-        $years_arr = array();
-        
-        $currentYear = date('Y'); //string
-        $currentMonth = date('m');
-        
-        if($endYear != null){
-            for($i = $endYear; $i >= $startYear; $i--){
-                $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
-            }
-        } else {
-            //show next year if it's May or later
-            if($currentMonth >= 5){
-                for($i = $currentYear; $i >= $startYear; $i--){
-                    $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
-                }
-            } else {
-                for($i = $currentYear - 1; $i >= $startYear; $i--){
-                    $range ? $years_arr[$i] = $i . '-' . ($i + 1) : $years_arr[$i] = $i;
-                }
-            }
-        }
-        
-        return $years_arr;
     }
 }

@@ -1,6 +1,0 @@
-{% for row_header in row_headers %}
-    {{ row_header }}
-{% endfor %}
-{% for row in data %}
-    {{ row.instructionDate|date('Y-m-d') }}, {{ row.librarian.firstName }} {{ row.librarian.lastName }}, {{ row.startTime|date('g:i A') }}, {{ row.endTime|date('g:i A') }}, {{ row.program }}, {{ row.course }}, {{ row.note }}
-{% endfor %}

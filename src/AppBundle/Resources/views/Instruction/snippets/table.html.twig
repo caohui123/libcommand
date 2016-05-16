@@ -7,6 +7,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Start Time</th>
+                    <th>Librarian</th>
                     <th>Course</th>
                     <th>Level</th>
                     <th>Actions</th>
@@ -17,6 +18,7 @@
                 <tr>
                     <td>{{ entity.instructionDate|date('n/j/y') }}</td>
                     <td>{{ entity.startTime|date('g:i A') }}</td>
+                    <td>{{ entity.librarian.lastName }}, {{ entity.librarian.firstName }}</td>
                     <td>{{ entity.course }}</td>
                     <td>
                         {% if entity.level == 'grad' %}
