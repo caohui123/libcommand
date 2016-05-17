@@ -355,7 +355,11 @@ class InstructionService{
                 ->setParameter('level', $level);
         }
         
-        return $query->getQuery()->getSingleScalarResult();
+        $result = $query->getQuery()->getSingleScalarResult();
+        
+        $result ? $return = $result : $return = 0;
+        
+        return $return;
     }
     
 

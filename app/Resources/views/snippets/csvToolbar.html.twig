@@ -1,0 +1,11 @@
+<div class="row">
+    <div class="col-xs-12">
+        <p>
+            <a class="btn btn-sm btn-primary" href="{{ basepath }}" aria-label="Back to List"><span class="glyphicon glyphicon-arrow-left"></span></a>
+            <a class="btn btn-sm btn-default pull-right" id="generateCsv" target="_blank" href="{{ csvpath }}"><span class="glyphicon glyphicon-download"></span> CSV</a>
+            {% if printpath is defined %}
+            <a class="btn btn-sm btn-default pull-right" target="_blank" href="{{ printpath }}"><span class="glyphicon glyphicon-print"></span></a>
+            {% endif %}
+        </p>    
+    </div>
+</div>

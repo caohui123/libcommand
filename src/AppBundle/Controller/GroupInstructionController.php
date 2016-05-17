@@ -305,17 +305,165 @@ class GroupInstructionController extends Controller
     }
     
     /**
-     * Displays a printer-friendly GroupInstruction entity.
+     * Create a form that specifies criteria for fiscal or academic year group instruction report generation.
+     * 
+     * @return \Symfony\Component\Form\Form The form
+     */
+    public function createYearlyReportGeneratorForm(){
+        $instruction_service = $this->get('instruction_service');
+        
+        //NOTE: specifiy action (route) and method (GET) in twig template wherever this form is called
+        $form = $this->createFormBuilder()
+                ->add('yearType', 'choice', array(
+                    'label' => 'Type',
+                    'choices' => array(
+                        'academic' => 'Academic (Sept-Aug)',
+                        'fiscal' => 'Fiscal (Jul-Jun)',
+                    ),
+                    'multiple' => false,
+                    'expanded' => true,
+                    'data' => 'academic', //pre-select academic
+                 ))
+                ->add('year', 'choice', array(
+                    'label' => 'Year',
+                    'choices' => $instruction_service->generateYears(),
+                ))
+                ->add('submit', 'submit', array(
+                    'label' => 'View Report',
+                    'attr' => array(
+                        'class' => 'btn btn-sm btn-warning',
+                    ),
+                ))
+                ->getForm();
+        
+        return $form;
+    }
+    
+    /**
+     * Generates group instruction reports based on year.
+     * This report includes totals by month and instruction level as well as 
+     * instruction counts by staff member over that time period.
      *
-     * @Route("/yearly/print", name="groupinstruction_yearly_print")
+     * @Route("/reports/yearly", name="generate_yearly_group_instruction")
+     * @Method("POST")
+     * @Template("AppBundle:GroupInstruction:yearly.html.twig")
+     */
+    public function generateYearlyReportAction(Request $request){
+        $requestData = $request->request->all();
+        $yearType = $requestData['form']['yearType'];
+        $year = (int) $requestData['form']['year'];
+
+        return array(
+            'entities' => $this->__getYearlySessionAndAttendanceCounts($yearType, $year),
+            'yearly_form' => $this->createYearlyReportGeneratorForm()->createView(),
+            'year_type' => $yearType,
+            'year' => $year,
+        );
+    }
+    
+    /**
+     * Generates GROUP instruction reports based on year.
+     * This report includes totals by month and instruction level as well as 
+     * instruction counts by staff member over that time period.
+     *
+     * @Route("/reports/yearly/csv", name="groupinstruction_yearly_csv")
      * @Method("GET")
      * @Template()
      */
+    public function downloadYearlyReportCsvAction(Request $request){
+        $requestData = $request->query->all();
+        $yearType = $requestData['yearType'];
+        $year = (int) $requestData['year'];
+        
+        $totals = $this->__getYearlySessionAndAttendanceCounts($yearType, $year);
+        
+        $filename = "instruction_totals_".date("Y_m_d_His").".csv"; 
+
+        $response = $this->render('AppBundle:GroupInstruction:yearly-csv.html.twig', array(
+                'totals' => $totals, 
+                'year_type' => $yearType,
+                'year' => $year,
+            )); 
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Group Instruction Yearly Totals Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response; 
+    }
+    
+    /**
+     * Displays a printer-friendly yearly report of GroupInstruction sessions.
+     *
+     * @Route("/reports/yearly/print", name="groupinstruction_yearly_print")
+     * @Method("GET")
+     * @Template("AppBundle:GroupInstruction:yearly-print.html.twig")
+     */
     public function printYearlyAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $requestData = $request->query->all();
+        $yearType = $requestData['yearType'];
+        $year = (int) $requestData['year'];
+        
+        $totals = $this->__getYearlySessionAndAttendanceCounts($yearType, $year);
+        
+        return array(
+            'entities' => $totals, 
+            'year_type' => $yearType,
+            'year' => $year,
+        );
+    }
+    
+    /**
+     * Returns sessions and attendance totals by month and instruction level over an academic or fiscal year.
+     *
+     * @param String $yearType  'academic' or 'fiscal' year
+     * @param int $year  The first year for which to fetch data
+     * 
+     * @return array  An array holding session and attendance totals by level for the year
+     */
+    private function __getYearlySessionAndAttendanceCounts($yearType, $year){
+        $totals_arr = array();
+        
+        $instruction_service = $this->get('instruction_service');
+        
+        switch($yearType){
+            case 'academic':
+                $startDate = new \DateTime($year . "-09-01");
+                $endDate = new \DateTime(($year + 1) . "-08-31");
+                break;
+            case 'fiscal':
+                $startDate = new \DateTime($year . "-07-01");
+                $endDate = new \DateTime(($year + 1) . "-06-30");
+                break;
+        }
+        
+        //Get instruction count and attendance by level for the first month plus the next 11 months
+        for($i = 0; $i < 12; $i++){
+            $month_iterator = new \DateInterval('P'.$i.'M'); //means add $i months to the date
+            
+            $date = clone $startDate;
+            $date->add($month_iterator);
+            
+            $loop_month = clone $date;
 
-
-        return null;
+            //Current list of levels (e.g. '100-200') located in AppBundle\Form\GroupTypeInstructionType.php in the 'level' field
+            $totals_arr[$loop_month->format('F')]['100-200']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, '100-200');
+            $totals_arr[$loop_month->format('F')]['100-200']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, '100-200');
+            $totals_arr[$loop_month->format('F')]['300-400']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, '300-400');
+            $totals_arr[$loop_month->format('F')]['300-400']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, '300-400');
+            $totals_arr[$loop_month->format('F')]['Graduate']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, 'grad');
+            $totals_arr[$loop_month->format('F')]['Graduate']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, 'grad');
+            $totals_arr[$loop_month->format('F')]['High School']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, 'high school');
+            $totals_arr[$loop_month->format('F')]['High School']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, 'high school');
+            $totals_arr[$loop_month->format('F')]['Other']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, 'other');
+            $totals_arr[$loop_month->format('F')]['Other']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, 'other');
+        }
+        
+        return $totals_arr;
     }
 }

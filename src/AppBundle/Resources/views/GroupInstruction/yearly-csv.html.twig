@@ -1,0 +1,56 @@
+{# This twig snipped takes in Instruction entities and row headers for CSV file generation. #}
+{# Variables for totaling sessions and attendance for the entire year #}
+{% set undergrad100SessionsTotal = 0 %}
+{% set undergrad100AttendanceTotal = 0 %}
+{% set undergrad300SessionsTotal = 0 %}
+{% set undergrad300AttendanceTotal = 0 %}
+{% set gradSessionsTotal = 0 %}
+{% set gradAttendanceTotal = 0 %}
+{% set highSchoolSessionsTotal = 0 %}
+{% set highSchoolAttendanceTotal = 0 %}
+{% set otherSessionsTotal = 0 %}
+{% set otherAttendanceTotal = 0 %}
+{% set yearSessionsTotal = 0 %}
+{% set yearAttendanceTotal = 0 %}
+{# Variables for keeping track of when to split up table by year #}
+{% set monthCount = 0 %}
+{% if year_type == 'academic' %}
+    {% set changeYearAfter = 4 %}
+{% elseif year_type == 'fiscal' %}
+    {% set changeYearAfter = 6 %}
+{% endif %}
+Group Instruction Session Totals for the {{ year_type|capitalize }} Year {{ year }}-{{ year + 1 }}
+  
+{% if totals is defined %}
+    ,Year {{ year }}-{{ year + 1 }},100-200, ,300-400, ,Graduate, ,High School, ,Other, ,Totals
+    ,,Sessions,Attendance,Sessions,Attendance,Sessions,Attendance,Sessions,Attendance,Sessions,Attendance,Sessions,Attendance
+    {% for month, values in totals %}
+        {# Variables for totaling sessions and attendance for the current month only...MAKE SURE THERE ARE NO WHITESPACES AFTER LINES AS IT WILL AFFECT THE OUTPUT!#}
+        {% set monthSessionsTotal = 0 %}{% set monthAttendanceTotal = 0 %}
+        {% set undergrad100SessionsTotal = undergrad100SessionsTotal + values["100-200"].sessions %}
+        {% set undergrad100AttendanceTotal = undergrad100AttendanceTotal + values["100-200"].attendance %}
+        {% set monthSessionsTotal = monthSessionsTotal + values["100-200"].sessions %}
+        {% set monthAttendanceTotal = monthAttendanceTotal + values["100-200"].attendance %}
+        {% set undergrad300SessionsTotal = undergrad300SessionsTotal + values["300-400"].sessions %}
+        {% set undergrad300AttendanceTotal = undergrad300AttendanceTotal + values["300-400"].attendance %}
+        {% set monthSessionsTotal = monthSessionsTotal + values["300-400"].sessions %}
+        {% set monthAttendanceTotal = monthAttendanceTotal + values["300-400"].attendance %}
+        {% set gradSessionsTotal = gradSessionsTotal + values["Graduate"].sessions %}
+        {% set gradAttendanceTotal = gradAttendanceTotal + values["Graduate"].attendance %}
+        {% set monthSessionsTotal = monthSessionsTotal + values["Graduate"].sessions %}
+        {% set monthAttendanceTotal = monthAttendanceTotal + values["Graduate"].attendance %}
+        {% set highSchoolSessionsTotal = highSchoolSessionsTotal + values["High School"].sessions %}
+        {% set highSchoolAttendanceTotal = highSchoolAttendanceTotal + values["High School"].attendance %}
+        {% set monthSessionsTotal = monthSessionsTotal + values["High School"].sessions %}
+        {% set monthAttendanceTotal = monthAttendanceTotal + values["High School"].attendance %}
+        {% set otherSessionsTotal = otherSessionsTotal + values["Other"].sessions %}
+        {% set otherAttendanceTotal = otherAttendanceTotal + values["Other"].attendance %}
+        {% set monthSessionsTotal = monthSessionsTotal + values["Other"].sessions %}
+        {% set monthAttendanceTotal = monthAttendanceTotal + values["Other"].attendance %}
+        {% set yearSessionsTotal = yearSessionsTotal + monthSessionsTotal %}
+        {% set yearAttendanceTotal = yearAttendanceTotal + monthAttendanceTotal %}
+        {# Month Row Output #}
+        ,{{ month }}, {{ values["100-200"].sessions }}, {{ values["100-200"].attendance }}, {{ values["300-400"].sessions }}, {{ values["300-400"].attendance }}, {{ values["Graduate"].sessions }}, {{ values["Graduate"].attendance }}, {{ values["High School"].sessions }}, {{ values["High School"].attendance }}, {{ values["Other"].sessions }}, {{ values["Other"].attendance }}, {{ monthSessionsTotal }}, {{ monthAttendanceTotal }}
+    {% endfor %}
+    ,TOTALS:, {{ undergrad100SessionsTotal }}, {{ undergrad100AttendanceTotal }}, {{ undergrad300SessionsTotal }}, {{ undergrad300AttendanceTotal }}, {{ gradSessionsTotal }}, {{ gradAttendanceTotal }}, {{ highSchoolSessionsTotal }}, {{ highSchoolAttendanceTotal }}, {{ otherSessionsTotal }}, {{ otherAttendanceTotal }}, {{ yearSessionsTotal }}, {{ yearAttendanceTotal }}
+{% endif %}

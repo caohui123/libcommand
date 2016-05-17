@@ -16,7 +16,11 @@
     <blockquote>
         <p>Note: You will only be shown editing and print options for your own instruction sessions.</p>
     </blockquote>
-    <p class="text-right"><a href="{{ path('instruction_csv', {'entities': entity_ids, 'filters': filters}) }}" target="_blank" class="btn btn-info" id="generateCsv"><span class="glyphicon glyphicon-download"></span> CSV</a></p>
+    
+    {# Back, CSV, Print buttons #}
+    {% set vars = {'basepath' : path('instruction'), 'csvpath': path('instruction_csv', {'entities': entity_ids, 'filters': filters}) } %}
+    {% include 'snippets/csvToolbar.html.twig' with vars %}
+    
     <div class="row" id="search-filters">
         <div class="col-xs-12">
             <p><strong>Filters:</strong>
@@ -37,14 +41,6 @@
             </section>
         </div>
     </div>
-            {#
-            <div class="row">
-                <div class="col-xs-5">
-                 
-                {{dump(requestData)}}
-                </div>
-            </div>
-            #}
 {% endblock %}
 {% block documentReady %} 
     

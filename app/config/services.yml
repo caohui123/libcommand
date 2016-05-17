@@ -89,3 +89,9 @@ services:
         class: AppBundle\Controller\InstructionController
         calls: 
             - [ setContainer, [ @service_container ]]
+    
+    #This is the GroupInstructionController
+    groupinstruction_controller:
+        class: AppBundle\Controller\GroupInstructionController
+        calls: 
+            - [ setContainer, [ @service_container ]]

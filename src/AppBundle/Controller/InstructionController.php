@@ -60,8 +60,9 @@ class InstructionController extends Controller
         //Instruction preliminary search form 
         $searchForm = $this->createPreliminarySearchInstructionForm();
         
-        //Yearly report generation form (action specified in form)
-        $yearlyReportForm = $this->createYearlyReportGeneratorForm();
+        //Yearly report generation form (action specified in twig file)
+        $groupinstruction_service = $this->get('groupinstruction_controller');
+        $yearlyReportForm = $groupinstruction_service->createYearlyReportGeneratorForm();
         
         //Use the Instruction Service to get user instruction statistic counts
         $instructionService = $this->get('instruction_service');
@@ -81,6 +82,28 @@ class InstructionController extends Controller
         );
     }
 
+    /**
+     * Finds and displays a Instruction entity.
+     *
+     * @Route("/{id}", name="instruction_show")
+     * @Method("GET")
+     * @Template()
+     */
+    public function showAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:Instruction')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Instruction entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
+    
     /**
      * A preliminary search form to filter the main instruction search form
      * @return  \Symfony\Component\Form\Form The form
@@ -154,41 +177,6 @@ class InstructionController extends Controller
     }
     
     /**
-     * Create a form that specifies criteria for fiscal or academic year group instruction report generation.
-     * 
-     * @return \Symfony\Component\Form\Form The form
-     */
-    public function createYearlyReportGeneratorForm(){
-        $instruction_service = $this->get('instruction_service');
-        
-        //NOTE: specifiy action (route) and method (GET) in twig template wherever this form is called
-        $form = $this->createFormBuilder()
-                ->add('yearType', 'choice', array(
-                    'label' => 'Type',
-                    'choices' => array(
-                        'academic' => 'Academic (Sept-Aug)',
-                        'fiscal' => 'Fiscal (Jul-Jun)',
-                    ),
-                    'multiple' => false,
-                    'expanded' => true,
-                    'data' => 'academic', //pre-select academic
-                 ))
-                ->add('year', 'choice', array(
-                    'label' => 'Year',
-                    'choices' => $instruction_service->generateYears(),
-                ))
-                ->add('submit', 'submit', array(
-                    'label' => 'View Report',
-                    'attr' => array(
-                        'class' => 'btn btn-sm btn-warning',
-                    ),
-                ))
-                ->getForm();
-        
-        return $form;
-    }
-    
-    /**
      * Show search results.
      * 
      * @Route("/instructionsearch/results", name="instruction_results")
@@ -243,9 +231,9 @@ class InstructionController extends Controller
     }
     
     /**
-     * Downloads instruction entities based on specific criteria.
+     * Downloads CSV of instruction entities based on specific criteria.
      *
-     * @Route("/csv", name="instruction_csv")
+     * @Route("/reports/csv", name="instruction_csv")
      * @Method("GET")
      * @Template()
      */
@@ -295,86 +283,5 @@ class InstructionController extends Controller
         $response->headers->set('Expires', '0');
 
         return $response; 
-    }
-    
-    /**
-     * Generates GROUP instruction reports based on year.
-     * This report includes totals by month and instruction level as well as 
-     * instruction counts by staff member over that time period.
-     *
-     * @Route("/reports/group", name="generate_yearly_group_instruction")
-     * @Method("POST")
-     * @Template("AppBundle:Instruction:yearly.html.twig")
-     */
-    public function generateYearlyReportAction(Request $request){
-        $requestData = $request->request->all();
-        $yearType = $requestData['form']['yearType'];
-        $year = (int) $requestData['form']['year'];
-        
-        $entities = array();
-        
-        $instruction_service = $this->get('instruction_service');
-        
-        switch($yearType){
-            case 'academic':
-                $startDate = new \DateTime($year . "-09-01");
-                $endDate = new \DateTime(($year + 1) . "-08-31");
-                break;
-            case 'fiscal':
-                $startDate = new \DateTime($year . "-07-01");
-                $endDate = new \DateTime(($year + 1) . "-06-30");
-                break;
-        }
-        
-        //Get instruction count and attendance by level for the first month plus the next 11 months
-        for($i = 0; $i < 12; $i++){
-            $month_iterator = new \DateInterval('P'.$i.'M'); //means add $i months to the date
-            
-            $date = clone $startDate;
-            $date->add($month_iterator);
-            
-            $loop_month = clone $date;
-
-            //Current list of levels (e.g. '100-200') located in AppBundle\Form\GroupTypeInstructionType.php in the 'level' field
-            $entities[$loop_month->format('F')]['100-200']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, '100-200');
-            $entities[$loop_month->format('F')]['100-200']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, '100-200');
-            $entities[$loop_month->format('F')]['300-400']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, '300-400');
-            $entities[$loop_month->format('F')]['300-400']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, '300-400');
-            $entities[$loop_month->format('F')]['Graduate']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, 'grad');
-            $entities[$loop_month->format('F')]['Graduate']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, 'grad');
-            $entities[$loop_month->format('F')]['High School']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, 'high school');
-            $entities[$loop_month->format('F')]['High School']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, 'high school');
-            $entities[$loop_month->format('F')]['Other']['sessions'] = $instruction_service->getGroupInstructionsByMonth($date, 'other');
-            $entities[$loop_month->format('F')]['Other']['attendance'] = $instruction_service->getGroupInstructionAttendanceByMonth($date, 'other');
-        }
-        
-        return array(
-            'entities' => $entities,
-            'yearly_form' => $this->createYearlyReportGeneratorForm()->createView(),
-            'year_type' => $yearType,
-            'year' => $year,
-        );
-    }
-    
-    /**
-     * Finds and displays a Instruction entity.
-     *
-     * @Route("/{id}", name="instruction_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AppBundle:Instruction')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Instruction entity.');
-        }
-
-        return array(
-            'entity'      => $entity,
-        );
     }
 }

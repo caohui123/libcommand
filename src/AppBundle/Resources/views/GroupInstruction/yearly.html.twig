@@ -1,0 +1,184 @@
+{% extends '::base.html.twig' %}
+{% block title %}Yearly Group Instruction Counts{% endblock %}
+{% block body -%}
+
+{# Variables for totaling sessions and attendance for the entire year #}
+{% set undergrad100SessionsTotal = 0 %}
+{% set undergrad100AttendanceTotal = 0 %}
+{% set undergrad300SessionsTotal = 0 %}
+{% set undergrad300AttendanceTotal = 0 %}
+{% set gradSessionsTotal = 0 %}
+{% set gradAttendanceTotal = 0 %}
+{% set highSchoolSessionsTotal = 0 %}
+{% set highSchoolAttendanceTotal = 0 %}
+{% set otherSessionsTotal = 0 %}
+{% set otherAttendanceTotal = 0 %}
+{% set yearSessionsTotal = 0 %}
+{% set yearAttendanceTotal = 0 %}
+
+{# Variables for keeping track of when to split up table by year #}
+{% set monthCount = 0 %}
+{% if year_type == 'academic' %}
+    {% set changeYearAfter = 4 %}
+{% elseif year_type == 'fiscal' %}
+    {% set changeYearAfter = 6 %}
+{% endif %}
+
+<nav id="instruction-navigation" class="navbar">
+    <ul class="nav navbar-nav navbar-right" id="search-instruction-list">
+        <li class="dropdown search-instruction-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-equalizer"></span> New Report <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="instruction-search-listitem">
+                <div class="instruction-search-container" id="instruction-search-container">
+                    {{ form(yearly_form) }} 
+                </div>
+            </li>
+          </ul>
+        </li>
+    </ul>
+</nav>
+
+<h1 class="page-header">Group Instruction Totals for the {{ year_type|capitalize }} Year {{ year }}-{{ year +1 }}</h1>
+
+{# Back, CSV, Print buttons #}
+{% set vars = {'basepath' : path('instruction'), 'csvpath': path('groupinstruction_yearly_csv', {'yearType': year_type, 'year': year}), 'printpath': path('groupinstruction_yearly_print', {'yearType': year_type, 'year': year})} %}
+{% include 'snippets/csvToolbar.html.twig' with vars %}
+    
+<div class="row">
+    <div class="col-xs-12">
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th class="success" aria-label="{{year}} records" rowspan="2"><span class="lead">{{ year }}</span></th>
+                    <th class="text-center" colspan="2">100-200</th>
+                    <th class="text-center" colspan="2">300-400</th>
+                    <th class="text-center" colspan="2">Graduate</th>
+                    <th class="text-center" colspan="2">High School</th>
+                    <th class="text-center" colspan="2">Other</th>
+                    <th class="text-center" colspan="2">Totals</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Sessions</th>
+                    <th class="text-center">Attendance</th>
+                    <th class="text-center">Sessions</th>
+                    <th class="text-center">Attendance</th>
+                    <th class="text-center">Sessions</th>
+                    <th class="text-center">Attendance</th>
+                    <th class="text-center">Sessions</th>
+                    <th class="text-center">Attendance</th>
+                    <th class="text-center">Sessions</th>
+                    <th class="text-center">Attendance</th>
+                    <th class="text-center">Sessions</th>
+                    <th class="text-center">Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for month, values in entities %}
+                {# Variables for totaling sessions and attendance for the current month only #}
+                {% set monthSessionsTotal = 0 %}
+                {% set monthAttendanceTotal = 0 %}
+                {% set cellBackground = '' %}
+                <tr>
+                    <th>{{ month }}</th>
+                    {% for key, value in values %}
+                        {# Conditional statement to tally total sessions and attendance by level #}
+                        {% if key == '100-200' %}
+                            {% set undergrad100SessionsTotal = undergrad100SessionsTotal + value.sessions %}
+                            {% set undergrad100AttendanceTotal = undergrad100AttendanceTotal + value.attendance %}
+                            {% set cellBackground = '' %}
+                        {% elseif key == '300-400' %}
+                            {% set undergrad300SessionsTotal = undergrad300SessionsTotal + value.sessions %}
+                            {% set undergrad300AttendanceTotal = undergrad300AttendanceTotal + value.attendance %}
+                            {% set cellBackground = 'warning' %}
+                        {% elseif key == 'Graduate' %}
+                            {% set gradSessionsTotal = gradSessionsTotal + value.sessions %}
+                            {% set gradAttendanceTotal = gradAttendanceTotal + value.attendance %}
+                            {% set cellBackground = '' %}
+                        {% elseif key == 'High School' %}
+                            {% set highSchoolSessionsTotal = highSchoolSessionsTotal + value.sessions %}
+                            {% set highSchoolAttendanceTotal = highSchoolAttendanceTotal + value.attendance %}
+                            {% set cellBackground = 'warning' %}
+                        {% elseif key == 'Other' %}
+                            {% set otherSessionsTotal = otherSessionsTotal + value.sessions %}
+                            {% set otherAttendanceTotal = otherAttendanceTotal + value.attendance %} 
+                            {% set cellBackground = '' %}
+                        {% endif %}
+
+                        {% set yearSessionsTotal = yearSessionsTotal + value.sessions %}
+                        {% set monthSessionsTotal = monthSessionsTotal + value.sessions %}
+                        {% set yearAttendanceTotal = yearAttendanceTotal + value.attendance %}
+                        {% set monthAttendanceTotal = monthAttendanceTotal + value.attendance %}
+
+                        {# fill in the session and attendance numbers #}
+                        <td class="text-right {{ cellBackground }}">{{ value.sessions }}</td>
+                        <td class="text-right {{ cellBackground }}">{{ value.attendance }}</td>  
+                    {% endfor %}
+                        <td class="text-right danger">{{ monthSessionsTotal }}</td>
+                        <td class="text-right danger">{{ monthAttendanceTotal }}</td>
+                </tr>
+                {% if loop.index == changeYearAfter %}
+                    <tr>
+                        <th class="success" aria-label="{{ year + 1 }} records" rowspan="2"><span class="lead">{{ year + 1 }}</span></th>
+                        <th class="text-center" colspan="2">100-200</th>
+                        <th class="text-center" colspan="2">300-400</th>
+                        <th class="text-center" colspan="2">Graduate</th>
+                        <th class="text-center" colspan="2">High School</th>
+                        <th class="text-center" colspan="2">Other</th>
+                        <th class="text-center" colspan="2">Totals</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Sessions</th>
+                        <th class="text-center">Attendance</th>
+                        <th class="text-center">Sessions</th>
+                        <th class="text-center">Attendance</th>
+                        <th class="text-center">Sessions</th>
+                        <th class="text-center">Attendance</th>
+                        <th class="text-center">Sessions</th>
+                        <th class="text-center">Attendance</th>
+                        <th class="text-center">Sessions</th>
+                        <th class="text-center">Attendance</th>
+                        <th class="text-center">Sessions</th>
+                        <th class="text-center">Attendance</th>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+                <tr class="info">
+                    <th class="text-right">TOTALS:</th>
+                    <td class="text-right"><strong>{{ undergrad100SessionsTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ undergrad100AttendanceTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ undergrad300SessionsTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ undergrad300AttendanceTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ gradSessionsTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ gradAttendanceTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ highSchoolSessionsTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ highSchoolAttendanceTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ otherSessionsTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ otherAttendanceTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ yearSessionsTotal }}</strong></td>
+                    <td class="text-right"><strong>{{ yearAttendanceTotal }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block documentReady %} 
+    initializeTablesort();
+
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    function initializeTablesort(){
+        $('#jquerySortable_1').tablesorter({
+            headers: {
+                5: {
+                    sorter: false
+                },
+                6: {
+                    sorter: false
+                }
+            }
+        });
+    }
+
+    {{ parent() }}
+{% endblock %}
