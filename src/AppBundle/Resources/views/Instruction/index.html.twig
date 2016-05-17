@@ -105,7 +105,7 @@
                                     <h4 class="list-group-item-heading">Yearly Group Instruction Reports</h4>
                                     <div class="well well-lg">
                                         <div class="row">
-                                            {{ form_start(yearly_report_form, {'method': 'POST', 'action': path('generate_yearly_group_instruction') }) }}
+                                            {{ form_start(yearly_report_form) }}
                                             <div class="col-xs-12 col-sm-5">
                                                 {{ form_row(yearly_report_form.yearType) }}
                                             </div>

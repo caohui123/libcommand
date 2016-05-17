@@ -314,6 +314,8 @@ class GroupInstructionController extends Controller
         
         //NOTE: specifiy action (route) and method (GET) in twig template wherever this form is called
         $form = $this->createFormBuilder()
+                ->setMethod('POST')
+                ->setAction($this->generateUrl('groupinstruction_yearly_view'))
                 ->add('yearType', 'choice', array(
                     'label' => 'Type',
                     'choices' => array(
@@ -344,7 +346,7 @@ class GroupInstructionController extends Controller
      * This report includes totals by month and instruction level as well as 
      * instruction counts by staff member over that time period.
      *
-     * @Route("/reports/yearly", name="generate_yearly_group_instruction")
+     * @Route("/reports/yearly/view", name="groupinstruction_yearly_view")
      * @Method("POST")
      * @Template("AppBundle:GroupInstruction:yearly.html.twig")
      */
@@ -352,12 +354,30 @@ class GroupInstructionController extends Controller
         $requestData = $request->request->all();
         $yearType = $requestData['form']['yearType'];
         $year = (int) $requestData['form']['year'];
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $staff = $em->getRepository('AppBundle:Staff')->findBy(array(), array('lastName' => 'ASC'));
+        
+        $staffTotals_arr = array();
+        if(!$staff){
+            $staffTotals_arr[] = 'No staff members found.';
+        } else {
+            $instruction_service = $this->get('instruction_service');
+            foreach($staff as $st){
+                $staffSessions = (int) $instruction_service->getStaffGroupInstructionTotalsByYear($yearType, $year, $st);
+                if($staffSessions > 0){
+                    $staffTotals_arr[strtoupper($st->getLastName()) . ' ' . $st->getFirstName()] = $staffSessions;
+                }
+            }
+        }
 
         return array(
             'entities' => $this->__getYearlySessionAndAttendanceCounts($yearType, $year),
             'yearly_form' => $this->createYearlyReportGeneratorForm()->createView(),
             'year_type' => $yearType,
             'year' => $year,
+            'staff_totals' => $staffTotals_arr,
         );
     }
     
@@ -375,6 +395,23 @@ class GroupInstructionController extends Controller
         $yearType = $requestData['yearType'];
         $year = (int) $requestData['year'];
         
+        $em = $this->getDoctrine()->getManager();
+        
+        $staff = $em->getRepository('AppBundle:Staff')->findBy(array(), array('lastName' => 'ASC'));
+        
+        $staffTotals_arr = array();
+        if(!$staff){
+            $staffTotals_arr[] = 'No staff members found.';
+        } else {
+            $instruction_service = $this->get('instruction_service');
+            foreach($staff as $st){
+                $staffSessions = (int) $instruction_service->getStaffGroupInstructionTotalsByYear($yearType, $year, $st);
+                if($staffSessions > 0){
+                    $staffTotals_arr[strtoupper($st->getLastName()) . ' ' . $st->getFirstName()] = $staffSessions;
+                }
+            }
+        }
+        
         $totals = $this->__getYearlySessionAndAttendanceCounts($yearType, $year);
         
         $filename = "instruction_totals_".date("Y_m_d_His").".csv"; 
@@ -383,6 +420,7 @@ class GroupInstructionController extends Controller
                 'totals' => $totals, 
                 'year_type' => $yearType,
                 'year' => $year,
+                'staff_totals' => $staffTotals_arr,
             )); 
 
         $response->setStatusCode(200);
@@ -409,12 +447,30 @@ class GroupInstructionController extends Controller
         $yearType = $requestData['yearType'];
         $year = (int) $requestData['year'];
         
+        $em = $this->getDoctrine()->getManager();
+        
+        $staff = $em->getRepository('AppBundle:Staff')->findBy(array(), array('lastName' => 'ASC'));
+        
+        $staffTotals_arr = array();
+        if(!$staff){
+            $staffTotals_arr[] = 'No staff members found.';
+        } else {
+            $instruction_service = $this->get('instruction_service');
+            foreach($staff as $st){
+                $staffSessions = (int) $instruction_service->getStaffGroupInstructionTotalsByYear($yearType, $year, $st);
+                if($staffSessions > 0){
+                    $staffTotals_arr[strtoupper($st->getLastName()) . ' ' . $st->getFirstName()] = $staffSessions;
+                }
+            }
+        }
+        
         $totals = $this->__getYearlySessionAndAttendanceCounts($yearType, $year);
         
         return array(
             'entities' => $totals, 
             'year_type' => $yearType,
             'year' => $year,
+            'staff_totals' => $staffTotals_arr,
         );
     }
     

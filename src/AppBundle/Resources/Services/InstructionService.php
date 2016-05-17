@@ -327,6 +327,12 @@ class InstructionService{
                 ->setParameter('level', $level);
         }
         
+        if($staff != null){          
+            $query
+                ->andWhere('i.librarian = :librarian')
+                ->setParameter('librarian', $staff);
+        }
+        
         return $query->getQuery()->getSingleScalarResult();
     }
     
@@ -353,6 +359,53 @@ class InstructionService{
             $query
                 ->andWhere('i.level = :level')
                 ->setParameter('level', $level);
+        }
+        
+        if($staff != null){          
+            $query
+                ->andWhere('i.librarian = :librarian')
+                ->setParameter('librarian', $staff);
+        }
+        
+        $result = $query->getQuery()->getSingleScalarResult();
+        
+        $result ? $return = $result : $return = 0;
+        
+        return $return;
+    }
+    
+    /**
+     * Get group instruction totals for 12-month period for a specific staff member or all staff members
+     * 
+     * @param DateTime $startMonth The first month for which to gather instruction totals
+     * @param Staff $staff
+     */
+    public function getStaffGroupInstructionTotalsByYear($yearType, $year, Staff $staff = null){
+        
+        switch($yearType){
+            case 'academic':
+                $startDate = new \DateTime($year . "-09-01");
+                $endDate = new \DateTime(($year + 1) . "-08-31");
+                break;
+            case 'fiscal':
+                $startDate = new \DateTime($year . "-07-01");
+                $endDate = new \DateTime(($year + 1) . "-06-30");
+                break;
+        }
+
+        // Uses Symfony's QUERY BUILDER
+        $repo = $this->em->getRepository('AppBundle\Entity\GroupInstruction');
+        $query = $repo->createQueryBuilder('i')
+                    ->select('count(i.id)')
+                    ->where('i.instructionDate >= :startDate AND i.instructionDate < :endDate')
+                    ->setParameter('startDate', $startDate)
+                    ->setParameter('endDate', $endDate)
+                    ;
+        
+        if($staff != null){          
+            $query
+                ->andWhere('i.librarian = :librarian')
+                ->setParameter('librarian', $staff);
         }
         
         $result = $query->getQuery()->getSingleScalarResult();

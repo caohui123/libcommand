@@ -54,3 +54,10 @@ Group Instruction Session Totals for the {{ year_type|capitalize }} Year {{ year
     {% endfor %}
     ,TOTALS:, {{ undergrad100SessionsTotal }}, {{ undergrad100AttendanceTotal }}, {{ undergrad300SessionsTotal }}, {{ undergrad300AttendanceTotal }}, {{ gradSessionsTotal }}, {{ gradAttendanceTotal }}, {{ highSchoolSessionsTotal }}, {{ highSchoolAttendanceTotal }}, {{ otherSessionsTotal }}, {{ otherAttendanceTotal }}, {{ yearSessionsTotal }}, {{ yearAttendanceTotal }}
 {% endif %}
+
+Group Instruction Session Totals by Faculty (min. 1 session)
+
+,Staff,Sessions
+{% for name, sessions in staff_totals %}
+    ,{{ name|trim(',') }}, {{ sessions }}
+{% endfor %}
