@@ -7,6 +7,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\User;
 use AppBundle\Entity\LiaisonSubject;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Instruction
@@ -90,6 +92,7 @@ abstract class Instruction
      * @var string
      *
      * @ORM\Column(name="note", type="text", nullable=true)
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $note;
     
@@ -107,6 +110,7 @@ abstract class Instruction
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(referencedColumnName="id")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $createdBy;
 
@@ -115,6 +119,7 @@ abstract class Instruction
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $updated;
     
@@ -124,6 +129,7 @@ abstract class Instruction
      * @Gedmo\Blameable(on="update")
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(referencedColumnName="id")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $updatedBy;
     
@@ -133,6 +139,7 @@ abstract class Instruction
      * @Gedmo\Blameable(on="change", field={"course", "instructionDate", "startTime", "endTime", "level", "levelDescription", "note", "program"})
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(referencedColumnName="id")
+     * @Serializer\Exclude //exclude from API calls 
      */
     private $contentChangedBy;
 

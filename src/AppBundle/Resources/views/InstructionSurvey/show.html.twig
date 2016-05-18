@@ -1,0 +1,92 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>InstructionSurvey</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Studentfirstname</th>
+                <td>{{ entity.studentFirstName }}</td>
+            </tr>
+            <tr>
+                <th>Studentlastname</th>
+                <td>{{ entity.studentLastName }}</td>
+            </tr>
+            <tr>
+                <th>Studentemail</th>
+                <td>{{ entity.studentEmail }}</td>
+            </tr>
+            <tr>
+                <th>Questionlearnedsomething</th>
+                <td>{{ entity.questionLearnedSomething }}</td>
+            </tr>
+            <tr>
+                <th>Questionskillsimproved</th>
+                <td>{{ entity.questionSkillsImproved }}</td>
+            </tr>
+            <tr>
+                <th>Questionrelevantsession</th>
+                <td>{{ entity.questionRelevantSession }}</td>
+            </tr>
+            <tr>
+                <th>Questionknowledgablespeaker</th>
+                <td>{{ entity.questionKnowledgableSpeaker }}</td>
+            </tr>
+            <tr>
+                <th>Questionclearlyexplained</th>
+                <td>{{ entity.questionClearlyExplained }}</td>
+            </tr>
+            <tr>
+                <th>Questionisfirstsession</th>
+                <td>{{ entity.questionIsFirstSession }}</td>
+            </tr>
+            <tr>
+                <th>Questiondiduseesearch</th>
+                <td>{{ entity.questionDidUseEsearch }}</td>
+            </tr>
+            <tr>
+                <th>Questionesearchrelevant</th>
+                <td>{{ entity.questionEsearchRelevant }}</td>
+            </tr>
+            <tr>
+                <th>Questionmostimportantthinglearned</th>
+                <td>{{ entity.questionMostImportantThingLearned }}</td>
+            </tr>
+            <tr>
+                <th>Questionotherquestions</th>
+                <td>{{ entity.questionOtherQuestions }}</td>
+            </tr>
+            <tr>
+                <th>Othersuggestions</th>
+                <td>{{ entity.otherSuggestions }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('instruction_survey') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('instruction_survey_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

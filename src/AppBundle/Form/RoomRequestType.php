@@ -63,41 +63,6 @@ class RoomRequestType extends AbstractType
                 $form->add('facultyPhone');
                 $form->add('facultyEmail');
                 $form->add('otherDetails');
-                /*
-                $form->add('room', 'entity', array(
-                    'class' => 'AppBundle:RoomRequestRoom',
-                    'multiple' => false,
-                    'expanded' => true,
-                ));
-                $form->add('fixedEquipment', 'entity', array(
-                    'class' => 'AppBundle:RoomRequestEquipment',
-                    'multiple' => true,
-                    'expanded' => true,
-                    'query_builder'=>function(EntityRepository $er){
-                        $qb = $er->createQueryBuilder('re');
-                        $qb
-                          ->where('re.isMobile = 0')
-                          ->orderBy('re.name', 'ASC')
-                          ->getQuery();
-                        return $qb;
-                    },
-                    'mapped' => false, //fixed and mobile equipment will be added to equipment array on save
-                ));
-                $form->add('mobileEquipment', 'entity', array(
-                    'class' => 'AppBundle:RoomRequestEquipment',
-                    'multiple' => true,
-                    'expanded' => true,
-                    'query_builder'=>function(EntityRepository $er){
-                        $qb = $er->createQueryBuilder('re');
-                        $qb
-                          ->where('re.isMobile = 1')
-                          ->orderBy('re.name', 'ASC')
-                          ->getQuery();
-                        return $qb;
-                    },
-                    'mapped' => false, //fixed and mobile equipment will be added to equipment array on save
-                ));
-                 */
                 $form->add('isTrainingNeeded');
                 $form->add('room', 'entity', array(
                     'class' => 'AppBundle:RoomRequestRoom',

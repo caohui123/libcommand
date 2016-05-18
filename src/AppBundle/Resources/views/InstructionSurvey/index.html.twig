@@ -1,0 +1,35 @@
+{# This index file is a bit different from others in that it shows a list of 
+   InstructionSurvey entities BASED ON an Instruction entity passed in the 
+   controller method showSurveysForInstructionAction() #}
+{% extends '::base.html.twig' %}
+{% block title %}Instruction Session Surveys{% endblock %}
+{% block body -%}
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Surveys for Instruction Session #' ~ session_id, 'newbutton' : false } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <p>
+                <a class="btn btn-sm btn-primary" href="{{ path('instruction') }}" aria-label="Back to List"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                <a class="btn btn-sm btn-info pull-right" target="_blank" href="{{ instructionSurveyUrl ~ session_id }}">Public Survey Link</a>
+            </p>    
+        </div>
+    </div>
+    
+    {% if entities|length == 0 %}
+        <div class="alert alert-warning">
+            {# instructionSurveyUrl set as a twig parameter in config.yml file #}
+            <p>There are no surveys associated with this instruction session.</p>
+        </div>
+    {% else %}
+        {% for entity in entities %}
+            {{ entity.id }}
+        {% endfor %}
+    {% endif %}
+    
+{% endblock %}
+{% block documentReady %} 
+    
+    {{ parent() }}
+{% endblock %}

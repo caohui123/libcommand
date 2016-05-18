@@ -54,6 +54,11 @@ instruction:
     resource: AppBundle\Controller\InstructionRestController
     prefix: /internalapi/
     
+instruction_survey:
+    type: rest
+    resource: AppBundle\Controller\InstructionSurveyRestController
+    prefix: /api/
+    
 materialpurchaserequest:
     type: rest
     resource: AppBundle\Controller\MaterialPurchaseRequestRestController
