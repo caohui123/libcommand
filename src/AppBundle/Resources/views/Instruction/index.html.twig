@@ -37,7 +37,7 @@
                 <h2>Ledger</h2>
                 <p>This is a display of your most recent <mark>personal</mark> insturction sessions. 
                     To perform a filtered search of sessions by librarian, instruction type, or date range, use the "Search Instructions" feature in the toolbar above.</p>
-                <div id="instruction-container">
+                <div id="instruction-container" class="table-responsive">
                 {% include 'AppBundle:Instruction:results-ajax.html.twig' %}
                 </div>
             </section>
@@ -50,23 +50,27 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-6"> 
                         <article id="my-insturction-statistics">
-                            <h3>My Sessions</h3>
+                            <h3>My Sessions <span class="badge">{{individual_statistics.allMonths}}</span></h3>
                             <div class="list-group">
                                 <div class="list-group-item">
-                                    <h4 class="list-group-item-heading">Last 3 Months</h4>
-                                    <p class="list-group-item-text"><span class="lead">{{individual_statistics.last3Months}}</span> / {{individual_statistics.allMonths}}</p>
+                                    <h4 class="list-group-item-heading">Last 3 Months <span class="badge">{{individual_statistics.last3Months}}</h4>
+                                    <p class="list-group-item-text">
+                                        {# Sends a GET request to the path instruction_results. Put the parameters inside the 'instrsearch' key because that is the name of
+                                            the form as defined in AppBundle:Form:InstructionSearchType #}
+                                        <a href="{{ path('instruction_results', {'instrsearch': {'lastmonths': 3, 'librarian': app.user.staffMember.id} }) }}">See List</a>
+                                    </p>
                                 </div>
                                 <div class="list-group-item">
-                                    <h4 class="list-group-item-heading">Last 6 Months</h4>
-                                    <p class="list-group-item-text"><span class="lead">{{individual_statistics.last6Months}}</span> / {{individual_statistics.allMonths}}</p>
+                                    <h4 class="list-group-item-heading">Last 6 Months <span class="badge">{{individual_statistics.last6Months}}</span></h4>
+                                    <p class="list-group-item-text"><a href="{{ path('instruction_results', {'instrsearch': {'lastmonths': 6, 'librarian': app.user.staffMember.id} }) }}">See List</a></p>
                                 </div>
                                 <div class="list-group-item">
-                                    <h4 class="list-group-item-heading">Last 9 Months</h4>
-                                    <p class="list-group-item-text"><span class="lead">{{individual_statistics.last9Months}}</span> / {{individual_statistics.allMonths}}</p>
+                                    <h4 class="list-group-item-heading">Last 9 Months <span class="badge">{{individual_statistics.last9Months}}</h4>
+                                    <p class="list-group-item-text"><a href="{{ path('instruction_results', {'instrsearch': {'lastmonths': 9, 'librarian': app.user.staffMember.id} }) }}">See List</a></p>
                                 </div>
                                 <div class="list-group-item">
-                                    <h4 class="list-group-item-heading">Last 12 Months</h4>
-                                    <p class="list-group-item-text"><span class="lead">{{individual_statistics.last12Months}}</span> / {{individual_statistics.allMonths}}</p>
+                                    <h4 class="list-group-item-heading">Last 12 Months <span class="badge">{{individual_statistics.last12Months}}</h4>
+                                    <p class="list-group-item-text"><a href="{{ path('instruction_results', {'instrsearch': {'lastmonths': 12, 'librarian': app.user.staffMember.id} }) }}">See List</a></p>
                                 </div>
                                 <div class="list-group-item">
                                     <h4 class="list-group-item-heading">Most Recent Session</h4>
@@ -83,23 +87,23 @@
                     </div>
                     <div class="col-xs-12 col-sm-6">
                         <article id="all-insturction-statistics">
-                            <h3>Everybody Else</h3>
+                            <h3>Everybody Else <span class="badge">{{group_statistics.allMonths}}</span></h3>
                             <div class="list-group">
                                 <div class="list-group-item">
-                                    <h4 class="list-group-item-heading">Last 3 Months</h4>
-                                    <p class="list-group-item-text"><span class="lead">{{group_statistics.last3Months}}</span> / {{group_statistics.allMonths}}</p>
+                                    <h4 class="list-group-item-heading">Last 3 Months <span class="badge">{{group_statistics.last3Months}}</h4>
+                                    <p class="list-group-item-text"><a href="{{ path('instruction_results', {'instrsearch': {'lastmonths': 3} }) }}">See List</a></p>
                                 </div>
                                 <div class="list-group-item">
-                                    <h4 class="list-group-item-heading">Last 6 Months</h4>
-                                    <p class="list-group-item-text"><span class="lead">{{group_statistics.last6Months}}</span> / {{group_statistics.allMonths}}</p>
+                                    <h4 class="list-group-item-heading">Last 6 Months <span class="badge">{{group_statistics.last6Months}}</h4>
+                                    <p class="list-group-item-text"><a href="{{ path('instruction_results', {'instrsearch': {'lastmonths': 6} }) }}">See List</a></p>
                                 </div>
                                 <div class="list-group-item">
-                                    <h4 class="list-group-item-heading">Last 9 Months</h4>
-                                    <p class="list-group-item-text"><span class="lead">{{group_statistics.last9Months}}</span> / {{group_statistics.allMonths}}</p>
+                                    <h4 class="list-group-item-heading">Last 9 Months <span class="badge">{{group_statistics.last9Months}}</h4>
+                                    <p class="list-group-item-text"><a href="{{ path('instruction_results', {'instrsearch': {'lastmonths': 9} }) }}">See List</a></p>
                                 </div>
                                 <div class="list-group-item">
-                                    <h4 class="list-group-item-heading">Last 12 Months</h4>
-                                    <p class="list-group-item-text"><span class="lead">{{group_statistics.last12Months}}</span> / {{group_statistics.allMonths}}</p>
+                                    <h4 class="list-group-item-heading">Last 12 Months <span class="badge">{{group_statistics.last12Months}}</h4>
+                                    <p class="list-group-item-text"><a href="{{ path('instruction_results', {'instrsearch': {'lastmonths': 12} }) }}">See List</a></p>
                                 </div>
                                 <div class="list-group-item">
                                     <h4 class="list-group-item-heading">Yearly Group Instruction Reports</h4>
@@ -176,7 +180,7 @@
      */
     function getInstructionSessions(maxItems, filterType, pageNumber){
         ajaxObject = {
-            url: '{{ path('get_filterinstructions') }}',
+            url: '{{ path('get_personalfilterinstructions') }}',
             data: {
                 filter: filterType,
                 maxItems: maxItems,

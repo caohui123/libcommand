@@ -17,19 +17,82 @@
         </div>
     </div>
     
-    {% if entities|length == 0 %}
-        <div class="alert alert-warning">
-            {# instructionSurveyUrl set as a twig parameter in config.yml file #}
-            <p>There are no surveys associated with this instruction session.</p>
-        </div>
+    {% if pagination|length == 0 %}
+        {# instructionSurveyUrl set as a twig parameter in config.yml file #}
+        <p class="alert alert-warning"><span class="glyphicon glyphicon-info-sign"></span> There are no surveys associated with this instruction session.</p>
     {% else %}
-        {% for entity in entities %}
-            {{ entity.id }}
-        {% endfor %}
+        <div id="survey-container">
+            {% include 'AppBundle:InstructionSurvey:snippets/table.html.twig' %}
+        </div>
     {% endif %}
     
 {% endblock %}
 {% block documentReady %} 
+    initializeTablesort();
     
+    var sessionId = {{ session_id }};
+    
+    //refresh the page with the new number of records per page
+    $(document).on('change', '#paginationMaxResults', function(){
+        var maxItems = $('#paginationMaxResults').find(":selected").val();
+
+        getInstructionSurveys(sessionId, maxItems);
+    });
+    
+    //AJAX Pagination using KNP Pagination
+    $(document).on('click', 'ul.pagination a', function(e){
+        e.preventDefault();
+        
+        var href = $(this).attr('href')
+        var pattern = "page=";
+        var pageNumber = href.substr(href.indexOf(pattern) + pattern.length, href.length); //get the page number only (e.g. page=2 becomes 2)
+
+        var maxItems = $('#paginationMaxResults').find(":selected").val();
+        
+        getInstructionSurveys(sessionId, maxItems, pageNumber)
+    });
+    
+    /**
+     * Uses KNP Pagination via AJAX.
+     * Refreshes the section#survey-container
+     *
+     * @var int sessionId The instruction session id for which to fetch sessions.
+     * @var int maxItems  How many items to show per page?
+     * @var int pageNumber  The current pagination page (optional; will default to page 1 if no value passed)
+     */
+    function getInstructionSurveys(sessionId, maxItems, pageNumber){
+        ajaxObject = {
+            url: '{{ path('get_paginatedsurveys') }}',
+            data: {    
+                sessionId: sessionId,
+                maxItems: maxItems,
+                page: pageNumber,
+            },
+            type: 'GET',
+        };
+
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                $('#survey-container').html(data);
+                initializeTablesort();
+            })
+            .fail(function(data,status,xhr) {
+                console.log("Failed to load survey data!");
+            })
+            .always(function(data,status,xhr) {
+                console.log("DONE!");
+            });
+    }
+    
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    function initializeTablesort(){
+        $('#jquerySortable_1').tablesorter({
+            headers: {
+                3: {
+                    sorter: false
+                },
+            }
+        });
+    }
     {{ parent() }}
 {% endblock %}

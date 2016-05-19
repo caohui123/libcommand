@@ -184,22 +184,42 @@ class InstructionController extends Controller
      * @Template("AppBundle:Instruction:results-search.html.twig")
      */
     public function showSearchResultsAction(Request $request){
+
         $requestData = $request->query->all();
         
         isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+        isset($requestData['instrsearch']['instructionType']) ? $instructionType = $requestData['instrsearch']['instructionType'] : $instructionType = null; //instruction search type
+        isset($requestData['instrsearch']['filterCriteria']) ? $filterCriteria = $requestData['instrsearch']['filterCriteria'] : $filterCriteria = null; //instruction filter criteria
         
-        $searchForm = $this->createSearchInstructionForm($requestData['instrsearch']['instructionType'], $requestData['instrsearch']['filterCriteria']);
+        $searchForm = $this->createSearchInstructionForm($instructionType, $filterCriteria);
         $searchForm->handleRequest($request);
         
         if($searchForm->isValid()){
             $instructionService = $this->get('instruction_service');
             
-            $matchingEntities = $instructionService->getInstructionsByCriteria($searchForm->getData());
+            //Is the user searching records by the last n months?
+            if( isset($requestData['instrsearch']['lastmonths']) ){
+                $em = $this->getDoctrine()->getManager();
+                
+                $criteria = array();
+                
+                //Is the user searching for himself, or all librarians?
+                if( isset($requestData['instrsearch']['librarian']) ){
+                    $librarian = $em->getRepository('AppBundle:Staff')->find($requestData['instrsearch']['librarian']);
+                    $criteria['librarian'] = $librarian;
+                }
+                $criteria['lastmonths'] = $requestData['instrsearch']['lastmonths'];
+                
+                $matchingEntities = $instructionService->getInstructionsByCriteria($criteria);
+            } else {
+                //User is searching by other criteria
+                $matchingEntities = $instructionService->getInstructionsByCriteria($searchForm->getData());
+            }
             $paginator  = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
-                $matchingEntities, /* query NOT result */
-                $request->query->getInt('page', 1)/*page number*/,
-                $maxItems/*limit per page*/
+                $matchingEntities, 
+                $request->query->getInt('page', 1),
+                $maxItems
             );
             
             $entity_id_arr = array();

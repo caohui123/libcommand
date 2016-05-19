@@ -76,6 +76,37 @@ class InstructionSurveyRestController extends FOSRestController
         ), 400);
     }
     
+    /**
+     * For use internally at AppBundle:InsructionSurvey:snippets/table.html.twig.
+     * Fetches InstructionSurvey entities when a user updates the paginator via AJAX.
+     */
+    public function getPaginatedsurveysAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+
+        $requestData = $request->query->all();
+         
+        $entities = $em->getRepository('AppBundle:InstructionSurvey')->findBy(array('instruction' => $requestData['sessionId']), array('created' => 'DESC'));
+
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, 
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
+        
+        $templateData = array('pagination' => $pagination);
+        
+        $view = $this->view($entities, 200)
+                ->setTemplate("AppBundle:InstructionSurvey:snippets/table.html.twig")
+                ->setTemplateData($templateData)
+                ->setFormat('html')
+                ;
+        
+        return $this->handleView($view);
+    }
+    
     protected function getFormErrors(\Symfony\Component\Form\Form $form)
     {
         $errors = array();

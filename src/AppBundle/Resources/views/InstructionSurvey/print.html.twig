@@ -1,54 +1,37 @@
-{% extends '::base.html.twig' %}
-{% block title %}Instruction Session Survey #{{ entity.id }}{% endblock %}
-{% block body -%}
-    
-    {# Page Heading #}
-    {% set headingvars = {'headingcontent' : 'Instruction Session Survey #' ~ entity.id } %}
-    {% include 'snippets/pageHeading.html.twig' with headingvars %}
-    
-    {# Back button and print button #}
-    {% set toolbarvars = {'basepath' : path('instructionsurvey_list', {'instruction_id' : entity.instruction.id }), 'printpath' : path('instructionsurvey_print', { 'id': entity.id }) } %}
-    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
-    
+{% extends '::printbase.html.twig' %}
+{% block title %}Group Instruction Sessions{% endblock %}
+{% block body %}
+<h1>Instruction Session Survey #{{ entity.id }}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+
     {% set averageRating = (entity.questionLearnedSomething + entity.questionSkillsImproved + entity.questionKnowledgableSpeaker + entity.questionClearlyExplained)/4 %}
-    
-    <div class="row">
-        <div class="col-xs-12 col-sm-9 col-md-6">
-            <table class="table">
-                <caption>Instruction Session Information</caption>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Course</th>
-                        <th>Instructor</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ entity.instruction.instructionDate|date('n/j/y') }}</td>
-                        <td>{{ entity.instruction.startTime|date('g:i A') }} - {{ entity.instruction.endTime|date('g:i A') }}</td>
-                        <td>{{ entity.instruction.course }}</td>
-                        <td>{{ entity.instruction.instructor }}
-                            {% if entity.instruction.client is defined %}
-                                {{ entity.instruction.client }}
-                            {% else %}
-                                {{ entity.instruction.instructor }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if entity.instruction.client is defined %}
-                            <a class="badge" href="{{ path('individualinstruction_edit', { 'id': entity.instruction.id }) }}" aria-label="edit" title="Edit Record"><span class="glyphicon glyphicon-pencil"></span></a>
-                            {% else %}
-                            <a class="badge" href="{{ path('groupinstruction_edit', { 'id': entity.instruction.id }) }}" aria-label="edit" title="Edit Record"><span class="glyphicon glyphicon-pencil"></span></a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+
+    <table border="1" cellpadding="5">
+        <caption>Instruction Session Information</caption>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Course</th>
+                <th>Instructor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ entity.instruction.instructionDate|date('n/j/y') }}</td>
+                <td>{{ entity.instruction.startTime|date('g:i A') }} - {{ entity.instruction.endTime|date('g:i A') }}</td>
+                <td>{{ entity.instruction.course }}</td>
+                <td>{{ entity.instruction.instructor }}
+                    {% if entity.instruction.client is defined %}
+                        {{ entity.instruction.client }}
+                    {% else %}
+                        {{ entity.instruction.instructor }}
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+                <hr>      
     <section id="survey-results">
         <header>
             <h2>Survey Results</h2>
@@ -65,8 +48,8 @@
                 on {{ entity.created|date('n/j/y') }} at {{ entity.created|date('g:i A') }}.
             </p>
         </header>
-        <div class="table-responsive">
-            <table class="table">
+        <div>
+            <table border="1" cellpadding="5">
                 <caption>My Performance Rating</caption>
                 <thead>
                     <tr>
@@ -91,8 +74,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-9 col-md-6">
                 <ul class="list-group">
                     <li class="list-group-item">
                         <p>This was 
@@ -134,12 +115,6 @@
                         <p><strong>Comments and feedback:</strong> {{ entity.otherSuggestions }}</p>
                     </li>
                 </ul>
-            </div>
-        </div>
+            
     </section>
-    <div class="row">
-        <div class="col-xs-12">
-            {{ form(delete_form) }}
-        </div>
-    </div>
 {% endblock %}

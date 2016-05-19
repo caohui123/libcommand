@@ -17,6 +17,7 @@ security:
           remember_me:
               key:      "%secret%"
               lifetime: 86400 #1 Day 
+              path: /
     
     # Preserve plain text password in token for refresh the user.
     # Analyze the security considerations before turn off this setting.

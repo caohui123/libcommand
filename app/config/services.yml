@@ -26,15 +26,8 @@ services:
       tags:
         - { name: form.type, alias: permission_choice }
         
-    security.access.groupinstruction_voter:
-      class: AppBundle\Security\Authorization\Voter\GroupInstructionVoter
-      public: false
-      arguments: [@security.role_hierarchy]
-      tags: 
-        - {name: security.voter}
-        
-    security.access.individualinstruction_voter:
-      class: AppBundle\Security\Authorization\Voter\IndividualInstructionVoter
+    security.access.instruction_voter:
+      class: AppBundle\Security\Authorization\Voter\InstructionVoter
       public: false
       arguments: [@security.role_hierarchy]
       tags: 

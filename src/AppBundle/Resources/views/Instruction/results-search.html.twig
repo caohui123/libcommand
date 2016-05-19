@@ -37,7 +37,11 @@
     <div class="row">
         <div class="col-xs-12">
             <section id="instruction-container">
-                {% include 'AppBundle:Instruction:snippets/table.html.twig' %}
+                {% if pagination|length == 0 %}
+                    <p class="alert alert-warning"><span class="glyphicon glyphicon-info-sign"></span> There are no instruction sessions that match your criteria.</p>
+                {% else %}
+                    {% include 'AppBundle:Instruction:snippets/table.html.twig' %}
+                {% endif %}
             </section>
         </div>
     </div>

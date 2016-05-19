@@ -40,9 +40,15 @@
                             <a class="badge" href="{{ path('instructionsurvey_list', { 'instruction_id': entity.id }) }}" target="_blank" aria-label="surveys" title="Student Surveys"><span class="glyphicon glyphicon-stats"></span></a>
                             <a class="badge" href="{{ path('individualinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="surveys" title="Student Surveys"><span class="glyphicon glyphicon-print"></span></a>
                             {% else %}
-                            <a class="badge" href="{{ path('groupinstruction_edit', { 'id': entity.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a class="badge" href="{{ path('groupinstruction_edit', { 'id': entity.id }) }}" aria-label="edit" title="Edit Record"><span class="glyphicon glyphicon-pencil"></span></a>
                             <a class="badge" href="{{ path('instructionsurvey_list', { 'instruction_id': entity.id }) }}" target="_blank" aria-label="surveys" title="Student Surveys"><span class="glyphicon glyphicon-stats"></span></a>
                             <a class="badge" href="{{ path('groupinstruction_print', { 'id': entity.id }) }}" target="_blank" aria-label="print" title="Print Record"><span class="glyphicon glyphicon-print"></span></a>
+                            {% endif %}
+                        {% else %}
+                            {% if entity.client is defined %}
+                            <a class="badge" href="{{ path('individualinstruction_show', { 'id': entity.id }) }}" aria-label="edit" title="View Record"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            {% else %}
+                            <a class="badge" href="{{ path('groupinstruction_show', { 'id': entity.id }) }}" aria-label="edit" title="View Record"><span class="glyphicon glyphicon-eye-open"></span></a>
                             {% endif %}
                         {% endif %}
                     </td>

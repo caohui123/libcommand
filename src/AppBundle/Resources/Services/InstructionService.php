@@ -88,6 +88,11 @@ class InstructionService{
             $filters['level'] = ucfirst($rawFilters['level']);
         } 
         
+        //LAST n MONTHS
+        if(array_key_exists('lastmonths', $rawFilters)){              
+            $filters['lastmonths'] = 'Last '.$rawFilters['lastmonths'].' months';
+        } 
+        
         return $filters;
     }
     
@@ -239,9 +244,21 @@ class InstructionService{
                 $query .= "AND i.instructionDate <= :instructionEndDate ";
             }
         }
+        
+        //LAST n MONTHS
+        if( isset($criteria['lastmonths']) ){
+            $monthRange = (int) $criteria['lastmonths']; //beginning now, search instructions for the last n months
+            
+            $endDate = new \DateTime();
+            $startDate = new \DateTime();
+            $startDate->sub(new \DateInterval('P'.$monthRange.'M'));
+                    
+            $options['instructionStartDate'] = $startDate;
+            $options['instructionEndDate'] = $endDate;
+            $query .= "AND i.instructionDate >= :instructionStartDate AND i.instructionDate <= :instructionEndDate ";
+        }
 
         $query .= " ORDER BY i.instructionDate DESC";
-
         $qb = $this->em->createQuery($query)->setParameters($options);
         
         return $qb->getResult();

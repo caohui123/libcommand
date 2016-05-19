@@ -48,7 +48,7 @@ class InstructionSurveyController extends Controller
     private function createCreateForm(InstructionSurvey $entity)
     {
         $form = $this->createForm(new InstructionSurveyType(), $entity, array(
-            'action' => $this->generateUrl('instruction_survey_create'),
+            'action' => $this->generateUrl('instructionsurvey_create'),
             'method' => 'POST',
         ));
 
@@ -59,7 +59,7 @@ class InstructionSurveyController extends Controller
     /**
      * Finds and displays a InstructionSurvey entity.
      *
-     * @Route("/{id}", name="instruction_survey_show")
+     * @Route("/{id}", name="instructionsurvey_show")
      * @Method("GET")
      * @Template()
      */
@@ -90,12 +90,35 @@ class InstructionSurveyController extends Controller
      */
     public function showSurveysForInstructionAction($instruction_id)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        
+        if(null === $currentUser->getStaffMember()){
+            throw new NoAssociatedStaffException();
+        }
+                
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('AppBundle:InstructionSurvey')->findBy(array('instruction' => $instruction_id), array('created' => 'DESC'));
+      
+        // Get the creator of the instruction session to which these surveys belong
+        $instruction_session = $em->getRepository('AppBundle:Instruction')->find($instruction_id);
+        
+        if (!$instruction_session) {
+            throw $this->createNotFoundException('Unable to find Instruction entity.');
+        }
+        
+        // If the current user did not create the original instruction session to which these surveys belong, deny them access to this list
+        $this->denyAccessUnlessGranted('edit', $instruction_session, 'In order to view these surveys, you must be the person who created the instruction session to which these surveys belong.');
+        
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, 
+            1/*page number*/,
+            10/*limit per page*/
+        );
 
         return array(
-            'entities'      => $entities,
+            'pagination'    => $pagination,
             'session_id'    => $instruction_id,
         );
     }
@@ -104,7 +127,7 @@ class InstructionSurveyController extends Controller
     /**
      * Displays a form to edit an existing InstructionSurvey entity.
      *
-     * @Route("/{id}/edit", name="instruction_survey_edit")
+     * @Route("/{id}/edit", name="instructionsurvey_edit")
      * @Method("GET")
      * @Template()
      */
@@ -138,7 +161,7 @@ class InstructionSurveyController extends Controller
     private function createEditForm(InstructionSurvey $entity)
     {
         $form = $this->createForm(new InstructionSurveyType(), $entity, array(
-            'action' => $this->generateUrl('instruction_survey_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('instructionsurvey_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -149,7 +172,7 @@ class InstructionSurveyController extends Controller
     /**
      * Edits an existing InstructionSurvey entity.
      *
-     * @Route("/{id}", name="instruction_survey_update")
+     * @Route("/{id}", name="instructionsurvey_update")
      * @Method("PUT")
      * @Template("AppBundle:InstructionSurvey:edit.html.twig")
      */
@@ -170,7 +193,7 @@ class InstructionSurveyController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('instruction_survey_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('instructionsurvey_edit', array('id' => $id)));
         }
 
         return array(
@@ -182,7 +205,7 @@ class InstructionSurveyController extends Controller
     /**
      * Deletes a InstructionSurvey entity.
      *
-     * @Route("/{id}", name="instruction_survey_delete")
+     * @Route("/{id}", name="instructionsurvey_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -193,6 +216,9 @@ class InstructionSurveyController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('AppBundle:InstructionSurvey')->find($id);
+            
+            // Get the corresponding Instruction id of this entity to send the user back to the list of remaining surveys for this instruction session.
+            $instruction_session_id = $entity->getInstruction()->getId();
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find InstructionSurvey entity.');
@@ -202,7 +228,7 @@ class InstructionSurveyController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('instruction_survey'));
+        return $this->redirect($this->generateUrl('instructionsurvey_list', array('instruction_id' => $instruction_session_id)));
     }
 
     /**
@@ -215,10 +241,38 @@ class InstructionSurveyController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('instruction_survey_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('instructionsurvey_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array(
+                    'label' => 'Delete',
+                    'attr' => array(
+                        'class' => 'btn btn-sm btn-danger',
+                        'onclick' => 'return confirm("Are you sure you want to delete this survey?")'
+                        )
+                ))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Displays a printer-friendly InstructionSurvey entity.
+     *
+     * @Route("/{id}/print", name="instructionsurvey_print")
+     * @Method("GET")
+     * @Template()
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:InstructionSurvey')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find InstructionSurvey entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
     }
 }
