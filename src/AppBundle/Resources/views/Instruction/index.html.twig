@@ -1,14 +1,10 @@
 {% extends '::base.html.twig' %}
 {% block title %}My Instruction Sessions{% endblock %}
 {% block body -%}
-    <nav id="instruction-navigation" class="navbar">
-        <ul class="nav navbar-nav nav-pills">
-            <li role="presentation" class="active"><a href="{{ path('instruction') }}"><span class="glyphicon glyphicon-dashboard"></span> My Instruction Dashboard</a></li>
-            <li role="presentation"><a href="{{ path('groupinstruction') }}">My Group Sessions</a></li>
-            <li role="presentation"><a href="{{ path('individualinstruction') }}">My Individual Sessions</a></li>
-        </ul>
-        {% include 'AppBundle:Instruction:search.html.twig' %}
-    </nav>
+    
+    {# Instruction toolbar #}
+    {% set instructionvars = {'dashboard' : true } %}
+    {% include 'snippets/instructionDashboardToolbar.html.twig' with instructionvars %}
             
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : app.user.staffMember.firstName ~ ' ' ~ app.user.staffMember.lastName  ~ '\'s Instruction Sessions', 'newbutton' : false } %}
@@ -44,7 +40,7 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
             <section id="stats-data">
-                <h2>Statistics</h2>
+                <h2>Instruction Statistics</h2>
                 <p>This is an overview of the number of group and individual instruction sessions during different time frames. 
                     Note that these results do NOT include any sessions that you may have already logged which will occur in the future.</p>
                 <div class="row">
@@ -83,6 +79,20 @@
                                     </p>
                                 </div>
                             </div>
+                        </article>
+                        <article id="my-survey-statistics">
+                            <h3>My Survey Statistics</h3>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <h4>Total Surveys</h4>
+                                    <p class="text-center"><span class="lead">{{ survey_statistics['number_surveys'] }}</span></p>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <h4>Average Rating</h4>
+                                    <p class="text-center"><span class="lead">{{ survey_statistics['average_score'] }}</span> / 5</p>
+                                </div>
+                            </div>
+                            <p>To view surveys for an instruction session, click on the <span class="glyphicon glyphicon-stats"></span> icon in any instruction record row.</p>
                         </article>
                     </div>
                     <div class="col-xs-12 col-sm-6">

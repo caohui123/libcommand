@@ -70,6 +70,9 @@ class InstructionController extends Controller
         $group_statistics = $instructionService->generateStaffRecentInstructionStatistics();
         $most_recent_instruction = $instructionService->getMostRecentInsturction($currentStaffMember);
         
+        //Use the Instruction Service to get user's survey counts
+        $survey_statistics = $instructionService->getStaffInstructionSurveyTotalAndAverageScore($currentStaffMember);
+        
         return array(
             'pagination' => $pagination,
             'filter' => 'filter-all', //varable for ajax pagination purposes in the view
@@ -79,28 +82,7 @@ class InstructionController extends Controller
             'individual_statistics' => $individual_statistics,
             'group_statistics' => $group_statistics,
             'most_recent_instruction' => $most_recent_instruction,
-        );
-    }
-
-    /**
-     * Finds and displays a Instruction entity.
-     *
-     * @Route("/{id}", name="instruction_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AppBundle:Instruction')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Instruction entity.');
-        }
-
-        return array(
-            'entity'      => $entity,
+            'survey_statistics' => $survey_statistics,
         );
     }
     

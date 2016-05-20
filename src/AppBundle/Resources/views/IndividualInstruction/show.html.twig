@@ -1,12 +1,13 @@
 {% extends '::base.html.twig' %}
 {% block title %}Individual Instruction Sessions{% endblock %}
 {% block body %}
+    
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'Individual Instruction #' ~ entity.id } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
     
     {# Back button, edit and print buttons #}
-    {% set toolbarvars = {'basepath' : path('individualinstruction'), 'editpath' : path('individualinstruction_edit', { 'id': entity.id }), 'printpath' : path('individualinstruction_print', { 'id': entity.id }), 'editrole' : 'IS_AUTHENTICATED_FULLY' } %}
+    {% set toolbarvars = {'basepath' : path('instruction'), 'editpath' : path('individualinstruction_edit', { 'id': entity.id }), 'printpath' : path('individualinstruction_print', { 'id': entity.id }), 'editrole' : 'IS_AUTHENTICATED_FULLY' } %}
     {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
     
     <p class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Anybody can view an instruction session made by any user. However, unless you are the user who created this session, you will not be able to access additional editing features nor view any private notes related to this record.</p>

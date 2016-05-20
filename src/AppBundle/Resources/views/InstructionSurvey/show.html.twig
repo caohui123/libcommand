@@ -10,7 +10,7 @@
     {% set toolbarvars = {'basepath' : path('instructionsurvey_list', {'instruction_id' : entity.instruction.id }), 'printpath' : path('instructionsurvey_print', { 'id': entity.id }) } %}
     {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
     
-    {% set averageRating = (entity.questionLearnedSomething + entity.questionSkillsImproved + entity.questionKnowledgableSpeaker + entity.questionClearlyExplained)/4 %}
+    {% set averageRating = (entity.questionLearnedSomething + entity.questionSkillsImproved + entity.questionRelevantSession + entity.questionKnowledgableSpeaker + entity.questionClearlyExplained)/5 %}
     
     <div class="row">
         <div class="col-xs-12 col-sm-9 col-md-6">

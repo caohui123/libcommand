@@ -1,0 +1,6 @@
+<nav id="instruction-navigation" class="navbar">
+    <ul class="nav navbar-nav nav-pills">
+        <li role="presentation" class="{% if dashboard is defined and dashboard %}active{% endif %}"><a href="{{ path('instruction') }}"><span class="glyphicon glyphicon-dashboard"></span> My Instruction Dashboard</a></li>
+    </ul>
+    {% include 'AppBundle:Instruction:search.html.twig' %}
+</nav>

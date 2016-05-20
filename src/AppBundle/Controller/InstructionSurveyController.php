@@ -110,6 +110,10 @@ class InstructionSurveyController extends Controller
         // If the current user did not create the original instruction session to which these surveys belong, deny them access to this list
         $this->denyAccessUnlessGranted('edit', $instruction_session, 'In order to view these surveys, you must be the person who created the instruction session to which these surveys belong.');
         
+        //Get the aggregate rating for all surveys taken for the instruction session. 
+        $instructionService = $this->get('instruction_service');
+        $average_survey_rating = $instructionService->getAverageSurveyScoreBySession($instruction_session);
+        
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities, 
@@ -120,6 +124,7 @@ class InstructionSurveyController extends Controller
         return array(
             'pagination'    => $pagination,
             'session_id'    => $instruction_id,
+            'average_survey_rating' => $average_survey_rating,
         );
     }
     

@@ -22,9 +22,11 @@ class GroupInstructionController extends Controller
     /**
      * Lists all GroupInstruction entities.
      *
-     * @Route("/", name="groupinstruction")
-     * @Method("GET")
-     * @Template()
+     * //@Route("/", name="groupinstruction")
+     * //@Method("GET")
+     * //@Template()
+     * 
+     * LEAVE THIS METHOD CLOSED... ALL GROUPINSTRUCTION ENTITIES VISIBLE UNDER INDEX ACTION OF PARENT "INSTRUCTION" INDEX ACTION
      */
     public function indexAction(Request $request)
     {

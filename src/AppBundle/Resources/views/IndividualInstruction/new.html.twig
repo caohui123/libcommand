@@ -1,12 +1,13 @@
 {% extends '::base.html.twig' %}
 {% block title %}Individual Instruction Sessions{% endblock %}
 {% block body -%}
+    
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'New Individual Instruction' } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
     
     {# Back button #}
-    {% set vars = {'basepath' : path('individualinstruction')} %}
+    {% set vars = {'basepath' : path('instruction')} %}
     {% include 'snippets/newToolbar.html.twig' with vars %}
 
     <blockquote>

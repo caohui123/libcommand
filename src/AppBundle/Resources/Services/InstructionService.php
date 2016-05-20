@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use AppBundle\Entity\Staff;
+use AppBundle\Entity\Instruction;
 
 class InstructionService{
   
@@ -464,6 +465,102 @@ class InstructionService{
         }
         
         return $years_arr;
+    }
+    
+    /**
+     * Average rating of all instruction sessions by a staff member.
+     * Uses 1-5 ratings of questions within the InstructionSurvey entity.
+     * 
+     * @param Staff $staff
+     * 
+     * @return array An array containing the number of surveys and the average rating.
+     */
+    public function getStaffInstructionSurveyTotalAndAverageScore(Staff $staff){
+        $total_arr = array();
+        
+        $total_sessions_with_surveys = 0;
+        $total_surveys = 0;
+        $survey_points = 0;
+        
+        $instruction_sessions = $this->__getInstructionsByStaff($staff);
+        
+        if(!$instruction_sessions){
+            $total_arr['number_surveys'] = 0;
+            $total_arr['average'] = 0;
+        
+            return $total_arr;
+        }
+        foreach($instruction_sessions as $session){
+            $this_session_surveys = count($this->__getSurveysBySession($session));
+            $total_surveys += $this_session_surveys;
+            
+            if($this_session_surveys > 0){
+                $total_sessions_with_surveys++;
+            }
+            $survey_points += $this->getAverageSurveyScoreBySession($session);
+        }
+        
+        $average = $survey_points / $total_sessions_with_surveys;
+        $total_arr['number_surveys'] = $total_surveys;
+        $total_arr['average_score'] = number_format($average, 2);
+        
+        return $total_arr;
+    }
+    
+    /**
+     * Get an average of all survey scores for an Instruction session
+     * 
+     * @param Instruction $session
+     * @return float $average
+     */
+    public function getAverageSurveyScoreBySession(Instruction $session){
+        $total_surveys = 0;
+        $survey_points = 0;
+        
+        //fetch any related surveys
+        $session_surveys = $this->__getSurveysBySession($session);
+
+        if(!$session_surveys){
+            return 0;
+        }
+        
+        foreach($session_surveys as $survey){
+            $total_surveys++;
+
+            $survey_points += (int) $survey->getQuestionLearnedSomething();
+            $survey_points += (int) $survey->getQuestionSkillsImproved();
+            $survey_points += (int) $survey->getQuestionRelevantSession();
+            $survey_points += (int) $survey->getQuestionKnowledgableSpeaker();
+            $survey_points += (int) $survey->getQuestionClearlyExplained();
+        }
+        
+        $average = ($survey_points / 5) / $total_surveys;
+        
+        return number_format($average, 2);
+    }
+    
+    /**
+     * Get all instruction sessions associated with a staff member
+     * 
+     * @param Staff $staff
+     * @return array An array of Instruciton entities (or empty)
+     */
+    private function __getInstructionsByStaff(Staff $staff){
+        $instruction_sessions = $this->em->getRepository('AppBundle\Entity\Instruction')->findBy(array('librarian' => $staff), array('instructionDate' => 'DESC') );
+        
+        return $instruction_sessions;
+    }
+    
+    /**
+     * Get all surveys associated with an Instruction entity
+     * 
+     * @param Instruction $instruction
+     * @return array An array of InstructionSurvey entities (or empty)
+     */
+    private function __getSurveysBySession(Instruction $instruction){
+        $instruction_surveys = $this->em->getRepository('AppBundle\Entity\InstructionSurvey')->findBy(array('instruction' => $instruction), array('created' => 'DESC') );
+        
+        return $instruction_surveys;
     }
     
     /**

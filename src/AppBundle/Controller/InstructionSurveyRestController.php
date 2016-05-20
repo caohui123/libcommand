@@ -96,7 +96,12 @@ class InstructionSurveyRestController extends FOSRestController
             $maxItems/*limit per page*/
         );
         
-        $templateData = array('pagination' => $pagination);
+        //Get the aggregate rating for all surveys taken for the instruction session. 
+        $instruction_session = $em->getRepository('AppBundle:Instruction')->find($requestData['sessionId']);
+        $instructionService = $this->get('instruction_service');
+        $average_survey_rating = $instructionService->getAverageSurveyScoreBySession($instruction_session);
+        
+        $templateData = array('pagination' => $pagination, 'average_survey_rating' => $average_survey_rating);
         
         $view = $this->view($entities, 200)
                 ->setTemplate("AppBundle:InstructionSurvey:snippets/table.html.twig")

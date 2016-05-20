@@ -1,12 +1,13 @@
 {% extends '::base.html.twig' %}
 {% block title %}Individual Instruction Sessions{% endblock %}
 {% block body -%}
+    
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'Edit Individual Instruction #' ~ entity.id } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
     
     {# Back button and print button #}
-    {% set toolbarvars = {'basepath' : path('individualinstruction'), 'printpath' : path('individualinstruction_print', { 'id': entity.id }) } %}
+    {% set toolbarvars = {'basepath' : path('instruction'), 'printpath' : path('individualinstruction_print', { 'id': entity.id }) } %}
     {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
 
     {{ form_start(edit_form) }}

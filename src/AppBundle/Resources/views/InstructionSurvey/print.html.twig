@@ -4,8 +4,8 @@
 <h1>Instruction Session Survey #{{ entity.id }}</h1>
 <button class="print-btn" onclick="window.print();">Print</button>
 
-    {% set averageRating = (entity.questionLearnedSomething + entity.questionSkillsImproved + entity.questionKnowledgableSpeaker + entity.questionClearlyExplained)/4 %}
-
+    {% set averageRating = (entity.questionLearnedSomething + entity.questionSkillsImproved + entity.questionRelevantSession + entity.questionKnowledgableSpeaker + entity.questionClearlyExplained)/5 %}
+                
     <table border="1" cellpadding="5">
         <caption>Instruction Session Information</caption>
         <thead>

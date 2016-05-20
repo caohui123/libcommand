@@ -22,9 +22,11 @@ class IndividualInstructionController extends Controller
     /**
      * Lists all IndividualInstruction entities.
      *
-     * @Route("/", name="individualinstruction")
-     * @Method("GET")
-     * @Template()
+     * //@Route("/", name="individualinstruction")
+     * //@Method("GET")
+     * //@Template()
+     * 
+     * LEAVE THIS METHOD CLOSED... ALL INDIVIDUALINSTRUCTION ENTITIES VISIBLE UNDER INDEX ACTION OF PARENT "INSTRUCTION" INDEX ACTION
      */
     public function indexAction(Request $request)
     {

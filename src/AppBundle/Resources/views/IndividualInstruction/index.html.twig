@@ -1,17 +1,18 @@
 {% extends '::base.html.twig' %}
 {% block title %}Individual Instruction Sessions{% endblock %}
 {% block body -%}
-    <nav id="instruction-navigation" class="collapse navbar-collapse">
+    {# <nav id="instruction-navigation" class="collapse navbar-collapse">
         <ul class="nav navbar-nav nav-pills">
             <li role="presentation"><a href="{{ path('instruction') }}"><span class="glyphicon glyphicon-dashboard"></span> My Instruction Dashboard</a></li>
             <li role="presentation"><a href="{{ path('groupinstruction') }}">My Group Sessions</a></li>
             <li role="presentation" class="active"><a href="{{ path('individualinstruction') }}">My Individual Sessions</a></li>
         </ul>
         <ul class="nav nav-pills navbar-right">
-            <li role="presentation"><a href="{# path('individualinstruction') #}"><span class="glyphicon glyphicon-search"></span> Search Sessions</a></li>
+            <li role="presentation"><a href="{{ path('individualinstruction') }}"><span class="glyphicon glyphicon-search"></span> Search Sessions</a></li>
         </ul>
     </nav>
-        
+    #}
+    
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'Individual Instruction Sessions', 'newbutton' : true, 'newpath' : path('individualinstruction_new'), 'newpathlabel' : 'New Individual Instruction' } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}

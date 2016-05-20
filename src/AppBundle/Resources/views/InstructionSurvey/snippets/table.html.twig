@@ -1,4 +1,4 @@
-<p><span class="badge">{{ pagination.getPaginationData.totalCount }}</span> Surveys</p>
+<p><span class="badge">{{ pagination.getPaginationData.totalCount }}</span> Surveys | <span class="badge">{{ average_survey_rating }}</span> Average Rating</p>
 <p>Page {{ pagination.getPaginationData.current }} of {{ pagination.getPaginationData.pageCount }}</p>
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
@@ -13,14 +13,14 @@
             </thead>
             <tbody>
             {% for entity in pagination %}
-                {% set averageRating = (entity.questionLearnedSomething + entity.questionSkillsImproved + entity.questionKnowledgableSpeaker + entity.questionClearlyExplained)/4 %}
+                {% set averageRating = (entity.questionLearnedSomething + entity.questionSkillsImproved + entity.questionRelevantSession + entity.questionKnowledgableSpeaker + entity.questionClearlyExplained)/5 %}
                 <tr>
                     <td>{{ entity.created|date('n/j/y') }}</td>
                     <td>{{ averageRating }}</td>
                     <td>{{ entity.studentFirstName }} {{ entity.studentLastName }}</td>
                     <td>
                         <a class="badge" href="{{ path('instructionsurvey_show', { 'id': entity.id }) }}" aria-label="edit" title="View Survey"><span class="glyphicon glyphicon-eye-open"></span></a>
-                        <a class="badge" href="{# path('instructionsurvey_print', { 'id': entity.id }) #}" target="_blank" aria-label="surveys" title="Print Surveys"><span class="glyphicon glyphicon-print"></span></a>
+                        <a class="badge" href="{{ path('instructionsurvey_print', { 'id': entity.id }) }}" target="_blank" aria-label="surveys" title="Print Surveys"><span class="glyphicon glyphicon-print"></span></a>
                     </td>
                 </tr>
             {% endfor %}
