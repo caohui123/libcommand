@@ -49,9 +49,9 @@ security:
       - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/register, role: ROLE_SUPER_ADMIN } #login through LDAP, should not need to register
       - { path: ^/admin, role: ROLE_ADMIN }
-      - { path: ^/groupinstruction, role: IS_AUTHENTICATED_FULLY }
-      - { path: ^/individualinstruction, role: IS_AUTHENTICATED_FULLY }
-      - { path: ^/instruction, role: IS_AUTHENTICATED_FULLY }
+      - { path: ^/groupinstruction, role: IS_AUTHENTICATED_REMEMBERED }
+      - { path: ^/individualinstruction, role: IS_AUTHENTICATED_REMEMBERED }
+      - { path: ^/instruction, role: IS_AUTHENTICATED_REMEMBERED }
       
     role_hierarchy:
         #General

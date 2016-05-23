@@ -42,6 +42,7 @@ $(document).ready(function(){
             });
     };    
 
+    
     /**
         * Toggle chevron on list groups such as admin/staffareas/
         * 
@@ -96,7 +97,7 @@ $(document).ready(function(){
      */
      function goBackToPreliminaryForm(){
         ajaxObject = {
-            url: 'internalapi/instructionpreliminaryform',
+            url: '/internalapi/instructionpreliminaryform',
             type: 'GET',
         };
 
@@ -121,7 +122,7 @@ $(document).ready(function(){
       */
      function loadSearchForm(form){
         ajaxObject = {
-            url: 'internalapi/instructionsearchform',
+            url: '/internalapi/instructionsearchform',
             data: form.serialize(),
             type: 'GET',
         };
@@ -163,6 +164,7 @@ $(document).ready(function(){
      
     //Add a custom parser for JQuery tablesorter to properly sort 12-hour time
     // add parser through the tablesorter addParser method 
+    // NOT FUNCTIONING AS OF 5/16/16
     $.tablesorter.addParser({ 
         // set a unique id 
         id: 'twelvehourtime', 

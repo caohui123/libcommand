@@ -10,6 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Staff;
 use AppBundle\Form\StaffType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use AppBundle\Entity\Image;
+use AppBundle\Form\ImageType;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -60,26 +62,25 @@ class StaffController extends Controller
      */
     public function createAction(Request $request)
     {
+        $requestData = $request->request->all();
+
         $entity = new Staff();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $files = $request->files->all();
-            $photo = $files['appbundle_staff']['photo'];
-            
-            // Generate a unique name for the file before saving it
-            $fileName = md5(uniqid()).'.'.$photo->guessExtension();
-            
-            // Move the photo to the directory where they are stored
-            $photosDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/profile';
-            $photo->move($photosDir, $fileName);
-            
-            // Update the 'photo' property to store the file name instead of its contents
-            $entity->setPhoto($fileName);
-
-            // persist the entity
             $em = $this->getDoctrine()->getManager();
+            
+            if(isset($requestData['profile_image'])){
+                //Just to be sure, check that the image (Image entity) exists
+                $image = $em->getRepository('AppBundle:Image')->find($requestData['profile_image']);
+          
+                if(!$image){
+                
+                }
+                $entity->setImage($image);
+            }
+            
             $em->persist($entity);
             $em->flush();
 
@@ -89,7 +90,6 @@ class StaffController extends Controller
             'entity' => $entity,
             'form'   => $form->createView(),
         );
-
     }
 
     /**
@@ -125,9 +125,13 @@ class StaffController extends Controller
         $entity = new Staff();
         $form   = $this->createCreateForm($entity);
 
+        $image = new Image();
+        $imageForm = $this->createImageForm($image);
+        
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'image_form' => $imageForm->createView(),
         );
     }
 
@@ -187,11 +191,15 @@ class StaffController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
         
+        $image = new Image();
+        $imageForm = $this->createImageForm($image);
+        
         return array(
             'entity'      => $entity,
             'ldap_user'   => $ldap_user,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'image_form'  => $imageForm->createView(),
         );
     }
 
@@ -223,6 +231,8 @@ class StaffController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $requestData = $request->request->all();
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Staff')->find($id);
@@ -231,54 +241,31 @@ class StaffController extends Controller
             throw $this->createNotFoundException('Unable to find Staff entity.');
         }
         
-        //staff photo directory
-        $photosDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/profile/';
-        $existingPhotoName = $entity->getPhoto();
-
+        $image = new Image();
+        $imageForm = $this->createImageForm($image);
             
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
+        
         if ($editForm->isValid()) {
-            $files = $request->files->all();
-            //check to see if there was an existing photo
-            if($existingPhotoName != ''){
-              $photoPath = $photosDir . $existingPhotoName;
-            } 
-            //if main submit button was clicked
-            if($editForm->get('submit')->isClicked()){
-
-              //check to see if there is a new photo
-              if($files['appbundle_staff']['photo'] != null){
-                //new photo? add it to the profile directory.
-                $photo = $files['appbundle_staff']['photo'];
-                $fileName = md5(uniqid()).'.'.$photo->getClientOriginalExtension();
-                $photo->move($photosDir, $fileName);
-                $entity->setPhoto($fileName);
-                
-                if(isset($photoPath) && file_exists($photoPath)){
-                  //now remove the old one
-                  $fs = new FileSystem();
-                  $fs->remove($photoPath);
-                }
-              }
-             
-              //if there is an existing photo but not a new one, retain the old file's name in the database
-              if($files['appbundle_staff']['photo'] == null && $existingPhotoName != ''){
-                $entity->setPhoto($existingPhotoName); //retain old photo name
-              }
-            } 
+            $requestData = $request->request->all();
             
-            //if delete photo submit button is clicked
-            if($editForm->has('deletePhotoSubmit') && $editForm->get('deletePhotoSubmit')->isClicked()){
-              if(isset($photoPath) && file_exists($photoPath)){
-                //remove the profile pic
-                $fs = new FileSystem();
-                $fs->remove($photoPath);
-                $entity->setShowPhoto(0);
-              }
+            if(isset($requestData['profile_image'])){
+                //Just to be sure, check that the image (Image entity) exists
+                $image = $em->getRepository('AppBundle:Image')->find($requestData['profile_image']);
+
+                if(!$image){
+
+                }
+                $entity->setImage($image);
             }
+
+            //if delete photo submit button is clicked
+            if($editForm->has('removeProfilePhotoSubmit') && $editForm->get('removeProfilePhotoSubmit')->isClicked()){
+                $entity->setImage(null);
+            }
+
              
             $em->persist($entity);
             $em->flush();
@@ -290,8 +277,55 @@ class StaffController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'image_form'  => $imageForm->createView(),
         );
     }
+    
+    /**
+    * Creates a form to create an Image entity.
+    *
+    * @param Image $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createImageForm(Image $entity)
+    {
+        $form = $this->createForm(new ImageType(), $entity, array(
+            'action' => $this->generateUrl('medialibrary_image_upload'),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'image_upload_form'
+            )
+        ));
+        $form->add('subdir', 'hidden', array(
+            'data' => 'profile'
+        ));
+        $form->add('newimage_ajax', 'submit', array('label' => 'Upload', 'attr' => array('class'=>'btn btn-sm btn-info')));
+
+        return $form;
+    }
+    
+    /**
+     * Displays a list of thumbnails of all images currently in the /uploads/profile directory.
+     *
+     * @Route("/image/thumbnails", name="staff_image_thumbnails")
+     * @Method("GET")
+     * @Template("AppBundle:Staff:thumbnails.html.twig")
+     */
+    public function imageThumbnailsAction(){
+        $em = $this->getDoctrine()->getManager();
+        
+        $entities = $em->getRepository('AppBundle:Image')->findBy(array('subdir' => 'profile'), array('created' => 'DESC'));
+        
+        if(!$entities){
+            throw $this->createNotFoundException('No Image entities found.');
+        }
+
+        return $this->render('AppBundle:Staff:thumbnails.html.twig', array(
+            'entities' => $entities
+        ));
+    }
+    
     /**
      * Deletes a Staff entity.
      *

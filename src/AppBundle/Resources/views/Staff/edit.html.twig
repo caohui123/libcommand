@@ -177,16 +177,37 @@
            <div class="panel panel-default">
                 <div class="panel-heading">Current Photo</div>
                 <div class="panel-body">
-                    {{ form_row(edit_form.photo) }}
-                    {{ form_row(edit_form.showPhoto) }}
-                    {% if edit_form.deletePhotoSubmit is defined %}
-                        <p><img src="{{ asset('uploads/profile/' ~ entity.photo) | imagine_filter('medium') }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/></p>
-                      {{ form_row(edit_form.deletePhotoSubmit) }}
+                    <div class="form-group">
+                        <label class="control-label">Current Profile Photo</label>
+                    {% if entity.image %}
+                        <p><img src="{{ asset('uploads/profile/' ~ entity.image.path) | imagine_filter('large') }}" alt="{{ entity.image.path }}" title="{{ entity.image.path }}"/></p>
+                        {{ form_row(edit_form.removeProfilePhotoSubmit) }}
+                    {% else %}
+                        <p class="alert alert-info">No profile image selected. Pick one below.</p>
                     {% endif %}
+                    </div>
+                    <div class="form-group" id="thumbnails-list-container">
+                        <label class="control-label">Other Profile Photos</label>
+                        <p>Click on the photo you wish to use. It will be set as the staff member's profile image when you update the form.</p>
+                        <p>Don't see the image you're looking for? Navigate to the <a href="#new-image-form-container">New Profile Image</a> form below to add one. Also be sure to use the scrolling arrows, which will appear if there are more images that aren't shown in the slider.</p>
+                        {{ render(controller("AppBundle:Staff:imageThumbnails")) }}
+                    </div>
+                    {{ form_end(edit_form) }}
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-12" id="new-image-message">
+                        </div>
+                    </div>
+                    <div id="new-image-form-container">
+                        <div class="well well-lg">
+                        <h2><span class="glyphicon glyphicon-camera text-info"></span> New Profile Image</h2>
+                        <p>For optimal display on the website, please make cover images <mark>800px wide by 916px tall</mark>. Also, images may not exceed <strong>8MB</strong> in size.</p>
+                        {{ form(image_form) }}
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-footer">
                     <p>
-                    {{ form_end(edit_form) }}
                     {% if is_granted("ROLE_STAFF_DELETE") %}
                     {{ form(delete_form) }}
                     {% endif %}
@@ -194,6 +215,51 @@
                 </div>
             </div>
       </div>
-      
     </div>
+{% endblock %}
+{% block documentReady %}
+    //process new image
+    $('#image_upload_form').submit(function(e){
+    
+        var formData = new FormData(this);
+        
+        ajaxObject = {
+            url: '{{ path('medialibrary_upload_ajax') }}',
+            type: 'POST',
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: formData
+        };
+
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+                    $('#new-image-form-container').hide();
+                    $('#new-image-message').html('<p class="alert alert-success">The image was successfully uploaded. You can now select it from the thumbnail list above.</p>');
+                    
+                    $.get("{{ path("staff_image_thumbnails") }}", function(data) {
+                        $("#thumbnails-list-container").html(data);
+                    });
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+                    $('#new-image-message').html('<p class="alert alert-danger">The image was not uploaded. Please ensure you are uploading a .JPG file not greater than 8MB in size.</p>');
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+            }); 
+            
+        return false;
+    });
+    
+    /* For some reason this is causing the profile_image field not to be send with the form (5/23/16)
+    // Uses the jQuery thumbnail scroller (http://manos.malihu.gr/jquery-thumbnail-scroller/)
+    $("#thumbnail_image_list_container").mThumbnailScroller({
+        axis: "x",
+        type: "click-thumb",
+        theme: "emulibrary"
+    });
+    */
+    {{ parent() }}
 {% endblock %}

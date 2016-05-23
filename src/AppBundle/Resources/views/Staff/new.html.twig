@@ -12,8 +12,80 @@
     
     <div class="row">
       <div class="col-xs-12">
-          <div class="well well-lg">{{ form(form) }}</div>
+          <div class="well well-lg">
+              {{ form_start(form) }}
+                <div class="form-group" id="thumbnails-list-container">
+                    <label class="control-label">Cover Images</label>
+                    <p>Click on the image you wish to use. It will be set as the cover image when you update the form.</p>
+                    <p>Don't see the image you're looking for? Navigate to the <a href="#new-image-form-container">New Image</a> form below to add one.</p>
+                    {{ render(controller("AppBundle:Staff:imageThumbnails")) }}
+                </div>
+                {{ form_row(form.showPhoto) }}
+                {{ form_row(form.submit) }}
+              {{ form_end(form) }}
+          </div>
       </div>
     </div>
-</ul>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8" id="new-image-message">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8" id="new-image-form-container">
+            <div class=" well well-lg">
+            <h2><span class="glyphicon glyphicon-camera text-info"></span> New Image</h2>
+            <p>For optimal display on the website, please make cover images <mark>800px wide by 916px tall</mark>. Also, images may not exceed <strong>8MB</strong> in size.</p>
+            {{ form(image_form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block documentReady %}
+    initializeThumbnailScroller();
+    
+    //process new image
+    $('#image_upload_form').submit(function(e){
+    
+        var formData = new FormData(this);
+        
+        ajaxObject = {
+            url: '{{ path('medialibrary_upload_ajax') }}',
+            type: 'POST',
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: formData
+        };
+
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                    console.log( status );
+                    $('#new-image-form-container').hide();
+                    $('#new-image-message').html('<p class="alert alert-success">The image was successfully uploaded. You can now select it from the thumbnail list above.</p>');
+                    
+                    $.get("{{ path("staff_image_thumbnails") }}", function(data) {
+                        $("#thumbnails-list-container").html(data);
+                        initializeThumbnailScroller();
+                    });
+            })
+            .fail(function(data,status,xhr) {
+                    console.log( status );
+                    $('#new-image-message').html('<p class="alert alert-danger">The image was not uploaded. Please ensure you are uploading a .JPG file not greater than 8MB in size.</p>');
+            })
+            .always(function(data,status,xhr) {
+                    console.log( status );
+            }); 
+            
+        return false;
+    });
+    
+    // Uses the jQuery thumbnail scroller (http://manos.malihu.gr/jquery-thumbnail-scroller/)
+    function initializeThumbnailScroller(){
+        $("#thumbnail_image_list_container").mThumbnailScroller({
+            axis: "x",
+            type: "click-thumb",
+            theme: "emulibrary"
+        });
+    }
+    {{ parent() }}
 {% endblock %}

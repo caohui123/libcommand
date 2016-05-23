@@ -82,7 +82,7 @@ class ImageController extends Controller implements DocumentControllerInterface
      * @Method("POST")
      * @Template("AppBundle:Image:new.html.twig")
      * 
-     * @Secure(roles="ROLE_MEDIALIBRARY_EDIT, ROLE_NEWS_EDIT")
+     * @Secure(roles="ROLE_MEDIALIBRARY_EDIT, ROLE_NEWS_EDIT, ROLE_STAFF_EDIT")
     */
     public function createAjaxAction(Request $request)
     {
@@ -91,7 +91,7 @@ class ImageController extends Controller implements DocumentControllerInterface
       
         if("image/jpeg" == $requestFiles['appbundle_image']['file']->getMimeType()){
             $entity = new Image();
-            $entity->setSubDir('news');
+            $entity->setSubDir($requestData['appbundle_image']['subdir']);
             $entity->setName($requestData['appbundle_image']['name']);
             $entity->setFile($requestFiles['appbundle_image']['file']);
 

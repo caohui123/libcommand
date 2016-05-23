@@ -154,7 +154,7 @@ class NewsController extends Controller
         $entities = $em->getRepository('AppBundle:Image')->findBy(array('subdir' => 'news'), array('created' => 'DESC'));
         
         if(!$entities){
-            throw $this->createNotFoundException('No News entities found.');
+            throw $this->createNotFoundException('No Image entities found.');
         }
 
         return $this->render('AppBundle:News:thumbnails.html.twig', array(
@@ -218,7 +218,7 @@ class NewsController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'image_form' => $imageForm->createView(),
+            'image_form'  => $imageForm->createView(),
         );
     }
     

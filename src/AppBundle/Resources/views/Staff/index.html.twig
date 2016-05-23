@@ -29,8 +29,8 @@
               {% for entity in pagination %}
                   <tr>
                       <td>
-                          {% if entity.photo %}
-                          <img src="{{ asset('uploads/profile/' ~ entity.photo) | imagine_filter('thumb') }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/>
+                          {% if entity.image %}
+                          <img src="{{ asset('uploads/profile/' ~ entity.image.path) | imagine_filter('thumb') }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/>
                           {% endif %}
                       </td>    
                       <td>

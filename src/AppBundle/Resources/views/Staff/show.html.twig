@@ -80,8 +80,8 @@
            <div class="panel panel-default">
                 <div class="panel-heading">Current Photo</div>
                 <div class="panel-body">
-                    {% if entity.photo != '' %}
-                        <img src="{{ asset('uploads/profile/' ~ entity.photo) }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/>
+                    {% if entity.image  %}
+                        <img src="{{ asset('uploads/profile/' ~ entity.image.path) | imagine_filter('large') }}" alt="A photo of {{ entity.firstName}} {{ entity.lastName }}" title="A photo of {{ entity.firstName}} {{ entity.lastName }}"/>
                     {% else %}
                         No photo uploaded
                     {% endif %}

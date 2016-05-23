@@ -42,6 +42,7 @@ $(document).ready(function(){
             });
     };    
 
+    
     /**
         * Toggle chevron on list groups such as admin/staffareas/
         * 

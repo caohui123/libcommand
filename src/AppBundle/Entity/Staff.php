@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
+use AppBundle\Entity\Document;
 
 /**
  * Staff
@@ -27,6 +28,24 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *    href = "expr('/api/department/' ~ object.getDepartment().getId())",
  *    embedded = "expr(object.getDepartment())",
  *    exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getDepartment() === null)")
+ * )
+ * @Hateoas\Relation(
+ *     "originalImage",
+ *     href = "expr('/uploads/profile/' ~ object.getImage().getPath())",
+ *     embedded = "expr(object.getImage())",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getImage() === null)")
+ * )
+ * @Hateoas\Relation(
+ *     "mediumImage",
+ *     href = "expr('/media/cache/medium/uploads/profile/' ~ object.getImage().getPath())",
+ *     embedded = "expr(object.getImage())",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getImage() === null)")
+ * )
+ * @Hateoas\Relation(
+ *     "thumbnailImage",
+ *     href = "expr('/media/cache/thumb/uploads/profile/' ~ object.getImage().getPath())",
+ *     embedded = "expr(object.getImage())",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getImage() === null)")
  * )
  */
 class Staff
@@ -185,9 +204,11 @@ class Staff
     private $favoriteWebsites;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Document", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Serializer\Exclude //exclude from API calls 
      */
-    private $photo;
+    private $image;
     
     /**
      * @ORM\ManyToOne(targetEntity="StaffArea", cascade={"persist"}, fetch="LAZY")
@@ -239,24 +260,8 @@ class Staff
      */
     private $contentChangedBy;
     
-    private $currentPhoto;
-    
     public function __construct() {
         $this->instructions = new ArrayCollection();
-    }
-    
-    /**
-     * Set currentPhoto
-     *
-     * @param string $currentPhoto
-     *
-     * @return Staff
-     */
-    public function setCurrentPhoto($currentPhoto)
-    {
-        $this->currentPhoto = $currentPhoto;
-
-        return $this;
     }
 
     /**
@@ -519,7 +524,7 @@ class Staff
     {
         return $this->jobDescription;
     }
-
+    
     /**
      * Set showPhoto
      *
@@ -542,6 +547,30 @@ class Staff
     public function getShowPhoto()
     {
         return $this->showPhoto;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \AppBundle\Entity\Document $image
+     *
+     * @return News
+     */
+    public function setImage(Document $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \AppBundle\Entity\Document
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     /**
@@ -734,30 +763,6 @@ class Staff
     public function getFavoriteWebsites()
     {
         return $this->favoriteWebsites;
-    }
-
-    /**
-     * Set photo
-     *
-     * @param string $photo
-     *
-     * @return Staff
-     */
-    public function setPhoto($photo)
-    {
-        $this->photo = $photo;
-
-        return $this;
-    }
-
-    /**
-     * Get photo
-     *
-     * @return string
-     */
-    public function getPhoto()
-    {
-        return $this->photo;
     }
 
     /**
