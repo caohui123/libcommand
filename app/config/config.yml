@@ -202,4 +202,8 @@ liip_imagine:
             quality: 100
             filters:
                 thumbnail: { size: [580, 270], mode: outbound }
+        web_headshot:
+            quality: 75
+            filters:
+                thumbnail: { size: [182, 250], mode: outbound }
               

@@ -42,6 +42,12 @@ use AppBundle\Entity\Document;
  *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getImage() === null)")
  * )
  * @Hateoas\Relation(
+ *     "headshotImage",
+ *     href = "expr('/media/cache/web_headshot/uploads/profile/' ~ object.getImage().getPath())",
+ *     embedded = "expr(object.getImage())",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getImage() === null)")
+ * )
+ * @Hateoas\Relation(
  *     "thumbnailImage",
  *     href = "expr('/media/cache/thumb/uploads/profile/' ~ object.getImage().getPath())",
  *     embedded = "expr(object.getImage())",

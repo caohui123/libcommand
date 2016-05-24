@@ -180,7 +180,7 @@
                     <div class="form-group">
                         <label class="control-label">Current Profile Photo</label>
                     {% if entity.image %}
-                        <p><img src="{{ asset('uploads/profile/' ~ entity.image.path) | imagine_filter('large') }}" alt="{{ entity.image.path }}" title="{{ entity.image.path }}"/></p>
+                        <p><img src="{{ asset('uploads/profile/' ~ entity.image.path) | imagine_filter('web_headshot') }}" alt="{{ entity.image.path }}" title="{{ entity.image.path }}"/></p>
                         {{ form_row(edit_form.removeProfilePhotoSubmit) }}
                     {% else %}
                         <p class="alert alert-info">No profile image selected. Pick one below.</p>
