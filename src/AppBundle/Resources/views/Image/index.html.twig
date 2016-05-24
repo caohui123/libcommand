@@ -19,6 +19,7 @@
                     <tr>
                         <th><span class="sr-only">Thumbnail</span></th>
                         <th>Image Title</th>
+                        <th>Category</th>
                         <th>Uploaded</th>
                         <th>Actions</th>
                     </tr>
@@ -28,6 +29,7 @@
                     <tr>
                         <td><img src="{{ asset('uploads/' ~ entity.subdir ~ '/' ~ entity.path) | imagine_filter('thumb') }}" alt="{{ entity.path }}" title="{{ entity.path }}"/></td>
                         <td>{{ entity.name }}</td>
+                        <td>{{ entity.subdir|capitalize }}</td>
                         <td>{{ entity.created|date('n/j/y') }}</td>
                         <td>
                             {% if is_granted('ROLE_MEDIALIBRARY_EDIT', entity) %}
@@ -52,7 +54,7 @@
             0: {
                 sorter: false
             },
-            3: {
+            4: {
                 sorter: false
             },
         }
