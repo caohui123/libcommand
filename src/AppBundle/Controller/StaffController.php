@@ -13,6 +13,8 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use AppBundle\Entity\Image;
 use AppBundle\Form\ImageType;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Staff controller.
@@ -36,6 +38,9 @@ class StaffController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('AppBundle:Staff')->findBy(array(), array('lastName'=>'ASC'));
+        
+        //Staff search form.
+        $staff_search = $this->createSearchForm();
 
         $requestData = $request->query->all();
         isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
@@ -48,7 +53,8 @@ class StaffController extends Controller
         );
 
         return array(
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'staff_search_form' => $staff_search->createView(),
         );
     }
     /**
@@ -403,5 +409,45 @@ class StaffController extends Controller
             'entity'      => $entity,
             'ldap_user'   => $ldap_user,
         );
+    }
+    
+    /**
+     * AJAX search Staff last name by a string.
+     *
+     * @Route("/search/autocomplete", name="staff_search")
+     * @Method("GET")
+     * 
+     * @Secure(roles="ROLE_STAFF_VIEW")
+     */
+    public function searchAction()
+    {   
+        $staff_service = $this->get('staff_service');
+        $matches = $staff_service->getAllStaffForAutocomplete();
+        
+        $response = new JsonResponse($matches, 200);
+        
+        return $response;
+    }
+    
+    /**
+     * Creates a form to search Staff entities by last name.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    public function createSearchForm()
+    {
+        return $this->createFormBuilder(null, array('attr'=> array('id' => 'staff_search')))
+            ->setMethod('GET')
+            ->add('name', 'text', array(
+                'label' => 'Search Staff by Name',
+                'attr'  => array(
+                        'class' => 'search_staff_input_box'
+                    )
+                )
+            )
+            ->getForm()
+        ;
     }
 }

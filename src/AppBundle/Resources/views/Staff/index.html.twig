@@ -5,7 +5,13 @@
     {# Page Heading #}
     {% set headingvars = {'headingcontent' : 'Libray Staff', 'newbutton' : true, 'newpath' : path('staff_new'), 'newpathlabel' : 'New Staff' } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
-    
+    <section id="staff-search-container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                {{ form(staff_search_form) }}
+            </div>
+        </div>
+    </section>
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Total Requests</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     <div class="row">
@@ -85,6 +91,9 @@
         
         window.location.href = url.replace('_item',item );
     });
+    
+    //Initiate the staff auto complete (jQueryUI feature; function in base.html.twig)
+    initStaffAutoComplete();
 {% endblock %}
     
     

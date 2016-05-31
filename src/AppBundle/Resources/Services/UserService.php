@@ -11,7 +11,6 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use FOS\UserBundle\Util\UserManipulator;
 
-//USE USERREPOSITORY.PHP INSTEAD!!!
 class UserService{
   
   protected $em;

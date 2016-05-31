@@ -51,6 +51,10 @@ services:
         class: AppBundle\Resources\Services\ImportExportService
         arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
         
+    staff_service:
+        class: AppBundle\Resources\Services\StaffService
+        arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
+        
     #This is the HoursRegularController
     hoursRegular_controller:
         class: AppBundle\Controller\HoursRegularController
@@ -86,5 +90,11 @@ services:
     #This is the GroupInstructionController
     groupinstruction_controller:
         class: AppBundle\Controller\GroupInstructionController
+        calls: 
+            - [ setContainer, [ @service_container ]]
+            
+    #This is the StaffController
+    staff_controller:
+        class: AppBundle\Controller\StaffController
         calls: 
             - [ setContainer, [ @service_container ]]

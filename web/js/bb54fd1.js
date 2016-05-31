@@ -53,17 +53,6 @@ $(document).ready(function(){
             }
        }
     });
-
-    function changeActivationStatus(userId){
-        $.post("{{ path('isactive') }}", {userId: userId})
-            .done(function(data){
-                console.log("Finished updating " + userId);
-            })
-            .fail(function(){
-                console.log("User could not be updated");
-            });
-    };    
-
     
     /**
         * Toggle chevron on list groups such as admin/staffareas/
@@ -201,6 +190,27 @@ $(document).ready(function(){
         // set type, either numeric or text 
         type: 'numeric' 
     });
+    
+       /**
+        * Set 'active' CSS class on current sidebar li
+        */
+       /*
+        var currentRoute = "{# app.request.get('_route') #}";
+        var $sidebarItems = $('.main-sidebar-nav-menu li');
+        $($sidebarItems).each(function(index){
+            var itemPaths = $("a", this).data("paths");
+            var currentItem = $(this);
+            if(typeof itemPaths !== undefined){
+                var pathsArr = itemPaths.split(",");
+                $.each(pathsArr, function(i, value){
+                    if(value == currentRoute){
+                        $(currentItem).addClass("active");
+                    }
+                });
+            }
+
+        });
+        */
 });
 
 

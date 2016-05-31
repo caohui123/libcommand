@@ -103,27 +103,39 @@
         
         <script>
           $(document).ready(function () {
-              /* Other gloabal JS included in AppBundle/Resources/public/js/custom.js */
-              /**
-                * Set 'active' CSS class on current sidebar li
-                */
-               /*
-                var currentRoute = "{# app.request.get('_route') #}";
-                var $sidebarItems = $('.main-sidebar-nav-menu li');
-                $($sidebarItems).each(function(index){
-                    var itemPaths = $("a", this).data("paths");
-                    var currentItem = $(this);
-                    if(typeof itemPaths !== undefined){
-                        var pathsArr = itemPaths.split(",");
-                        $.each(pathsArr, function(i, value){
-                            if(value == currentRoute){
-                                $(currentItem).addClass("active");
-                            }
-                        });
+                /* Other gloabal JS included in AppBundle/Resources/public/js/custom.js */
+                
+                /** DO NOT move these functions to custom.js as they utilize twig paths **/
+                    // (De)activate a user
+                    function changeActivationStatus(userId){
+                        $.post("{{ path('isactive') }}", {userId: userId})
+                            .done(function(data){
+                                console.log("Finished updating " + userId);
+                            })
+                            .fail(function(){
+                                console.log("User could not be updated");
+                            });
+                    };
+                    
+                    function initStaffAutoComplete(){
+                        $.get('{{ path('staff_search') }}')
+                            .done(function(data){
+                                $( ".search_staff_input_box" ).autocomplete({
+                                    source: data,
+                                    minLength: 2,
+                                    select: function( event, ui ) {
+                                        var staffid = '{{ path('staff_show', {'id': '__staffid'}) }}';
+                                        staffid = staffid.replace('__staffid', ui.item.id);
+                                      
+                                        window.location.href = staffid;
+                                    }
+                                });
+                            })
+                            .fail(function(){
+                                console.log("Staff search not executed.");
+                            });
                     }
-                   
-                });
-                */
+                    
               {% block documentReady %}{% endblock documentReady %}
                   
           });
