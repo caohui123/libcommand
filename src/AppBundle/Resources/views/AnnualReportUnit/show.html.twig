@@ -1,0 +1,31 @@
+{% extends '::base.html.twig' %}
+{% block title %}Annual Report Units{% endblock %}
+{% block body %}
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : entity.name ~ ' Unit'  } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('annualreportunit'), 'editpath' : path('annualreportunit_edit', { 'id': entity.id }), 'printpath' : path('annualreportunit_print', { 'id': entity.id }), 'editrole' : 'ROLE_ANNUALREPORT_EDIT' } %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                    {% if entity.isActive %}
+                        Active
+                    {% else %}
+                        Inactive
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

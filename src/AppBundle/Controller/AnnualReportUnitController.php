@@ -1,0 +1,329 @@
+<?php
+
+namespace AppBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use AppBundle\Entity\AnnualReportUnit;
+use AppBundle\Form\AnnualReportUnitType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * AnnualReportUnit controller.
+ *
+ * @Route("/annualreportunit")
+ */
+class AnnualReportUnitController extends Controller
+{
+
+    /**
+     * Lists all AnnualReportUnit entities.
+     *
+     * @Route("/", name="annualreportunit")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_VIEW")
+     */
+    public function indexAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('AppBundle:AnnualReportUnit')->findBy(array(), array('name' => 'ASC'));
+        
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
+
+        return array(
+            'pagination' => $pagination
+        );
+    }
+    /**
+     * Creates a new AnnualReportUnit entity.
+     *
+     * @Route("/", name="annualreportunit_create")
+     * @Method("POST")
+     * @Template("AppBundle:AnnualReportUnit:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new AnnualReportUnit();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $entity->setIsActive(1);
+            
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('annualreportunit_show', array('id' => $entity->getId())));
+        }
+
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+
+    /**
+     * Creates a form to create a AnnualReportUnit entity.
+     *
+     * @param AnnualReportUnit $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(AnnualReportUnit $entity)
+    {
+        $form = $this->createForm(new AnnualReportUnitType(), $entity, array(
+            'action' => $this->generateUrl('annualreportunit_create'),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-sm btn-success')));
+
+        return $form;
+    }
+
+    /**
+     * Displays a form to create a new AnnualReportUnit entity.
+     *
+     * @Route("/new", name="annualreportunit_new")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
+     */
+    public function newAction()
+    {
+        $entity = new AnnualReportUnit();
+        $form   = $this->createCreateForm($entity);
+
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+
+    /**
+     * Finds and displays a AnnualReportUnit entity.
+     *
+     * @Route("/{id}", name="annualreportunit_show")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_VIEW")
+     */
+    public function showAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:AnnualReportUnit')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entity'      => $entity,
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
+
+    /**
+     * Displays a form to edit an existing AnnualReportUnit entity.
+     *
+     * @Route("/{id}/edit", name="annualreportunit_edit")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
+     */
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:AnnualReportUnit')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
+
+    /**
+    * Creates a form to edit a AnnualReportUnit entity.
+    *
+    * @param AnnualReportUnit $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createEditForm(AnnualReportUnit $entity)
+    {
+        $form = $this->createForm(new AnnualReportUnitType(), $entity, array(
+            'action' => $this->generateUrl('annualreportunit_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+        $form->add('isActive', 'checkbox', array(
+            'label' => 'Active',
+            'required' => false, 
+            'attr' => array('class' => 'user-status-ckbx-noajax')
+        ));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-warning')));
+
+        return $form;
+    }
+    /**
+     * Edits an existing AnnualReportUnit entity.
+     *
+     * @Route("/{id}", name="annualreportunit_update")
+     * @Method("PUT")
+     * @Template("AppBundle:AnnualReportUnit:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:AnnualReportUnit')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('annualreportunit_edit', array('id' => $id)));
+        }
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
+    /**
+     * Deletes a AnnualReportUnit entity.
+     *
+     * @Route("/{id}", name="annualreportunit_delete")
+     * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_DELETE")
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $form = $this->createDeleteForm($id);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('AppBundle:AnnualReportUnit')->find($id);
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
+            }
+
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('annualreportunit'));
+    }
+
+    /**
+     * Creates a form to delete a AnnualReportUnit entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('annualreportunit_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array(
+                'label' => 'Delete Unit', 
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("WARNING! Deleting this Unit will also delete any associated annual reports. To avoid this, please change the unit\'s activation status to inactive.")'
+                    )))
+            ->getForm()
+        ;
+    }
+    
+    /**
+     * Displays a printer-friendly AnnualReportUnit entity.
+     *
+     * @Route("/{id}/print", name="annualreportunit_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:AnnualReportUnit')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
+    
+    /**
+     * Return the number of annual reports associated with this AnnualReportUnit.
+     *
+     * @Route("/reports/count/{id}", name="annualreportunit_countreports")
+     * @Method("GET")
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_VIEW")
+     */
+    public function countAnnualReportsAction($id){
+        $em = $this->getDoctrine()->getManager();
+        
+        $unit = $em->getRepository('AppBundle:AnnualReportUnit')->find($id);
+        if(!$unit){
+            throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
+        }
+        
+        $reports = $em->getRepository('AppBundle:AnnualReport')->findBy(array('unit' => $unit));
+        return new Response(count($reports), 200);
+    }
+}

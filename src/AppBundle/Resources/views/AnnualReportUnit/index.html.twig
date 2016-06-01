@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+{% block title %}Annual Report Units{% endblock %}
+{% block body -%}
+    
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="{# path('annualreport') #}"><span class="glyphicon glyphicon-list-alt"></span> Reports</a></li>
+        <li role="presentation" class="active"><a href="{{ path('annualreportunit') }}"><span class="glyphicon glyphicon-education"></span> Units</a></li>
+    </ul>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Annual Report Units', 'newbutton' : true, 'newpath' : path('annualreportunit_new'), 'newpathlabel' : 'New Unit' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    <p class="badge">{{ pagination.getPaginationData.totalCount }} Units</p>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-responsive table-striped records_list" id="jquerySortable_1">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Active?</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in pagination %}
+                    <tr>
+                        <td>{{ entity.name }}</td>
+                        <td>
+                            {% if entity.isActive %}
+                                <span class="label label-success">YES</span>
+                            {% else %}
+                                <span class="label label-danger">No</span
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if is_granted('ROLE_ANNUALREPORT_EDIT', entity) %}
+                                <a class="btn btn-sm btn-primary" type="button" href="{{ path('annualreportunit_edit', { 'id': entity.id }) }}" aria-label="list reports">
+                                    <span class="glyphicon glyphicon-list-alt"></span> 
+                                    <span class="badge">
+                                        {{ render(controller('AppBundle:AnnualReportUnit:countAnnualReports', { 'id': entity.id })) }}
+                                    </span>
+                                </a>
+                                <a class="badge" href="{{ path('annualreportunit_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                            {% elseif is_granted('ROLE_ANNUALREPORT_VIEW', entity) %}
+                                <a class="badge" href="{{ path('annualreportunit_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="badge" href="{{ path('annualreportunit_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+    {% include('AppBundle:Pagination:paginator.html.twig') %}
+    {% endblock %}

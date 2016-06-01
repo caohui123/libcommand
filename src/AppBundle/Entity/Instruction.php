@@ -448,9 +448,5 @@ abstract class Instruction
         
         return $this;
     }
-    
-    /**
-     * Get owner
-     */
 }
 

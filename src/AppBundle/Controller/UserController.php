@@ -318,6 +318,8 @@ class UserController extends Controller
         $service->updatePermissions($entity, $formData['roomrequest'], $formData['roomrequest_previous']);
         //MEDIA LIBRARY
         $service->updatePermissions($entity, $formData['medialibrary'], $formData['medialibrary_previous']);
+        //ANNUAL REPORTS
+        $service->updatePermissions($entity, $formData['annualreport'], $formData['annualreport_previous']);
         
         //redirect to the Edit screen for the given user
         return $this->redirect($this->generateUrl('user_edit', array('id' => $userId)));
@@ -366,6 +368,8 @@ class UserController extends Controller
         $roomrequest_permission = $service->generateViewEditDelete($user, 'ROLE_ROOMREQUEST');
         //MEDIA LIBRARY
         $medialibrary_permission = $service->generateViewEditDelete($user, 'ROLE_MEDIALIBRARY');
+        //ANNUAL REPORTS
+        $annualreport_permission = $service->generateViewEditDelete($user, 'ROLE_ANNUALREPORT');
         
         $data = array();
         $form = $this->get('form.factory')->createNamedBuilder('user_permission_form', 'form', $data, array(
@@ -623,6 +627,24 @@ class UserController extends Controller
             ->add('medialibrary_previous', 'hidden', array(
               //need to know the previous permission level so we can remove it and replace it with the new one.
               'data' => $medialibrary_permission
+            ))
+            //ANNUAL REPORTS
+            ->add('annualreport', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_ANNUALREPORT_VIEW'=> 'View',
+                'ROLE_ANNUALREPORT_EDIT'=> 'Edit',
+                'ROLE_ANNUALREPORT_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'label' => 'Annual Report Builder',
+              'data' => $annualreport_permission
+            ))
+            ->add('annualreport_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $annualreport_permission
             ))
             //user's ID (send along to createEditForm action)
             ->add('userId', 'hidden', array(
