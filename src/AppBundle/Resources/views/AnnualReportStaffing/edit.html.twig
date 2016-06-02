@@ -1,13 +1,13 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>AnnualReport edit</h1>
+    <h1>AnnualReportStaffing edit</h1>
 
     {{ form(edit_form) }}
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('annualreportunit_edit', {'id': entity.unit.id} ) }}">
+        <a href="{{ path('annualreportstaffing') }}">
             Back to the list
         </a>
     </li>

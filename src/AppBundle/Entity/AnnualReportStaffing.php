@@ -7,20 +7,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
-use AppBundle\Entity\AnnualReportUnit;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use AppBundle\Entity\AnnualReportStaffing;
+use AppBundle\Entity\AnnualReport;
 
 /**
- * AnnualReport
+ * AnnualReportStaffing
  *
  * @ORM\Table()
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity(fields={"year", "unit"}, message="A report for this year has already been created for this unit.")
  */
-class AnnualReport
+class AnnualReportStaffing
 {
     /**
      * @var integer
@@ -32,27 +27,26 @@ class AnnualReport
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="year", type="integer")
+     * @ORM\Column(name="employeeCount", type="decimal")
      */
-    private $year;
+    private $employeeCount;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AnnualReportUnit", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="unit_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @var boolean
+     *
+     * @ORM\Column(name="isFullTime", type="boolean")
      */
-    private $unit;
+    private $isFullTime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text")
+     */
+    private $note;
     
-    /**
-     * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
-     * @ORM\JoinTable(name="annualreports_staffingtenure",
-     *      joinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      )
-     */
-    private $staffingTenured;
-
     /**
      * @var \DateTime $created
      *
@@ -93,19 +87,14 @@ class AnnualReport
     /**
      * @var User $contentChangedBy
      *
-     * @Gedmo\Blameable(on="change", field={"year"})
+     * @Gedmo\Blameable(on="change", field={"employee", "isFullTime", "note"})
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(referencedColumnName="id")
      * @Serializer\Exclude //exclude from API calls 
      */
     private $contentChangedBy;
-    
-    public function __construct(AnnualReportUnit $unit, $year) {
-        $this->unit = $unit;
-        $this->year = $year;
-        $this->staffingTenured = new ArrayCollection();
-    }
-    
+
+
     /**
      * Get id
      *
@@ -117,87 +106,99 @@ class AnnualReport
     }
 
     /**
-     * Set year
+     * Set employeeCount
      *
-     * @param integer $year
+     * @param string $employeeCount
      *
-     * @return AnnualReport
+     * @return AnnualReportStaffing
      */
-    public function setYear($year)
+    public function setEmployeeCount($employeeCount)
     {
-        $this->year = $year;
+        $this->employeeCount = $employeeCount;
 
         return $this;
     }
 
     /**
-     * Get year
+     * Get employeeCount
      *
-     * @return integer
+     * @return string
      */
-    public function getYear()
+    public function getEmployeeCount()
     {
-        return $this->year;
+        return $this->employeeCount;
     }
 
     /**
-     * Set unit
+     * Set isFullTime
      *
-     * @param \AppBundle\Entity\AnnualReportUnit $unit
+     * @param boolean $isFullTime
      *
-     * @return AnnualReport
+     * @return AnnualReportStaffing
      */
-    public function setUnit(AnnualReportUnit $unit)
+    public function setIsFullTime($isFullTime)
     {
-        $this->unit = $unit;
+        $this->isFullTime = $isFullTime;
 
         return $this;
     }
 
     /**
-     * Get unit
+     * Get isFullTime
      *
-     * @return AppBundle\Entity\AnnualReportUnit
+     * @return boolean
      */
-    public function getUnit()
+    public function getIsFullTime()
     {
-        return $this->unit;
+        return $this->isFullTime;
+    }
+
+    /**
+     * Set note
+     *
+     * @param string $note
+     *
+     * @return AnnualReportStaffing
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
     }
     
     /**
-     * Add staffingTenured
+     * Set AnnualReport
      *
-     * @param AppBundle\Entity\AnnualReportStaffing  $staffing
-     * @return AnnualReport
+     * @param AppBundle\Entity\AnnualReport $annualReport
+     *
+     * @return AnnualReportStaffing
      */
-    public function addStaffingTenured(AnnualReportStaffing $staffing)
+    public function setAnnualReport(AnnualReport $annualReport)
     {
-        $this->staffingTenured->add($staffing);
+        $this->annualReport = $annualReport;
 
         return $this;
     }
 
     /**
-     * Remove staffingTenured
+     * Get AnnualReport
      *
-     * @param AppBundle\Entity\AnnualReportStaffing  $staffing
      * @return AnnualReport
      */
-    public function removeStaffingTenured(AnnualReportStaffing $staffing)
+    public function getAnnualReport()
     {
-        $this->staffingTenured->removeElement($staffing);
-        
-        return $this;
-    }
-    
-    /**
-     * Get staffingTenured
-     *
-     * @return AppBundle\Entity\AnnualReportStaffing 
-     */
-    public function getStaffingTenured()
-    {
-        return $this->staffingTenured;
+        return $this->annualReport;
     }
     
     /**

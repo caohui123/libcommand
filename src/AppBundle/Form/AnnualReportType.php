@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use AppBundle\Form\AnnualReportStaffingType;
 
 class AnnualReportType extends AbstractType
 {
@@ -23,6 +24,12 @@ class AnnualReportType extends AbstractType
     {        
         // AnnualReport object passed into $options['data'] array
         $builder
+            //AnnualReportStaffing entity collection
+            ->add('staffingTenured', 'collection', array(
+                'type' => new AnnualReportStaffingType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
             ->add('year', 'hidden', array(
                 'data' => $options['data']->getYear(),
             ))

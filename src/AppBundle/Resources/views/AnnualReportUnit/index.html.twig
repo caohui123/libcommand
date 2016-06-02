@@ -1,15 +1,16 @@
 {% extends '::base.html.twig' %}
-{% block title %}Annual Report Units{% endblock %}
+{% block title %}Annual Report Builder{% endblock %}
 {% block body -%}
-    
-    <ul class="nav nav-pills">
-        <li role="presentation"><a href="{# path('annualreport') #}"><span class="glyphicon glyphicon-list-alt"></span> Reports</a></li>
-        <li role="presentation" class="active"><a href="{{ path('annualreportunit') }}"><span class="glyphicon glyphicon-education"></span> Units</a></li>
-    </ul>
-    
     {# Page Heading #}
-    {% set headingvars = {'headingcontent' : 'Annual Report Units', 'newbutton' : true, 'newpath' : path('annualreportunit_new'), 'newpathlabel' : 'New Unit' } %}
+    {% set headingvars = {'headingcontent' : 'Annual Report Builder', 'newbutton' : true, 'newpath' : path('annualreportunit_new'), 'newpathlabel' : 'New Unit' } %}
     {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    <blockquote>
+        <p>
+            The annual report builder allows unit leaders to record accomplishments and goals for an academic year as well as upload documents related to the unit. To create a new report or view existing reports for your unit, click on the
+            button under "Actions", which displays the number of existing annual reports that belong to this unit. If you do not see your unit displayed, create a new one by clicking the "New Unit" button above.
+        </p>
+    </blockquote>
     
     <p class="badge">{{ pagination.getPaginationData.totalCount }} Units</p>
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
@@ -57,3 +58,21 @@
     <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
     {% include('AppBundle:Pagination:paginator.html.twig') %}
     {% endblock %}
+{% block documentReady %} 
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    $('#jquerySortable_1').tablesorter({
+        headers: {
+            2: {
+                sorter: false
+            },
+        }
+    });
+    
+    //refresh the page with the new number of records per page
+    $('#paginationMaxResults').on('change', function(){
+        var item = $(this).find(":selected").val();
+        var url = '{{path('annualreportunit', {'maxItems': '_item'})}}';
+        
+        window.location.href = url.replace('_item',item );
+    });
+{% endblock %}

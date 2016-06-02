@@ -44,6 +44,7 @@ twig:
         administratorEmail: "cpuzzuol@emich.edu"
         administratorPhone: "7.1777"
         documentService: "@document_service"
+        instructionService: "@instruction_service"
         instructionSurveyUrl: "http://brand-test.emich.edu/survey/instruction/index.php?id="
 
 # Assetic Configuration

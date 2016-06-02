@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\AnnualReport;
 use AppBundle\Form\AnnualReportType;
 use AppBundle\Entity\AnnualReportUnit;
+use AppBundle\Entity\AnnualReportStaffing;
 
 /**
  * AnnualReport controller.
@@ -116,6 +117,7 @@ class AnnualReportController extends Controller
         }
         
         $entity = new AnnualReport($unit, $year);
+        
         $form   = $this->createCreateForm($entity);
 
         return array(

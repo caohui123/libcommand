@@ -18,7 +18,59 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-7 col-lg-8">
+            {# Form to handle creating a new report (submitted via JQuery below) #}
+            <div class="row" id="new_report_container">
+                <div class="col-xs-12 col-sm-6">
+                    <form id="new_report_year" class="form well well-lg">
+                        <div class="form-group">
+                            <label for="report_year">Create new report for year:</label>
+                            {# Uses the instruction service generateYears() function for a dropdown of years #}
+                            <select name="report_year" id="report_year">
+                                {% set years = instructionService.generateYears() %}
+                                {% for year in years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="submit" class="btn btn-sm btn-info" value="Go" />
+                        </div>
+                    </form>
+                </div>
+            </div>
             <h2>Associated Annual Reports</h2>
+            <p class="badge">{{ pagination.getPaginationData.totalCount }} Annual Reports</p>
+            <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <table class="table table-responsive table-striped records_list" id="jquerySortable_1">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for report in pagination %}
+                            <tr>
+                                <td>{{ report.year }}</td>
+                                <td>TODO</td>
+                                <td>
+                                    {% if is_granted('ROLE_ANNUALREPORT_EDIT', report) %}
+                                        <a class="badge" type="button" href="{{ path('annualreport_edit', { 'id': report.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a class="badge" href="{# path('annualreport_print', { 'id': report.id }) #}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                                    {% elseif is_granted('ROLE_ANNUALREPORT_VIEW', entity) %}
+                                        <a class="badge" href="{{ path('annualreport_show', { 'id': report.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                        <a class="badge" href="{# path('annualreport_print', { 'id': report.id }) #}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+            {% include('AppBundle:Pagination:paginator.html.twig') %}
         </div>
         <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
             <h2>Unit Information</h2>
@@ -28,4 +80,41 @@
         </div>
     </div>
     {{ form(delete_form) }}
+{% endblock %}
+{% block documentReady %} 
+    //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    $('#jquerySortable_1').tablesorter({
+        headers: {
+            1: {
+                sorter: false
+            },
+        }
+    });
+    
+    // Handle submission of the new report form
+    $('#new_report_year').on('submit', function(e){
+        e.preventDefault();
+        
+        var year = $('#report_year', this).val();
+        var firstYear = year.split('-'); //we only need the first year in the string
+        
+        var entityId = '{{ entity.id }}';
+        var url = '{{path('annualreport_new', {'unit': '_entityId', 'year': '_year'})}}';
+        
+        url = url.replace('_year',firstYear[0] );
+        url = url.replace('_entityId',entityId );
+        window.location.href = url;
+    });
+    
+    //refresh the page with the new number of records per page
+    $('#paginationMaxResults').on('change', function(){
+        var item = $(this).find(":selected").val();
+        var entityId = '{{ entity.id }}';
+        var url = '{{path('annualreportunit_edit', {'id': '_entityId', 'maxItems': '_item'})}}';
+        
+        url = url.replace('_item',item );
+        url = url.replace('_entityId',entityId );
+        window.location.href = url;
+    });
+    
 {% endblock %}

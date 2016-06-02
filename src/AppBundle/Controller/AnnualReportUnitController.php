@@ -156,7 +156,7 @@ class AnnualReportUnitController extends Controller
      * 
      * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -168,11 +168,25 @@ class AnnualReportUnitController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
+        
+        //Annual reports for this unit (if any)
+        $annualreports = $em->getRepository('AppBundle:AnnualReport')->findBy(array('unit' => $entity), array('year' => 'DESC'));
+        
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $annualreports, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
 
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'pagination' => $pagination,
         );
     }
 
