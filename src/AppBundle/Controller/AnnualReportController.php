@@ -192,7 +192,7 @@ class AnnualReportController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-warning')));
 
         return $form;
     }
@@ -237,6 +237,10 @@ class AnnualReportController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $requestData = $request->request->all();
+        $unit = $requestData['form']['unit'];
+        
+        
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -252,7 +256,7 @@ class AnnualReportController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('annualreport'));
+        return $this->redirect($this->generateUrl('annualreportunit_edit', array('id' => $unit)));
     }
 
     /**
@@ -264,10 +268,25 @@ class AnnualReportController extends Controller
      */
     private function createDeleteForm($id)
     {
+        //Look up the AnnualReportUnit to which this entity belongs and send it with the form.
+        $em = $this->getDoctrine()->getManager();
+        
+        $entity = $em->getRepository('AppBundle:AnnualReport')->find($id);
+        $unit = $entity->getUnit()->getId();
+        
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('annualreport_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('unit', 'hidden', array(
+                'data' => $unit,
+            ))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete',
+                'attr' => array(
+                    'class' => 'btn btn-sm btn-danger',
+                    'onclick' => 'return confirm("Are you sure you want to delete this report? All associated documents will be deleted along with it.")',
+                    )
+            ))
             ->getForm()
         ;
     }

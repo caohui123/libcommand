@@ -113,6 +113,16 @@ input.thumbnail-photo-select{
     margin-right: 5px;
 }
 
+/**
+ * Annual report staffing lists
+ */
+ul.staffing-list, ul.detail-list{
+    list-style-type: none;
+}
+ul.staffing-list .staffing-form .form-group{
+    margin: 1% 2% 1% 0%;
+}
+
 @media screen and (min-width: 0) {
   .navbar-toggle {
     display: block; /* force showing the toggle */

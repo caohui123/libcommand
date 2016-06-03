@@ -11,53 +11,69 @@
             button under "Actions", which displays the number of existing annual reports that belong to this unit. If you do not see your unit displayed, create a new one by clicking the "New Unit" button above.
         </p>
     </blockquote>
-    
-    <p class="badge">{{ pagination.getPaginationData.totalCount }} Units</p>
-    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <table class="table table-responsive table-striped records_list" id="jquerySortable_1">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Active?</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for entity in pagination %}
-                    <tr>
-                        <td>{{ entity.name }}</td>
-                        <td>
-                            {% if entity.isActive %}
-                                <span class="label label-success">YES</span>
-                            {% else %}
-                                <span class="label label-danger">No</span
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if is_granted('ROLE_ANNUALREPORT_EDIT', entity) %}
-                                <a class="btn btn-sm btn-primary" type="button" href="{{ path('annualreportunit_edit', { 'id': entity.id }) }}" aria-label="list reports">
-                                    <span class="glyphicon glyphicon-list-alt"></span> 
-                                    <span class="badge">
-                                        {{ render(controller('AppBundle:AnnualReportUnit:countAnnualReports', { 'id': entity.id })) }}
-                                    </span>
-                                </a>
-                                <a class="badge" href="{{ path('annualreportunit_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
-                            {% elseif is_granted('ROLE_ANNUALREPORT_VIEW', entity) %}
-                                <a class="badge" href="{{ path('annualreportunit_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                <a class="badge" href="{{ path('annualreportunit_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+    <section id="active-units">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-7">
+                <h2>Active Units</h2>
+                <p class="badge">{{ pagination.getPaginationData.totalCount }} Active Units</p>
+                <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-responsive table-striped records_list" id="jquerySortable_1">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for entity in pagination %}
+                                <tr>
+                                    <td>{{ entity.name }}</td>
+                                    <td>
+                                        {% if is_granted('ROLE_ANNUALREPORT_EDIT', entity) %}
+                                            <a class="btn btn-sm btn-primary" type="button" href="{{ path('annualreportunit_edit', { 'id': entity.id }) }}" aria-label="list reports">
+                                                <span class="glyphicon glyphicon-list-alt"></span> 
+                                                <span class="badge">
+                                                    {{ render(controller('AppBundle:AnnualReportUnit:countAnnualReports', { 'id': entity.id })) }}
+                                                </span>
+                                            </a>
+                                            <a class="badge" href="{{ path('annualreportunit_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                                        {% elseif is_granted('ROLE_ANNUALREPORT_VIEW', entity) %}
+                                            <a class="badge" href="{{ path('annualreportunit_show', { 'id': entity.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                            <a class="badge" href="{{ path('annualreportunit_print', { 'id': entity.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
+                {% include('AppBundle:Pagination:paginator.html.twig') %}
+            </div>
         </div>
-    </div>
-    <p>Page {{pagination.getPaginationData.current}} of {{pagination.getPaginationData.pageCount}}</p>
-    {% include('AppBundle:Pagination:paginator.html.twig') %}
-    {% endblock %}
+    </section>
+    {% if inactive_units %}
+        <section id="inactive-units">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-7">
+                    <h3>Inactive Units</h3>
+                    <ul class="list">
+                    {% for inactive in inactive_units %}
+                        {% if is_granted('ROLE_ANNUALREPORT_EDIT', inactive) %}
+                            <li><a href="{{ path('annualreportunit_edit', { 'id': inactive.id }) }}" aria-label="edit">{{ inactive.name }}</a></li>
+                            {% elseif is_granted('ROLE_ANNUALREPORT_VIEW', entity) %}
+                            <li><a href="{{ path('annualreportunit_show', { 'id': inactive.id }) }}" aria-label="show">{{ inactive.name }}</a></li>
+                            {% endif %}
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+    {% endif %} {# end if inactive_units #}
+{% endblock %}
 {% block documentReady %} 
     //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
     $('#jquerySortable_1').tablesorter({

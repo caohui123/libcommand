@@ -4,81 +4,126 @@
     <h1>AnnualReport creation</h1>
 
     {{ form_start(form) }}
-    <h2>Staffing Information</h2>
-    <div class="row">
-        <div class="col-xs-12 col-sm-6">
-            <h3>Tenure-Track Librarians</h3>
-            <ul class="stafftenured_collection" data-prototype="{{ form_widget(form.staffingTenured.vars.prototype)|e('html_attr') }}">
-            </ul>
+    <section id="annual-report-staffing">
+        <h2>Staffing Information</h2>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h3>Tenure-Track Librarians</h3>
+                <ul class="stafftenured_collection staffing-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': form.staffingTenured.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h3>Librarian Lecturers</h3>
+                <ul class="stafflecturers_collection staffing-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': form.staffingLecturers.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
         </div>
-        <div class="col-xs-12 col-sm-6">
-            <h3>Librarian Lecturers</h3>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h3>Clerical Staff</h3>
+                <ul class="staffclerical_collection staffing-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': form.staffingClerical.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h3>Other Employees (PTs or Students)</h3>
+                <ul class="staffother_collection staffing-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': form.staffingOther.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-6">
-            <h3>Clerical Staff</h3>
-        </div>
-        <div class="col-xs-12 col-sm-6">
-            <h3>Other Employees (PTs or Students)</h3>
-        </div>
-    </div>
-    {{ form_end(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('annualreport') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    </section>
+    <hr>
+    <section id="annual-report-categories">
+        <header>
+            <h2>Annual Report Categories</h2>
+        </header>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>1. Core Services/Responsibilities</h3>
+                <small>List this unit's core services and responsibilities (even if they have not changed since last year).</small>
+                <ul class="detailcore_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': form.detailCore.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>2. Progress on Goals</h3>
+                <small>List and describe progress on unit goals and objectives for the academic year, refering to data/measurement/assessment results as appropriate.</small>
+                <ul class="detailprogress_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': form.detailProgress.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>3. Non-Core Initiatives</h3>
+                <small>List and describe unit's activities (as distinct from core services) and initiatives for the academic year.</small>
+                <ul class="detailinitiatives_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': form.detailInitiatives.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>4. Noteworthy Accomplishments</h3>
+                <small>Summarize noteworthy accomplishments of the unit's staff for the year that are not already listed above.</small>
+                <ul class="detailaccomplishments_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': form.detailAccomplishments.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>5. Changes for Next Year</h3>
+                <small>Briefly describe any significant changes, opportunities or challenges (either internal or external) that your unit will need to address in the coming year.</small>
+                <ul class="detailchanges_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': form.detailChanges.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>6. Objectives for Next Year</h3>
+                <small>What specific objectives does the unit expect to accomplish during the next academic year? How will you measure your success?</small>
+                <ul class="detailobjectives_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': form.detailObjectives.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+        </div> 
+    </section>
+    <hr>
+            {{ form_row(form.year) }}
+            {{ form_row(form.unit) }}
+            {{ form_row(form._token) }}
+            {{ form_row(form.submit) }}
+    {{ form_end(form, {'render_rest': false}) }}
 {% endblock %}
 {% block documentReady %} 
-    var $collectionHolder;
-
-    // setup an "add a stafftenured" link
-    var $addTagLink = $('<a href="#" class="add_stafftenured_link">Add Staff</a>');
-    var $newLinkLi = $('<li></li>').append($addTagLink);
-
-
-    // Get the ul that holds the collection of tags
-    $collectionHolder = $('ul.stafftenured_collection');
-
-    // add the "add a tag" anchor and li to the tags ul
-    $collectionHolder.append($newLinkLi);
-
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
-    $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-    //Add an initial staffTenured form.
-    addTagForm($collectionHolder, $newLinkLi);
-    
-    $addTagLink.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
-        e.preventDefault();
-
-        // add a new tag form (see next code block)
-        addTagForm($collectionHolder, $newLinkLi);
-    });
-        
-    function addTagForm($collectionHolder, $newLinkLi) {
-        // Get the data-prototype explained earlier
-        var prototype = $collectionHolder.data('prototype');
-
-        // get the new index
-        var index = $collectionHolder.data('index');
-
-        // Replace '__name__' in the prototype's HTML to
-        // instead be a number based on how many items we have
-        var newForm = prototype.replace(/__name__/g, index);
-
-        // increase the index with one for the next item
-        $collectionHolder.data('index', index + 1);
-
-        // Display the form in the page in an li, before the "Add a tag" link li
-        var $newFormLi = $('<li></li>').append(newForm);
-        $newLinkLi.before($newFormLi);
-    }
-        
+   //JS file located in Resources/public/js/annualreport.js
 {% endblock %}

@@ -16,10 +16,22 @@ class AnnualReportStaffingType extends AbstractType
     {
         $builder
             ->add('note', 'text', array(
-                'label' => 'Staff Description'
+                'label' => 'Staff Description',
+                'label_attr' => array(
+                    'class' => 'sr-only',
+                ),
+                'attr' => array(
+                    'placeholder' => 'Description',
+                )
             ))
             ->add('employeeCount', 'number', array(
                 'label' => 'Quantity (use .5 for half)',
+                'label_attr' => array(
+                    'class' => 'sr-only',
+                ),
+                'attr' => array(
+                    'placeholder' => 'Qty.',
+                )
             ))
             ->add('isFullTime', 'checkbox', array(
                 'label' => 'Full Time',

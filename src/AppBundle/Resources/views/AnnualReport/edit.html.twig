@@ -2,8 +2,130 @@
 
 {% block body -%}
     <h1>AnnualReport edit</h1>
-
-    {{ form(edit_form) }}
+{{ dump(entity) }}
+    {{ form_start(edit_form) }}
+    <section id="annual-report-staffing">
+        <h2>Staffing Information</h2>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h3>Tenure-Track Librarians</h3>
+                <ul class="stafftenured_collection staffing-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': edit_form.staffingTenured.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                    {% for staffTenure in entity.staffingTenured if staffTenure %}
+                        <li>{{staffTenure.note}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h3>Librarian Lecturers</h3>
+                <ul class="stafflecturers_collection staffing-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': edit_form.staffingLecturers.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h3>Clerical Staff</h3>
+                <ul class="staffclerical_collection staffing-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': edit_form.staffingClerical.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h3>Other Employees (PTs or Students)</h3>
+                <ul class="staffother_collection staffing-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': edit_form.staffingOther.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+        </div>
+    </section>
+    <hr>
+    <section id="annual-report-categories">
+        <header>
+            <h2>Annual Report Categories</h2>
+        </header>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>1. Core Services/Responsibilities</h3>
+                <small>List this unit's core services and responsibilities (even if they have not changed since last year).</small>
+                <ul class="detailcore_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailCore.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>2. Progress on Goals</h3>
+                <small>List and describe progress on unit goals and objectives for the academic year, refering to data/measurement/assessment results as appropriate.</small>
+                <ul class="detailprogress_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailProgress.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>3. Non-Core Initiatives</h3>
+                <small>List and describe unit's activities (as distinct from core services) and initiatives for the academic year.</small>
+                <ul class="detailinitiatives_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailInitiatives.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>4. Noteworthy Accomplishments</h3>
+                <small>Summarize noteworthy accomplishments of the unit's staff for the year that are not already listed above.</small>
+                <ul class="detailaccomplishments_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailAccomplishments.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>5. Changes for Next Year</h3>
+                <small>Briefly describe any significant changes, opportunities or challenges (either internal or external) that your unit will need to address in the coming year.</small>
+                <ul class="detailchanges_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailChanges.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>6. Objectives for Next Year</h3>
+                <small>What specific objectives does the unit expect to accomplish during the next academic year? How will you measure your success?</small>
+                <ul class="detailobjectives_collection detail-list" data-prototype="
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailObjectives.vars.prototype }) }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+        </div> 
+    </section>
+    <hr>
+            {{ form_row(edit_form.year) }}
+            {{ form_row(edit_form.unit) }}
+            {{ form_row(edit_form._token) }}
+            {{ form_row(edit_form.submit) }}
+    {{ form_end(edit_form, {'render_rest': false}) }}
 
         <ul class="record_actions">
     <li>
@@ -13,4 +135,7 @@
     </li>
     <li>{{ form(delete_form) }}</li>
 </ul>
+{% endblock %}
+{% block documentReady %} 
+   //JS file located in Resources/public/js/annualreport.js
 {% endblock %}

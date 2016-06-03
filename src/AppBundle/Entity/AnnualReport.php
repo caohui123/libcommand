@@ -11,6 +11,7 @@ use AppBundle\Entity\AnnualReportUnit;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\AnnualReportStaffing;
+use AppBundle\Entity\AnnualReportDetail;
 
 /**
  * AnnualReport
@@ -52,6 +53,93 @@ class AnnualReport
      *      )
      */
     private $staffingTenured;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_staffingclerical",
+     *      joinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $staffingClerical;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_staffinglecturers",
+     *      joinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $staffingLecturers;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_staffingother",
+     *      joinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $staffingOther;
+    
+    /**
+     * Category 1. Core Services/Responsibilities
+     * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_detailcore",
+     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $detailCore;
+    
+    /**
+     * Category 2. Progress on Goals
+     * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_detailprogress",
+     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $detailProgress;
+    
+    /**
+     * Category 3. Non-Core Initiatives
+     * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_detailinitatives",
+     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $detailInitiatives;
+    
+    /**
+     * Category 4. Noteworthy Accomplishments
+     * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_detailaccomplishments",
+     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $detailAccomplishments;
+    
+    /**
+     * Category 5. Changes for Next Year
+     * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_detailchanges",
+     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $detailChanges;
+    
+    /**
+     * Category 6. Objectives for Next Year
+     * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_detailobjectives",
+     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $detailObjectives;
 
     /**
      * @var \DateTime $created
@@ -104,6 +192,15 @@ class AnnualReport
         $this->unit = $unit;
         $this->year = $year;
         $this->staffingTenured = new ArrayCollection();
+        $this->staffingClerical = new ArrayCollection();
+        $this->staffingLecturers = new ArrayCollection();
+        $this->staffingOther = new ArrayCollection();
+        $this->detailCore = new ArrayCollection();
+        $this->detailProgress = new ArrayCollection();
+        $this->detailInitiatives = new ArrayCollection();
+        $this->detailAccomplishments = new ArrayCollection();
+        $this->detailChanges = new ArrayCollection();
+        $this->detailObjectives = new ArrayCollection();
     }
     
     /**
@@ -198,6 +295,330 @@ class AnnualReport
     public function getStaffingTenured()
     {
         return $this->staffingTenured;
+    }
+    
+    /**
+     * Add staffingClerical
+     *
+     * @param AppBundle\Entity\AnnualReportStaffing  $staffing
+     * @return AnnualReport
+     */
+    public function addStaffingClerical(AnnualReportStaffing $staffing)
+    {
+        $this->staffingClerical->add($staffing);
+
+        return $this;
+    }
+
+    /**
+     * Remove staffingClerical
+     *
+     * @param AppBundle\Entity\AnnualReportStaffing  $staffing
+     * @return AnnualReport
+     */
+    public function removeStaffingClerical(AnnualReportStaffing $staffing)
+    {
+        $this->staffingClerical->removeElement($staffing);
+        
+        return $this;
+    }
+    
+    /**
+     * Get staffingClerical
+     *
+     * @return AppBundle\Entity\AnnualReportStaffing 
+     */
+    public function getStaffingClerical()
+    {
+        return $this->staffingClerical;
+    }
+    
+    /**
+     * Add staffingLecturers
+     *
+     * @param AppBundle\Entity\AnnualReportStaffing  $staffing
+     * @return AnnualReport
+     */
+    public function addStaffingLecturer(AnnualReportStaffing $staffing)
+    {
+        $this->staffingLecturers->add($staffing);
+
+        return $this;
+    }
+
+    /**
+     * Remove staffingLecturers
+     *
+     * @param AppBundle\Entity\AnnualReportStaffing  $staffing
+     * @return AnnualReport
+     */
+    public function removeStaffingLecturer(AnnualReportStaffing $staffing)
+    {
+        $this->staffingLecturers->removeElement($staffing);
+        
+        return $this;
+    }
+    
+    /**
+     * Get staffingLecturers
+     *
+     * @return AppBundle\Entity\AnnualReportStaffing 
+     */
+    public function getStaffingLecturers()
+    {
+        return $this->staffingLecturers;
+    }
+    
+    /**
+     * Add staffingOther
+     *
+     * @param AppBundle\Entity\AnnualReportStaffing  $staffing
+     * @return AnnualReport
+     */
+    public function addStaffingOther(AnnualReportStaffing $staffing)
+    {
+        $this->staffingOther->add($staffing);
+
+        return $this;
+    }
+
+    /**
+     * Remove staffingOther
+     *
+     * @param AppBundle\Entity\AnnualReportStaffing  $staffing
+     * @return AnnualReport
+     */
+    public function removeStaffingOther(AnnualReportStaffing $staffing)
+    {
+        $this->staffingOther->removeElement($staffing);
+        
+        return $this;
+    }
+    
+    /**
+     * Get staffingOther
+     *
+     * @return AppBundle\Entity\AnnualReportStaffing 
+     */
+    public function getStaffingOther()
+    {
+        return $this->staffingOther;
+    }
+    
+    /**
+     * Add detailCore
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function addDetailCore(AnnualReportDetail $detail)
+    {
+        $this->detailCore->add($detail);
+
+        return $this;
+    }
+
+    /**
+     * Remove detailCore
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function removeDetailCore(AnnualReportDetail $detail)
+    {
+        $this->detailCore->removeElement($detail);
+        
+        return $this;
+    }
+    
+    /**
+     * Get detailCore
+     *
+     * @return AppBundle\Entity\AnnualReportDetail
+     */
+    public function getDetailCore()
+    {
+        return $this->detailCore;
+    }
+    
+    /**
+     * Add detailProgress
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function addDetailProgres(AnnualReportDetail $detail)
+    {
+        $this->detailProgress->add($detail);
+
+        return $this;
+    }
+
+    /**
+     * Remove detailProgress
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function removeDetailProgres(AnnualReportDetail $detail)
+    {
+        $this->detailProgress->removeElement($detail);
+        
+        return $this;
+    }
+    
+    /**
+     * Get detailProgress
+     *
+     * @return AppBundle\Entity\AnnualReportDetail
+     */
+    public function getDetailProgress()
+    {
+        return $this->detailProgress;
+    }
+    
+    /**
+     * Add detailInitiatives
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function addDetailInitiative(AnnualReportDetail $detail)
+    {
+        $this->detailInitiatives->add($detail);
+
+        return $this;
+    }
+
+    /**
+     * Remove detailInitiatives
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function removeDetailInitiative(AnnualReportDetail $detail)
+    {
+        $this->detailInitiatives->removeElement($detail);
+        
+        return $this;
+    }
+    
+    /**
+     * Get detailInitiatives
+     *
+     * @return AppBundle\Entity\AnnualReportDetail
+     */
+    public function getDetailInitiatives()
+    {
+        return $this->detailInitiatives;
+    }
+    
+    /**
+     * Add detailAccomplishments
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function addDetailAccomplishment(AnnualReportDetail $detail)
+    {
+        $this->detailAccomplishments->add($detail);
+
+        return $this;
+    }
+
+    /**
+     * Remove detailAccomplishments
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function removeDetailAccomplishment(AnnualReportDetail $detail)
+    {
+        $this->detailAccomplishments->removeElement($detail);
+        
+        return $this;
+    }
+    
+    /**
+     * Get detailAccomplishments
+     *
+     * @return AppBundle\Entity\AnnualReportDetail
+     */
+    public function getDetailAccomplishments()
+    {
+        return $this->detailAccomplishments;
+    }
+    
+    /**
+     * Add detailChanges
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function addDetailChange(AnnualReportDetail $detail)
+    {
+        $this->detailChanges->add($detail);
+
+        return $this;
+    }
+
+    /**
+     * Remove detailChanges
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function removeDetailChange(AnnualReportDetail $detail)
+    {
+        $this->detailChanges->removeElement($detail);
+        
+        return $this;
+    }
+    
+    /**
+     * Get detailChanges
+     *
+     * @return AppBundle\Entity\AnnualReportDetail
+     */
+    public function getDetailChanges()
+    {
+        return $this->detailChanges;
+    }
+    
+    /**
+     * Add detailObjectives
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function addDetailObjective(AnnualReportDetail $detail)
+    {
+        $this->detailObjectives->add($detail);
+
+        return $this;
+    }
+
+    /**
+     * Remove detailObjectives
+     *
+     * @param AppBundle\Entity\AnnualReportDetail  $detail
+     * @return AnnualReport
+     */
+    public function removeDetailObjective(AnnualReportDetail $detail)
+    {
+        $this->detailObjectives->removeElement($detail);
+        
+        return $this;
+    }
+    
+    /**
+     * Get detailObjectives
+     *
+     * @return AppBundle\Entity\AnnualReportDetail
+     */
+    public function getDetailObjectives()
+    {
+        return $this->detailObjectives;
     }
     
     /**

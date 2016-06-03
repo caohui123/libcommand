@@ -33,7 +33,8 @@ class AnnualReportUnitController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:AnnualReportUnit')->findBy(array(), array('name' => 'ASC'));
+        $entities = $em->getRepository('AppBundle:AnnualReportUnit')->findBy(array('isActive' => 1), array('name' => 'ASC'));
+        $inactiveUnits = $em->getRepository('AppBundle:AnnualReportUnit')->findBy(array('isActive' => 0), array('name' => 'ASC'));
         
         $requestData = $request->query->all();
         isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
@@ -46,7 +47,8 @@ class AnnualReportUnitController extends Controller
         );
 
         return array(
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'inactive_units' => $inactiveUnits,
         );
     }
     /**

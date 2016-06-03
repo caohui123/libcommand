@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Form\AnnualReportStaffingType;
+use AppBundle\Form\AnnualReportDetailType;
 
 class AnnualReportType extends AbstractType
 {
@@ -27,6 +28,60 @@ class AnnualReportType extends AbstractType
             //AnnualReportStaffing entity collection
             ->add('staffingTenured', 'collection', array(
                 'type' => new AnnualReportStaffingType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportStaffing entity collection
+            ->add('staffingClerical', 'collection', array(
+                'type' => new AnnualReportStaffingType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportStaffing entity collection
+            ->add('staffingLecturers', 'collection', array(
+                'type' => new AnnualReportStaffingType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportStaffing entity collection
+            ->add('staffingOther', 'collection', array(
+                'type' => new AnnualReportStaffingType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportDetail entity collection
+            ->add('detailCore', 'collection', array(
+                'type' => new AnnualReportDetailType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportDetail entity collection
+            ->add('detailProgress', 'collection', array(
+                'type' => new AnnualReportDetailType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportDetail entity collection
+            ->add('detailInitiatives', 'collection', array(
+                'type' => new AnnualReportDetailType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportDetail entity collection
+            ->add('detailAccomplishments', 'collection', array(
+                'type' => new AnnualReportDetailType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportDetail entity collection
+            ->add('detailChanges', 'collection', array(
+                'type' => new AnnualReportDetailType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            //AnnualReportDetail entity collection
+            ->add('detailObjectives', 'collection', array(
+                'type' => new AnnualReportDetailType(),
                 'allow_add' => true,
                 'by_reference' => false,
             ))
