@@ -11,6 +11,7 @@ use AppBundle\Entity\AnnualReport;
 use AppBundle\Form\AnnualReportType;
 use AppBundle\Entity\AnnualReportUnit;
 use AppBundle\Entity\AnnualReportStaffing;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * AnnualReport controller.
@@ -23,9 +24,11 @@ class AnnualReportController extends Controller
     /**
      * Lists all AnnualReport entities.
      *
-     * @Route("/", name="annualreport")
-     * @Method("GET")
-     * @Template()
+     * //@Route("/", name="annualreport")
+     * //@Method("GET")
+     * //@Template()
+     * 
+     * KEEP THIS ROUTE CLOSED UNLESS TESTING
      */
     public function indexAction()
     {
@@ -43,6 +46,8 @@ class AnnualReportController extends Controller
      * @Route("/", name="annualreport_create")
      * @Method("POST")
      * @Template("AppBundle:AnnualReport:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -67,7 +72,7 @@ class AnnualReportController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('annualreport_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('annualreport_edit', array('id' => $entity->getId())));
         }
 
         return array(
@@ -90,7 +95,12 @@ class AnnualReportController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array(
+            'label' => 'Create Draft',
+            'attr' => array(
+                'class' => 'btn btn-sm btn-success'
+            ),
+        ));
 
         return $form;
     }
@@ -101,6 +111,8 @@ class AnnualReportController extends Controller
      * @Route("/new/{unit}/{year}", name="annualreport_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
      */
     public function newAction(AnnualReportUnit $unit, $year)
     {
@@ -132,6 +144,8 @@ class AnnualReportController extends Controller
      * @Route("/{id}", name="annualreport_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_VIEW")
      */
     public function showAction($id)
     {
@@ -157,6 +171,8 @@ class AnnualReportController extends Controller
      * @Route("/{id}/edit", name="annualreport_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
      */
     public function editAction($id)
     {
@@ -202,9 +218,11 @@ class AnnualReportController extends Controller
      * @Route("/{id}", name="annualreport_update")
      * @Method("PUT")
      * @Template("AppBundle:AnnualReport:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
      */
     public function updateAction(Request $request, $id)
-    {
+    {   
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:AnnualReport')->find($id);
@@ -234,6 +252,8 @@ class AnnualReportController extends Controller
      *
      * @Route("/{id}", name="annualreport_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -289,5 +309,29 @@ class AnnualReportController extends Controller
             ))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Displays a printer-friendly AnnualReport entity.
+     *
+     * @Route("/{id}/print", name="annualreport_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_ANNUALREPORT_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:AnnualReport')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AnnualReport entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
     }
 }

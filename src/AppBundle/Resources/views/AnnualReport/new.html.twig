@@ -1,7 +1,17 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}New Annual Report{% endblock %}
 {% block body -%}
-    <h1>AnnualReport creation</h1>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : entity.unit.name ~ ' Annual Report for ' ~ entity.year ~ '-' ~ (entity.year + 1)  } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('annualreportunit_edit', {'id': entity.unit.id })} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
+    
+    <blockquote>
+        <p>Use the Annual Report Builder interface to create a new report for this unit. Once created, this report will be saved as a <mark>draft</mark>. An annual report can only be marked as <span class="text-success">final</span> in the editor.</p>
+    </blockquote>
 
     {{ form_start(form) }}
     <section id="annual-report-staffing">

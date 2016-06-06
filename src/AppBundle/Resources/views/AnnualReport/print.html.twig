@@ -1,0 +1,108 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Annual Report Unit{% endblock %}
+{% block body %}
+<h1>{{entity.unit}} Annual Report {{entity.year}}-{{(entity.year + 1)}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+<section id="annual-report-staffing">
+    <h2>Staffing Information</h2>
+    <table border="1" cellspacing="5" cellpadding="5">
+        <tr>
+            <th align="left">Tenure-Track Librarians</th>
+            <th align="left">Librarian Lecturers</th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    {% for staffTenure in entity.staffingTenured if staffTenure %}
+                        <li>{{ staffTenure.employeeCount}}x {{ staffTenure.note }} ({% if staffTenure.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    {% for staffLecturer in entity.staffingLecturers if staffLecturer %}
+                        <li>{{ staffLecturer.employeeCount}}x {{ staffLecturer.note }} ({% if staffLecturer.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th align="left">Clerical Staff</th>
+            <th align="left">Other Employees (PTs or Students)</th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                {% for staffClerical in entity.staffingClerical if staffClerical %}
+                    <li>{{ staffClerical.employeeCount}}x {{ staffClerical.note }} ({% if staffClerical.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
+                {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+                {% for staffOther in entity.staffingOther if staffOther %}
+                    <li>{{ staffOther.employeeCount}}x {{ staffOther.note }} ({% if staffOther.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+</section>
+<section id="annual-report-categories">
+    <header>
+        <h2>Annual Report Categories</h2>
+    </header>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <h3>1. Core Services/Responsibilities</h3>
+            <ol>
+                {% for detCore in entity.detailCore if detCore %}
+                    <li>{{ detCore.detail }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <h3>2. Progress on Goals</h3>
+            <ol>
+                {% for detProgress in entity.detailProgress if detProgress %}
+                    <li>{{ detProgress.detail }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <h3>3. Non-Core Initiatives</h3>
+            <ol>
+                {% for detInitiatives in entity.detailInitiatives if detInitiatives %}
+                    <li>{{ detInitiatives.detail }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <h3>4. Noteworthy Accomplishments</h3>
+            <ol>
+                {% for detAccomplishments in entity.detailAccomplishments if detAccomplishments %}
+                    <li>{{ detAccomplishments.detail }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <h3>5. Changes for Next Year</h3>
+            <ol>
+                {% for detChanges in entity.detailChanges if detChanges %}
+                    <li>{{ detChanges.detail }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <h3>6. Objectives for Next Year</h3>
+            <ol>
+                {% for detObjectives in entity.detailObjectives if detObjectives %}
+                    <li>{{ detObjectives.detail }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div> 
+</section>
+{% endblock %}

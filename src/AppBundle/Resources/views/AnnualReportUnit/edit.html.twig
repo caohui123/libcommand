@@ -52,15 +52,21 @@
                         <tbody>
                         {% for report in pagination %}
                             <tr>
-                                <td>{{ report.year }}</td>
-                                <td>TODO</td>
+                                <td>{{ report.year }}-{{ (report.year + 1) }}</td>
+                                <td>
+                                    {% if report.isFinal %}
+                                        <span class="label label-success">Final</span>
+                                    {% else %}
+                                        <span class="label label-warning">Draft</span>
+                                    {% endif %}
+                                </td>
                                 <td>
                                     {% if is_granted('ROLE_ANNUALREPORT_EDIT', report) %}
                                         <a class="badge" type="button" href="{{ path('annualreport_edit', { 'id': report.id }) }}" aria-label="edit"><span class="glyphicon glyphicon-pencil"></span></a>
-                                        <a class="badge" href="{# path('annualreport_print', { 'id': report.id }) #}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                                        <a class="badge" href="{{ path('annualreport_print', { 'id': report.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                                     {% elseif is_granted('ROLE_ANNUALREPORT_VIEW', entity) %}
                                         <a class="badge" href="{{ path('annualreport_show', { 'id': report.id }) }}" aria-label="show"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                        <a class="badge" href="{# path('annualreport_print', { 'id': report.id }) #}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
+                                        <a class="badge" href="{{ path('annualreport_print', { 'id': report.id }) }}" target="_blank" aria-label="print"><span class="glyphicon glyphicon-print"></span></a>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -79,13 +85,16 @@
             </div>
         </div>
     </div>
+            
+    {% if is_granted('ROLE_ANNUALREPORT_DELETE') %}
     {{ form(delete_form) }}
+    {% endif %}
 {% endblock %}
 {% block documentReady %} 
     //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
     $('#jquerySortable_1').tablesorter({
         headers: {
-            1: {
+            2: {
                 sorter: false
             },
         }

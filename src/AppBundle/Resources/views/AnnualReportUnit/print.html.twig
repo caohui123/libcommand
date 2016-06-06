@@ -11,6 +11,20 @@
                 <td>{{ entity.name }}</td>
             </tr>
             <tr>
+                <th>Reports</th>
+                <td>
+                    {% if years is not null %}
+                        <ul>
+                        {% for report in years %}
+                            <li style="list-style-type:none">{{ report }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
                 <th>Status</th>
                 <td>
                     {% if entity.isActive %}

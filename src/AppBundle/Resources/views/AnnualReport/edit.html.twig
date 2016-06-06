@@ -1,8 +1,21 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Annual Report Editor{% endblock %}
 {% block body -%}
-    <h1>AnnualReport edit</h1>
-{{ dump(entity) }}
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Edit ' ~ entity.unit.name ~ ' ' ~ entity.year ~ '-' ~ (entity.year + 1) ~ ' Annual Report' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('annualreportunit_edit', {'id': entity.unit.id} ), 'printpath' : path('annualreport_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %}
+    
+    {% for flash_message in app.session.flashBag.get('reportexists') %}
+        <div class="flash-notice alert alert-warning">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
+    
     {{ form_start(edit_form) }}
     <section id="annual-report-staffing">
         <h2>Staffing Information</h2>
@@ -15,7 +28,7 @@
                     {% endfilter %}
                     ">
                     {% for staffTenure in entity.staffingTenured if staffTenure %}
-                        <li>{{staffTenure.note}}</li>
+                        {{ include('AppBundle:AnnualReport:snippets/edit-staffing.html.twig', { 'entity': staffTenure, 'type': 'staffingTenured', 'index': loop.index0 }) }}
                     {% endfor %}
                 </ul>
             </div>
@@ -26,6 +39,9 @@
                         {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': edit_form.staffingLecturers.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for staffLecturer in entity.staffingLecturers if staffLecturer %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-staffing.html.twig', { 'entity': staffLecturer, 'type': 'staffingLecturers', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -37,6 +53,9 @@
                         {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': edit_form.staffingClerical.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for staffClerical in entity.staffingClerical if staffClerical %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-staffing.html.twig', { 'entity': staffClerical, 'type': 'staffingClerical', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-6">
@@ -46,6 +65,9 @@
                         {{ include('AppBundle:AnnualReport:snippets/staffing-prototype.html.twig', { 'form': edit_form.staffingOther.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for staffOther in entity.staffingOther if staffOther %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-staffing.html.twig', { 'entity': staffOther, 'type': 'staffingOther', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -64,6 +86,9 @@
                         {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailCore.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for detCore in entity.detailCore if detCore %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-detail.html.twig', { 'entity': detCore, 'type': 'detailCore', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
@@ -74,6 +99,9 @@
                         {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailProgress.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for detProgress in entity.detailProgress if detProgress %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-detail.html.twig', { 'entity': detProgress, 'type': 'detailProgress', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
@@ -84,6 +112,9 @@
                         {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailInitiatives.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for detInitiatives in entity.detailInitiatives if detInitiatives %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-detail.html.twig', { 'entity': detInitiatives, 'type': 'detailInitiatives', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
         </div> 
@@ -96,6 +127,9 @@
                         {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailAccomplishments.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for detAccomplishments in entity.detailAccomplishments if detAccomplishments %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-detail.html.twig', { 'entity': detAccomplishments, 'type': 'detailAccomplishments', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
@@ -106,6 +140,9 @@
                         {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailChanges.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for detChanges in entity.detailChanges if detChanges %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-detail.html.twig', { 'entity': detChanges, 'type': 'detailChanges', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
@@ -116,25 +153,33 @@
                         {{ include('AppBundle:AnnualReport:snippets/detail-prototype.html.twig', { 'form': edit_form.detailObjectives.vars.prototype }) }} 
                     {% endfilter %}
                     ">
+                    {% for detObjectives in entity.detailObjectives if detObjectives %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-detail.html.twig', { 'entity': detObjectives, 'type': 'detailObjectives', 'index': loop.index0 }) }}
+                    {% endfor %}
                 </ul>
             </div>
         </div> 
     </section>
-    <hr>
-            {{ form_row(edit_form.year) }}
-            {{ form_row(edit_form.unit) }}
-            {{ form_row(edit_form._token) }}
-            {{ form_row(edit_form.submit) }}
-    {{ form_end(edit_form, {'render_rest': false}) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('annualreportunit_edit', {'id': entity.unit.id} ) }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <hr>        
+    <div class="row">
+        <div class="col-xs-6">
+            {{ form_row(edit_form.isFinal) }}
+        </div>
+        <div class="col-xs-6 text-right">
+                {{ form_row(edit_form.year) }}
+                {{ form_row(edit_form.unit) }}
+                {{ form_row(edit_form._token) }}
+                {{ form_row(edit_form.submit) }}
+            {{ form_end(edit_form, {'render_rest': false}) }}
+            {% if is_granted('ROLE_ANNUALREPORT_DELETE') %}
+            {{ form(delete_form) }}
+            {% endif %} 
+        </div>
+    </div>
+    
+    
+               
+   
 {% endblock %}
 {% block documentReady %} 
    //JS file located in Resources/public/js/annualreport.js

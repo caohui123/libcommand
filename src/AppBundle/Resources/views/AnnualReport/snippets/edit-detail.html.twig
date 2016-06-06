@@ -1,0 +1,12 @@
+<li>
+    {# This code taken from the data-prototype attribute of the detail collection (e.g.: form.detailCore.vars.prototype) #}
+    <div class="row annualreport-item-container">
+        <div class="col-xs-2 col-sm-1">
+            <button class="delete-detail btn btn-link" type="button"><span class="glyphicon glyphicon-trash text-danger"></span></button>
+        </div>
+        <div class="col-xs-10 col-sm-11">
+            <textarea id="appbundle_annualreport_{{ type }}_{{ index }}_detail" name="appbundle_annualreport[{{ type }}][{{ index }}][detail]" required="required" class="form-control">{{ entity.detail }}</textarea>
+        </div>
+    </div> 
+                                                
+</li>

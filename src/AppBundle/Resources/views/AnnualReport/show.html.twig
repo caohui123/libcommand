@@ -1,31 +1,116 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Annual Reports{% endblock %}
 {% block body -%}
-    <h1>AnnualReport</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : entity.unit.name ~ ' ' ~ entity.year ~ '-' ~ (entity.year + 1) ~ ' Annual Report'  } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('annualreportunit'), 'editpath' : path('annualreport_edit', { 'id': entity.id }), 'printpath' : path('annualreport_print', { 'id': entity.id }), 'editrole' : 'ROLE_ANNUALREPORT_EDIT' } %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Unit</th>
-                <td>{{ entity.unit.name }}</td>
-            </tr>
-            <tr>
-                <th>Year</th>
-                <td>{{ entity.year }}-{{ entity.year + 1 }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('annualreportunit_show', {'id' : entity.unit.id }) }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('annualreport_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-</ul>
+    <section id="annual-report-staffing">
+        <h2>Staffing Information</h2>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h3>Tenure-Track Librarians</h3>
+                <ul>
+                    {% for staffTenure in entity.staffingTenured if staffTenure %}
+                        <li>{{ staffTenure.employeeCount}}x {{ staffTenure.note }} ({% if staffTenure.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h3>Librarian Lecturers</h3>
+                <ul>
+                    {% for staffLecturer in entity.staffingLecturers if staffLecturer %}
+                        <li>{{ staffLecturer.employeeCount}}x {{ staffLecturer.note }} ({% if staffLecturer.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h3>Clerical Staff</h3>
+                <ul>
+                    {% for staffClerical in entity.staffingClerical if staffClerical %}
+                        <li>{{ staffClerical.employeeCount}}x {{ staffClerical.note }} ({% if staffClerical.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h3>Other Employees (PTs or Students)</h3>
+                <ul>
+                    {% for staffOther in entity.staffingOther if staffOther %}
+                        <li>{{ staffOther.employeeCount}}x {{ staffOther.note }} ({% if staffOther.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+    <hr>
+    <section id="annual-report-categories">
+        <header>
+            <h2>Annual Report Categories</h2>
+        </header>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>1. Core Services/Responsibilities</h3>
+                <small>List this unit's core services and responsibilities (even if they have not changed since last year).</small>
+                <ol>
+                    {% for detCore in entity.detailCore if detCore %}
+                        <li>{{ detCore.detail }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>2. Progress on Goals</h3>
+                <small>List and describe progress on unit goals and objectives for the academic year, refering to data/measurement/assessment results as appropriate.</small>
+                <ol>
+                    {% for detProgress in entity.detailProgress if detProgress %}
+                        <li>{{ detProgress.detail }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>3. Non-Core Initiatives</h3>
+                <small>List and describe unit's activities (as distinct from core services) and initiatives for the academic year.</small>
+                <ol>
+                    {% for detInitiatives in entity.detailInitiatives if detInitiatives %}
+                        <li>{{ detInitiatives.detail }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>4. Noteworthy Accomplishments</h3>
+                <small>Summarize noteworthy accomplishments of the unit's staff for the year that are not already listed above.</small>
+                <ol>
+                    {% for detAccomplishments in entity.detailAccomplishments if detAccomplishments %}
+                        <li>{{ detAccomplishments.detail }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>5. Changes for Next Year</h3>
+                <small>Briefly describe any significant changes, opportunities or challenges (either internal or external) that your unit will need to address in the coming year.</small>
+                <ol>
+                    {% for detChanges in entity.detailChanges if detChanges %}
+                        <li>{{ detChanges.detail }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <h3>6. Objectives for Next Year</h3>
+                <small>What specific objectives does the unit expect to accomplish during the next academic year? How will you measure your success?</small>
+                <ol>
+                    {% for detObjectives in entity.detailObjectives if detObjectives %}
+                        <li>{{ detObjectives.detail }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div> 
+    </section>
 {% endblock %}

@@ -131,21 +131,34 @@ class AnnualReportUnitController extends Controller
      * 
      * @Secure(roles="ROLE_ANNUALREPORT_VIEW")
      */
-    public function showAction($id)
+    public function showAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        
         $entity = $em->getRepository('AppBundle:AnnualReportUnit')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
         }
-
+        
         $deleteForm = $this->createDeleteForm($id);
+        
+        $annualReports = $em->getRepository('AppBundle:AnnualReport')->findBy(array('unit' => $entity), array('year' => 'DESC'));
+        
+        $requestData = $request->query->all();
+        isset($requestData['maxItems']) ? $maxItems = $requestData['maxItems'] : $maxItems = 10;
+      
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $annualReports, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $maxItems/*limit per page*/
+        );
 
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'pagination' => $pagination,
         );
     }
 
@@ -318,8 +331,12 @@ class AnnualReportUnitController extends Controller
             throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
         }
 
+        //Get years for which this unit has annual reports.
+        $years = $this->__unitReportYears($entity);
+        
         return array(
             'entity'      => $entity,
+            'years'       => $years,
         );
     }
     
@@ -341,5 +358,31 @@ class AnnualReportUnitController extends Controller
         
         $reports = $em->getRepository('AppBundle:AnnualReport')->findBy(array('unit' => $unit));
         return new Response(count($reports), 200);
+    }
+    
+    /**
+     * Return the years for which the given unit has an annual report.
+     *
+     * @param AppBundle\Entity\AnnualReportUnit $unit
+     * 
+     * @return array $years
+     */
+    private function __unitReportYears(AnnualReportUnit $unit){
+        $em = $this->getDoctrine()->getManager();
+        
+        $years = array();
+        
+        //Get years for which this unit has an annual report
+        $annualReports = $em->getRepository('AppBundle:AnnualReport')->findBy(array('unit' => $unit), array('year' => 'DESC'));
+        if(!$annualReports){
+            return $years; 
+        }
+        
+        foreach($annualReports as $report){
+            $year = $report->getYear();
+            $years[] = $year . '-' . ($year + 1);
+        }
+        
+        return $years;
     }
 }

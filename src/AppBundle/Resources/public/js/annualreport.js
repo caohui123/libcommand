@@ -8,7 +8,7 @@ $(document).ready(function(){
 
     // Get the ul that holds the collection of tags
     $tenuredCollectionHolder = $('ul.stafftenured_collection');
-
+    
     // add the "add a tag" anchor and li to the tags ul
     $tenuredCollectionHolder.append($newTenuredLi);
 
@@ -24,7 +24,7 @@ $(document).ready(function(){
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
 
-        // add a new tag form (see next code block)
+        // add a new tag form
         addTagForm($tenuredCollectionHolder, $newTenuredLi);
     });
 

@@ -38,6 +38,13 @@ class AnnualReport
      * @ORM\Column(name="year", type="integer")
      */
     private $year;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isFinal", type="boolean")
+     */
+    private $isFinal;
 
     /**
      * @ORM\ManyToOne(targetEntity="AnnualReportUnit", cascade={"persist"}, fetch="LAZY")
@@ -235,6 +242,30 @@ class AnnualReport
     public function getYear()
     {
         return $this->year;
+    }
+    
+    /**
+     * Set isFinal
+     *
+     * @param boolean $isFinal
+     *
+     * @return AnnualReport
+     */
+    public function setIsFinal($isFinal)
+    {
+        $this->isFinal = $isFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get isFinal
+     *
+     * @return boolean
+     */
+    public function getIsFinal()
+    {
+        return $this->isFinal;
     }
 
     /**

@@ -1,0 +1,20 @@
+<li>
+    {# This code taken from the data-prototype attribute of the staffing collection (e.g.: form.staffingTenured.vars.prototype) #}
+    <div class="row annualreport-item-container">
+        <div class="col-xs-3 col-sm-1">
+            <button class="delete-staff btn btn-link" type="button"><span class="glyphicon glyphicon-trash text-danger"></span></button>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <input type="text" id="appbundle_annualreport_{{ type }}_{{ index }}_note" name="appbundle_annualreport[{{ type }}][{{ index }}][note]" required="required" value="{{ entity.note}}" class="form-control" />
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-2">
+            <input type="text" id="appbundle_annualreport_{{ type }}_{{ index }}_employeeCount" name="appbundle_annualreport[{{ type }}][{{ index }}][employeeCount]" required="required" value="{{ entity.employeeCount}}" class="form-control" />
+        </div>
+        <div class="col-xs-9 col-sm-2">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="appbundle_annualreport_{{ type }}_{{ index }}_isFullTime" name="appbundle_annualreport[{{ type }}][{{ index }}][isFullTime]" value="1" {% if entity.isFullTime == 1 %}checked="checked"{% endif %} /> Full Time</label>
+            </div>
+        </div>
+    </div>
+</li>

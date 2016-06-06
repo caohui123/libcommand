@@ -29,60 +29,70 @@ class AnnualReportType extends AbstractType
             ->add('staffingTenured', 'collection', array(
                 'type' => new AnnualReportStaffingType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportStaffing entity collection
             ->add('staffingClerical', 'collection', array(
                 'type' => new AnnualReportStaffingType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportStaffing entity collection
             ->add('staffingLecturers', 'collection', array(
                 'type' => new AnnualReportStaffingType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportStaffing entity collection
             ->add('staffingOther', 'collection', array(
                 'type' => new AnnualReportStaffingType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportDetail entity collection
             ->add('detailCore', 'collection', array(
                 'type' => new AnnualReportDetailType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportDetail entity collection
             ->add('detailProgress', 'collection', array(
                 'type' => new AnnualReportDetailType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportDetail entity collection
             ->add('detailInitiatives', 'collection', array(
                 'type' => new AnnualReportDetailType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportDetail entity collection
             ->add('detailAccomplishments', 'collection', array(
                 'type' => new AnnualReportDetailType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportDetail entity collection
             ->add('detailChanges', 'collection', array(
                 'type' => new AnnualReportDetailType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             //AnnualReportDetail entity collection
             ->add('detailObjectives', 'collection', array(
                 'type' => new AnnualReportDetailType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             ->add('year', 'hidden', array(
@@ -91,6 +101,11 @@ class AnnualReportType extends AbstractType
             ->add('unit', 'hidden', array(
                 'data' => $options['data']->getUnit(),
                 'data_class' => null,
+            ))
+            ->add('isFinal', 'checkbox', array(
+                'label'=> 'Mark as Final ', 
+                'required'=>false, 
+                'attr'=>array('class'=>'user-status-ckbx-noajax')
             ))
         ;
         //Takes the AnnualReportUnit id passed to the unit field and converts it into the proper AnnualReportUnit entity.
