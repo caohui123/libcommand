@@ -138,7 +138,7 @@ input.thumbnail-photo-select{
 /**
  * Annual report staffing lists
  */
-ul.staffing-list, ul.detail-list{
+ul.staffing-list, ul.detail-list, ul.document-list{
     list-style-type: none;
 }
 ul.staffing-list .staffing-form .form-group{

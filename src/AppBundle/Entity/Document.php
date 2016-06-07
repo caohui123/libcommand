@@ -22,7 +22,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="class_name", type="string")
  * @ORM\DiscriminatorMap({
- *  "AppBundle\Entity\Image"     = "AppBundle\Entity\Image",
+ *  "AppBundle\Entity\Image"                    = "AppBundle\Entity\Image",
+ *  "AppBundle\Entity\AnnualReportDocument"     = "AppBundle\Entity\AnnualReportDocument",
  * })
  */
 abstract class Document
@@ -108,7 +109,9 @@ abstract class Document
      */
     public function setName($name)
     {
-        $this->name = $name;
+        if($name !== null){
+            $this->name = $name;
+        }
 
         return $this;
     }
@@ -184,8 +187,9 @@ abstract class Document
      */
     public function setSubDir($subdir)
     {
-        $this->subdir = $subdir;
-
+        if($subdir !== null){
+            $this->subdir = $subdir;
+        }
         return $this;
     }
 

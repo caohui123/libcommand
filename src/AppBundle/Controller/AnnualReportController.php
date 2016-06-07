@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,7 +11,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\AnnualReport;
 use AppBundle\Form\AnnualReportType;
 use AppBundle\Entity\AnnualReportUnit;
-use AppBundle\Entity\AnnualReportStaffing;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
@@ -52,6 +52,7 @@ class AnnualReportController extends Controller
     public function createAction(Request $request)
     {
         $requestData = $request->request->all();
+        //var_dump($requestData);
         
         $em = $this->getDoctrine()->getManager();
         
@@ -205,7 +206,7 @@ class AnnualReportController extends Controller
     {
         $form = $this->createForm(new AnnualReportType($this->getDoctrine()->getManager()), $entity, array(
             'action' => $this->generateUrl('annualreport_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'method' => 'PUT', //DO NOT USE PATCH because partial form data submission will NOT allow for deletion of staffing & detail collections
         ));
 
         $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-warning')));
@@ -214,15 +215,22 @@ class AnnualReportController extends Controller
     }
     /**
      * Edits an existing AnnualReport entity.
+     * 
+     * NOTE: The PATCH method allows submitting partial data. 
+     * In other words, if the submitted form data is missing certain fields (e.g. Document collection entities), 
+     * those will be ignored and the default values (if any) will be used. 
+     * With all other HTTP methods, if the submitted form data is missing some fields, those fields are set to null.
      *
      * @Route("/{id}", name="annualreport_update")
-     * @Method("PUT")
+     * @Method({"PUT", "PATCH"})
      * @Template("AppBundle:AnnualReport:edit.html.twig")
      * 
      * @Secure(roles="ROLE_ANNUALREPORT_EDIT")
      */
     public function updateAction(Request $request, $id)
     {   
+        $requestData = $request->request->all();
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:AnnualReport')->find($id);
@@ -236,6 +244,16 @@ class AnnualReportController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            //Remove any documents marked for deletion (allow_delete set to FALSE in form so have to do manually)
+            if(isset($requestData['delete_document'])){
+                foreach($requestData['delete_document'] as $documentId){
+                    $document = $em->getRepository('AppBundle:AnnualReportDocument')->find($documentId);
+                    if(!$document){
+                        throw $this->createNotFoundException('Unable to find AnnualReportDocument entity.');
+                    }
+                    $entity->removeDocument($document);
+                }
+            }
             $em->flush();
 
             return $this->redirect($this->generateUrl('annualreport_edit', array('id' => $id)));
@@ -246,6 +264,7 @@ class AnnualReportController extends Controller
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
+
     }
     /**
      * Deletes a AnnualReport entity.
@@ -271,9 +290,18 @@ class AnnualReportController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find AnnualReport entity.');
             }
-
-            $em->remove($entity);
+            
+            //Remove any documents (allow_delete set to FALSE in form so have to do manually)
+            $documents = $entity->getDocuments();
+            foreach($documents as $document){
+                $entity->removeDocument($document);
+                //$em->remove($document);
+            }
+            $em->persist($entity);
             $em->flush();
+            
+            $em->remove($entity);
+            $em->flush(); //flush again to remove the annual report
         }
 
         return $this->redirect($this->generateUrl('annualreportunit_edit', array('id' => $unit)));

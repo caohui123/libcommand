@@ -225,6 +225,28 @@ $(document).ready(function(){
         e.preventDefault();
         addTagForm($detailObjectivesCollectionHolder, $newDetailObjectivesLi);
     });
+    
+    /******
+     * Documents (new.html.twig) 
+     ******/
+    var $documentsCollectionHolder;
+    var $addDocumentsLink = $('<a href="#" class="add_documents_link">+ Add Document</a>');
+    var $newDocumentsLi = $('<li></li>').append($addDocumentsLink);
+
+    $documentsCollectionHolder = $('ul.documents_collection');
+
+    $documentsCollectionHolder.append($newDocumentsLi);
+
+    $documentsCollectionHolder.data('index', $documentsCollectionHolder.find(':input').length);
+
+    //Add an initial documents form.
+    //addTagForm($documentsCollectionHolder, $newDocumentsLi);
+
+    //Add an additional documents form each time a user clicks the $addDocumentsLink
+    $addDocumentsLink.on('click', function(e) {
+        e.preventDefault();
+        addTagForm($documentsCollectionHolder, $newDocumentsLi);
+    });
 
     /**
      * Uses Symfony's prototype code to generate a new list item for a form collection
@@ -247,8 +269,50 @@ $(document).ready(function(){
         var $newFormLi = $('<li></li>').append(newForm);
         $newLinkLi.before($newFormLi);
     }
+    
+    /******
+     * Documents (edit.html.twig)
+     ******/
+    var $documentCollectionHolder;
+    var $addDocumentLink = $('<a href="#" class="add_document_link">+ Add Document</a>');
+    var $newDocumentTr = $('<tr></tr>').append($addDocumentLink);
 
-    $(document).on('click', '.delete-staff, .delete-detail', function(event){
+    $documentCollectionHolder = $('table.documents_collection');
+
+    $documentCollectionHolder.append($newDocumentTr);
+
+    $documentCollectionHolder.data('index', $documentCollectionHolder.find(':input').length);
+
+    //Add an additional documents form each time a user clicks the $addDocumentLink
+    $addDocumentLink.on('click', function(e) {
+        e.preventDefault();
+        addDocumentRow($documentCollectionHolder, $newDocumentTr);
+    });
+    
+    /**
+     * Uses Symfony's prototype code to generate a new table row for a form collection
+     */
+    function addDocumentRow($collectionHolder, $newDocumentTr) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+        
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormTr = $('<tr></tr>').append(newForm);
+        console.log($newFormTr);
+        $newDocumentTr.before($newFormTr);
+    }
+
+    $(document).on('click', '.delete-staff, .delete-detail, .delete-document', function(event){
         event.preventDefault();
         $(this).parents('.annualreport-item-container').remove();
     });

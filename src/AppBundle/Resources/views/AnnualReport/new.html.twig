@@ -128,6 +128,24 @@
         </div> 
     </section>
     <hr>
+    <section id="annual-report-documents">
+        <header>
+            <h2>Documents</h2>
+        </header>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <ul class="documents_collection document-list" data-prototype="
+                    {# The AnnualReportDocument form prototype does NOT include fields for file or subdirectory, 
+                       so this snippet was made with those extra fields modeled after the 'name' text field #}
+                    {% filter escape %}
+                        {{ include('AppBundle:AnnualReport:snippets/documentform.html.twig') }} 
+                    {% endfilter %}
+                    ">
+                </ul>
+            </div>
+        </div>
+    </section>
+    <hr>
             {{ form_row(form.year) }}
             {{ form_row(form.unit) }}
             {{ form_row(form._token) }}

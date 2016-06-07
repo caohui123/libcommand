@@ -1,7 +1,14 @@
 {% extends '::printbase.html.twig' %}
 {% block title %}Annual Report Unit{% endblock %}
 {% block body %}
-<h1>{{entity.unit}} Annual Report {{entity.year}}-{{(entity.year + 1)}}</h1>
+<h1>
+    {{entity.unit}} Annual Report {{entity.year}}-{{(entity.year + 1)}}
+    {% if entity.isFinal %}
+        (Final)
+    {% else %}
+        (Draft)
+    {% endif %}
+</h1>
 <button class="print-btn" onclick="window.print();">Print</button>
 <section id="annual-report-staffing">
     <h2>Staffing Information</h2>

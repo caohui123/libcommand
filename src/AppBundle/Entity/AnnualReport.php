@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\AnnualReportStaffing;
 use AppBundle\Entity\AnnualReportDetail;
+use AppBundle\Entity\AnnualReportDocument;
 
 /**
  * AnnualReport
@@ -55,8 +56,8 @@ class AnnualReport
     /**
      * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_staffingtenure",
-     *      joinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $staffingTenured;
@@ -64,8 +65,8 @@ class AnnualReport
     /**
      * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_staffingclerical",
-     *      joinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $staffingClerical;
@@ -73,8 +74,8 @@ class AnnualReport
     /**
      * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_staffinglecturers",
-     *      joinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $staffingLecturers;
@@ -82,8 +83,8 @@ class AnnualReport
     /**
      * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_staffingother",
-     *      joinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $staffingOther;
@@ -92,8 +93,8 @@ class AnnualReport
      * Category 1. Core Services/Responsibilities
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailcore",
-     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $detailCore;
@@ -102,8 +103,8 @@ class AnnualReport
      * Category 2. Progress on Goals
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailprogress",
-     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $detailProgress;
@@ -112,8 +113,8 @@ class AnnualReport
      * Category 3. Non-Core Initiatives
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailinitatives",
-     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $detailInitiatives;
@@ -122,8 +123,8 @@ class AnnualReport
      * Category 4. Noteworthy Accomplishments
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailaccomplishments",
-     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $detailAccomplishments;
@@ -132,8 +133,8 @@ class AnnualReport
      * Category 5. Changes for Next Year
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailchanges",
-     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $detailChanges;
@@ -142,11 +143,20 @@ class AnnualReport
      * Category 6. Objectives for Next Year
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailobjectives",
-     *      joinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
     private $detailObjectives;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Document", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="annualreports_documents",
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="document_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      )
+     */
+    private $documents;
 
     /**
      * @var \DateTime $created
@@ -208,6 +218,7 @@ class AnnualReport
         $this->detailAccomplishments = new ArrayCollection();
         $this->detailChanges = new ArrayCollection();
         $this->detailObjectives = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
     
     /**
@@ -321,7 +332,7 @@ class AnnualReport
     /**
      * Get staffingTenured
      *
-     * @return AppBundle\Entity\AnnualReportStaffing 
+     * @return ArrayCollection 
      */
     public function getStaffingTenured()
     {
@@ -357,7 +368,7 @@ class AnnualReport
     /**
      * Get staffingClerical
      *
-     * @return AppBundle\Entity\AnnualReportStaffing 
+     * @return ArrayCollection
      */
     public function getStaffingClerical()
     {
@@ -393,7 +404,7 @@ class AnnualReport
     /**
      * Get staffingLecturers
      *
-     * @return AppBundle\Entity\AnnualReportStaffing 
+     * @return ArrayCollection
      */
     public function getStaffingLecturers()
     {
@@ -429,7 +440,7 @@ class AnnualReport
     /**
      * Get staffingOther
      *
-     * @return AppBundle\Entity\AnnualReportStaffing 
+     * @return ArrayCollection
      */
     public function getStaffingOther()
     {
@@ -465,7 +476,7 @@ class AnnualReport
     /**
      * Get detailCore
      *
-     * @return AppBundle\Entity\AnnualReportDetail
+     * @return ArrayCollection
      */
     public function getDetailCore()
     {
@@ -501,7 +512,7 @@ class AnnualReport
     /**
      * Get detailProgress
      *
-     * @return AppBundle\Entity\AnnualReportDetail
+     * @return ArrayCollection
      */
     public function getDetailProgress()
     {
@@ -537,7 +548,7 @@ class AnnualReport
     /**
      * Get detailInitiatives
      *
-     * @return AppBundle\Entity\AnnualReportDetail
+     * @return ArrayCollection
      */
     public function getDetailInitiatives()
     {
@@ -573,7 +584,7 @@ class AnnualReport
     /**
      * Get detailAccomplishments
      *
-     * @return AppBundle\Entity\AnnualReportDetail
+     * @return ArrayCollection
      */
     public function getDetailAccomplishments()
     {
@@ -609,7 +620,7 @@ class AnnualReport
     /**
      * Get detailChanges
      *
-     * @return AppBundle\Entity\AnnualReportDetail
+     * @return ArrayCollection
      */
     public function getDetailChanges()
     {
@@ -645,11 +656,47 @@ class AnnualReport
     /**
      * Get detailObjectives
      *
-     * @return AppBundle\Entity\AnnualReportDetail
+     * @return ArrayCollection
      */
     public function getDetailObjectives()
     {
         return $this->detailObjectives;
+    }
+    
+    /**
+     * Add document
+     *
+     * @param AppBundle\Entity\AnnualReportDocument  $document
+     * @return AnnualReport
+     */
+    public function addDocument(AnnualReportDocument $document)
+    {
+        $this->documents->add($document);
+
+        return $this;
+    }
+
+    /**
+     * Remove document
+     *
+     * @param AppBundle\Entity\AnnualReportDocument  $document
+     * @return AnnualReport
+     */
+    public function removeDocument(AnnualReportDocument $document)
+    {
+        $this->documents->removeElement($document);
+        
+        return $this;
+    }
+    
+    /**
+     * Get documents
+     *
+     * @return ArrayCollection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
     
     /**

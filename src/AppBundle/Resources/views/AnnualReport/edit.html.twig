@@ -160,7 +160,55 @@
             </div>
         </div> 
     </section>
-    <hr>        
+    <hr>    
+    <section id="annual-report-documents">
+        <h2>Documents</h2>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="table-responsive">
+                    <table class="table table-striped documents_collection"  id="jquerySortable_1" data-prototype="
+                        {# The AnnualReportDocument form prototype does NOT include fields for file or subdirectory, 
+                           so this snippet was made with those extra fields modeled after the 'name' text field #}
+                        {% filter escape %}
+                            {{ include('AppBundle:AnnualReport:snippets/documentform.html.twig') }} 
+                        {% endfilter %}
+                        ">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Delete on Update</th>
+                            </tr>
+                        </thead>
+                        <tbody id="document_rows">
+                            {% if entity.documents|length > 0 %}
+                                {% for document in entity.documents if document %}
+                                    <tr>
+                                        <td><a href="{{ asset('uploads/annualreport/' ~ document.path) }}" aria-label="show document">{{ document.name }}</a></td>
+                                        <td>
+                                            {% set imagePath = document.path|split('.') %}
+                                            {% if imagePath|length > 1 %}
+                                                {% set imagePath = imagePath[1] %}
+                                            {% else %}
+                                                {% set imagePath = '' %}
+                                            {% endif %}
+                                            {{ imagePath }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="delete_document[{{ document.id }}]" value="{{ document.id }}" />
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="3">There are no files associated with this report.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+        </div>
+    </section>
+    <hr>
     <div class="row">
         <div class="col-xs-6">
             {{ form_row(edit_form.isFinal) }}
@@ -176,11 +224,16 @@
             {% endif %} 
         </div>
     </div>
-    
-    
-               
-   
 {% endblock %}
 {% block documentReady %} 
    //JS file located in Resources/public/js/annualreport.js
+   
+   //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)
+    $('#jquerySortable_1').tablesorter({
+        headers: {
+            2: {
+                sorter: false
+            },
+        }
+    });
 {% endblock %}
