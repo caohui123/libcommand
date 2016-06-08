@@ -26,6 +26,14 @@ class AnnualReportDocumentType extends AbstractType
 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'), 'mimeTypesMessage' => 'Only .PDF, .DOC(X), .XLS(X), .PPT(X), .CSV, .TXT file types allowed.'])
                 )
             ))
+            ->add('category', 'choice', array(
+                'label' => 'Category',
+                'choices' => array(
+                    'service' => 'Service Transactions',
+                    'processing' => 'Processing Statistics',
+                    'other' => 'Other',
+                ),
+            ))
             ->add('subdir', 'hidden', array(
                 'data' => 'annualreport'
             ))

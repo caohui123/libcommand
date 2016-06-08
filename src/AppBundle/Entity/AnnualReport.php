@@ -49,14 +49,14 @@ class AnnualReport
 
     /**
      * @ORM\ManyToOne(targetEntity="AnnualReportUnit", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="unit_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="unit_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $unit;
     
     /**
      * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_staffingtenure",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -65,7 +65,7 @@ class AnnualReport
     /**
      * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_staffingclerical",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -74,7 +74,7 @@ class AnnualReport
     /**
      * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_staffinglecturers",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -83,7 +83,7 @@ class AnnualReport
     /**
      * @ORM\ManyToMany(targetEntity="AnnualReportStaffing", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_staffingother",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="staffing_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -93,7 +93,7 @@ class AnnualReport
      * Category 1. Core Services/Responsibilities
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailcore",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -103,7 +103,7 @@ class AnnualReport
      * Category 2. Progress on Goals
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailprogress",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -113,7 +113,7 @@ class AnnualReport
      * Category 3. Non-Core Initiatives
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailinitatives",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -123,7 +123,7 @@ class AnnualReport
      * Category 4. Noteworthy Accomplishments
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailaccomplishments",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -133,7 +133,7 @@ class AnnualReport
      * Category 5. Changes for Next Year
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailchanges",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -143,7 +143,7 @@ class AnnualReport
      * Category 6. Objectives for Next Year
      * @ORM\ManyToMany(targetEntity="AnnualReportDetail", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_detailobjectives",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="detail_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */
@@ -152,7 +152,7 @@ class AnnualReport
     /**
      * @ORM\ManyToMany(targetEntity="Document", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="annualreports_documents",
-     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="annualreport_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="document_id", referencedColumnName="id", onDelete="CASCADE")},
      *      )
      */

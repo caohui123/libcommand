@@ -15,6 +15,12 @@
             <p>{{ flash_message }}</p>
         </div>
     {% endfor %}
+    
+    {% for flash_message in app.session.flashBag.get('existingreports') %}
+        <div class="flash-notice alert alert-danger">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
 
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-7 col-lg-8">
@@ -82,13 +88,16 @@
             <h2>Unit Information</h2>
             <div class="well well-lg">
             {{ form(edit_form) }}
+            {% if is_granted('ROLE_ANNUALREPORT_DELETE') %}
+                {% if pagination.getPaginationData.totalCount == 0 %}
+                    {{ form(delete_form) }}
+                {% else %}
+                    <p class="alert alert-info">To delete this unit you must first delete all associated annual reports for security reasons.</p>
+                {% endif %}
+            {% endif %}
             </div>
         </div>
     </div>
-            
-    {% if is_granted('ROLE_ANNUALREPORT_DELETE') %}
-    {{ form(delete_form) }}
-    {% endif %}
 {% endblock %}
 {% block documentReady %} 
     //uses jQuery Tablesorter to sort columns for paginated results (http://tablesorter.com/)

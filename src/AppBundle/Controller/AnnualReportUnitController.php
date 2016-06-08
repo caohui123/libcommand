@@ -282,6 +282,17 @@ class AnnualReportUnitController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find AnnualReportUnit entity.');
             }
+            
+            //Do NOT delete this if there are still Annual Reports which belong to it (ensures a unit isn't deleted by accident, which would also wipe out these reports)
+            $annualReports = $em->getRepository('AppBundle:AnnualReport')->findBy(array('unit' => $entity));
+            if($annualReports){
+                $this->addFlash(
+                    'existingreports',
+                    'You must delete all annual reports for this unit before deleting the unit!'
+                );
+                
+                return $this->redirect($this->generateUrl('annualreportunit_edit', array('id' => $entity->getId())));
+            }
 
             $em->remove($entity);
             $em->flush();

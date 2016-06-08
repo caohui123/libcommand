@@ -163,12 +163,13 @@
     <hr>    
     <section id="annual-report-documents">
         <h2>Documents</h2>
+        {#
         <div class="row">
             <div class="col-xs-12 col-sm-6">
                 <div class="table-responsive">
                     <table class="table table-striped documents_collection"  id="jquerySortable_1" data-prototype="
                         {# The AnnualReportDocument form prototype does NOT include fields for file or subdirectory, 
-                           so this snippet was made with those extra fields modeled after the 'name' text field #}
+                           so this snippet was made with those extra fields modeled after the 'name' text field }
                         {% filter escape %}
                             {{ include('AppBundle:AnnualReport:snippets/documentform.html.twig') }} 
                         {% endfilter %}
@@ -205,6 +206,22 @@
                         </tbody>
                     </table>
                 </div> 
+            </div>
+        </div>
+        #}
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+                <ul class="documents_collection document-list list-group" data-prototype="
+                        {# The AnnualReportDocument form prototype does NOT include fields for file or subdirectory, 
+                           so this snippet was made with those extra fields modeled after the 'name' text field #}
+                        {% filter escape %}
+                            {{ include('AppBundle:AnnualReport:snippets/document-prototype.html.twig') }} 
+                        {% endfilter %}
+                        ">
+                    {% for document in entity.documents if document %}
+                        {{ include('AppBundle:AnnualReport:snippets/edit-document.html.twig', { 'entity': document, 'index': loop.index0 }) }}
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </section>

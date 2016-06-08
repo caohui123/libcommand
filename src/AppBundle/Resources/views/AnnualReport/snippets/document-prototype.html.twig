@@ -1,0 +1,27 @@
+
+    <div class="row">
+        <div class="col-xs-2 col-sm-1">
+            <button class="delete-document btn btn-link" type="button"><span class="glyphicon glyphicon-trash text-danger"></span></button>
+        </div>
+        <div class="col-xs-10 col-sm-6">
+            <label for="appbundle_annualreport_documents___name___name"> Name: </label>
+            <input type="text" id="appbundle_annualreport_documents___name___name" name="appbundle_annualreport[documents][__name__][name]" required="required" maxlength="255" class="form-control" />
+        </div>
+        <div class="col-xs-10 col-sm-5">
+            <label for="appbundle_annualreport_documents___name___category"> Category: </label>
+            <select id="appbundle_annualreport_documents___name___category" name="appbundle_annualreport[documents][__name__][category]" required="required" class="form-control">
+                <option value="service">Service Transactions</option>
+                <option value="processing">Processing Statistics</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-2 col-sm-1 col-sm-offset-1">
+            <input type="file" id="appbundle_annualreport_documents___name___file" name="appbundle_annualreport[documents][__name__][file]" required="required" />
+            <input type="hidden" id="appbundle_annualreport_documents___name___subdir" name="appbundle_annualreport[documents][__name__][subdir]" required="required" value="annualreport" />
+        </div>
+    </div>
+
+
+                    

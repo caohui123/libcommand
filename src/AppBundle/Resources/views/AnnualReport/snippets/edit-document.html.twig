@@ -1,0 +1,27 @@
+<li class="list-group-item annualreport-item-container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-5">
+            <label for="appbundle_annualreport_documents_{{ index }}_name"> Name: </label>
+            <input type="text" id="appbundle_annualreport_documents_{{ index }}_name" name="appbundle_annualreport[documents][{{ index }}][name]" required="required" value="{{ entity.name }}" maxlength="255" class="form-control" />
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-5">
+            <label for="appbundle_annualreport_documents_{{ index }}_category"> Category: </label>
+            <select id="appbundle_annualreport_documents_{{ index }}_category" name="appbundle_annualreport[documents][{{ index }}][category]" required="required" class="form-control">
+                <option value="service" {% if entity.category == 'service' %}selected{% endif %}>Service Transactions</option>
+                <option value="processing" {% if entity.category == 'processing' %}selected{% endif %}>Processing Statistics</option>
+                <option value="other" {% if entity.category == 'other' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2">
+            <label>Actions: </label>
+            <div class="btn-group" role="group" aria-label="Document action buttons">
+                <button type="button" class="btn btn-link" aria-label="download document" onclick="javascript:window.location.href='{{ asset('uploads/annualreport/' ~ entity.path) }}'; return false;"><span class="glyphicon glyphicon-download text-info"></span></button>
+                <button type="button" class="delete-document btn btn-link" aria-label="delete document on update"><span class="glyphicon glyphicon-trash text-danger"></span></button>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="appbundle_annualreport_documents_{{ index }}_subdir" name="appbundle_annualreport[documents][{{ index }}][subdir]" required="required" value="annualreport" />
+</li>
+
+
+                    

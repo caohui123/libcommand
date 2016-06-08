@@ -99,7 +99,7 @@ class AnnualReportType extends AbstractType
             ->add('documents', 'collection', array(
                 'type' => new AnnualReportDocumentType(),
                 'allow_add' => true,
-                'allow_delete' => false, // Do NOT automatically remove documents not in the collection (i.e. edit form where Documents are not passed again)
+                'allow_delete' => true, // Do NOT automatically remove documents not in the collection (i.e. edit form where Documents are not passed again)
                 'by_reference' => false,
             ))
             ->add('year', 'hidden', array(

@@ -178,30 +178,6 @@ class AnnualReportStaffing
     }
     
     /**
-     * Set AnnualReport
-     *
-     * @param AppBundle\Entity\AnnualReport $annualReport
-     *
-     * @return AnnualReportStaffing
-     */
-    public function setAnnualReport(AnnualReport $annualReport)
-    {
-        $this->annualReport = $annualReport;
-
-        return $this;
-    }
-
-    /**
-     * Get AnnualReport
-     *
-     * @return AnnualReport
-     */
-    public function getAnnualReport()
-    {
-        return $this->annualReport;
-    }
-    
-    /**
      * Get created
      *
      * @return \DateTime

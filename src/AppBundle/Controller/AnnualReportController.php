@@ -291,15 +291,6 @@ class AnnualReportController extends Controller
                 throw $this->createNotFoundException('Unable to find AnnualReport entity.');
             }
             
-            //Remove any documents (allow_delete set to FALSE in form so have to do manually)
-            $documents = $entity->getDocuments();
-            foreach($documents as $document){
-                $entity->removeDocument($document);
-                //$em->remove($document);
-            }
-            $em->persist($entity);
-            $em->flush();
-            
             $em->remove($entity);
             $em->flush(); //flush again to remove the annual report
         }
