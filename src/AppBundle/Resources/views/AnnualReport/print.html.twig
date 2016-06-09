@@ -11,131 +11,188 @@
 </h1>
 <button class="print-btn" onclick="window.print();">Print</button>
 <section id="annual-report-staffing">
-    <h2>Staffing Information</h2>
-    <table border="1" cellspacing="5" cellpadding="5">
-        <tr>
-            <th align="left">Tenure-Track Librarians</th>
-            <th align="left">Librarian Lecturers</th>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    {% for staffTenure in entity.staffingTenured if staffTenure %}
-                        <li>{{ staffTenure.employeeCount}}x {{ staffTenure.note }} ({% if staffTenure.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    {% for staffLecturer in entity.staffingLecturers if staffLecturer %}
-                        <li>{{ staffLecturer.employeeCount}}x {{ staffLecturer.note }} ({% if staffLecturer.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <th align="left">Clerical Staff</th>
-            <th align="left">Other Employees (PTs or Students)</th>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                {% for staffClerical in entity.staffingClerical if staffClerical %}
-                    <li>{{ staffClerical.employeeCount}}x {{ staffClerical.note }} ({% if staffClerical.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
-                {% endfor %}
-                </ul>
-            </td>
-            <td>
-                <ul>
-                {% for staffOther in entity.staffingOther if staffOther %}
-                    <li>{{ staffOther.employeeCount}}x {{ staffOther.note }} ({% if staffOther.isFullTime %}Full Time{% else %}Part Time{% endif %})</li>
-                {% endfor %}
-                </ul>
-            </td>
-        </tr>
+    <h2>Staffing</h2>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Faculty (Tenure Track)</caption>
+        <tbody>
+            <tr>
+                <th>Details</th>
+                <th>Appointment</th>
+                <th>Quantity</th>
+            </tr>
+            {% for staffTenure in entity.staffingTenured if staffTenure %}
+                <tr>
+                    <td>{{ staffTenure.note }}</td>
+                    <td>{% if staffTenure.isFullTime %}Full Time{% else %}Part Time{% endif %}</td>
+                    <td>{{ staffTenure.employeeCount}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Librarian Lecturers</caption>
+        <tbody>
+            <tr>
+                <th>Details</th>
+                <th>Appointment</th>
+                <th>Quantity</th>
+            </tr>
+            {% for staffLecturer in entity.staffingLecturers if staffLecturer %}
+                <tr>
+                    <td>{{ staffLecturer.note }}</td>
+                    <td>{% if staffLecturer.isFullTime %}Full Time{% else %}Part Time{% endif %}</td>
+                    <td>{{ staffLecturer.employeeCount}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Clerical</caption>
+        <tbody>
+            <tr>
+                <th>Details</th>
+                <th>Appointment</th>
+                <th>Quantity</th>
+            </tr>
+            {% for staffClerical in entity.staffingClerical if staffClerical %}
+                <tr>
+                    <td>{{ staffClerical.note }}</td>
+                    <td>{% if staffClerical.isFullTime %}Full Time{% else %}Part Time{% endif %}</td>
+                    <td>{{ staffClerical.employeeCount}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Other</caption>
+        <tbody>
+            <tr>
+                <th>Details</th>
+                <th>Appointment</th>
+                <th>Quantity</th>
+            </tr>
+            {% for staffOther in entity.staffingOther if staffOther %}
+                <tr>
+                    <td>{{ staffOther.note }}</td>
+                    <td>{% if staffOther.isFullTime %}Full Time{% else %}Part Time{% endif %}</td>
+                    <td>{{ staffOther.employeeCount}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
 </section>
 <section id="annual-report-categories">
-    <header>
-        <h2>Categories</h2>
-    </header>
-    <h3>1. Core Services/Responsibilities</h3>
-    <ol>
-        {% for detCore in entity.detailCore if detCore %}
-            <li>{{ detCore.detail }}</li>
-        {% endfor %}
-    </ol>
-
-    <h3>2. Progress on Goals</h3>
-    <ol>
-        {% for detProgress in entity.detailProgress if detProgress %}
-            <li>{{ detProgress.detail }}</li>
-        {% endfor %}
-    </ol>
-    <h3>3. Non-Core Initiatives</h3>
-    <ol>
-        {% for detInitiatives in entity.detailInitiatives if detInitiatives %}
-            <li>{{ detInitiatives.detail }}</li>
-        {% endfor %}
-    </ol>
-    <h3>4. Noteworthy Accomplishments</h3>
-    <ol>
-        {% for detAccomplishments in entity.detailAccomplishments if detAccomplishments %}
-            <li>{{ detAccomplishments.detail }}</li>
-        {% endfor %}
-    </ol>
-    <h3>5. Changes for Next Year</h3>
-    <ol>
-        {% for detChanges in entity.detailChanges if detChanges %}
-            <li>{{ detChanges.detail }}</li>
-        {% endfor %}
-    </ol>
-    <h3>6. Objectives for Next Year</h3>
-    <ol>
-        {% for detObjectives in entity.detailObjectives if detObjectives %}
-            <li>{{ detObjectives.detail }}</li>
-        {% endfor %}
-    </ol>
+    <h2>Categories</h2>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>1. Core Services/Responsibilities</caption>
+        <tbody>
+            {% for detCore in entity.detailCore if detCore %}
+                <tr>
+                    <td style="text-align:left">{{ detCore.detail }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>2. Progress on Goals</caption>
+        <tbody>
+            {% for detProgress in entity.detailProgress if detProgress %}
+                <tr>
+                    <td style="text-align:left">{{ detProgress.detail }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>3. Non-Core Initiatives</caption>
+        <tbody>
+            {% for detInitiatives in entity.detailProgress if detInitiatives %}
+                <tr>
+                    <td style="text-align:left">{{ detInitiatives.detail }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>     
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>4. Noteworthy Accomplishments</caption>
+        <tbody>
+            {% for detAccomplishments in entity.detailAccomplishments if detAccomplishments %}
+                <tr>
+                    <td style="text-align:left">{{ detAccomplishments.detail }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>5. Changes for Next Year</caption>
+        <tbody>
+            {% for detChanges in entity.detailChanges if detChanges %}
+                <tr>
+                    <td style="text-align:left">{{ detChanges.detail }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>6. Objectives for Next Year</caption>
+        <tbody>
+            {% for detObjectives in entity.detailObjectives if detObjectives %}
+                <tr>
+                    <td style="text-align:left">{{ detObjectives.detail }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </section>
 <section id="annual-report-documents">
-    <header>
-        <h2>Documents</h2>
-    </header>
-    <h3>Service Transactions</h3>
-    <ul>
-        {% for document in entity.documents if document.category == 'service' %}
-            {% set imagePath = document.path|split('.') %}
-            {% if imagePath|length > 1 %}
-                {% set imagePath = '(' ~ imagePath[1] ~ ')' %}
-            {% else %}
-                {% set imagePath = '' %}
-            {% endif %}
-            <li>{{ document.name }} {{ imagePath }}</li>
-        {% endfor %}
-    </ul>
-    <h3>Processing Statistics</h3>
-    <ul>
-        {% for document in entity.documents if document.category == 'processing' %}
-            {% set imagePath = document.path|split('.') %}
-            {% if imagePath|length > 1 %}
-                {% set imagePath = '(' ~ imagePath[1] ~ ')' %}
-            {% else %}
-                {% set imagePath = '' %}
-            {% endif %}
-            <li>{{ document.name }} {{ imagePath }}</li>
-        {% endfor %}
-    </ul>
-    <h3>Other</h3>
-    <ul>
-        {% for document in entity.documents if document.category == 'other' %}
-            {% set imagePath = document.path|split('.') %}
-            {% if imagePath|length > 1 %}
-                {% set imagePath = '(' ~ imagePath[1] ~ ')' %}
-            {% else %}
-                {% set imagePath = '' %}
-            {% endif %}
-            <li>{{ document.name }} {{ imagePath }}</li>
-        {% endfor %}
-    </ul>
+    <h2>Documents</h2>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Service Transactions</caption>
+        <tbody>
+            {% for document in entity.documents if document.category == 'service' %}
+                {% set imagePath = document.path|split('.') %}
+                {% if imagePath|length > 1 %}
+                    {% set imagePath = '(' ~ imagePath[1] ~ ')' %}
+                {% else %}
+                    {% set imagePath = '' %}
+                {% endif %}
+                <tr>
+                    <td style="text-align:left">{{ document.name }} {{ imagePath }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Processing Statistics</caption>
+        <tbody>
+            {% for document in entity.documents if document.category == 'processing' %}
+                {% set imagePath = document.path|split('.') %}
+                {% if imagePath|length > 1 %}
+                    {% set imagePath = '(' ~ imagePath[1] ~ ')' %}
+                {% else %}
+                    {% set imagePath = '' %}
+                {% endif %}
+                <tr>
+                    <td style="text-align:left">{{ document.name }} {{ imagePath }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Other</caption>
+        <tbody>
+            {% for document in entity.documents if document.category == 'other' %}
+                {% set imagePath = document.path|split('.') %}
+                {% if imagePath|length > 1 %}
+                    {% set imagePath = '(' ~ imagePath[1] ~ ')' %}
+                {% else %}
+                    {% set imagePath = '' %}
+                {% endif %}
+                <tr>
+                    <td style="text-align:left">{{ document.name }} {{ imagePath }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </section>
 {% endblock %}
