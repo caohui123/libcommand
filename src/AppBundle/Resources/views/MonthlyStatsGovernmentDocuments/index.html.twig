@@ -1,0 +1,57 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>MonthlyStatsGovernmentDocuments list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Itemsaddedgross</th>
+                <th>Itemswithdrawn</th>
+                <th>Itemsaddednet</th>
+                <th>Paper</th>
+                <th>Electronicopacurls</th>
+                <th>Weeklyrecordsadded</th>
+                <th>Monthlyrecordsadded</th>
+                <th>Monthlynonoverlays</th>
+                <th>Month</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('monthly_govdocs_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.itemsAddedGross }}</td>
+                <td>{{ entity.itemsWithdrawn }}</td>
+                <td>{{ entity.itemsAddedNet }}</td>
+                <td>{{ entity.paper }}</td>
+                <td>{{ entity.electronicOpacUrls }}</td>
+                <td>{{ entity.weeklyRecordsAdded }}</td>
+                <td>{{ entity.monthlyRecordsAdded }}</td>
+                <td>{{ entity.monthlyNonOverlays }}</td>
+                <td>{% if entity.month %}{{ entity.month|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('monthly_govdocs_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('monthly_govdocs_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('monthly_govdocs_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

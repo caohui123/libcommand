@@ -1,0 +1,64 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>MonthlyStatsGovernmentDocuments</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Itemsaddedgross</th>
+                <td>{{ entity.itemsAddedGross }}</td>
+            </tr>
+            <tr>
+                <th>Itemswithdrawn</th>
+                <td>{{ entity.itemsWithdrawn }}</td>
+            </tr>
+            <tr>
+                <th>Itemsaddednet</th>
+                <td>{{ entity.itemsAddedNet }}</td>
+            </tr>
+            <tr>
+                <th>Paper</th>
+                <td>{{ entity.paper }}</td>
+            </tr>
+            <tr>
+                <th>Electronicopacurls</th>
+                <td>{{ entity.electronicOpacUrls }}</td>
+            </tr>
+            <tr>
+                <th>Weeklyrecordsadded</th>
+                <td>{{ entity.weeklyRecordsAdded }}</td>
+            </tr>
+            <tr>
+                <th>Monthlyrecordsadded</th>
+                <td>{{ entity.monthlyRecordsAdded }}</td>
+            </tr>
+            <tr>
+                <th>Monthlynonoverlays</th>
+                <td>{{ entity.monthlyNonOverlays }}</td>
+            </tr>
+            <tr>
+                <th>Month</th>
+                <td>{{ entity.month|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('monthly_govdocs') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('monthly_govdocs_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
