@@ -1,0 +1,155 @@
+{% extends '::base.html.twig' %}
+{% block title %}Government Documents Monthly Statistics{% endblock %}
+{% block body -%}
+    {# Totals #}
+    {% set totalItemsAddedGross = 0 %}
+    {% set totalItemsWithdrawn = 0 %}
+    {% set totalPapers = 0 %}
+    {% set totalOPAC = 0 %}
+    {% set totalWeeklyRecordsAdded = 0 %}
+    {% set totalMonthlyRecordsAdded = 0 %}
+    {% set totalMonthlyNonOverlays = 0 %}
+
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Government Documents Statistics: ' ~ type|capitalize ~ ' Year ' ~ year } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back, CSV, Print buttons #}
+    {% set vars = {'basepath' : path('monthly_govdocs'), 'csvpath': path('monthly_govdocs_report_csv', {'report_type': type, 'report_year': year, 'options': options}), 'printpath': path('monthly_govdocs_report_print', {'report_type': type, 'report_year': year, 'options': options}) } %}
+    {% include 'snippets/csvToolbar.html.twig' with vars %}
+
+    {% if options.holdings is defined %}
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Holdings' } %}
+                {% include 'AppBundle:MonthlyStatsGovernmentDocuments:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Items Added (gross)</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalItemsAddedGross = totalItemsAddedGross + monthly.itemsAddedGross %}
+                                <td>{{monthly.itemsAddedGross}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>{{ totalItemsAddedGross }}</td>
+                    </tr>
+                    <tr>
+                        <th>Items Withdrawn</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>-0</td>
+                            {% else %}
+                                {% set totalItemsWithdrawn = totalItemsWithdrawn + monthly.itemsWithdrawn %}
+                                <td>-{{monthly.itemsWithdrawn}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>-{{ totalItemsWithdrawn }}</td>
+                    </tr>
+                    <tr>
+                        <th>Net Items Added</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                <td>{{ monthly.itemsAddedGross - monthly.itemsWithdrawn }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>{{ totalItemsAddedGross - totalItemsWithdrawn }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    {% if options.usage is defined %}
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Usage' } %}
+                {% include 'AppBundle:MonthlyStatsGovernmentDocuments:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Paper</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalPapers = totalPapers + monthly.paper %}
+                                <td>{{monthly.paper}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>{{ totalPapers }}</td>
+                    </tr>
+                    <tr>
+                        <th>Electronic (OPAC URLs)</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalOPAC = totalOPAC + monthly.electronicOpacUrls %}
+                                <td>{{monthly.electronicOpacUrls}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>{{ totalOPAC }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    {% if options.processing is defined %}
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Processing' } %}
+                {% include 'AppBundle:MonthlyStatsGovernmentDocuments:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Weekly Records Added</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalWeeklyRecordsAdded = totalWeeklyRecordsAdded + monthly.weeklyRecordsAdded %}
+                                <td>{{monthly.weeklyRecordsAdded}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>{{ totalWeeklyRecordsAdded }}</td>
+                    </tr>
+                    <tr>
+                        <th>Monthly Records Added</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalMonthlyRecordsAdded = totalMonthlyRecordsAdded + monthly.monthlyRecordsAdded %}
+                                <td>{{monthly.monthlyRecordsAdded}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>{{ totalMonthlyRecordsAdded }}</td>
+                    </tr>
+                    <tr>
+                        <th>Monthly Non-Overlays</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalMonthlyNonOverlays = totalMonthlyNonOverlays + monthly.monthlyNonOverlays %}
+                                <td>{{monthly.monthlyNonOverlays}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>{{ totalMonthlyNonOverlays }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>    
+    {% endif %}
+{% endblock %}
+{% block documentReady %}
+    
+{% endblock %}

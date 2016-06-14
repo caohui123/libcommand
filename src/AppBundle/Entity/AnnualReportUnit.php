@@ -80,7 +80,7 @@ class AnnualReportUnit
     /**
      * @var User $contentChangedBy
      *
-     * @Gedmo\Blameable(on="change", field={"unit"})
+     * @Gedmo\Blameable(on="change", field={"name", "isActive"})
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(referencedColumnName="id")
      * @Serializer\Exclude //exclude from API calls 

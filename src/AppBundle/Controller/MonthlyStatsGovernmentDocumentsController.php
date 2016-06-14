@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\MonthlyStatsGovernmentDocuments;
 use AppBundle\Form\MonthlyStatsGovernmentDocumentsType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * MonthlyStatsGovernmentDocuments controller.
@@ -17,6 +19,7 @@ use AppBundle\Form\MonthlyStatsGovernmentDocumentsType;
  */
 class MonthlyStatsGovernmentDocumentsController extends Controller
 {
+    const START_YEAR = 2003;
 
     /**
      * Lists all MonthlyStatsGovernmentDocuments entities.
@@ -24,15 +27,18 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
      * @Route("/", name="monthly_govdocs")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('AppBundle:MonthlyStatsGovernmentDocuments')->findAll();
+        
+        $statsService = $this->get('monthlystatistics_service');
+        $yearlyTables = $statsService->monthlyTablesByYear('govdocs', self::START_YEAR);
 
         return array(
-            'entities' => $entities,
+            'yearly_tables' => $yearlyTables,
         );
     }
     /**
@@ -41,10 +47,15 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
      * @Route("/", name="monthly_govdocs_create")
      * @Method("POST")
      * @Template("AppBundle:MonthlyStatsGovernmentDocuments:new.html.twig")
+     * 
+     * @Secure(roles="ROLE_MONTHLYGOVDOCS_EDIT")
      */
     public function createAction(Request $request)
     {
-        $entity = new MonthlyStatsGovernmentDocuments();
+        $requestData = $request->request->all();
+        $month = new \DateTime($requestData['appbundle_monthlystatsgovernmentdocuments']['month']);
+        
+        $entity = new MonthlyStatsGovernmentDocuments($month);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -71,12 +82,12 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
      */
     private function createCreateForm(MonthlyStatsGovernmentDocuments $entity)
     {
-        $form = $this->createForm(new MonthlyStatsGovernmentDocumentsType(), $entity, array(
+        $form = $this->createForm(new MonthlyStatsGovernmentDocumentsType($this->getDoctrine()->getManager()), $entity, array(
             'action' => $this->generateUrl('monthly_govdocs_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-sm btn-success')));
 
         return $form;
     }
@@ -84,13 +95,17 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     /**
      * Displays a form to create a new MonthlyStatsGovernmentDocuments entity.
      *
-     * @Route("/new", name="monthly_govdocs_new")
+     * @Route("/new/{month}", name="monthly_govdocs_new")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MONTHLYGOVDOCS_EDIT")
+     * 
+     * @param String $month (YYYY-mm-dd)
      */
-    public function newAction()
+    public function newAction($month)
     {
-        $entity = new MonthlyStatsGovernmentDocuments();
+        $entity = new MonthlyStatsGovernmentDocuments(new \DateTime($month));
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -105,6 +120,8 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
      * @Route("/{id}", name="monthly_govdocs_show")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
      */
     public function showAction($id)
     {
@@ -130,6 +147,8 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
      * @Route("/{id}/edit", name="monthly_govdocs_edit")
      * @Method("GET")
      * @Template()
+     * 
+     * @Secure(roles="ROLE_MONTHLYGOVDOCS_EDIT")
      */
     public function editAction($id)
     {
@@ -160,12 +179,12 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     */
     private function createEditForm(MonthlyStatsGovernmentDocuments $entity)
     {
-        $form = $this->createForm(new MonthlyStatsGovernmentDocumentsType(), $entity, array(
+        $form = $this->createForm(new MonthlyStatsGovernmentDocumentsType($this->getDoctrine()->getManager()), $entity, array(
             'action' => $this->generateUrl('monthly_govdocs_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update', 'attr' => array('class' => 'btn btn-sm btn-warning')));
 
         return $form;
     }
@@ -175,6 +194,8 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
      * @Route("/{id}", name="monthly_govdocs_update")
      * @Method("PUT")
      * @Template("AppBundle:MonthlyStatsGovernmentDocuments:edit.html.twig")
+     * 
+     * @Secure(roles="ROLE_MONTHLYGOVDOCS_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -207,6 +228,8 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
      *
      * @Route("/{id}", name="monthly_govdocs_delete")
      * @Method("DELETE")
+     * 
+     * @Secure(roles="ROLE_MONTHLYGOVDOCS_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -240,8 +263,170 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('monthly_govdocs_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Displays a printer-friendly MonthlyStatsGovernmentDocuments entity.
+     *
+     * @Route("/{id}/print", name="monthly_govdocs_print")
+     * @Method("GET")
+     * @Template()
+     * 
+     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
+     */
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:MonthlyStatsGovernmentDocuments')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MonthlyStatsGovernmentDocuments entity.');
+        }
+
+        return array(
+            'entity'      => $entity,
+        );
+    }
+    
+    /**
+     * Call the Monthly Stats Service to generate a report for the year.
+     * 
+     * @Route("/report", name="monthly_govdocs_report")
+     * @Method("POST")
+     * @Template("AppBundle:MonthlyStatsGovernmentDocuments:viewyearlyreport.html.twig")
+     */
+    public function viewYearlyReportAction(Request $request){
+        $requestData = $request->request->all();
+        
+        $reportType = $requestData['report_type'];
+        $reportYear = $requestData['report_year'];
+        
+        if(isset($requestData['options'])){
+            $reportOptions = $requestData['options'];
+        } else {
+            $reportOptions = array();
+        }
+        
+        $statsService = $this->get('monthlystatistics_service');
+        $entities = $statsService->generateGovdocsYearlyReport($reportYear, $reportType);
+        
+        return array(
+            'entities' => $entities,
+            'type' => $reportType,
+            'year' => $reportYear,
+            'options' => $reportOptions,
+        );
+    }
+    
+    /**
+     * Call the Monthly Stats Service to generate a report for the year.
+     * 
+     * @Route("/report/print/yearly", name="monthly_govdocs_report_print")
+     * @Method("GET")
+     * @Template("AppBundle:MonthlyStatsGovernmentDocuments:printyearlyreport.html.twig")
+     */
+    public function printYearlyReportAction(Request $request){
+        $requestData = $request->query->all();
+        
+        $reportType = $requestData['report_type'];
+        $reportYear = $requestData['report_year'];
+        
+        if(isset($requestData['options'])){
+            $reportOptions = $requestData['options'];
+        } else {
+            $reportOptions = array();
+        }
+        
+        $statsService = $this->get('monthlystatistics_service');
+        $entities = $statsService->generateGovdocsYearlyReport($reportYear, $reportType);
+        
+        return array(
+            'entities' => $entities,
+            'type' => $reportType,
+            'year' => $reportYear,
+            'options' => $reportOptions,
+        );
+    }
+    
+    /**
+     * Call the Monthly Stats Service to generate a report for the year.
+     * 
+     * @Route("/report/csv/yearly", name="monthly_govdocs_report_csv")
+     * @Method("GET")
+     * @Template("AppBundle:MonthlyStatsGovernmentDocuments:csvyearlyreport.html.twig")
+     */
+    public function csvYearlyReportAction(Request $request){
+        $requestData = $request->query->all();
+        
+        $reportType = $requestData['report_type'];
+        $reportYear = $requestData['report_year'];
+        
+        
+        if(isset($requestData['options'])){
+            $reportOptions = $requestData['options'];
+        } else {
+            $reportOptions = array();
+        }
+        
+        $statsService = $this->get('monthlystatistics_service');
+        $entities = $statsService->generateGovdocsYearlyReport($reportYear, $reportType);
+        
+        $filename = "govdocs_".$reportType.'_'.$reportYear.'_'.date("Y_m_d_His").".csv"; 
+
+        $response = $this->render('AppBundle:MonthlyStatsGovernmentDocuments:csvyearlyreport.html.twig', array(
+                'entities' => $entities,
+                'type' => $reportType,
+                'year' => $reportYear,
+                'options' => $reportOptions,
+                'group_headers' => 'Instruction Date, Staff, Start, End, Instructor, Program, Course, Level, Level Description, Attendance,',
+                //'individual_instructions' => $individual_instruction_arr,
+                //'individual_headers' => 'Instruction Date, Staff, Start, End, Client, Program, Course, Level, Level Description, Client Interaction,',
+            )); 
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Government Documents Report Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response; 
+    }
+    
+    /**
+     * Retrieve a year dropdown list from the Instruction Service
+     * 
+     * @Route("/years/dropdown", name="monthly_govdocs_dropdown")
+     * @Method("GET")
+     * @Template()
+     */
+    public function getYearsDropdownAction(Request $request){
+        $requestData = $request->query->all();
+        $reportType = $requestData['type'];
+        $reportYear = self::START_YEAR;
+
+        $instructionService = $this->get('instruction_service');
+        
+        switch($reportType){
+            case 'calendar':
+                $years = $instructionService->generateYears(false, $reportYear);
+                break;
+            case 'fiscal':
+                $years = $instructionService->generateYears(true, $reportYear);
+                break;
+        }
+        
+        if(isset($years) && $years != null){
+            return $this->render('AppBundle:MonthlyStatsGovernmentDocuments:snippets/yeardropdown.html.twig', array(
+                'years' => $years,
+            ));
+        }
+        
+        return new Response('Improperly configured GET request for year dropdown menu.', 400);
     }
 }

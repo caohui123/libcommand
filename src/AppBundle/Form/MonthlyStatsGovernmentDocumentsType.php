@@ -5,9 +5,18 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use AppBundle\Form\DataTransformer\DateTimeToStringTransformer;
+
 
 class MonthlyStatsGovernmentDocumentsType extends AbstractType
 {
+    private $manager;
+    
+    public function __construct(ObjectManager $manager){
+        $this->manager = $manager;
+    }
+    
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -17,14 +26,20 @@ class MonthlyStatsGovernmentDocumentsType extends AbstractType
         $builder
             ->add('itemsAddedGross')
             ->add('itemsWithdrawn')
-            ->add('itemsAddedNet')
             ->add('paper')
             ->add('electronicOpacUrls')
             ->add('weeklyRecordsAdded')
             ->add('monthlyRecordsAdded')
             ->add('monthlyNonOverlays')
-            ->add('month')
+            ->add('month', 'hidden', array(
+                'data' => $options['data']->getMonth(),
+                'data_class' => null,
+            ))
         ;
+        
+        //Takes the AnnualReportUnit id passed to the unit field and converts it into the proper AnnualReportUnit entity.
+        $builder->get('month')
+                ->addModelTransformer(new DateTimeToStringTransformer($this->manager));
     }
     
     /**

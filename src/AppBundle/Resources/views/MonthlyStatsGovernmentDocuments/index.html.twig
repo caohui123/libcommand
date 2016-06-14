@@ -1,57 +1,75 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Government Documents Monthly Statistics{% endblock %}
 {% block body -%}
-    <h1>MonthlyStatsGovernmentDocuments list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Itemsaddedgross</th>
-                <th>Itemswithdrawn</th>
-                <th>Itemsaddednet</th>
-                <th>Paper</th>
-                <th>Electronicopacurls</th>
-                <th>Weeklyrecordsadded</th>
-                <th>Monthlyrecordsadded</th>
-                <th>Monthlynonoverlays</th>
-                <th>Month</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('monthly_govdocs_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.itemsAddedGross }}</td>
-                <td>{{ entity.itemsWithdrawn }}</td>
-                <td>{{ entity.itemsAddedNet }}</td>
-                <td>{{ entity.paper }}</td>
-                <td>{{ entity.electronicOpacUrls }}</td>
-                <td>{{ entity.weeklyRecordsAdded }}</td>
-                <td>{{ entity.monthlyRecordsAdded }}</td>
-                <td>{{ entity.monthlyNonOverlays }}</td>
-                <td>{% if entity.month %}{{ entity.month|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('monthly_govdocs_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('monthly_govdocs_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('monthly_govdocs_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Government Documents Monthly Statistics' } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    <section id="yearly-documents-tables">
+        <div class="row" id="yearly-documents-container">
+            <div class="col-xs-12 col-sm-12 col-md-7">
+                <h2>Monthly Statistics</h2> 
+                {{ yearly_tables|raw }}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-5">
+                <h2>View Statistics Reports</h2>
+                <form id="new_report_year" class="form well well-lg" method="post" action="{{ path('monthly_govdocs_report') }}">
+                    <label>Include</label>
+                    <div class="checkbox">
+                        <label>
+                          <input type="checkbox" value="holdings" name="options[holdings]" checked>
+                          Holdings
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                          <input type="checkbox" value="usage" name="options[usage]" checked>
+                          Usage
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                          <input type="checkbox" value="processing" name="options[processing]" checked>
+                          Processing
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="report_type">Type</label>
+                        <select name="report_type" id="report_type">
+                            <option value="calendar">Calendar Year</option>
+                            <option value="fiscal">Fiscal Year</option>
+                        </select>
+                    <div class="form-group" id="year-dropdown-container">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block documentReady %}
+    var $reportType = $('#report_type');
+    
+    generateYearsDropdown($reportType.val());
+    
+    $reportType.on('change', function(e){
+        generateYearsDropdown($(this).val());
+    });
+    
+    function generateYearsDropdown(reportType){
+        ajaxObject = {
+            url: '{{ path('monthly_govdocs_dropdown') }}',
+            type: 'GET',
+            data: {type: reportType}
+        };
+        
+        $.ajax(ajaxObject)
+            .success(function(data,status,xhr) {
+                $('#year-dropdown-container').html(data);
+            })
+            .fail(function(data,status,xhr) {
+                $('#year-dropdown-container').html('<p class="text-danger">Error generating report dropdown!</p>');
+            })
+            .always(function(data,status,xhr) {});
+    }
+{% endblock %}

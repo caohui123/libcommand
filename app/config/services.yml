@@ -55,6 +55,10 @@ services:
         class: AppBundle\Resources\Services\StaffService
         arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
         
+    monthlystatistics_service:
+        class: AppBundle\Resources\Services\MonthlyStatisticsService
+        arguments: [ @doctrine.orm.entity_manager, @service_container, @security.authorization_checker, @router ]
+        
     #This is the HoursRegularController
     hoursRegular_controller:
         class: AppBundle\Controller\HoursRegularController

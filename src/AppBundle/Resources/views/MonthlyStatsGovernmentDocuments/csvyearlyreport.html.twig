@@ -1,0 +1,33 @@
+{# This twig snippet takes in MonthlyStatsGovernmentDocuments entities and row headers for CSV file generation. #}
+{# if group_instructions|length > 0 %}
+    Group Instruction Sessions
+    {{ group_headers }}
+    {% for row in group_instructions %}
+        {{ row.instructionDate|date('Y-m-d') }}, {{ row.librarian.firstName }} {{ row.librarian.lastName }}, {{ row.startTime|date('g:i A') }}, {{ row.endTime|date('g:i A') }}, {{ row.instructor }}, {{ row.program }}, {{ row.course }}, {{ row.level }}, {{ row.levelDescription }}, {{ row.attendance }}
+    {% endfor %}
+{% endif %}
+{% if individual_instructions|length > 0 %}
+    Individual Instruction Sessions
+    {{ individual_headers }}
+    {% for row in individual_instructions %}
+        {{ row.instructionDate|date('Y-m-d') }}, {{ row.librarian.firstName }} {{ row.librarian.lastName }}, {{ row.startTime|date('g:i A') }}, {{ row.endTime|date('g:i A') }}, {{ row.client }}, {{ row.program }}, {{ row.course }}, {{ row.level }}, {{ row.levelDescription }}, {{ row.interaction }}
+    {% endfor %}
+{% endif #}
+
+    {# Totals #}
+    {% set totalItemsAddedGross = 0 %}
+    {% set totalItemsWithdrawn = 0 %}
+    {% set totalPapers = 0 %}
+    {% set totalOPAC = 0 %}
+    {% set totalWeeklyRecordsAdded = 0 %}
+    {% set totalMonthlyRecordsAdded = 0 %}
+    {% set totalMonthlyNonOverlays = 0 %}
+Government Documents Statistics: {{ type|capitalize }} Year {{ year }}
+{% if options.holdings is defined %}
+    {% if type == 'calendar' %}
+        {{ options.holdings|capitalize }},Jan '{{year|slice(2,2)}},Feb '{{year|slice(2,2)}},Mar '{{year|slice(2,2)}},Apr '{{year|slice(2,2)}},May '{{year|slice(2,2)}},Jun '{{year|slice(2,2)}},Jul '{{year|slice(2,2)}},Aug '{{year|slice(2,2)}},Sep '{{year|slice(2,2)}},Oct '{{year|slice(2,2)}},Nov '{{year|slice(2,2)}},Dec '{{year|slice(2,2)}}, TOTAL,
+    {% elseif type == 'fiscal' %}
+        {{ options.holdings|capitalize }},Jul '{{year|slice(2,2)}},Aug '{{year|slice(2,2)}},Sep '{{year|slice(2,2)}},Oct '{{year|slice(2,2)}},Nov '{{year|slice(2,2)}},Dec '{{year|slice(2,2)}},Jan '{{year|slice(7,2)}},Feb '{{year|slice(7,2)}},Mar '{{year|slice(7,2)}},Apr '{{year|slice(7,2)}},May '{{year|slice(7,2)}},Jun '{{year|slice(7,2)}}, TOTAL,
+    {% endif %}
+    Items Added (gross),{% for monthly in entities %}{% if monthly == null %}0,{% else %}{% set totalItemsAddedGross = totalItemsAddedGross + monthly.itemsAddedGross %}{{ monthly.itemsAddedGross }},{% endif %}{% endfor %}{{ totalItemsAddedGross }},
+{% endif %}

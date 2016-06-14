@@ -1,64 +1,67 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Government Documents Monthly Statistics{% endblock %}
 {% block body -%}
-    <h1>MonthlyStatsGovernmentDocuments</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Government Document Stats: ' ~ entity.month|date('F Y') } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('monthly_govdocs'), 'editpath' : path('monthly_govdocs_edit', { 'id': entity.id }), 'printpath' : path('monthly_govdocs_print', { 'id': entity.id }), 'editrole' : 'ROLE_MONTHLYGOVDOCS_EDIT'} %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-7">
+            <table class="table table-responsive table-striped">
+                <caption>Items</caption>
+                <tbody>
+                    <tr>
+                        <td>Items added (gross)</td>
+                        <td>{{ entity.itemsAddedGross }}</td>
+                    </tr>
+                    <tr>
+                        <td>Items withdrawn</td>
+                        <td>{{ entity.itemsWithdrawn }}</td>
+                    </tr>
+                    <tr>
+                        <td>Items added (net)</td>
+                        <td>{{ entity.itemsAddedGross - entity.itemsWithdrawn }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-responsive table-striped">
+                <caption>Usage</caption>
+                <tbody>
+                    <tr>
+                        <td>Paper</td>
+                        <td>{{entity.paper}}</td>
+                    </tr>
+                    <tr>
+                        <td>Electronic (OPAC URLs)</td>
+                        <td>{{entity.electronicOpacUrls}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-responsive table-striped">
+                <caption>Processing</caption>
+                <tbody>
+                    <tr>
+                        <td>Weekly records added</td>
+                        <td>{{ entity.weeklyRecordsAdded }}</td>
+                    </tr>
+                    <tr>
+                        <td>Monthly records added</td>
+                        <td>{{ entity.monthlyRecordsAdded }}</td>
+                    </tr>
+                    <tr>
+                        <td>Monthly non-overlays</td>
+                        <td>{{ entity.monthlyNonOverlays }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block documentReady %}
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Itemsaddedgross</th>
-                <td>{{ entity.itemsAddedGross }}</td>
-            </tr>
-            <tr>
-                <th>Itemswithdrawn</th>
-                <td>{{ entity.itemsWithdrawn }}</td>
-            </tr>
-            <tr>
-                <th>Itemsaddednet</th>
-                <td>{{ entity.itemsAddedNet }}</td>
-            </tr>
-            <tr>
-                <th>Paper</th>
-                <td>{{ entity.paper }}</td>
-            </tr>
-            <tr>
-                <th>Electronicopacurls</th>
-                <td>{{ entity.electronicOpacUrls }}</td>
-            </tr>
-            <tr>
-                <th>Weeklyrecordsadded</th>
-                <td>{{ entity.weeklyRecordsAdded }}</td>
-            </tr>
-            <tr>
-                <th>Monthlyrecordsadded</th>
-                <td>{{ entity.monthlyRecordsAdded }}</td>
-            </tr>
-            <tr>
-                <th>Monthlynonoverlays</th>
-                <td>{{ entity.monthlyNonOverlays }}</td>
-            </tr>
-            <tr>
-                <th>Month</th>
-                <td>{{ entity.month|date('Y-m-d H:i:s') }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('monthly_govdocs') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('monthly_govdocs_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
 {% endblock %}

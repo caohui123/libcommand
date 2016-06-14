@@ -1,15 +1,108 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Government Documents Monthly Statistics{% endblock %}
 {% block body -%}
-    <h1>MonthlyStatsGovernmentDocuments creation</h1>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New Government Document Stats: ' ~ entity.month|date('F Y') } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('monthly_govdocs')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
 
-    {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('monthly_govdocs') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <table class="table">
+                        <caption>Items</caption>
+                        <tr>
+                            <td>{{ form_label(form.itemsAddedGross) }}</td>
+                            <td>
+                                {{ form_errors(form.itemsAddedGross) }}
+                                {{ form_widget(form.itemsAddedGross) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.itemsWithdrawn) }}</td>
+                            <td>
+                                {{ form_errors(form.itemsWithdrawn) }}
+                                {{ form_widget(form.itemsWithdrawn) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Items Added (net)</td>
+                            <td>
+                                <p id="itemsAddedNet"></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <table class="table">
+                        <caption>Processing</caption>
+                        <tr>
+                            <td>{{ form_label(form.paper) }}</td>
+                            <td>
+                                {{ form_errors(form.paper) }}
+                                {{ form_widget(form.paper) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.electronicOpacUrls) }}</td>
+                            <td>
+                                {{ form_errors(form.electronicOpacUrls) }}
+                                {{ form_widget(form.electronicOpacUrls) }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <table class="table">
+                        <caption>Usage</caption>
+                        <tr>
+                            <td>{{ form_label(form.weeklyRecordsAdded) }}</td>
+                            <td>
+                                {{ form_errors(form.weeklyRecordsAdded) }}
+                                {{ form_widget(form.weeklyRecordsAdded) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.monthlyRecordsAdded) }}</td>
+                            <td>
+                                {{ form_errors(form.monthlyRecordsAdded) }}
+                                {{ form_widget(form.monthlyRecordsAdded) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.monthlyNonOverlays) }}</td>
+                            <td>
+                                {{ form_errors(form.monthlyNonOverlays) }}
+                                {{ form_widget(form.monthlyNonOverlays) }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+{% block documentReady %}
+    var $itemsAddedGross = $('#appbundle_monthlystatsgovernmentdocuments_itemsAddedGross');
+    var $itemsWithdrawn = $('#appbundle_monthlystatsgovernmentdocuments_itemsWithdrawn');
+    
+    updateItemsAdded(); //update the value of itemsAddedNet on page load
+    
+    $($itemsAddedGross, $itemsWithdrawn).on('change keyup blur', function(){
+        updateItemsAdded(); //update the value of itemsAddedNet when the gross or withdrawn values are changed
+    });
+    
+    //subtract itemsWithdrawn from itemsAddedGross
+    function updateItemsAdded(){        
+        var difference = $itemsAddedGross.val() - $itemsWithdrawn.val();
+        $('#itemsAddedNet').html(difference); 
+    }
 {% endblock %}

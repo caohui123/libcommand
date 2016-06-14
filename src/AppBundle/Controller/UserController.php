@@ -320,6 +320,8 @@ class UserController extends Controller
         $service->updatePermissions($entity, $formData['medialibrary'], $formData['medialibrary_previous']);
         //ANNUAL REPORTS
         $service->updatePermissions($entity, $formData['annualreport'], $formData['annualreport_previous']);
+        //MONTHLY STATISTICS: GOVERNMENT DOCUMENTS
+        $service->updatePermissions($entity, $formData['monthly_govdocs'], $formData['monthly_govdocs_previous']);
         
         //redirect to the Edit screen for the given user
         return $this->redirect($this->generateUrl('user_edit', array('id' => $userId)));
@@ -370,6 +372,8 @@ class UserController extends Controller
         $medialibrary_permission = $service->generateViewEditDelete($user, 'ROLE_MEDIALIBRARY');
         //ANNUAL REPORTS
         $annualreport_permission = $service->generateViewEditDelete($user, 'ROLE_ANNUALREPORT');
+        //MONTHLY STATISTICS: GOVERNMENT DOCUMENTS
+        $monthly_govdocs_permission = $service->generateViewEditDelete($user, 'ROLE_MONTHLYGOVDOCS');
         
         $data = array();
         $form = $this->get('form.factory')->createNamedBuilder('user_permission_form', 'form', $data, array(
@@ -645,6 +649,24 @@ class UserController extends Controller
             ->add('annualreport_previous', 'hidden', array(
               //need to know the previous permission level so we can remove it and replace it with the new one.
               'data' => $annualreport_permission
+            ))
+            //MONTHLY STATISTICS: GOVERNMENT DOCUMENTS
+            ->add('monthly_govdocs', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_MONTHLYGOVDOCS_VIEW'=> 'View',
+                'ROLE_MONTHLYGOVDOCS_EDIT'=> 'Edit',
+                'ROLE_MONTHLYGOVDOCS_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'label' => 'Monthly Stats: Government Documents',
+              'data' => $monthly_govdocs_permission
+            ))
+            ->add('monthly_govdocs_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $monthly_govdocs_permission
             ))
             //user's ID (send along to createEditForm action)
             ->add('userId', 'hidden', array(
