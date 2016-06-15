@@ -11,6 +11,7 @@ use AppBundle\Entity\MonthlyStatsGovernmentDocuments;
 use AppBundle\Form\MonthlyStatsGovernmentDocumentsType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * MonthlyStatsGovernmentDocuments controller.
@@ -375,27 +376,9 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         $statsService = $this->get('monthlystatistics_service');
         $entities = $statsService->generateGovdocsYearlyReport($reportYear, $reportType);
         
-        $filename = "govdocs_".$reportType.'_'.$reportYear.'_'.date("Y_m_d_His").".csv"; 
-
-        $response = $this->render('AppBundle:MonthlyStatsGovernmentDocuments:csvyearlyreport.html.twig', array(
-                'entities' => $entities,
-                'type' => $reportType,
-                'year' => $reportYear,
-                'options' => $reportOptions,
-                'group_headers' => 'Instruction Date, Staff, Start, End, Instructor, Program, Course, Level, Level Description, Attendance,',
-                //'individual_instructions' => $individual_instruction_arr,
-                //'individual_headers' => 'Instruction Date, Staff, Start, End, Client, Program, Course, Level, Level Description, Client Interaction,',
-            )); 
-
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Description', 'Government Documents Report Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
-
-        return $response; 
+        $excelFile = $statsService->assembleGovDocsCSV($reportType, $reportYear, $reportOptions, $entities);
+        
+        return $excelFile;
     }
     
     /**
