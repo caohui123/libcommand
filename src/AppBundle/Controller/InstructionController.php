@@ -265,7 +265,7 @@ class InstructionController extends Controller
                 $group_instruction_arr[] = $entity;
             }
         }
-        
+        /*
         $filename = "instructions_".date("Y_m_d_His").".csv"; 
 
         $response = $this->render('AppBundle:Instruction:csvfile.html.twig', array(
@@ -285,5 +285,11 @@ class InstructionController extends Controller
         $response->headers->set('Expires', '0');
 
         return $response; 
+         */
+        
+        $instructionService = $this->get('instruction_service');
+        $excelFile = $instructionService->assembleInstructionCSV($group_instruction_arr, $individual_instruction_arr, $filters);
+        
+        return $excelFile;
     }
 }

@@ -358,7 +358,6 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
      * 
      * @Route("/report/csv/yearly", name="monthly_govdocs_report_csv")
      * @Method("GET")
-     * @Template("AppBundle:MonthlyStatsGovernmentDocuments:csvyearlyreport.html.twig")
      */
     public function csvYearlyReportAction(Request $request){
         $requestData = $request->query->all();

@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use AppBundle\Entity\Staff;
 use AppBundle\Entity\Instruction;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class InstructionService{
   
@@ -537,6 +538,116 @@ class InstructionService{
         $average = ($survey_points / 5) / $total_surveys;
         
         return number_format($average, 2);
+    }
+    
+    /**
+     * Create a CSV file for the given Instruction data.
+     * 
+     * @param array $groupInstructions  An array of GroupInstruction entities.
+     * @param array $individualInstructions  An array of IndividualInstruction entities.
+     * @param array $filters  An array of descriptors for how the Instruction query was filtered.
+     * @return StreamedResponse $response  A ready-to-go Symfony response which will generate the file when returned by a calling controller method.
+     */
+    public function assembleInstructionCSV($groupInstructions, $individualInstructions, $filters){
+        $phpExcelObject = $this->container->get('phpexcel')->createPHPExcelObject();
+        
+        $phpExcelObject->getProperties()
+                ->setCreator($this->container->get('security.context')->getToken()->getUser()->getUsername())
+                ->setTitle('Instruction Sessions Report')
+                ;
+        
+        // Start writing the Excel file.
+        $num_sheets = 0;
+        if(!empty($filters)){
+            $phpExcelObject->createSheet($num_sheets);
+            $phpExcelObject->setActiveSheetIndex($num_sheets);
+            
+            // Headers
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A1', "These instruction sessions used the following search constraints:");
+            
+            $phpExcelObject->getActiveSheet()->setBreak( 'A2', \PHPExcel_Worksheet::BREAK_ROW );
+            
+            $cell_count = 3;
+            foreach($filters as $filter){
+                $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A'.$cell_count, $filter);
+
+                $cell_count++;
+            }
+            
+            $phpExcelObject->getActiveSheet()->setBreak( 'A'.$cell_count, \PHPExcel_Worksheet::BREAK_ROW );
+            $cell_count++;
+            
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A'.$cell_count, "NOTE: INSTRUCTION SESSIONS APPEAR ON SEPARATE WORKSHEETS WITHIN THIS DOCUMENT!");
+            
+            $phpExcelObject->getActiveSheet()->setTitle("FILTERS");
+            $num_sheets++; //increment our num_sheets counter
+        }
+        
+        if(!empty($groupInstructions)){
+            $phpExcelObject->createSheet($num_sheets);
+            $phpExcelObject->setActiveSheetIndex($num_sheets);
+            
+            // Headers
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A1', "Instruction Date")
+                    ->setCellValue('B1', "Staff")
+                    ->setCellValue('C1', "Start")
+                    ->setCellValue('D1', "End")
+                    ->setCellValue('E1', "Instructor")
+                    ->setCellValue('F1', "Program")
+                    ->setCellValue('G1', "Course")
+                    ->setCellValue('H1', "Level")
+                    ->setCellValue('I1', "Level Description")
+                    ->setCellValue('J1', "Attendance")
+                    ;
+            
+            $phpExcelObject->getActiveSheet()->setTitle("Group Sessions");
+            $num_sheets++; //increment our num_sheets counter
+        }
+        
+        if(!empty($individualInstructions)){
+            $phpExcelObject->createSheet($num_sheets);
+            $phpExcelObject->setActiveSheetIndex($num_sheets);
+            
+            // Headers
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A1', "Instruction Date")
+                    ->setCellValue('B1', "Staff")
+                    ->setCellValue('C1', "Start")
+                    ->setCellValue('D1', "End")
+                    ->setCellValue('E1', "Client")
+                    ->setCellValue('F1', "Program")
+                    ->setCellValue('G1', "Course")
+                    ->setCellValue('H1', "Level")
+                    ->setCellValue('I1', "Level Description")
+                    ->setCellValue('J1', "Client Interaction")
+                    ;
+            
+            $phpExcelObject->getActiveSheet()->setTitle("Individual Sessions");
+            $num_sheets++; //increment our num_sheets counter
+        }
+        
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $phpExcelObject->setActiveSheetIndex(0);
+       
+        // Create a Excel5 and create a StreamedResponse.
+        $writer = $this->container->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->container->get('phpexcel')->createStreamedResponse($writer);
+        
+        // Add headers.
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "instructions_".date("Y_m_d_His").".xls"
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        
+        return $response;
     }
     
     /**

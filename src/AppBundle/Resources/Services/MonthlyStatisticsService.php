@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManager as EntityManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Ddeboer\DataImport\ValueConverter\CallbackValueConverter;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class MonthlyStatisticsService{
@@ -131,6 +130,7 @@ class MonthlyStatisticsService{
     }
     
     /**
+     * Create a CSV file for the given govdocs data for either a fiscal or academic year.
      * 
      * @param String $reportType  Either 'fiscal' or 'academic'
      * @param String $reportYear 
