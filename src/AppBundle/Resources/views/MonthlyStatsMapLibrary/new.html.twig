@@ -1,0 +1,233 @@
+{% extends '::base.html.twig' %}
+{% block title %}Map Library Monthly Statistics{% endblock %}
+{% block body -%}
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New Map Library Stats: ' ~ entity.month|date('F Y') } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('monthly_maplibrary')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
+
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <table class="table">
+                        <caption>Holdings</caption>
+                        <tr>
+                            <td>{{ form_label(form.mapsAddedGross) }}</td>
+                            <td>
+                                {{ form_errors(form.mapsAddedGross) }}
+                                {{ form_widget(form.mapsAddedGross) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.mapsWithdrawn) }}</td>
+                            <td>
+                                {{ form_errors(form.mapsWithdrawn) }}
+                                {{ form_widget(form.mapsWithdrawn) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Maps Added (net)</td>
+                            <td>
+                                <p id="mapsAddedNet"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.materialsAddedGross) }}</td>
+                            <td>
+                                {{ form_errors(form.materialsAddedGross) }}
+                                {{ form_widget(form.materialsAddedGross) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.materialsWithdrawn) }}</td>
+                            <td>
+                                {{ form_errors(form.materialsWithdrawn) }}
+                                {{ form_widget(form.materialsWithdrawn) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Uncataloged Materials Added (net)</td>
+                            <td>
+                                <p id="materialsAddedNet"></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <table class="table">
+                        <caption>Usage</caption>
+                        <tr>
+                            <td>{{ form_label(form.itemsShelved) }}</td>
+                            <td>
+                                {{ form_errors(form.itemsShelved) }}
+                                {{ form_widget(form.itemsShelved) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.itemsAdded) }}</td>
+                            <td>
+                                {{ form_errors(form.itemsAdded) }}
+                                {{ form_widget(form.itemsAdded) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>In-House Usage</td>
+                            <td>
+                                <p id="usageNet"></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <table class="table">
+                        <caption>Directional/Procedural Questions</caption>
+                        <tr>
+                            <td>{{ form_label(form.procedureQuestion1) }}</td>
+                            <td>
+                                {{ form_errors(form.procedureQuestion1) }}
+                                {{ form_widget(form.procedureQuestion1) }}
+                            </td>
+                            <td>{{ form_label(form.procedureQuestion3) }}</td>
+                            <td>
+                                {{ form_errors(form.procedureQuestion3) }}
+                                {{ form_widget(form.procedureQuestion3) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.procedureQuestion5) }}</td>
+                            <td>
+                                {{ form_errors(form.procedureQuestion5) }}
+                                {{ form_widget(form.procedureQuestion5) }}
+                            </td>
+                            <td>{{ form_label(form.procedureQuestion10) }}</td>
+                            <td>
+                                {{ form_errors(form.procedureQuestion10) }}
+                                {{ form_widget(form.procedureQuestion10) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.procedureQuestion10Plus) }}</td>
+                            <td>
+                                {{ form_errors(form.procedureQuestion10Plus) }}
+                                {{ form_widget(form.procedureQuestion10Plus) }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <table class="table">
+                        <caption>Research/Instructional Questions</caption>
+                        <tr>
+                            <td>{{ form_label(form.researchQuestion1) }}</td>
+                            <td>
+                                {{ form_errors(form.researchQuestion1) }}
+                                {{ form_widget(form.researchQuestion1) }}
+                            </td>
+                            <td>{{ form_label(form.researchQuestion3) }}</td>
+                            <td>
+                                {{ form_errors(form.researchQuestion3) }}
+                                {{ form_widget(form.researchQuestion3) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.researchQuestion5) }}</td>
+                            <td>
+                                {{ form_errors(form.researchQuestion5) }}
+                                {{ form_widget(form.researchQuestion5) }}
+                            </td>
+                            <td>{{ form_label(form.researchQuestion10) }}</td>
+                            <td>
+                                {{ form_errors(form.researchQuestion10) }}
+                                {{ form_widget(form.researchQuestion10) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.researchQuestion15) }}</td>
+                            <td>
+                                {{ form_errors(form.researchQuestion15) }}
+                                {{ form_widget(form.researchQuestion15) }}
+                            </td>
+                            <td>{{ form_label(form.researchQuestion20) }}</td>
+                            <td>
+                                {{ form_errors(form.researchQuestion20) }}
+                                {{ form_widget(form.researchQuestion20) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.researchQuestion25) }}</td>
+                            <td>
+                                {{ form_errors(form.researchQuestion25) }}
+                                {{ form_widget(form.researchQuestion25) }}
+                            </td>
+                            <td>{{ form_label(form.researchQuestion25Plus) }}</td>
+                            <td>
+                                {{ form_errors(form.researchQuestion25Plus) }}
+                                {{ form_widget(form.researchQuestion25Plus) }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+{% block documentReady %}
+    /** MAPS **/
+    var $mapsAddedGross = $('#appbundle_monthlystatsmaplibrary_mapsAddedGross');
+    var $mapsWithdrawn = $('#appbundle_monthlystatsmaplibrary_mapsWithdrawn');
+    
+    updateMapsAdded(); //update the value of mapsAddedNet on page load
+    
+    $($mapsAddedGross, $mapsWithdrawn).on('change keyup blur', function(){
+        updateMapsAdded(); //update the value of mapsAddedNet when the gross or withdrawn values are changed
+    });
+    
+    //subtract mapsWithdrawn from mapsAddedGross
+    function updateMapsAdded(){        
+        var difference = $mapsAddedGross.val() - $mapsWithdrawn.val();
+        $('#mapsAddedNet').html(difference); 
+    }
+    
+    /** UNCATALOGED MATERIALS **/
+    var $materialsAddedGross = $('#appbundle_monthlystatsmaplibrary_materialsAddedGross');
+    var $materialsWithdrawn = $('#appbundle_monthlystatsmaplibrary_materialsWithdrawn');
+    
+    updateMaterialsAdded(); //update the value of materialsAddedNet on page load
+    
+    $($materialsAddedGross, $materialsWithdrawn).on('change keyup blur', function(){
+        updateMaterialsAdded(); //update the value of materialsAddedNet when the gross or withdrawn values are changed
+    });
+    
+    //subtract materialsWithdrawn from materialsAddedGross
+    function updateMaterialsAdded(){        
+        var difference = $materialsAddedGross.val() - $materialsWithdrawn.val();
+        $('#materialsAddedNet').html(difference); 
+    }
+    
+    /** USAGE **/
+    var $itemsShelved = $('#appbundle_monthlystatsmaplibrary_itemsShelved');
+    var $itemsAdded = $('#appbundle_monthlystatsmaplibrary_itemsAdded');
+    
+    updateUsage(); //update the value of usageNet on page load
+    
+    $($itemsShelved, $itemsAdded).on('change keyup blur', function(){
+        updateUsage(); //update the value of usageNet when the shelved or added values are changed
+    });
+    
+    //subtract materialsWithdrawn from materialsAddedGross
+    function updateUsage(){        
+        var difference = $itemsShelved.val() - $itemsAdded.val();
+        $('#usageNet').html(difference); 
+    }
+{% endblock %}

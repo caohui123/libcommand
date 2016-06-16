@@ -41,13 +41,13 @@
                         <th>Items Withdrawn</th>
                         {% for monthly in entities %}
                             {% if monthly == null %}
-                                <td>-0</td>
+                                <td>0</td>
                             {% else %}
                                 {% set totalItemsWithdrawn = totalItemsWithdrawn + monthly.itemsWithdrawn %}
-                                <td>-{{monthly.itemsWithdrawn}}</td>
+                                <td>{{monthly.itemsWithdrawn}}</td>
                             {% endif %}
                         {% endfor %}
-                        <td>-{{ totalItemsWithdrawn }}</td>
+                        <td>{{ totalItemsWithdrawn }}</td>
                     </tr>
                     <tr>
                         <th>Net Items Added</th>

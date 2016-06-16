@@ -7,55 +7,56 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use AppBundle\Entity\MonthlyStatsGovernmentDocuments;
-use AppBundle\Form\MonthlyStatsGovernmentDocumentsType;
+use AppBundle\Entity\MonthlyStatsMapLibrary;
+use AppBundle\Form\MonthlyStatsMapLibraryType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * MonthlyStatsGovernmentDocuments controller.
+ * MonthlyStatsMapLibrary controller.
  *
- * @Route("/monthly/govdocs")
+ * @Route("/monthly/maplibrary")
  */
-class MonthlyStatsGovernmentDocumentsController extends Controller
+class MonthlyStatsMapLibraryController extends Controller
 {
-    const START_YEAR = 2003;
 
+    const START_YEAR = 2007;
+    
     /**
-     * Lists all MonthlyStatsGovernmentDocuments entities.
+     * Lists all MonthlyStatsMapLibrary entities.
      *
-     * @Route("/", name="monthly_govdocs")
+     * @Route("/", name="monthly_maplibrary")
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_VIEW")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         
         $statsService = $this->get('monthlystatistics_service');
-        $yearlyTables = $statsService->monthlyTablesByYear('govdocs', self::START_YEAR);
+        $yearlyTables = $statsService->monthlyTablesByYear('maplibrary', self::START_YEAR);
 
         return array(
             'yearly_tables' => $yearlyTables,
         );
     }
     /**
-     * Creates a new MonthlyStatsGovernmentDocuments entity.
+     * Creates a new MonthlyStatsMapLibrary entity.
      *
-     * @Route("/", name="monthly_govdocs_create")
+     * @Route("/", name="monthly_maplibrary_create")
      * @Method("POST")
-     * @Template("AppBundle:MonthlyStatsGovernmentDocuments:new.html.twig")
+     * @Template("AppBundle:MonthlyStatsMapLibrary:new.html.twig")
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_EDIT")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_EDIT")
      */
     public function createAction(Request $request)
     {
         $requestData = $request->request->all();
-        $month = new \DateTime($requestData['appbundle_monthlystatsgovernmentdocuments']['month']);
+        $month = new \DateTime($requestData['appbundle_monthlystatsmaplibrary']['month']);
         
-        $entity = new MonthlyStatsGovernmentDocuments($month);
+        $entity = new MonthlyStatsMapLibrary($month);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -64,7 +65,7 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('monthly_govdocs_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('monthly_maplibrary_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -74,16 +75,16 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     }
 
     /**
-     * Creates a form to create a MonthlyStatsGovernmentDocuments entity.
+     * Creates a form to create a MonthlyStatsMapLibrary entity.
      *
-     * @param MonthlyStatsGovernmentDocuments $entity The entity
+     * @param MonthlyStatsMapLibrary $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(MonthlyStatsGovernmentDocuments $entity)
+    private function createCreateForm(MonthlyStatsMapLibrary $entity)
     {
-        $form = $this->createForm(new MonthlyStatsGovernmentDocumentsType($this->getDoctrine()->getManager()), $entity, array(
-            'action' => $this->generateUrl('monthly_govdocs_create'),
+        $form = $this->createForm(new MonthlyStatsMapLibraryType($this->getDoctrine()->getManager()), $entity, array(
+            'action' => $this->generateUrl('monthly_maplibrary_create'),
             'method' => 'POST',
         ));
 
@@ -93,19 +94,19 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     }
 
     /**
-     * Displays a form to create a new MonthlyStatsGovernmentDocuments entity.
+     * Displays a form to create a new MonthlyStatsMapLibrary entity.
      *
-     * @Route("/new/{month}", name="monthly_govdocs_new")
+     * @Route("/new/{month}", name="monthly_maplibrary_new")
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_EDIT")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_EDIT")
      * 
      * @param String $month (YYYY-mm-dd)
      */
     public function newAction($month)
     {
-        $entity = new MonthlyStatsGovernmentDocuments(new \DateTime($month));
+        $entity = new MonthlyStatsMapLibrary(new \DateTime($month));
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -115,22 +116,22 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     }
 
     /**
-     * Finds and displays a MonthlyStatsGovernmentDocuments entity.
+     * Finds and displays a MonthlyStatsMapLibrary entity.
      *
-     * @Route("/{id}", name="monthly_govdocs_show")
+     * @Route("/{id}", name="monthly_maplibrary_show")
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_VIEW")
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:MonthlyStatsGovernmentDocuments')->find($id);
+        $entity = $em->getRepository('AppBundle:MonthlyStatsMapLibrary')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MonthlyStatsGovernmentDocuments entity.');
+            throw $this->createNotFoundException('Unable to find MonthlyStatsMapLibrary entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -142,22 +143,22 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing MonthlyStatsGovernmentDocuments entity.
+     * Displays a form to edit an existing MonthlyStatsMapLibrary entity.
      *
-     * @Route("/{id}/edit", name="monthly_govdocs_edit")
+     * @Route("/{id}/edit", name="monthly_maplibrary_edit")
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_EDIT")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_EDIT")
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:MonthlyStatsGovernmentDocuments')->find($id);
+        $entity = $em->getRepository('AppBundle:MonthlyStatsMapLibrary')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MonthlyStatsGovernmentDocuments entity.');
+            throw $this->createNotFoundException('Unable to find MonthlyStatsMapLibrary entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -171,16 +172,16 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     }
 
     /**
-    * Creates a form to edit a MonthlyStatsGovernmentDocuments entity.
+    * Creates a form to edit a MonthlyStatsMapLibrary entity.
     *
-    * @param MonthlyStatsGovernmentDocuments $entity The entity
+    * @param MonthlyStatsMapLibrary $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(MonthlyStatsGovernmentDocuments $entity)
+    private function createEditForm(MonthlyStatsMapLibrary $entity)
     {
-        $form = $this->createForm(new MonthlyStatsGovernmentDocumentsType($this->getDoctrine()->getManager()), $entity, array(
-            'action' => $this->generateUrl('monthly_govdocs_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new MonthlyStatsMapLibraryType($this->getDoctrine()->getManager()), $entity, array(
+            'action' => $this->generateUrl('monthly_maplibrary_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -189,22 +190,22 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         return $form;
     }
     /**
-     * Edits an existing MonthlyStatsGovernmentDocuments entity.
+     * Edits an existing MonthlyStatsMapLibrary entity.
      *
-     * @Route("/{id}", name="monthly_govdocs_update")
+     * @Route("/{id}", name="monthly_maplibrary_update")
      * @Method("PUT")
-     * @Template("AppBundle:MonthlyStatsGovernmentDocuments:edit.html.twig")
+     * @Template("AppBundle:MonthlyStatsMapLibrary:edit.html.twig")
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_EDIT")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:MonthlyStatsGovernmentDocuments')->find($id);
+        $entity = $em->getRepository('AppBundle:MonthlyStatsMapLibrary')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MonthlyStatsGovernmentDocuments entity.');
+            throw $this->createNotFoundException('Unable to find MonthlyStatsMapLibrary entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -214,7 +215,7 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('monthly_govdocs_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('monthly_maplibrary_edit', array('id' => $id)));
         }
 
         return array(
@@ -224,12 +225,12 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         );
     }
     /**
-     * Deletes a MonthlyStatsGovernmentDocuments entity.
+     * Deletes a MonthlyStatsMapLibrary entity.
      *
-     * @Route("/{id}", name="monthly_govdocs_delete")
+     * @Route("/{id}", name="monthly_maplibrary_delete")
      * @Method("DELETE")
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_DELETE")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -238,21 +239,21 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:MonthlyStatsGovernmentDocuments')->find($id);
+            $entity = $em->getRepository('AppBundle:MonthlyStatsMapLibrary')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find MonthlyStatsGovernmentDocuments entity.');
+                throw $this->createNotFoundException('Unable to find MonthlyStatsMapLibrary entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('monthly_govdocs'));
+        return $this->redirect($this->generateUrl('monthly_maplibrary'));
     }
 
     /**
-     * Creates a form to delete a MonthlyStatsGovernmentDocuments entity by id.
+     * Creates a form to delete a MonthlyStatsMapLibrary entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -261,7 +262,7 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('monthly_govdocs_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('monthly_maplibrary_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-sm btn-danger')))
             ->getForm()
@@ -269,22 +270,22 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     }
     
     /**
-     * Displays a printer-friendly MonthlyStatsGovernmentDocuments entity.
+     * Displays a printer-friendly MonthlyStatsMapLibrary entity.
      *
-     * @Route("/{id}/print", name="monthly_govdocs_print")
+     * @Route("/{id}/print", name="monthly_maplibrary_print")
      * @Method("GET")
      * @Template()
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_VIEW")
      */
     public function printAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:MonthlyStatsGovernmentDocuments')->find($id);
+        $entity = $em->getRepository('AppBundle:MonthlyStatsMapLibrary')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MonthlyStatsGovernmentDocuments entity.');
+            throw $this->createNotFoundException('Unable to find MonthlyStatsMapLibrary entity.');
         }
 
         return array(
@@ -295,11 +296,11 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     /**
      * Call the Monthly Stats Service to view a report for the year.
      * 
-     * @Route("/report", name="monthly_govdocs_report")
+     * @Route("/report", name="monthly_maplibrary_report")
      * @Method("POST")
-     * @Template("AppBundle:MonthlyStatsGovernmentDocuments:viewyearlyreport.html.twig")
+     * @Template("AppBundle:MonthlyStatsMapLibrary:viewyearlyreport.html.twig")
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_VIEW")
      */
     public function viewYearlyReportAction(Request $request){
         $requestData = $request->request->all();
@@ -314,7 +315,7 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         }
         
         $statsService = $this->get('monthlystatistics_service');
-        $entities = $statsService->generateYearlyReport('govdocs', $reportYear, $reportType);
+        $entities = $statsService->generateYearlyReport('maplibrary', $reportYear, $reportType);
         
         return array(
             'entities' => $entities,
@@ -327,11 +328,11 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     /**
      * Call the Monthly Stats Service to print a report for the year.
      * 
-     * @Route("/report/print/yearly", name="monthly_govdocs_report_print")
+     * @Route("/report/print/yearly", name="monthly_maplibrary_report_print")
      * @Method("GET")
-     * @Template("AppBundle:MonthlyStatsGovernmentDocuments:printyearlyreport.html.twig")
+     * @Template("AppBundle:MonthlyStatsMapLibrary:printyearlyreport.html.twig")
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_VIEW")
      */
     public function printYearlyReportAction(Request $request){
         $requestData = $request->query->all();
@@ -346,7 +347,7 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         }
         
         $statsService = $this->get('monthlystatistics_service');
-        $entities = $statsService->generateYearlyReport('govdocs', $reportYear, $reportType);
+        $entities = $statsService->generateYearlyReport('maplibrary', $reportYear, $reportType);
         
         return array(
             'entities' => $entities,
@@ -357,12 +358,12 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     }
     
     /**
-     * Call the Monthly Stats Service to generate a CSV report for the year.
+     * Call the Monthly Stats Service to generate a CSV for the year.
      * 
-     * @Route("/report/csv/yearly", name="monthly_govdocs_report_csv")
+     * @Route("/report/csv/yearly", name="monthly_maplibrary_report_csv")
      * @Method("GET")
      * 
-     * @Secure(roles="ROLE_MONTHLYGOVDOCS_VIEW")
+     * @Secure(roles="ROLE_MONTHLYMAPLIBRARY_VIEW")
      */
     public function csvYearlyReportAction(Request $request){
         $requestData = $request->query->all();
@@ -378,9 +379,9 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         }
         
         $statsService = $this->get('monthlystatistics_service');
-        $entities = $statsService->generateYearlyReport('govdocs', $reportYear, $reportType);
+        $entities = $statsService->generateYearlyReport('maplibrary', $reportYear, $reportType);
         
-        $excelFile = $statsService->assembleGovDocsCSV($reportType, $reportYear, $reportOptions, $entities);
+        $excelFile = $statsService->assembleMapLibraryCSV($reportType, $reportYear, $reportOptions, $entities);
         
         return $excelFile;
     }
@@ -388,7 +389,7 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
     /**
      * Retrieve a year dropdown list from the Instruction Service
      * 
-     * @Route("/years/dropdown", name="monthly_govdocs_dropdown")
+     * @Route("/years/dropdown", name="monthly_maplibrary_dropdown")
      * @Method("GET")
      * @Template()
      */
@@ -409,7 +410,7 @@ class MonthlyStatsGovernmentDocumentsController extends Controller
         }
         
         if(isset($years) && $years != null){
-            return $this->render('AppBundle:MonthlyStatsGovernmentDocuments:snippets/yeardropdown.html.twig', array(
+            return $this->render('AppBundle:MonthlyStatsMapLibrary:snippets/yeardropdown.html.twig', array(
                 'years' => $years,
             ));
         }

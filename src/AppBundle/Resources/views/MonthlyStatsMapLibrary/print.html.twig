@@ -1,0 +1,117 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Map Library Monthly Statistics{% endblock %}
+{% block body %}
+<h1>Map Library Statistics: {{entity.month|date('F Y')}}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Holdings</caption>
+        <tbody>
+            <tr>
+                <td>Maps added (gross)</td>
+                <td>{{ entity.mapsAddedGross }}</td>
+            </tr>
+            <tr>
+                <td>Maps withdrawn</td>
+                <td>{{ entity.mapsWithdrawn }}</td>
+            </tr>
+            <tr>
+                <td>Net maps added</td>
+                <td>{{ entity.mapsAddedGross - entity.mapsWithdrawn }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>Uncataloged materials added (gross)</td>
+                <td>{{ entity.materialsAddedGross }}</td>
+            </tr>
+            <tr>
+                <td>Uncataloged materials withdrawn</td>
+                <td>{{ entity.materialsWithdrawn }}</td>
+            </tr>
+            <tr>
+                <td>Uncataloged Materials Added (net)</td>
+                <td>{{ entity.materialsAddedGross - entity.materialsWithdrawn }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Usage</caption>
+        <tbody>
+            <tr>
+                <td>Items shelved</td>
+                <td>{{ entity.itemsShelved }}</td>
+            </tr>
+            <tr>
+                <td>Items added</td>
+                <td>{{ entity.itemsAdded }}</td>
+            </tr>
+            <tr>
+                <td>In-House usage</td>
+                <td>{{ entity.itemsShelved - entity.itemsAdded }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Directional/Procedural Questions</caption>
+        <tbody>
+            <tr>
+                <td>1 minute</td>
+                <td>{{ entity.procedureQuestion1 }}</td>
+            </tr>
+            <tr>
+                <td>3 minutes</td>
+                <td>{{ entity.procedureQuestion3 }}</td>
+            </tr>
+            <tr>
+                <td>5 minutes</td>
+                <td>{{ entity.procedureQuestion5 }}</td>
+            </tr>
+            <tr>
+                <td>10 minutes</td>
+                <td>{{ entity.procedureQuestion10 }}</td>
+            </tr>
+            <tr>
+                <td>>10 minutes</td>
+                <td>{{ entity.procedureQuestion10Plus }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="libcommand-print-table libcommand-print-table-650">
+        <caption>Research/Instructional Questions</caption>
+        <tbody>
+            <tr>
+                <td>1 minute</td>
+                <td>{{ entity.researchQuestion1 }}</td>
+            </tr>
+            <tr>
+                <td>3 minutes</td>
+                <td>{{ entity.researchQuestion3 }}</td>
+            </tr>
+            <tr>
+                <td>5 minutes</td>
+                <td>{{ entity.researchQuestion5 }}</td>
+            </tr>
+            <tr>
+                <td>10 minutes</td>
+                <td>{{ entity.researchQuestion10 }}</td>
+            </tr>
+            <tr>
+                <td>15 minutes</td>
+                <td>{{ entity.researchQuestion15 }}</td>
+            </tr>
+            <tr>
+                <td>20 minutes</td>
+                <td>{{ entity.researchQuestion20 }}</td>
+            </tr>
+            <tr>
+                <td>25 minutes</td>
+                <td>{{ entity.researchQuestion25 }}</td>
+            </tr>
+            <tr>
+                <td>>25 minutes</td>
+                <td>{{ entity.researchQuestion25Plus }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

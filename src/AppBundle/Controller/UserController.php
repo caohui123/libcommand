@@ -322,6 +322,8 @@ class UserController extends Controller
         $service->updatePermissions($entity, $formData['annualreport'], $formData['annualreport_previous']);
         //MONTHLY STATISTICS: GOVERNMENT DOCUMENTS
         $service->updatePermissions($entity, $formData['monthly_govdocs'], $formData['monthly_govdocs_previous']);
+        //MONTHLY STATISTICS: MAP LIBRARY
+        $service->updatePermissions($entity, $formData['monthly_maplibrary'], $formData['monthly_maplibrary_previous']);
         
         //redirect to the Edit screen for the given user
         return $this->redirect($this->generateUrl('user_edit', array('id' => $userId)));
@@ -374,6 +376,8 @@ class UserController extends Controller
         $annualreport_permission = $service->generateViewEditDelete($user, 'ROLE_ANNUALREPORT');
         //MONTHLY STATISTICS: GOVERNMENT DOCUMENTS
         $monthly_govdocs_permission = $service->generateViewEditDelete($user, 'ROLE_MONTHLYGOVDOCS');
+        //MONTHLY STATISTICS: MAP LIBRARY
+        $monthly_maplibrary_permission = $service->generateViewEditDelete($user, 'ROLE_MONTHLYMAPLIBRARY');
         
         $data = array();
         $form = $this->get('form.factory')->createNamedBuilder('user_permission_form', 'form', $data, array(
@@ -667,6 +671,24 @@ class UserController extends Controller
             ->add('monthly_govdocs_previous', 'hidden', array(
               //need to know the previous permission level so we can remove it and replace it with the new one.
               'data' => $monthly_govdocs_permission
+            ))
+            //MONTHLY STATISTICS: MAP LIBRARY
+            ->add('monthly_maplibrary', 'choice', array(
+              'choices' => array(
+                'none'=>'None',
+                'ROLE_MONTHLYMAPLIBRARY_VIEW'=> 'View',
+                'ROLE_MONTHLYMAPLIBRARY_EDIT'=> 'Edit',
+                'ROLE_MONTHLYMAPLIBRARY_DELETE'=> 'Delete'
+              ),
+              'multiple' => false,
+              'expanded' => true,
+              'required' => true,
+              'label' => 'Monthly Stats: Map Library',
+              'data' => $monthly_maplibrary_permission
+            ))
+            ->add('monthly_maplibrary_previous', 'hidden', array(
+              //need to know the previous permission level so we can remove it and replace it with the new one.
+              'data' => $monthly_maplibrary_permission
             ))
             //user's ID (send along to createEditForm action)
             ->add('userId', 'hidden', array(

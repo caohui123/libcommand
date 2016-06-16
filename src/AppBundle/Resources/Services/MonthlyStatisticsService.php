@@ -28,14 +28,14 @@ class MonthlyStatisticsService{
     }
     
     /**
-     * Generate a yearly report (fiscal or academic) for government documents
+     * Generate a yearly report (fiscal or academic) for a monthly statistics category.
      * 
+     * @param String $statsType  Either 'govdocs', 'maplibrary', 'periodical', or 'archives'
      * @param mixed $year
      * @param String $period
-     * @param array $options either an empty array or an array with values "holdings, usage, processing" or a mixture of those 
      * @return array $report  An array returning the results.
      */
-    public function generateGovdocsYearlyReport($year, $period = 'fiscal'){
+    public function generateYearlyReport($statsType, $year, $period = 'fiscal'){
         if($period  == 'fiscal'){
             $year = $this->__trimYear($year);
             
@@ -53,7 +53,7 @@ class MonthlyStatisticsService{
             $nextMonth = clone $startDate;
             $nextMonth->add(new \DateInterval('P'.$i.'M'));
             
-            $monthRecord[] = $this->__getMonthRecord('govdocs', $nextMonth);
+            $monthRecord[] = $this->__getMonthRecord($statsType, $nextMonth);
         }
 
         return $monthRecord;
@@ -62,7 +62,7 @@ class MonthlyStatisticsService{
     /**
      * Create a series of Add/Edit tables on the Monthly Stats entity's index.html.twig page 
      * 
-     * @param String $statsType  Either 'govdocs', 'map', 'periodical', or 'archives'
+     * @param String $statsType  Either 'govdocs', 'maplibrary', 'periodical', or 'archives'
      * @param int $startYear  From what year should the tables be printed?
      * @return string $tables  The HTML table for the year.
      */
@@ -71,7 +71,8 @@ class MonthlyStatisticsService{
             case 'govdocs':
                 $path = 'monthly_govdocs';
                 break;
-            case 'map':
+            case 'maplibrary':
+                $path = 'monthly_maplibrary';
                 break;
             case 'periodical':
                 break;
@@ -160,7 +161,7 @@ class MonthlyStatisticsService{
             //Excel file
             $phpExcelObject->setActiveSheetIndex($num_sheets);
             
-            $this->__getGovDocsCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
+            $this->__getCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
             
             $phpExcelObject->getActiveSheet()
                     ->setCellValue('A2', "Items Added (gross)")
@@ -214,7 +215,7 @@ class MonthlyStatisticsService{
             $phpExcelObject->createSheet($num_sheets); //create a new sheet.
             $phpExcelObject->setActiveSheetIndex($num_sheets);
             
-            $this->__getGovDocsCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
+            $this->__getCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
             
             $phpExcelObject->getActiveSheet()
                     ->setCellValue('A2', "Papers")
@@ -264,7 +265,7 @@ class MonthlyStatisticsService{
             $phpExcelObject->createSheet($num_sheets); //create a new sheet.
             $phpExcelObject->setActiveSheetIndex($num_sheets);
             
-            $this->__getGovDocsCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
+            $this->__getCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
             
             $phpExcelObject->getActiveSheet()
                     ->setCellValue('A2', "Weekly Records Added")
@@ -330,14 +331,310 @@ class MonthlyStatisticsService{
     }
     
     /**
-     * Add header rows to a GOVDOCS CSV.
+     * Create a CSV file for the given maplibrary data for either a fiscal or academic year.
+     * 
+     * @param String $reportType  Either 'fiscal' or 'academic'
+     * @param String $reportYear 
+     * @param type $reportOptions
+     * @param array $data  Contains an array (ordered by month) of MonthlyStatsMapLibrary entities where applicable records are found; 
+     *                     where applicable records are not found, null is present in that slot.   
+     * @return StreamedResponse $response  A ready-to-go Symfony response which will generate the file when returned by a calling controller method.
+     */
+    public function assembleMapLibraryCSV($reportType, $reportYear, $reportOptions, $data){
+        $phpExcelObject = $this->container->get('phpexcel')->createPHPExcelObject();
+        
+        $phpExcelObject->getProperties()
+                ->setCreator($this->container->get('security.context')->getToken()->getUser()->getUsername())
+                ->setTitle('Map Library Statistics: ' . ucfirst($reportType) . ' Year ' . $reportYear)
+                ;
+        
+        // Start writing the Excel file.
+        $num_sheets = 0;
+             
+        // Generate holdings stats.
+        if(in_array('holdings', $reportOptions)){
+            //Holdings totals variables
+            $totalMapsAdded = 0;
+            $totalMapsWithdrawn = 0;
+            $totalMaps = 0;
+            $totalMaterialsAdded = 0;
+            $totalMaterialsWithdrawn = 0;
+            $totalMaterials = 0;
+            
+            //Excel file
+            $phpExcelObject->setActiveSheetIndex($num_sheets);
+            
+            $this->__getCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
+            
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A2', "Maps Added (gross)")
+                    ->setCellValue('A3', "Maps Withdrawn")
+                    ->setCellValue('A4', "Net Maps")
+                        // skip row 5
+                    ->setCellValue('A6', "Materials Added (gross)")
+                    ->setCellValue('A7', "Materials Withdrawn")
+                    ->setCellValue('A8', "Net Materials")
+                    ;
+            
+            //Populate the data for each category for each month of the year
+            $cell_counter = range('B','Z');
+            $month_counter = 0;
+            while($month_counter < 12){
+                // Sometimes no record will exsit for a given month. If that's the case, set all values for that month to 0.
+                if($data[$month_counter] == null){
+                    $phpExcelObject->getActiveSheet()
+                        ->setCellValue($cell_counter[$month_counter].'2', 0)
+                        ->setCellValue($cell_counter[$month_counter].'3', 0)
+                        ->setCellValue($cell_counter[$month_counter].'4', 0)
+                            //skip row 5
+                        ->setCellValue($cell_counter[$month_counter].'6', 0)
+                        ->setCellValue($cell_counter[$month_counter].'7', 0)
+                        ->setCellValue($cell_counter[$month_counter].'8', 0)
+                        ;
+                } else {
+                    $phpExcelObject->getActiveSheet()
+                        ->setCellValue($cell_counter[$month_counter].'2', $data[$month_counter]->getMapsAddedGross())
+                        ->setCellValue($cell_counter[$month_counter].'3', $data[$month_counter]->getMapsWithdrawn())
+                        ->setCellValue($cell_counter[$month_counter].'4', ($data[$month_counter]->getMapsAddedGross() - $data[$month_counter]->getMapsWithdrawn()))
+                            //skip row 5
+                        ->setCellValue($cell_counter[$month_counter].'6', $data[$month_counter]->getMaterialsAddedGross())
+                        ->setCellValue($cell_counter[$month_counter].'7', $data[$month_counter]->getMaterialsWithdrawn())
+                        ->setCellValue($cell_counter[$month_counter].'8', ($data[$month_counter]->getMaterialsAddedGross() - $data[$month_counter]->getMaterialsWithdrawn()))
+                        ;
+                    
+                    $totalMapsAdded += $data[$month_counter]->getMapsAddedGross();
+                    $totalMapsWithdrawn += $data[$month_counter]->getMapsWithdrawn();
+                    $totalMaps += ($totalMapsAdded - $totalMapsWithdrawn);
+                    
+                    $totalMaterialsAdded += $data[$month_counter]->getMaterialsAddedGross();
+                    $totalMaterialsWithdrawn += $data[$month_counter]->getMaterialsWithdrawn();
+                    $totalMaterials += ($totalMaterialsAdded - $totalMaterialsWithdrawn);
+                }
+                $month_counter++;
+            }
+            
+            //Totals
+            $phpExcelObject->getActiveSheet()
+                ->setCellValue($cell_counter[$month_counter].'2', $totalMapsAdded)
+                ->setCellValue($cell_counter[$month_counter].'3', $totalMapsWithdrawn)
+                ->setCellValue($cell_counter[$month_counter].'4', ($totalMapsAdded - $totalMapsWithdrawn))
+                    //skip row 5
+                ->setCellValue($cell_counter[$month_counter].'6', $totalMaterialsAdded)
+                ->setCellValue($cell_counter[$month_counter].'7', $totalMaterialsWithdrawn)
+                ->setCellValue($cell_counter[$month_counter].'8', ($totalMaterialsAdded - $totalMaterialsWithdrawn))
+                ;
+            $month_counter++;
+            
+            $phpExcelObject->getActiveSheet()->setTitle("Holdings");
+            $num_sheets++; //increment our num_sheets counter
+        }
+        
+        // Generate usage stats.
+        if(in_array('usage', $reportOptions)){
+            //Holdings totals variables
+            $totalItemsShelved = 0;
+            $totalItemsAdded = 0;
+            $totalItems = 0;
+            
+            $phpExcelObject->createSheet($num_sheets); //create a new sheet.
+            $phpExcelObject->setActiveSheetIndex($num_sheets);
+            
+            $this->__getCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
+            
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A2', "Items Shelved")
+                    ->setCellValue('A3', "Items Added")
+                    ->setCellValue('A4', "In-House Usage")
+                    ;
+            
+            //Populate the data for each category for each month of the year
+            $cell_counter = range('B','Z');
+            $month_counter = 0;
+            while($month_counter < 12){
+                // Sometimes no record will exsit for a given month. If that's the case, set all values for that month to 0.
+                if($data[$month_counter] == null){
+                    $phpExcelObject->getActiveSheet()
+                        ->setCellValue($cell_counter[$month_counter].'2', 0)
+                        ->setCellValue($cell_counter[$month_counter].'3', 0)
+                        ->setCellValue($cell_counter[$month_counter].'4', 0)
+                        ;
+                } else {
+                    $phpExcelObject->getActiveSheet()
+                        ->setCellValue($cell_counter[$month_counter].'2', $data[$month_counter]->getItemsShelved())
+                        ->setCellValue($cell_counter[$month_counter].'3', $data[$month_counter]->getItemsAdded())
+                        ->setCellValue($cell_counter[$month_counter].'4', ($data[$month_counter]->getItemsShelved() - $data[$month_counter]->getItemsAdded()))
+                        ;
+                    
+                    $totalItemsShelved += $data[$month_counter]->getItemsShelved();
+                    $totalItemsAdded += $data[$month_counter]->getItemsAdded();
+                    $totalItems += ($totalItemsShelved - $totalItemsAdded);
+                }
+                $month_counter++;
+            }
+            
+            //Totals
+            $phpExcelObject->getActiveSheet()
+                ->setCellValue($cell_counter[$month_counter].'2', $totalItemsShelved)
+                ->setCellValue($cell_counter[$month_counter].'3', $totalItemsAdded)
+                ->setCellValue($cell_counter[$month_counter].'4', ($totalItemsShelved - $totalItemsAdded))
+                ;
+            $month_counter++;
+            
+            $phpExcelObject->getActiveSheet()->setTitle("Usage");
+            $num_sheets++; //increment our num_sheets counter
+        }
+        
+        // Generate reference stats.
+        if(in_array('reference', $reportOptions)){
+            //Holdings totals variables
+            $totalProcedureQuestion1 = 0;
+            $totalProcedureQuestion3 = 0;
+            $totalProcedureQuestion5 = 0;
+            $totalProcedureQuestion10 = 0;
+            $totalProcedureQuestion10Plus = 0;
+            $totalResearchQuestion1 = 0;
+            $totalResearchQuestion3 = 0;
+            $totalResearchQuestion5 = 0;
+            $totalResearchQuestion10 = 0;
+            $totalResearchQuestion15 = 0;
+            $totalResearchQuestion20 = 0;
+            $totalResearchQuestion25 = 0;
+            $totalResearchQuestion25Plus = 0;
+            
+            $phpExcelObject->createSheet($num_sheets); //create a new sheet.
+            $phpExcelObject->setActiveSheetIndex($num_sheets);
+            
+            $this->__getCSVHeaders($phpExcelObject, $reportType, $reportYear); // Headers
+            
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A2', "Directional/Procedural Questions")
+                    ->setCellValue('A3', "1 Minute")
+                    ->setCellValue('A4', "3 Minutes")
+                    ->setCellValue('A5', "5 Minutes")
+                    ->setCellValue('A6', "10 Minutes")
+                    ->setCellValue('A7', ">10 Minutes")
+                        //skip row 8
+                    ->setCellValue('A9', "Research/Instructional Questions")
+                    ->setCellValue('A10', "1 Minute")
+                    ->setCellValue('A11', "3 Minutes")
+                    ->setCellValue('A12', "5 Minutes")
+                    ->setCellValue('A13', "10 Minutes")
+                    ->setCellValue('A14', "15 Minutes")
+                    ->setCellValue('A15', "20 Minutes")
+                    ->setCellValue('A16', "25 Minutes")
+                    ->setCellValue('A17', ">25 Minutes")
+                    ;
+            
+            //Populate the data for each category for each month of the year
+            $cell_counter = range('B','Z');
+            $month_counter = 0;
+            while($month_counter < 12){
+                // Sometimes no record will exsit for a given month. If that's the case, set all values for that month to 0.
+                if($data[$month_counter] == null){
+                    $phpExcelObject->getActiveSheet()
+                        ->setCellValue($cell_counter[$month_counter].'3', 0)
+                        ->setCellValue($cell_counter[$month_counter].'4', 0)
+                        ->setCellValue($cell_counter[$month_counter].'5', 0)
+                        ->setCellValue($cell_counter[$month_counter].'6', 0)
+                        ->setCellValue($cell_counter[$month_counter].'7', 0)
+                            //skip row 8,9
+                        ->setCellValue($cell_counter[$month_counter].'10', 0)
+                        ->setCellValue($cell_counter[$month_counter].'11', 0)
+                        ->setCellValue($cell_counter[$month_counter].'12', 0)
+                        ->setCellValue($cell_counter[$month_counter].'13', 0)
+                        ->setCellValue($cell_counter[$month_counter].'14', 0)
+                        ->setCellValue($cell_counter[$month_counter].'15', 0)
+                        ->setCellValue($cell_counter[$month_counter].'16', 0)
+                        ->setCellValue($cell_counter[$month_counter].'17', 0)
+                        ;
+                } else {
+                    $phpExcelObject->getActiveSheet()
+                        ->setCellValue($cell_counter[$month_counter].'3', $data[$month_counter]->getProcedureQuestion1())
+                        ->setCellValue($cell_counter[$month_counter].'4', $data[$month_counter]->getProcedureQuestion3())
+                        ->setCellValue($cell_counter[$month_counter].'5', $data[$month_counter]->getProcedureQuestion5())
+                        ->setCellValue($cell_counter[$month_counter].'6', $data[$month_counter]->getProcedureQuestion10())
+                        ->setCellValue($cell_counter[$month_counter].'7', $data[$month_counter]->getProcedureQuestion10Plus())
+                            //skip row 8,9
+                        ->setCellValue($cell_counter[$month_counter].'10', $data[$month_counter]->getResearchQuestion1())
+                        ->setCellValue($cell_counter[$month_counter].'11', $data[$month_counter]->getResearchQuestion3())
+                        ->setCellValue($cell_counter[$month_counter].'12', $data[$month_counter]->getResearchQuestion5())
+                        ->setCellValue($cell_counter[$month_counter].'13', $data[$month_counter]->getResearchQuestion10())
+                        ->setCellValue($cell_counter[$month_counter].'14', $data[$month_counter]->getResearchQuestion15())
+                        ->setCellValue($cell_counter[$month_counter].'15', $data[$month_counter]->getResearchQuestion20())
+                        ->setCellValue($cell_counter[$month_counter].'16', $data[$month_counter]->getResearchQuestion25())
+                        ->setCellValue($cell_counter[$month_counter].'17', $data[$month_counter]->getResearchQuestion25Plus())
+                        ;
+                    
+                    $totalProcedureQuestion1 += $data[$month_counter]->getProcedureQuestion1();
+                    $totalProcedureQuestion3 += $data[$month_counter]->getProcedureQuestion3();
+                    $totalProcedureQuestion5 += $data[$month_counter]->getProcedureQuestion5();
+                    $totalProcedureQuestion10 += $data[$month_counter]->getProcedureQuestion10();
+                    $totalProcedureQuestion10Plus += $data[$month_counter]->getProcedureQuestion10Plus();
+                    
+                    $totalResearchQuestion1 += $data[$month_counter]->getResearchQuestion1();
+                    $totalResearchQuestion3 += $data[$month_counter]->getResearchQuestion3();
+                    $totalResearchQuestion5 += $data[$month_counter]->getResearchQuestion5();
+                    $totalResearchQuestion10 += $data[$month_counter]->getResearchQuestion10();
+                    $totalResearchQuestion15 += $data[$month_counter]->getResearchQuestion15();
+                    $totalResearchQuestion20 += $data[$month_counter]->getResearchQuestion20();
+                    $totalResearchQuestion25 += $data[$month_counter]->getResearchQuestion25();
+                    $totalResearchQuestion25Plus += $data[$month_counter]->getResearchQuestion25Plus();
+                }
+                $month_counter++;
+            }
+            
+            //Totals
+            $phpExcelObject->getActiveSheet()
+                ->setCellValue($cell_counter[$month_counter].'3', $totalProcedureQuestion1)
+                ->setCellValue($cell_counter[$month_counter].'4', $totalProcedureQuestion3)
+                ->setCellValue($cell_counter[$month_counter].'5', $totalProcedureQuestion5)
+                ->setCellValue($cell_counter[$month_counter].'6', $totalProcedureQuestion10)
+                ->setCellValue($cell_counter[$month_counter].'7', $totalProcedureQuestion10Plus)
+                    //skip row 8,9
+                ->setCellValue($cell_counter[$month_counter].'10', $totalResearchQuestion1)
+                ->setCellValue($cell_counter[$month_counter].'11', $totalResearchQuestion3)
+                ->setCellValue($cell_counter[$month_counter].'12', $totalResearchQuestion5)
+                ->setCellValue($cell_counter[$month_counter].'13', $totalResearchQuestion10)
+                ->setCellValue($cell_counter[$month_counter].'14', $totalResearchQuestion15)
+                ->setCellValue($cell_counter[$month_counter].'15', $totalResearchQuestion20)
+                ->setCellValue($cell_counter[$month_counter].'16', $totalResearchQuestion25)
+                ->setCellValue($cell_counter[$month_counter].'17', $totalResearchQuestion25Plus)
+                ;
+            $month_counter++;
+            
+            $phpExcelObject->getActiveSheet()->setTitle("Reference Statistics");
+            $num_sheets++; //increment our num_sheets counter
+        }
+        
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $phpExcelObject->setActiveSheetIndex(0);
+       
+        // Create a Excel5 and create a StreamedResponse.
+        $writer = $this->container->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->container->get('phpexcel')->createStreamedResponse($writer);
+        
+        // Add headers.
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "maplibrary_".$reportType.'_'.$reportYear.'_'.date("Y_m_d_His").".xls"
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        
+        return $response;
+    }
+    
+    /**
+     * Add header rows to a monthly stats CSV.
      * 
      * @param \PHPExcel $phpExcelObject 
      * @param String $reportType  Either 'fiscal' or 'calendar'
      * @param mixed $reportYear  The year (either in format 'year1' or 'year1-year2')
      * @return false
      */
-    private function __getGovDocsCSVHeaders(\PHPExcel $phpExcelObject, $reportType, $reportYear){
+    private function __getCSVHeaders(\PHPExcel $phpExcelObject, $reportType, $reportYear){
         if($reportType == 'calendar'){
             $phpExcelObject->getActiveSheet()
                     ->setCellValue('B1', "Jan " . $reportYear)
@@ -381,7 +678,7 @@ class MonthlyStatisticsService{
     /**
      * Get a record for a month for ANY type of monthly statistic entity
      * 
-     * @param String $statsType  Either 'govdocs', 'map', 'periodical', or 'archives'
+     * @param String $statsType  Either 'govdocs', 'maplibrary', 'periodical', or 'archives'
      * @param \DateTime $month
      * @return mixed  The entity that whose month matches the $month param, or null if no match was found.
      */
@@ -392,7 +689,8 @@ class MonthlyStatisticsService{
                 // Uses Symfony's QUERY BUILDER (as opposed to standard DQL queries)
                 $repo = $this->em->getRepository('AppBundle\Entity\MonthlyStatsGovernmentDocuments');
                 break;
-            case 'map':
+            case 'maplibrary':
+                $repo = $this->em->getRepository('AppBundle\Entity\MonthlyStatsMapLibrary');
                 break;
             case 'periodical':
                 break;
