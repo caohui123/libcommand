@@ -265,27 +265,6 @@ class InstructionController extends Controller
                 $group_instruction_arr[] = $entity;
             }
         }
-        /*
-        $filename = "instructions_".date("Y_m_d_His").".csv"; 
-
-        $response = $this->render('AppBundle:Instruction:csvfile.html.twig', array(
-                'group_instructions' => $group_instruction_arr, 
-                'group_headers' => 'Instruction Date, Staff, Start, End, Instructor, Program, Course, Level, Level Description, Attendance,',
-                'individual_instructions' => $individual_instruction_arr,
-                'individual_headers' => 'Instruction Date, Staff, Start, End, Client, Program, Course, Level, Level Description, Client Interaction,',
-                'filters' => $filters,
-            )); 
-
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Description', 'Instruction Session Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
-
-        return $response; 
-         */
         
         $instructionService = $this->get('instruction_service');
         $excelFile = $instructionService->assembleInstructionCSV($group_instruction_arr, $individual_instruction_arr, $filters);
