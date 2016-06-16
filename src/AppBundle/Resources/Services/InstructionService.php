@@ -559,7 +559,7 @@ class InstructionService{
         // Start writing the Excel file.
         $num_sheets = 0;
         if(!empty($filters)){
-            $phpExcelObject->createSheet($num_sheets);
+            $phpExcelObject->createSheet($num_sheets); //new sheet
             $phpExcelObject->setActiveSheetIndex($num_sheets);
             
             // Headers
@@ -568,7 +568,8 @@ class InstructionService{
             
             $phpExcelObject->getActiveSheet()->setBreak( 'A2', \PHPExcel_Worksheet::BREAK_ROW );
             
-            $cell_count = 3;
+            $cell_count = 3; 
+            // Output the filters that were used for the instruction query on their own sheet
             foreach($filters as $filter){
                 $phpExcelObject->getActiveSheet()
                     ->setCellValue('A'.$cell_count, $filter);
@@ -587,7 +588,7 @@ class InstructionService{
         }
         
         if(!empty($groupInstructions)){
-            $phpExcelObject->createSheet($num_sheets);
+            $phpExcelObject->createSheet($num_sheets); //new sheet
             $phpExcelObject->setActiveSheetIndex($num_sheets);
             
             // Headers
@@ -604,12 +605,30 @@ class InstructionService{
                     ->setCellValue('J1', "Attendance")
                     ;
             
+            $row_count = 2;
+            // GroupInstruction entities
+            foreach($groupInstructions as $group_instruction){
+                $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A'.$row_count, $group_instruction->getInstructionDate()->format('m/d/Y'))
+                    ->setCellValue('B'.$row_count, $group_instruction->getLibrarian())
+                    ->setCellValue('C'.$row_count, $group_instruction->getStartTime()->format('h:i A'))
+                    ->setCellValue('D'.$row_count, $group_instruction->getEndTime()->format('h:i A'))
+                    ->setCellValue('E'.$row_count, $group_instruction->getInstructor())
+                    ->setCellValue('F'.$row_count, $group_instruction->getProgram())
+                    ->setCellValue('G'.$row_count, $group_instruction->getCourse())
+                    ->setCellValue('H'.$row_count, $group_instruction->getLevel())
+                    ->setCellValue('I'.$row_count, $group_instruction->getLevelDescription())
+                    ->setCellValue('J'.$row_count, $group_instruction->getAttendance())
+                    ;
+                $row_count++;
+            }
+            
             $phpExcelObject->getActiveSheet()->setTitle("Group Sessions");
             $num_sheets++; //increment our num_sheets counter
         }
         
         if(!empty($individualInstructions)){
-            $phpExcelObject->createSheet($num_sheets);
+            $phpExcelObject->createSheet($num_sheets); // new sheet
             $phpExcelObject->setActiveSheetIndex($num_sheets);
             
             // Headers
@@ -625,6 +644,24 @@ class InstructionService{
                     ->setCellValue('I1', "Level Description")
                     ->setCellValue('J1', "Client Interaction")
                     ;
+            
+            $row_count = 2;
+            // IndividualInstruction entities
+            foreach($individualInstructions as $individual_instruction){
+                $phpExcelObject->getActiveSheet()
+                    ->setCellValue('A'.$row_count, $individual_instruction->getInstructionDate()->format('m/d/Y'))
+                    ->setCellValue('B'.$row_count, $individual_instruction->getLibrarian())
+                    ->setCellValue('C'.$row_count, $individual_instruction->getStartTime()->format('h:i A'))
+                    ->setCellValue('D'.$row_count, $individual_instruction->getEndTime()->format('h:i A'))
+                    ->setCellValue('E'.$row_count, $individual_instruction->getClient())
+                    ->setCellValue('F'.$row_count, $individual_instruction->getProgram())
+                    ->setCellValue('G'.$row_count, $individual_instruction->getCourse())
+                    ->setCellValue('H'.$row_count, $individual_instruction->getLevel())
+                    ->setCellValue('I'.$row_count, $individual_instruction->getLevelDescription())
+                    ->setCellValue('J'.$row_count, $individual_instruction->getInteraction())
+                    ;
+                $row_count++;
+            }
             
             $phpExcelObject->getActiveSheet()->setTitle("Individual Sessions");
             $num_sheets++; //increment our num_sheets counter
