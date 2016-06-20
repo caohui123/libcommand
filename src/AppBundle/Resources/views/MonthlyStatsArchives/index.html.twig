@@ -1,0 +1,117 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>MonthlyStatsArchives list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Month</th>
+                <th>Researchminutes5</th>
+                <th>Researchminutes10</th>
+                <th>Researchminutes15</th>
+                <th>Researchminutes20</th>
+                <th>Researchminutes30</th>
+                <th>Researchminutes45</th>
+                <th>Researchminutes60</th>
+                <th>Instructionalminutes5</th>
+                <th>Instructionalminutes10</th>
+                <th>Instructionalminutes15</th>
+                <th>Instructionalminutes20</th>
+                <th>Instructionalminutes30</th>
+                <th>Instructionalminutes45</th>
+                <th>Instructionalminutes60</th>
+                <th>Researchersfaculty</th>
+                <th>Researchersstaff</th>
+                <th>Researchersundergrad</th>
+                <th>Researchersgrad</th>
+                <th>Researcherscommunity</th>
+                <th>Researchersother</th>
+                <th>Directionalemailref</th>
+                <th>Directionalphoneref</th>
+                <th>Researchrequestscollectionemailref</th>
+                <th>Researchrequestscollectionphoneref</th>
+                <th>Researchrequestsemailref</th>
+                <th>Researchrequestsphoneref</th>
+                <th>Donationsemailref</th>
+                <th>Donationsphoneref</th>
+                <th>Loansemailref</th>
+                <th>Loansphoneref</th>
+                <th>Collectionsprocessedlinearfeet</th>
+                <th>Collectionsprocessedcallnumber</th>
+                <th>Collectionsprocessedtotalcollection</th>
+                <th>Collectionsstoredlinearfeet</th>
+                <th>Collectionsstoredcallnumber</th>
+                <th>Collectionsstoredtotalcollection</th>
+                <th>Holdingsaddedbooks</th>
+                <th>Holdingsaddedfacultypublications</th>
+                <th>Accessionslinearfeet</th>
+                <th>Accessionstotalcollections</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('monthly_archives_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.month %}{{ entity.month|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.researchMinutes5 }}</td>
+                <td>{{ entity.researchMinutes10 }}</td>
+                <td>{{ entity.researchMinutes15 }}</td>
+                <td>{{ entity.researchMinutes20 }}</td>
+                <td>{{ entity.researchMinutes30 }}</td>
+                <td>{{ entity.researchMinutes45 }}</td>
+                <td>{{ entity.researchMinutes60 }}</td>
+                <td>{{ entity.instructionalMinutes5 }}</td>
+                <td>{{ entity.instructionalMinutes10 }}</td>
+                <td>{{ entity.instructionalMinutes15 }}</td>
+                <td>{{ entity.instructionalMinutes20 }}</td>
+                <td>{{ entity.instructionalMinutes30 }}</td>
+                <td>{{ entity.instructionalMinutes45 }}</td>
+                <td>{{ entity.instructionalMinutes60 }}</td>
+                <td>{{ entity.researchersFaculty }}</td>
+                <td>{{ entity.researchersStaff }}</td>
+                <td>{{ entity.researchersUndergrad }}</td>
+                <td>{{ entity.researchersGrad }}</td>
+                <td>{{ entity.researchersCommunity }}</td>
+                <td>{{ entity.researchersOther }}</td>
+                <td>{{ entity.directionalEmailRef }}</td>
+                <td>{{ entity.directionalPhoneRef }}</td>
+                <td>{{ entity.researchRequestsCollectionEmailRef }}</td>
+                <td>{{ entity.researchRequestsCollectionPhoneRef }}</td>
+                <td>{{ entity.researchRequestsEmailRef }}</td>
+                <td>{{ entity.researchRequestsPhoneRef }}</td>
+                <td>{{ entity.donationsEmailRef }}</td>
+                <td>{{ entity.donationsPhoneRef }}</td>
+                <td>{{ entity.loansEmailRef }}</td>
+                <td>{{ entity.loansPhoneRef }}</td>
+                <td>{{ entity.collectionsProcessedLinearFeet }}</td>
+                <td>{{ entity.collectionsProcessedCallNumber }}</td>
+                <td>{{ entity.collectionsProcessedTotalCollection }}</td>
+                <td>{{ entity.collectionsStoredLinearFeet }}</td>
+                <td>{{ entity.collectionsStoredCallNumber }}</td>
+                <td>{{ entity.collectionsStoredTotalCollection }}</td>
+                <td>{{ entity.holdingsAddedBooks }}</td>
+                <td>{{ entity.holdingsAddedFacultyPublications }}</td>
+                <td>{{ entity.accessionsLinearFeet }}</td>
+                <td>{{ entity.accessionsTotalCollections }}</td>
+                <td>{% if entity.created %}{{ entity.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.updated %}{{ entity.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('monthly_archives_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('monthly_archives_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

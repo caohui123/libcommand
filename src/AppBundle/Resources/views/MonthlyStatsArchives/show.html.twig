@@ -1,0 +1,200 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>MonthlyStatsArchives</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Month</th>
+                <td>{{ entity.month|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Researchminutes5</th>
+                <td>{{ entity.researchMinutes5 }}</td>
+            </tr>
+            <tr>
+                <th>Researchminutes10</th>
+                <td>{{ entity.researchMinutes10 }}</td>
+            </tr>
+            <tr>
+                <th>Researchminutes15</th>
+                <td>{{ entity.researchMinutes15 }}</td>
+            </tr>
+            <tr>
+                <th>Researchminutes20</th>
+                <td>{{ entity.researchMinutes20 }}</td>
+            </tr>
+            <tr>
+                <th>Researchminutes30</th>
+                <td>{{ entity.researchMinutes30 }}</td>
+            </tr>
+            <tr>
+                <th>Researchminutes45</th>
+                <td>{{ entity.researchMinutes45 }}</td>
+            </tr>
+            <tr>
+                <th>Researchminutes60</th>
+                <td>{{ entity.researchMinutes60 }}</td>
+            </tr>
+            <tr>
+                <th>Instructionalminutes5</th>
+                <td>{{ entity.instructionalMinutes5 }}</td>
+            </tr>
+            <tr>
+                <th>Instructionalminutes10</th>
+                <td>{{ entity.instructionalMinutes10 }}</td>
+            </tr>
+            <tr>
+                <th>Instructionalminutes15</th>
+                <td>{{ entity.instructionalMinutes15 }}</td>
+            </tr>
+            <tr>
+                <th>Instructionalminutes20</th>
+                <td>{{ entity.instructionalMinutes20 }}</td>
+            </tr>
+            <tr>
+                <th>Instructionalminutes30</th>
+                <td>{{ entity.instructionalMinutes30 }}</td>
+            </tr>
+            <tr>
+                <th>Instructionalminutes45</th>
+                <td>{{ entity.instructionalMinutes45 }}</td>
+            </tr>
+            <tr>
+                <th>Instructionalminutes60</th>
+                <td>{{ entity.instructionalMinutes60 }}</td>
+            </tr>
+            <tr>
+                <th>Researchersfaculty</th>
+                <td>{{ entity.researchersFaculty }}</td>
+            </tr>
+            <tr>
+                <th>Researchersstaff</th>
+                <td>{{ entity.researchersStaff }}</td>
+            </tr>
+            <tr>
+                <th>Researchersundergrad</th>
+                <td>{{ entity.researchersUndergrad }}</td>
+            </tr>
+            <tr>
+                <th>Researchersgrad</th>
+                <td>{{ entity.researchersGrad }}</td>
+            </tr>
+            <tr>
+                <th>Researcherscommunity</th>
+                <td>{{ entity.researchersCommunity }}</td>
+            </tr>
+            <tr>
+                <th>Researchersother</th>
+                <td>{{ entity.researchersOther }}</td>
+            </tr>
+            <tr>
+                <th>Directionalemailref</th>
+                <td>{{ entity.directionalEmailRef }}</td>
+            </tr>
+            <tr>
+                <th>Directionalphoneref</th>
+                <td>{{ entity.directionalPhoneRef }}</td>
+            </tr>
+            <tr>
+                <th>Researchrequestscollectionemailref</th>
+                <td>{{ entity.researchRequestsCollectionEmailRef }}</td>
+            </tr>
+            <tr>
+                <th>Researchrequestscollectionphoneref</th>
+                <td>{{ entity.researchRequestsCollectionPhoneRef }}</td>
+            </tr>
+            <tr>
+                <th>Researchrequestsemailref</th>
+                <td>{{ entity.researchRequestsEmailRef }}</td>
+            </tr>
+            <tr>
+                <th>Researchrequestsphoneref</th>
+                <td>{{ entity.researchRequestsPhoneRef }}</td>
+            </tr>
+            <tr>
+                <th>Donationsemailref</th>
+                <td>{{ entity.donationsEmailRef }}</td>
+            </tr>
+            <tr>
+                <th>Donationsphoneref</th>
+                <td>{{ entity.donationsPhoneRef }}</td>
+            </tr>
+            <tr>
+                <th>Loansemailref</th>
+                <td>{{ entity.loansEmailRef }}</td>
+            </tr>
+            <tr>
+                <th>Loansphoneref</th>
+                <td>{{ entity.loansPhoneRef }}</td>
+            </tr>
+            <tr>
+                <th>Collectionsprocessedlinearfeet</th>
+                <td>{{ entity.collectionsProcessedLinearFeet }}</td>
+            </tr>
+            <tr>
+                <th>Collectionsprocessedcallnumber</th>
+                <td>{{ entity.collectionsProcessedCallNumber }}</td>
+            </tr>
+            <tr>
+                <th>Collectionsprocessedtotalcollection</th>
+                <td>{{ entity.collectionsProcessedTotalCollection }}</td>
+            </tr>
+            <tr>
+                <th>Collectionsstoredlinearfeet</th>
+                <td>{{ entity.collectionsStoredLinearFeet }}</td>
+            </tr>
+            <tr>
+                <th>Collectionsstoredcallnumber</th>
+                <td>{{ entity.collectionsStoredCallNumber }}</td>
+            </tr>
+            <tr>
+                <th>Collectionsstoredtotalcollection</th>
+                <td>{{ entity.collectionsStoredTotalCollection }}</td>
+            </tr>
+            <tr>
+                <th>Holdingsaddedbooks</th>
+                <td>{{ entity.holdingsAddedBooks }}</td>
+            </tr>
+            <tr>
+                <th>Holdingsaddedfacultypublications</th>
+                <td>{{ entity.holdingsAddedFacultyPublications }}</td>
+            </tr>
+            <tr>
+                <th>Accessionslinearfeet</th>
+                <td>{{ entity.accessionsLinearFeet }}</td>
+            </tr>
+            <tr>
+                <th>Accessionstotalcollections</th>
+                <td>{{ entity.accessionsTotalCollections }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('monthly_archives') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('monthly_archives_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
