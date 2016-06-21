@@ -80,7 +80,6 @@ class MonthlyStatsMapLibraryType extends AbstractType
             ))
         ;
         
-        //Takes the AnnualReportUnit id passed to the unit field and converts it into the proper AnnualReportUnit entity.
         $builder->get('month')
                 ->addModelTransformer(new DateTimeToStringTransformer($this->manager));
     }

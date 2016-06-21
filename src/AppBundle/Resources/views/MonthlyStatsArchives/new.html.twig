@@ -3,13 +3,96 @@
 {% block body -%}
     <h1>MonthlyStatsArchives creation</h1>
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="requested_collection" 
+                     data-prototype-boxquantity="{{ form_widget(form.requestedCollections.vars.prototype.children.boxQuantity.vars.prototype)|e('html_attr') }}"
+                     data-prototype-collections="{{ form_widget(form.requestedCollections.vars.prototype)|e('html_attr') }}"
+                     >
+                </ul>
+            </div>
+        </div>
+    {{ form_end(form) }}
+    
+    {#
+        {{ form_row(form.}}
+        {{ form_row(form._token) }}
+        {{ form_row(form.submit) }}
+    {{ form_end(form, {'render_rest': false}) }}
+    #}
+{% endblock %}
+{% block documentReady %}
+    var $requestedCollectionHolder;
+    var $addRequestedCollectionLink = $('<a href="#" class="add_collection_link">+ Add Collection</a>');
+    var $newRequestedCollectionLi = $('<li></li>').append($addRequestedCollectionLink);
+    var $newBoxQuantityLink = $('<a href="#" class="add_boxquantity_link">+ Box</a>');
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('monthly_archives') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    // Get the ul that holds the collection of tags
+    $requestedCollectionHolder = $('ul.requested_collection');
+    
+    // add the "add a tag" anchor and li to the tags ul
+    $requestedCollectionHolder.append($newRequestedCollectionLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $requestedCollectionHolder.data('index', $requestedCollectionHolder.find(':input').length);
+
+    //Add an initial staffTenured form.
+    addCollectionForm($requestedCollectionHolder, $newRequestedCollectionLi);
+
+    //Add an additional archives collection form each time a user clicks the $addRequestedCollectionLink
+    $addRequestedCollectionLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new collection form
+        addCollectionForm($requestedCollectionHolder, $newRequestedCollectionLi);
+    });
+    
+    //Add an additional box collection form each time a user clicks the newBoxQuantity anchor
+    $addRequestedCollectionLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new collection form
+        addBoxForm($requestedCollectionHolder, $newRequestedCollectionLi);
+    });
+    
+    /**
+     * Uses Symfony's prototype code to generate a new list item for a form collection
+     */
+    function addCollectionForm($collectionHolder, $newLinkLi, bootstrapListStyle) {
+        // Get the data-prototype-collections and data-prototype-boxquantity
+        var collectionsPrototype = $collectionHolder.data('prototype-collections');
+        var boxquantityPrototype = $collectionHolder.data('prototype-boxquantity');
+        
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newCollectionForm = collectionsPrototype.replace(/__name__/g, index);
+        var newBoxForm = boxquantityPrototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the collection form in the page in an li, before the "Add collection" link li
+        if(bootstrapListStyle === true){
+            var $newCollectionFormLi = $('<li class="list-group-item requestedcollection-item-container"></li>').append(newCollectionForm);
+        } else {
+            var $newCollectionFormLi = $('<li class="requestedcollection-item-container"></li>').append(newCollectionForm);
+        }    
+        $newLinkLi.before($newCollectionFormLi);
+        
+        // Display the box form in the boxquantity list in an li, before the "Add box" link li
+        var $newBoxFormUl = $('<ul class="requested_collection_boxquantity"></ul>');
+        var $newBoxFormLi = $('<li class="list-group-item requestedcollectionbox-item-container"></li>');
+        $newBoxFormLi.append(newBoxForm);
+        $newBoxFormUl.append($newBoxFormLi);
+        $newBoxFormUl.append($newBoxQuantityLink); //defined outside of the function
+        
+        $newLinkLi.before($newBoxFormUl);
+    }
 {% endblock %}

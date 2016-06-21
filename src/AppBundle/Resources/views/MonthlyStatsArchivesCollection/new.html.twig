@@ -3,7 +3,15 @@
 {% block body -%}
     <h1>MonthlyStatsArchivesCollection creation</h1>
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_label(form.boxQuantity) }}
+        <ul class="archives_collection" data-prototype="{{ form_widget(form.boxQuantity.vars.prototype)|e('html_attr') }}">
+        </ul>
+        
+        {{ form_row(form._token) }}
+        {{ form_row(form.submit) }}
+    {{ form_end(form, {'render_rest': false}) }}
 
         <ul class="record_actions">
     <li>
@@ -12,4 +20,57 @@
         </a>
     </li>
 </ul>
+{% endblock %}
+{% block documentReady %}
+    var $archivesCollectionHolder;
+    var $addCollectionLink = $('<a href="#" class="add_collection_link">+ Add Collection</a>');
+    var $newCollectionLi = $('<li></li>').append($addCollectionLink);
+
+    // Get the ul that holds the collection of tags
+    $archivesCollectionHolder = $('ul.archives_collection');
+    
+    // add the "add a tag" anchor and li to the tags ul
+    $archivesCollectionHolder.append($newCollectionLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $archivesCollectionHolder.data('index', $archivesCollectionHolder.find(':input').length);
+
+    //Add an initial staffTenured form.
+    addCollectionForm($archivesCollectionHolder, $newCollectionLi);
+
+    //Add an additional archives collection form each time a user clicks the $addCollectionLink
+    $addCollectionLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new collection form
+        addCollectionForm($archivesCollectionHolder, $newCollectionLi);
+    });
+    
+    /**
+     * Uses Symfony's prototype code to generate a new list item for a form collection
+     */
+    function addCollectionForm($collectionHolder, $newLinkLi, bootstrapListStyle) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        if(bootstrapListStyle === true){
+            var $newFormLi = $('<li class="list-group-item archivescollection-item-container"></li>').append(newForm);
+        } else {
+            var $newFormLi = $('<li class="archivescollection-item-container"></li>').append(newForm);
+        }    
+        $newLinkLi.before($newFormLi);
+    }
 {% endblock %}

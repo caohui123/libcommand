@@ -35,7 +35,7 @@ class MonthlyStatsArchivesCollection
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesBoxQuantity", cascade={"persist"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesBoxQuantity", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="monthlystatsarchivescollection_monthlystatsarchivesboxquantity",
      *      joinColumns={@ORM\JoinColumn(name="collection_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="boxquantity_id", referencedColumnName="id", onDelete="CASCADE")},
@@ -162,6 +162,85 @@ class MonthlyStatsArchivesCollection
     public function getBoxQuantity()
     {
         return $this->boxQuantity;
+    }
+    
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+    public function setCreated($created)
+    {
+        $this->created = $created;
+        
+        return $this;
+    }
+    
+    /**
+     * Get createdBy
+     * @return User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+    public function setCreatedBy(User $createdBy)
+    {
+        $this->createdBy = $createdBy;
+        
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+        
+        return $this;
+    }
+    
+    /**
+     * Get updatedBy
+     *
+     * @return User
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+    public function setUpdatedBy(User $updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+        
+        return $this;
+    }
+
+    /**
+     * Get contentChangedBy
+     *
+     * @return User
+     */
+    public function getContentChangedBy()
+    {
+        return $this->contentChangedBy;
+    }
+    public function setContentChangedBy(User $changedby)
+    {
+        $this->contentChangedBy = $changedby;
+        
+        return $this;
     }
     
 }

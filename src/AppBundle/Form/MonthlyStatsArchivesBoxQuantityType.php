@@ -16,8 +16,8 @@ class MonthlyStatsArchivesBoxQuantityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('quantity')
             ->add('box', 'entity', array(
+                'label' => 'Box Number',
                 'class'=>'AppBundle:MonthlyStatsArchivesBox',
                 'query_builder'=>function(EntityRepository $er){
                     $qb = $er->createQueryBuilder('b');
@@ -28,6 +28,7 @@ class MonthlyStatsArchivesBoxQuantityType extends AbstractType
                 },
                 'placeholder' => '--NOT SET--',
             ))
+            ->add('quantity')
         ;
     }
     

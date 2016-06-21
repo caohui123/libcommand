@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Form\DataTransformer\DateTimeToStringTransformer;
-use AppBundle\Form\AppBundle\Entity\MonthlyStatsArchivesCollectionType;
+use AppBundle\Form\MonthlyStatsArchivesCollectionType;
 
 class MonthlyStatsArchivesType extends AbstractType
 {
@@ -77,6 +77,9 @@ class MonthlyStatsArchivesType extends AbstractType
                 'data_class' => null,
             ))
         ;
+        
+        $builder->get('month')
+                ->addModelTransformer(new DateTimeToStringTransformer($this->manager));
     }
     
     /**
