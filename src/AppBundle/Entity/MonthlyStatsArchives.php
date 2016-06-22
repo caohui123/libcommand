@@ -36,7 +36,7 @@ class MonthlyStatsArchives
     private $month;
     
     /**
-     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesCollection", cascade={"persist"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesCollection", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="monthlystatsarchives_monthlystatsarchivesrequestedcollection",
      *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="collection_id", referencedColumnName="id", unique=true, onDelete="CASCADE")},
@@ -45,7 +45,7 @@ class MonthlyStatsArchives
     private $requestedCollections;
     
     /**
-     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesCollection", cascade={"persist"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesCollection", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
      * @ORM\JoinTable(name="monthlystatsarchives_monthlystatsarchivesdigitizationcollection",
      *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="collection_id", referencedColumnName="id", unique=true, onDelete="CASCADE")},
@@ -1196,12 +1196,12 @@ class MonthlyStatsArchives
     }
     
     /**
-     * Add RequestedCollections
+     * Add RequestedCollection
      *
      * @param AppBundle\Entity\MonthlyStatsArchivesCollection  $requestedCollections
      * @return AnnualReport
      */
-    public function addRequestedCollections(MonthlyStatsArchivesCollection $requestedCollections)
+    public function addRequestedCollection(MonthlyStatsArchivesCollection $requestedCollections)
     {
         $this->requestedCollections->add($requestedCollections);
 
@@ -1209,12 +1209,12 @@ class MonthlyStatsArchives
     }
 
     /**
-     * Remove RequestedCollections
+     * Remove RequestedCollection
      *
      * @param AppBundle\Entity\MonthlyStatsArchivesCollection  $requestedCollections
      * @return MonthlyStatsArchives
      */
-    public function removeRequestedCollections(MonthlyStatsArchivesCollection $requestedCollections)
+    public function removeRequestedCollection(MonthlyStatsArchivesCollection $requestedCollections)
     {
         $this->requestedCollections->removeElement($requestedCollections);
         
@@ -1232,12 +1232,12 @@ class MonthlyStatsArchives
     }
     
     /**
-     * Add DigitizationCollections
+     * Add DigitizationCollection
      *
      * @param AppBundle\Entity\MonthlyStatsArchivesCollection  $digitizationCollections
-     * @return AnnualReport
+     * @return MonthlyStatsArchives
      */
-    public function addDigitizationCollections(MonthlyStatsArchivesCollection $digitizationCollections)
+    public function addDigitizationCollection(MonthlyStatsArchivesCollection $digitizationCollections)
     {
         $this->digitizationCollections->add($digitizationCollections);
 
@@ -1245,12 +1245,12 @@ class MonthlyStatsArchives
     }
 
     /**
-     * Remove DigitizationCollections
+     * Remove DigitizationCollection
      *
      * @param AppBundle\Entity\MonthlyStatsArchivesCollection  $digitizationCollections
      * @return MonthlyStatsArchives
      */
-    public function removeDigitizationCollections(MonthlyStatsArchivesCollection $digitizationCollections)
+    public function removeDigitizationCollection(MonthlyStatsArchivesCollection $digitizationCollections)
     {
         $this->digitizationCollections->removeElement($digitizationCollections);
         

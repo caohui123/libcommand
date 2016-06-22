@@ -38,40 +38,142 @@ class MonthlyStatsArchivesType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
             ))
-            ->add('researchMinutes5')
-            ->add('researchMinutes10')
-            ->add('researchMinutes15')
-            ->add('researchMinutes20')
-            ->add('researchMinutes30')
-            ->add('researchMinutes45')
-            ->add('researchMinutes60')
-            ->add('instructionalMinutes5')
-            ->add('instructionalMinutes10')
-            ->add('instructionalMinutes15')
-            ->add('instructionalMinutes20')
-            ->add('instructionalMinutes30')
-            ->add('instructionalMinutes45')
-            ->add('instructionalMinutes60')
-            ->add('researchersFaculty')
-            ->add('researchersStaff')
-            ->add('researchersUndergrad')
-            ->add('researchersGrad')
-            ->add('researchersCommunity')
-            ->add('researchersOther')
-            ->add('directionalEmailRef')
-            ->add('directionalPhoneRef')
-            ->add('researchRequestsCollectionEmailRef')
-            ->add('researchRequestsCollectionPhoneRef')
-            ->add('researchRequestsEmailRef')
-            ->add('researchRequestsPhoneRef')
-            ->add('donationsEmailRef')
-            ->add('donationsPhoneRef')
-            ->add('loansEmailRef')
-            ->add('loansPhoneRef')
-            ->add('holdingsAddedBooks')
-            ->add('holdingsAddedFacultyPublications')
-            ->add('accessionsLinearFeet')
-            ->add('accessionsTotalCollections')
+            ->add('researchMinutes5', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchMinutes10', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchMinutes15', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchMinutes20', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchMinutes30', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchMinutes45', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchMinutes60', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('instructionalMinutes5', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('instructionalMinutes10', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('instructionalMinutes15', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('instructionalMinutes20', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('instructionalMinutes30', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('instructionalMinutes45', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('instructionalMinutes60', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchersFaculty', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchersStaff', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchersUndergrad', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchersGrad', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchersCommunity', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchersOther', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('directionalEmailRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('directionalPhoneRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchRequestsCollectionEmailRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchRequestsCollectionPhoneRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchRequestsEmailRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('researchRequestsPhoneRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('donationsEmailRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('donationsPhoneRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('loansEmailRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('loansPhoneRef', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('holdingsAddedBooks', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('holdingsAddedFacultyPublications', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('accessionsLinearFeet', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
+            ->add('accessionsTotalCollections', null, array(
+                'required' => false,
+                'data' => 0,
+            ))
             ->add('month', 'hidden', array(
                 'data' => $options['data']->getMonth(),
                 'data_class' => null,
