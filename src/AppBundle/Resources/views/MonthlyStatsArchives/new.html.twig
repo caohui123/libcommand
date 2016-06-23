@@ -5,145 +5,123 @@
     {{ form_start(form) }}
         <div class="row">
             <div class="col-xs-12">
-                {#
-                <ul class="requested_collection" 
-                     data-prototype-boxquantity="{{ form_widget(form.requestedCollections.vars.prototype.children.boxQuantity.vars.prototype)|e('html_attr') }}"
-                     data-prototype-collections="{{ form_widget(form.requestedCollections.vars.prototype)|e('html_attr') }}"
-                     >
-                </ul>
-                #}
+                <h2>Requested Book Titles</h2>
+                PLACEHOLDER!
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Requested Collection Titles</h2>
                 <ul class="requested_collection" 
                      data-prototype-boxquantity="
                         {% filter escape %}
-                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': form.requestedCollections.vars.prototype.children.boxQuantity.vars.prototype }) }}
+                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': form.requestedCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'requested' }) }}
                         {% endfilter %}
                         "
                      data-prototype-collections="
                         {% filter escape %}
-                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': form.requestedCollections.vars.prototype }) }}
+                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': form.requestedCollections.vars.prototype, 'collectionType': 'requested' }) }}
                         {% endfilter %}
                      "
                      >
                 </ul>
             </div>
         </div>
-    {{ form_end(form) }}
-    
-    {#
-        {{ form_row(form.}}
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Requested File Titles</h2>
+                PLACEHOLDER!
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                <h2>Research Minutes</h2>
+                {{ form_row(form.researchMinutes5) }}
+                {{ form_row(form.researchMinutes10) }}
+                {{ form_row(form.researchMinutes15) }}
+                {{ form_row(form.researchMinutes20) }}
+                {{ form_row(form.researchMinutes30) }}
+                {{ form_row(form.researchMinutes45) }}
+                {{ form_row(form.researchMinutes60) }}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                <h2>Instructional Minutes</h2>
+                {{ form_row(form.instructionalMinutes5) }}
+                {{ form_row(form.instructionalMinutes10) }}
+                {{ form_row(form.instructionalMinutes15) }}
+                {{ form_row(form.instructionalMinutes20) }}
+                {{ form_row(form.instructionalMinutes30) }}
+                {{ form_row(form.instructionalMinutes45) }}
+                {{ form_row(form.instructionalMinutes60) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                <h2>Researchers</h2>
+                {{ form_row(form.researchersFaculty) }}
+                {{ form_row(form.researchersStaff) }}
+                {{ form_row(form.researchersUndergrad) }}
+                {{ form_row(form.researchersGrad) }}
+                {{ form_row(form.researchersCommunity) }}
+                {{ form_row(form.researchersOther) }}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8">
+                <h2>Email/Phone Reference</h2>
+                {{ form_row(form.directionalEmailRef) }}
+                {{ form_row(form.directionalPhoneRef) }}
+                {{ form_row(form.researchRequestsCollectionEmailRef) }}
+                {{ form_row(form.researchRequestsCollectionPhoneRef) }}
+                {{ form_row(form.researchRequestsEmailRef) }}
+                {{ form_row(form.donationsEmailRef) }}
+                {{ form_row(form.loansEmailRef) }}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Technical Services</h2>
+                {{ form_row(form.holdingsAddedBooks) }}
+                {{ form_row(form.holdingsAddedFacultyPublications) }}
+                {{ form_row(form.accessionsLinearFeet) }}
+                {{ form_row(form.accessionsTotalCollections) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Digitized Books</h2>
+                PLACEHOLDER!
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Digitized Collections</h2>
+                <ul class="digitization_collection" 
+                     data-prototype-boxquantity="
+                        {% filter escape %}
+                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'digitization' }) }}
+                        {% endfilter %}
+                        "
+                     data-prototype-collections="
+                        {% filter escape %}
+                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': form.digitizationCollections.vars.prototype, 'collectionType': 'digitization' }) }}
+                        {% endfilter %}
+                     "
+                     >
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Digitized Files</h2>
+                PLACEHOLDER!
+            </div>
+        </div>
+
         {{ form_row(form._token) }}
         {{ form_row(form.submit) }}
     {{ form_end(form, {'render_rest': false}) }}
-    #}
 {% endblock %}
 {% block documentReady %}
-    // Archives Requested Collection
-    var $requestedCollectionHolder;
-    var $addRequestedCollectionLink = $('<a href="#" class="add_collection_link">+ Add Collection</a>');
-    var $newRequestedCollectionLi = $('<li></li>').append($addRequestedCollectionLink);
-    
-    // Archives Requested Collection Boxes
-    var $newBoxQuantityLink = $('<a href="#" class="add_boxquantity_link">+ Box</a>');
-    var $newBoxQuantityLi = $('<li></li>').append($newBoxQuantityLink);
-
-    // Get the ul that holds the collection of Collections
-    $requestedCollectionHolder = $('ul.requested_collection');
-    
-    // add the "add a tag" anchor and li to the tags ul
-    $requestedCollectionHolder.append($newRequestedCollectionLi);
-
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
-    $requestedCollectionHolder.data('index', $requestedCollectionHolder.find(':input').length);
-
-    //Add an initial collection form.
-    addCollectionForm($requestedCollectionHolder, $newRequestedCollectionLi, $newBoxQuantityLi);
-
-    //Add an additional archives collection form each time a user clicks the $addRequestedCollectionLink
-    $addRequestedCollectionLink.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
-        e.preventDefault();
-
-        // add a new collection form
-        addCollectionForm($requestedCollectionHolder, $newRequestedCollectionLi, $newBoxQuantityLi);
-    });
-    
-    //Add an additional box collection form each time a user clicks the newBoxQuantity anchor
-    $newBoxQuantityLink.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
-        e.preventDefault();
-        
-        // Get the ul that holds the collection of boxes
-        $requestedBoxCollectionHolder = $('ul.requested_collection_boxquantity');
-        $requestedBoxCollectionHolder.data('index', $requestedBoxCollectionHolder.find('li.requestedcollectionbox-item-container').length);
-
-        // add a new collection form
-        addBoxForm($requestedBoxCollectionHolder, $newBoxQuantityLi, $requestedCollectionHolder);
-    });
-    
-    /**
-     * Uses Symfony's prototype code to generate a new list item for a form collection
-     */
-    function addCollectionForm($collectionHolder, $newLinkLi, $newBoxLinkLi, bootstrapListStyle) {
-        // Get the data-prototype-collections and data-prototype-boxquantity
-        var collectionsPrototype = $collectionHolder.data('prototype-collections');
-        var boxquantityPrototype = $collectionHolder.data('prototype-boxquantity');
-        
-        // get the new index
-        var index = $collectionHolder.data('index');
-
-        // Replace '__name__' in the prototype's HTML to
-        // instead be a number based on how many items we have
-        var newCollectionForm = collectionsPrototype.replace(/__name__/g, index);
-        var newBoxForm = boxquantityPrototype.replace(/__boxname__/g, 0);
-            newBoxForm = newBoxForm.replace(/__collectionname__/g, index);
-
-        // increase the index with one for the next item
-        $collectionHolder.data('index', index + 1);
-
-        // Display the collection form in the page in an li, before the "Add collection" link li
-        if(bootstrapListStyle === true){
-            var $newCollectionFormLi = $('<li class="list-group-item requestedcollection-item-container"></li>').append(newCollectionForm);
-        } else {
-            var $newCollectionFormLi = $('<li class="requestedcollection-item-container"></li>').append(newCollectionForm);
-        }    
-        
-        
-        // Display the box form in the boxquantity list in an li, before the "Add box" link li
-        var $newBoxFormUl = $('<ul class="requested_collection_boxquantity"></ul>');
-        var $newBoxFormLi = $('<li class="list-group-item requestedcollectionbox-item-container"></li>');
-        $newBoxFormLi.append(newBoxForm);
-        $newBoxFormUl.append($newBoxFormLi);
-        $newBoxFormUl.append($newBoxLinkLi); 
-        $newCollectionFormLi.append($newBoxFormUl);
-        
-        // Add the collection and box before the +Add Collection list item
-        $newLinkLi.before($newCollectionFormLi);
-    }
-    
-    function addBoxForm($boxCollectionHolder, $newLinkLi, $parentCollectionHolder){
-        // Extract the collection index for this collection
-        var $collectionNameContainer = $boxCollectionHolder.siblings();
-        //var collectionId = $collectionNameContainer.attr('id');
-        //var collectionIndex = collectionId.match(/\d+$/); //matches the number at the end of the ID string
-        console.log($collectionNameContainer);
-        
-        var boxquantityPrototype = $parentCollectionHolder.data('prototype-boxquantity');
-        
-        // get the new index for the box index
-        var boxIndex = $requestedCollectionHolder.find(':input').length
-        
-        // Replace '__boxname__' in the prototype's HTML to
-        // instead be a number based on how many items we have
-        var newBoxForm = boxquantityPrototype.replace(/__boxname__/g, boxIndex);
-            newBoxForm = newBoxForm.replace(/__collectionname__/g, collectionIndex);
-        
-        // increase the index with one for the next item
-        $boxCollectionHolder.data('index', boxIndex + 1);
-        
-        // Display the collection form in the page in an li, before the "Add collection" link li
-        var $newBoxFormLi = $('<li class="list-group-item requestedcollectionbox-item-container"></li>').append(newBoxForm);
- 
-        $newLinkLi.before($newBoxFormLi);
-    }
+    // JavaScript located in AppBundle/Resources/public/js/monthlystatsarchives.js
 {% endblock %}

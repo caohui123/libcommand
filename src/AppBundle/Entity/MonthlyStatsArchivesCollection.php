@@ -29,7 +29,7 @@ class MonthlyStatsArchivesCollection
 
     /**
      * @ORM\ManyToOne(targetEntity="MonthlyStatsArchivesCollectionTitle")
-     * @ORM\JoinColumn(name="box_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="collectiontitle_id", referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $name;

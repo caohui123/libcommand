@@ -1,10 +1,12 @@
 {# DO NOT REMOVE the class="collection-identifier" as it is used in the javascript #}
-<div class="collection-identifier" id="appbundle_monthlystatsarchives_requestedCollections___name__">
+<div class="collection-identifier" id="appbundle_monthlystatsarchives_{{ (collectionType) }}Collections___name__">
     <div class="form-group">
-        <label class="control-label required" for="appbundle_monthlystatsarchives_requestedCollections___name___name">Name</label>
-        <select id="appbundle_monthlystatsarchives_requestedCollections___name___name" name="appbundle_monthlystatsarchives[requestedCollections][__name__][name]" required="required" class="form-control">
-            <option value="" selected="selected">--NOT SET--</option>            
-            <option value="1" >I am Collection, hear me roar!</option>
+        <label class="control-label required" for="appbundle_monthlystatsarchives_{{ (collectionType) }}Collections___name___name">Name</label>
+        <select id="appbundle_monthlystatsarchives_{{ (collectionType) }}Collections___name___name" name="appbundle_monthlystatsarchives[{{ (collectionType) }}Collections][__name__][name]" required="required" class="form-control">
+            <option value="" selected="selected">{{ form.children.name.vars.placeholder }}</option>
+            {% for option in form.children.name.vars.choices %}
+                <option value="{{ option.data.id }}">{{ option.data.name }}</option>
+            {% endfor %}
         </select>
     </div>
 </div>
