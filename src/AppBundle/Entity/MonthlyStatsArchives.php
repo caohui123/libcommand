@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\MonthlyStatsArchivesCollection;
+use AppBundle\Entity\MonthlyStatsArchivesBookQuantity;
 
 /**
  * MonthlyStatsArchives
@@ -52,6 +53,24 @@ class MonthlyStatsArchives
      *      )
      */
     private $digitizationCollections;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesBookQuantity", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="monthlystatsarchives_monthlystatsarchivesrequestedbook",
+     *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id", unique=true, onDelete="CASCADE")},
+     *      )
+     */
+    private $requestedBooks;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesBookQuantity", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="monthlystatsarchives_monthlystatsarchivesdigitizationbook",
+     *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id", unique=true, onDelete="CASCADE")},
+     *      )
+     */
+    private $digitizationBooks;
     
 
     /**
@@ -343,6 +362,8 @@ class MonthlyStatsArchives
         $this->month = $month;
         $this->requestedCollections = new ArrayCollection();
         $this->digitizationCollections = new ArrayCollection();
+        $this->requestedBooks = new ArrayCollection();
+        $this->digitizationBooks = new ArrayCollection();
     }
 
     /**
@@ -1265,6 +1286,78 @@ class MonthlyStatsArchives
     public function getDigitizationCollections()
     {
         return $this->digitizationCollections;
+    }
+    
+    /**
+     * Add RequestedBooks
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesBookQuantity  $requestedBooks
+     * @return AnnualReport
+     */
+    public function addRequestedBook(MonthlyStatsArchivesBookQuantity $requestedBooks)
+    {
+        $this->requestedBooks->add($requestedBooks);
+
+        return $this;
+    }
+
+    /**
+     * Remove RequestedBooks
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesBookQuantity  $requestedBooks
+     * @return MonthlyStatsArchives
+     */
+    public function removeRequestedBook(MonthlyStatsArchivesBookQuantity $requestedBooks)
+    {
+        $this->requestedBooks->removeElement($requestedBooks);
+        
+        return $this;
+    }
+    
+    /**
+     * Get RequestedBooks
+     *
+     * @return ArrayCollection 
+     */
+    public function getRequestedBooks()
+    {
+        return $this->requestedBooks;
+    }
+    
+    /**
+     * Add DigitizationBooks
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesBookQuantity  $digitizationBooks
+     * @return MonthlyStatsArchives
+     */
+    public function addDigitizationBook(MonthlyStatsArchivesBookQuantity $digitizationBooks)
+    {
+        $this->digitizationBooks->add($digitizationBooks);
+
+        return $this;
+    }
+
+    /**
+     * Remove DigitizationBooks
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesBookQuantity  $digitizationBooks
+     * @return MonthlyStatsArchives
+     */
+    public function removeDigitizationBook(MonthlyStatsArchivesBookQuantity $digitizationBooks)
+    {
+        $this->digitizationBooks->removeElement($digitizationBooks);
+        
+        return $this;
+    }
+    
+    /**
+     * Get DigitizationBooks
+     *
+     * @return ArrayCollection 
+     */
+    public function getDigitizationBooks()
+    {
+        return $this->digitizationBooks;
     }
     
     /**

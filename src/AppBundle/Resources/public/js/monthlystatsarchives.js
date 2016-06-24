@@ -66,6 +66,46 @@ $(document).ready(function(){
         // add a new collection form
         addDigitizationBoxForm($(this), $digitizationCollectionHolder);
     });
+    
+////// Requested Books //////
+    var $requestedBookHolder;
+        $requestedBookHolder = $('ul.requested_book');
+        
+    var $addRequestedBookLink = $('<a href="#" class="add_requestedcollection_link">+ Add Book</a>');
+    var $newRequestedBookLi = $('<li></li>').append($addRequestedBookLink);
+
+    // add the "+ Add Book" li to the ul
+    $requestedBookHolder.append($newRequestedBookLi);
+
+    $requestedBookHolder.data('index', $requestedBookHolder.find(':input').length);
+    
+    //Add an additional archives book form each time a user clicks the $addRequestedBookLink
+    $addRequestedBookLink.on('click', function(e) {
+        e.preventDefault();
+        addBookForm($requestedBookHolder, $newRequestedBookLi);
+    });
+    
+    addBookForm($requestedBookHolder, $newRequestedBookLi, 'requested');
+    
+////// Digitization Books //////
+    var $digitizationBookHolder;
+        $digitizationBookHolder = $('ul.digitization_book');
+        
+    var $addDigitizationBookLink = $('<a href="#" class="add_digitizationcollection_link">+ Add Book</a>');
+    var $newDigitizationBookLi = $('<li></li>').append($addDigitizationBookLink);
+
+    // add the "+ Add Book" li to the ul
+    $digitizationBookHolder.append($newDigitizationBookLi);
+
+    $digitizationBookHolder.data('index', $digitizationBookHolder.find(':input').length);
+    
+    //Add an additional archives book form each time a user clicks the $addDigitizationBookLink
+    $addDigitizationBookLink.on('click', function(e) {
+        e.preventDefault();
+        addBookForm($digitizationBookHolder, $newDigitizationBookLi);
+    });
+    
+    addBookForm($digitizationBookHolder, $newDigitizationBookLi, 'digitization');
 
     
     /**
@@ -229,6 +269,39 @@ $(document).ready(function(){
         $newLinkLi.before($newBoxFormLi);
         
         return;
+    }
+    
+    /**
+     * Uses Symfony's prototype code to generate a new list item for a book 
+     *
+     * @param jQuery Object $collectionHolder   The <ul> which holds the collection and prototypes
+     * @param jQuery Object $newLinkLi          The jQuery element of the link that was just clicked.
+     */
+    function addBookForm($collectionHolder, $newLinkLi, formType, bootstrapListStyle) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        if(bootstrapListStyle === true){
+            var newFormLi = '<li class="list-group-item __formType__bookquantity-item-container"></li>';
+                newFormLi = newFormLi.replace(/__formType__/g, formType);
+            var $newFormLi = $(newFormLi).append(newForm);
+        } else {
+            var newFormLi = '<li class="__formType__bookquantity-item-container"></li>';
+                newFormLi = newFormLi.replace(/__formType__/g, formType);
+            var $newFormLi = $(newFormLi).append(newForm);
+        }    
+        $newLinkLi.before($newFormLi);
     }
 });
 

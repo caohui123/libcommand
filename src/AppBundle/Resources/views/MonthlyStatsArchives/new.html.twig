@@ -6,7 +6,8 @@
         <div class="row">
             <div class="col-xs-12">
                 <h2>Requested Book Titles</h2>
-                PLACEHOLDER!
+                <ul class="requested_book" data-prototype="{{ form_widget(form.requestedBooks.vars.prototype)|e('html_attr') }}">
+                </ul>
             </div>
         </div>
         <div class="row">
@@ -70,11 +71,15 @@
                 <h2>Email/Phone Reference</h2>
                 {{ form_row(form.directionalEmailRef) }}
                 {{ form_row(form.directionalPhoneRef) }}
+                {{ form_row(form.researchRequestsEmailRef) }}
+                {{ form_row(form.researchRequestsPhoneRef) }}
                 {{ form_row(form.researchRequestsCollectionEmailRef) }}
                 {{ form_row(form.researchRequestsCollectionPhoneRef) }}
                 {{ form_row(form.researchRequestsEmailRef) }}
                 {{ form_row(form.donationsEmailRef) }}
+                {{ form_row(form.donationsPhoneRef) }}
                 {{ form_row(form.loansEmailRef) }}
+                {{ form_row(form.loansPhoneRef) }}
             </div>
         </div>
         <hr>
@@ -89,8 +94,9 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <h2>Digitized Books</h2>
-                PLACEHOLDER!
+                <h2>Digitization Book Titles</h2>
+                <ul class="digitization_book" data-prototype="{{ form_widget(form.digitizationBooks.vars.prototype)|e('html_attr') }}">
+                </ul>
             </div>
         </div>
         <div class="row">
@@ -113,11 +119,12 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <h2>Digitized Files</h2>
+                <h2>Digitized File Titles</h2>
                 PLACEHOLDER!
             </div>
         </div>
-
+        
+        {{ form_row(form.month) }}
         {{ form_row(form._token) }}
         {{ form_row(form.submit) }}
     {{ form_end(form, {'render_rest': false}) }}

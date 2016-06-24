@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Form\DataTransformer\DateTimeToStringTransformer;
 use AppBundle\Form\MonthlyStatsArchivesCollectionType;
+use AppBundle\Form\MonthlyStatsArchivesBookQuantityType;
 
 class MonthlyStatsArchivesType extends AbstractType
 {
@@ -34,6 +35,20 @@ class MonthlyStatsArchivesType extends AbstractType
             //MonthlyStatsArchivesCollection entity collection
             ->add('digitizationCollections', 'collection', array(
                 'type' => new MonthlyStatsArchivesCollectionType(),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ))
+            //MonthlyStatsArchivesBookQuantityType entity collection
+            ->add('requestedBooks', 'collection', array(
+                'type' => new MonthlyStatsArchivesBookQuantityType(),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ))
+            //MonthlyStatsArchivesBookQuantityType entity collection
+            ->add('digitizationBooks', 'collection', array(
+                'type' => new MonthlyStatsArchivesBookQuantityType(),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
