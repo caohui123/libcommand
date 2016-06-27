@@ -10,6 +10,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\MonthlyStatsArchivesCollection;
 use AppBundle\Entity\MonthlyStatsArchivesBookQuantity;
+use AppBundle\Entity\MonthlyStatsArchivesFileRequested;
+use AppBundle\Entity\MonthlyStatsArchivesFileDigitization;
 
 /**
  * MonthlyStatsArchives
@@ -72,6 +74,23 @@ class MonthlyStatsArchives
      */
     private $digitizationBooks;
     
+    /**
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesFileRequested", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="monthlystatsarchives_monthlystatsarchivesrequestedfile",
+     *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="file_id", referencedColumnName="id", unique=true, onDelete="CASCADE")},
+     *      )
+     */
+    private $requestedFiles; 
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesFileDigitization", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="monthlystatsarchives_monthlystatsarchivesdigitizationfile",
+     *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="file_id", referencedColumnName="id", unique=true, onDelete="CASCADE")},
+     *      )
+     */
+    private $digitizationFiles; 
 
     /**
      * @var integer
@@ -300,7 +319,7 @@ class MonthlyStatsArchives
     /**
      * @var integer
      *
-     * @ORM\Column(name="accessionsLinearFeet", type="integer")
+     * @ORM\Column(name="accessionsLinearFeet", type="decimal", precision=15, scale=1)
      */
     private $accessionsLinearFeet;
 
@@ -364,6 +383,8 @@ class MonthlyStatsArchives
         $this->digitizationCollections = new ArrayCollection();
         $this->requestedBooks = new ArrayCollection();
         $this->digitizationBooks = new ArrayCollection();
+        $this->requestedFiles = new ArrayCollection();
+        $this->digitizationFiles = new ArrayCollection();
     }
 
     /**
@@ -1220,7 +1241,7 @@ class MonthlyStatsArchives
      * Add RequestedCollection
      *
      * @param AppBundle\Entity\MonthlyStatsArchivesCollection  $requestedCollections
-     * @return AnnualReport
+     * @return MonthlyStatsArchives
      */
     public function addRequestedCollection(MonthlyStatsArchivesCollection $requestedCollections)
     {
@@ -1292,7 +1313,7 @@ class MonthlyStatsArchives
      * Add RequestedBooks
      *
      * @param AppBundle\Entity\MonthlyStatsArchivesBookQuantity  $requestedBooks
-     * @return AnnualReport
+     * @return MonthlyStatsArchives
      */
     public function addRequestedBook(MonthlyStatsArchivesBookQuantity $requestedBooks)
     {
@@ -1358,6 +1379,78 @@ class MonthlyStatsArchives
     public function getDigitizationBooks()
     {
         return $this->digitizationBooks;
+    }
+    
+    /**
+     * Add RequestedFile
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesFileRequested  $requestedFile
+     * @return MonthlyStatsArchives
+     */
+    public function addRequestedFile(MonthlyStatsArchivesFileRequested $requestedFile)
+    {
+        $this->requestedFiles->add($requestedFile);
+
+        return $this;
+    }
+
+    /**
+     * Remove RequestedFile
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesFileRequested  $requestedFile
+     * @return MonthlyStatsArchives
+     */
+    public function removeRequestedFile(MonthlyStatsArchivesFileRequested $requestedFile)
+    {
+        $this->requestedFiles->removeElement($requestedFile);
+        
+        return $this;
+    }
+    
+    /**
+     * Get RequestedFiles
+     *
+     * @return ArrayCollection 
+     */
+    public function getRequestedFiles()
+    {
+        return $this->requestedFiles;
+    }
+    
+    /**
+     * Add DigitizationFile
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesFileDigitization  $digitizationFile
+     * @return MonthlyStatsArchives
+     */
+    public function addDigitizationFile(MonthlyStatsArchivesFileDigitization $digitizationFile)
+    {
+        $this->digitizationFiles->add($digitizationFile);
+
+        return $this;
+    }
+
+    /**
+     * Remove DigitizationFile
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesFileDigitization  $digitizationFile
+     * @return MonthlyStatsArchives
+     */
+    public function removeDigitizationFile(MonthlyStatsArchivesFileDigitization $digitizationFile)
+    {
+        $this->digitizationFiles->removeElement($digitizationFile);
+        
+        return $this;
+    }
+    
+    /**
+     * Get DigitizationFile
+     *
+     * @return ArrayCollection 
+     */
+    public function getDigitizationFiles()
+    {
+        return $this->digitizationFiles;
     }
     
     /**

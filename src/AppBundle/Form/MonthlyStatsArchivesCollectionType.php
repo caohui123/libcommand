@@ -27,6 +27,7 @@ class MonthlyStatsArchivesCollectionType extends AbstractType
                     return $qb;
                 },
                 'placeholder' => '--NOT SET--',
+                'label' => 'Collection Title',
             ))
             ->add('boxQuantity', 'collection', array(
                 'type' => new MonthlyStatsArchivesBoxQuantityType(),

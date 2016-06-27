@@ -64,6 +64,14 @@ input.thumbnail-photo-select{
     background: #fad65c;
 }
 
+.list-style-none{
+    list-style-type: none;
+}
+
+.archives_addbtn{
+    margin:5px 0px 5px 0px;
+}
+
 /* FOSUserBundle Signin */
 .form-signin {
   max-width: 330px;

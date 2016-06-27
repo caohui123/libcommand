@@ -1,12 +1,19 @@
 {# DO NOT REMOVE the class="collection-identifier" as it is used in the javascript #}
 <div class="collection-identifier" id="appbundle_monthlystatsarchives_{{ (collectionType) }}Collections___name__">
     <div class="form-group">
-        <label class="control-label required" for="appbundle_monthlystatsarchives_{{ (collectionType) }}Collections___name___name">Name</label>
-        <select id="appbundle_monthlystatsarchives_{{ (collectionType) }}Collections___name___name" name="appbundle_monthlystatsarchives[{{ (collectionType) }}Collections][__name__][name]" required="required" class="form-control">
-            <option value="" selected="selected">{{ form.children.name.vars.placeholder }}</option>
-            {% for option in form.children.name.vars.choices %}
-                <option value="{{ option.data.id }}">{{ option.data.name }}</option>
-            {% endfor %}
-        </select>
+        <div class="row">
+            <div class="col-xs-10">
+                <label class="control-label required" for="appbundle_monthlystatsarchives_{{ (collectionType) }}Collections___name___name">{{ form.children.name.vars.label }}</label>
+                <select id="appbundle_monthlystatsarchives_{{ (collectionType) }}Collections___name___name" name="appbundle_monthlystatsarchives[{{ (collectionType) }}Collections][__name__][name]" required="required" class="form-control">
+                    <option value="" selected="selected">{{ form.children.name.vars.placeholder }}</option>
+                    {% for option in form.children.name.vars.choices %}
+                        <option value="{{ option.data.id }}">{{ option.data.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-2" style="margin-top:25px">
+                <button type="button" class="delete-{{ collectionType }}collection btn btn-link"><span class="glyphicon glyphicon-trash text-danger" aria-label="delete {{ collectionType }} collection"></span></button>
+            </div>
+        </div>
     </div>
 </div>

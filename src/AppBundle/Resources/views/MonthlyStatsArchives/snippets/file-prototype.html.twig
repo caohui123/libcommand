@@ -1,0 +1,23 @@
+<div id="appbundle_monthlystatsarchives_{{ fileType }}Files___name__">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ fileType }}Files___name___name">Name</label>
+            <input type="text" id="appbundle_monthlystatsarchives_{{ fileType }}Files___name___name" name="appbundle_monthlystatsarchives[{{ fileType }}Files][__name__][name]" required="required" maxlength="255" class="form-control" />
+        </div>
+        <div class="col-xs-12 col-sm-9 col-md-3 col-lg-3">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ fileType }}Files___name___type">Type</label>
+            <select id="appbundle_monthlystatsarchives_{{ fileType }}Files___name___type" name="appbundle_monthlystatsarchives[{{ fileType }}Files][__name__][type]" class="form-control">            
+                {% for option in form.children.type.vars.choices %}
+                    <option value="{{ option.value }}">{{ option.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ fileType }}Files___name___quantity">Quantity</label>
+            <input type="number" id="appbundle_monthlystatsarchives_{{ fileType }}Files___name___quantity" name="appbundle_monthlystatsarchives[{{ fileType }}Files][__name__][quantity]" required="required" class="{{ fileType }}file_quantity form-control" />
+        </div>
+        <div class="col-xs-12 col-sm-2 col-md-1">
+            <button type="button" class="delete-{{ fileType }}file btn btn-link"><span class="glyphicon glyphicon-trash text-danger" aria-label="delete {{ fileType }} file"></span></button>
+        </div>
+    </div>
+</div>

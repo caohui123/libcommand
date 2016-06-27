@@ -1,132 +1,481 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+    {# Totals variables #}
+    {% set totalResearchMinutes5 = 0 %}
+    {% set totalResearchMinutes10 = 0 %}
+    {% set totalResearchMinutes15 = 0 %}
+    {% set totalResearchMinutes20 = 0 %}
+    {% set totalResearchMinutes30 = 0 %}
+    {% set totalResearchMinutes45 = 0 %}
+    {% set totalResearchMinutes60 = 0 %}
+    {% set totalInstructionalMinutes5 = 0 %}
+    {% set totalInstructionalMinutes10 = 0 %}
+    {% set totalInstructionalMinutes15 = 0 %}
+    {% set totalInstructionalMinutes20 = 0 %}
+    {% set totalInstructionalMinutes30 = 0 %}
+    {% set totalInstructionalMinutes45 = 0 %}
+    {% set totalInstructionalMinutes60 = 0 %}
+    
     <h1>MonthlyStatsArchives creation</h1>
+    <div class="row">
+        <div class="col-xs-12"  id="monthlyarchives-tabs">
+            <ul>
+                <li role="presentation"><a href="#requested-container" >Requested Materials</a></li>
+                <li role="presentation"><a href="#research-container">Researchers & Reference</a></li>
+                <li role="presentation"><a href="#digitization-container">Holdings & Conversions</a></li>
+            </ul>
     {{ form_start(form) }}
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Requested Book Titles</h2>
-                <ul class="requested_book" data-prototype="{{ form_widget(form.requestedBooks.vars.prototype)|e('html_attr') }}">
-                </ul>
-            </div>
+            <section id="requested-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="requested_books_total">0</span> Requested Book Titles</h2>
+                                <ul class="requested_book" 
+                                    data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/book-prototype.html.twig', { 'form': form.requestedBooks.vars.prototype, 'bookType': 'requested' }) }}
+                                        {% endfilter %}
+                                        ">
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="requested_collections_total">0</span> Requested Collection Titles <small>(<span class="badge" id="requested_collectionboxes_total">0</span> boxes)</small></h2>
+                                <ul class="requested_collection" 
+                                     data-prototype-boxquantity="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': form.requestedCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'requested' }) }}
+                                        {% endfilter %}
+                                        "
+                                     data-prototype-collections="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': form.requestedCollections.vars.prototype, 'collectionType': 'requested' }) }}
+                                        {% endfilter %}
+                                     "
+                                     >
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="requested_files_total">0</span> Requested File Titles</h2>
+                                <ul class="requested_file" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/file-prototype.html.twig', { 'form': form.requestedFiles.vars.prototype, 'fileType': 'requested' }) }}
+                                        {% endfilter %}
+                                        ">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="research-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                        <h2>Research Minutes</h2>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                
+                            </div>
+                            <div class="col-xs-4">
+                                Researchers
+                            </div>
+                            <div class="col-xs-4">
+                                Time (mins)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.researchMinutes5) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchMinutes5) }}
+                                {{ form_widget(form.researchMinutes5) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_5_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.researchMinutes10) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchMinutes10) }}
+                                {{ form_widget(form.researchMinutes10) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_10_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.researchMinutes15) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchMinutes15) }}
+                                {{ form_widget(form.researchMinutes15) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_15_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.researchMinutes20) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchMinutes20) }}
+                                {{ form_widget(form.researchMinutes20) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_20_total">
+                                0
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.researchMinutes30) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchMinutes30) }}
+                                {{ form_widget(form.researchMinutes30) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_30_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.researchMinutes45) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchMinutes45) }}
+                                {{ form_widget(form.researchMinutes45) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_45_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.researchMinutes60) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchMinutes60) }}
+                                {{ form_widget(form.researchMinutes60) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_60_total">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                        <h2>Instructional Minutes</h2>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                
+                            </div>
+                            <div class="col-xs-4">
+                                Sessions
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_5_total">
+                                Time (mins)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.instructionalMinutes5) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.instructionalMinutes5) }}
+                                {{ form_widget(form.instructionalMinutes5) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_5_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.instructionalMinutes10) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.instructionalMinutes10) }}
+                                {{ form_widget(form.instructionalMinutes10) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_10_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.instructionalMinutes15) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.instructionalMinutes15) }}
+                                {{ form_widget(form.instructionalMinutes15) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_15_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.instructionalMinutes20) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.instructionalMinutes20) }}
+                                {{ form_widget(form.instructionalMinutes20) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_20_total">
+                                0
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.instructionalMinutes30) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.instructionalMinutes30) }}
+                                {{ form_widget(form.instructionalMinutes30) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_30_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.instructionalMinutes45) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.instructionalMinutes45) }}
+                                {{ form_widget(form.instructionalMinutes45) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_45_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(form.instructionalMinutes60) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.instructionalMinutes60) }}
+                                {{ form_widget(form.instructionalMinutes60) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_60_total">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+                        <h2>Researchers</h2>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(form.researchersFaculty) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(form.researchersFaculty) }}
+                                {{ form_widget(form.researchersFaculty) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(form.researchersStaff) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(form.researchersStaff) }}
+                                {{ form_widget(form.researchersStaff) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(form.researchersUndergrad) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(form.researchersUndergrad) }}
+                                {{ form_widget(form.researchersUndergrad) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(form.researchersGrad) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(form.researchersGrad) }}
+                                {{ form_widget(form.researchersGrad) }}
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(form.researchersCommunity) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(form.researchersCommunity) }}
+                                {{ form_widget(form.researchersCommunity) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(form.researchersOther) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(form.researchersOther) }}
+                                {{ form_widget(form.researchersOther) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-5">
+                        <h2>Email/Phone Reference</h2>
+                        <div class="row">
+                            <div class="col-xs-4">
+                            </div>
+                            <div class="col-xs-4">
+                                Email References
+                            </div>
+                            <div class="col-xs-4">
+                                Phone References
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Directional</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.directionalEmailRef) }}
+                                {{ form_widget(form.directionalEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.directionalPhoneRef) }}
+                                {{ form_widget(form.directionalPhoneRef) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Research Requestes for Collection</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchRequestsCollectionEmailRef) }}
+                                {{ form_widget(form.researchRequestsCollectionEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchRequestsCollectionPhoneRef) }}
+                                {{ form_widget(form.researchRequestsCollectionPhoneRef) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Research Requestes</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchRequestsEmailRef) }}
+                                {{ form_widget(form.researchRequestsEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.researchRequestsPhoneRef) }}
+                                {{ form_widget(form.researchRequestsPhoneRef) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Donations</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.donationsEmailRef) }}
+                                {{ form_widget(form.donationsEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.donationsPhoneRef) }}
+                                {{ form_widget(form.donationsPhoneRef) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Loans</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.loansEmailRef) }}
+                                {{ form_widget(form.loansEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(form.loansPhoneRef) }}
+                                {{ form_widget(form.loansPhoneRef) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="digitization-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2>Technical Services</h2>
+                                {{ form_row(form.holdingsAddedBooks) }}
+                                {{ form_row(form.holdingsAddedFacultyPublications) }}
+                                {{ form_row(form.accessionsLinearFeet) }}
+                                {{ form_row(form.accessionsTotalCollections) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_books_total">0</span> Digitization Book Titles</h2>
+                                <ul class="digitization_book" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/book-prototype.html.twig', { 'form': form.digitizationBooks.vars.prototype, 'bookType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        ">
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_collections_total">0</span> Digitization Collections <small>(<span class="badge" id="digitization_collectionboxes_total">0</span> boxes)</small></h2>
+                                <ul class="digitization_collection" 
+                                     data-prototype-boxquantity="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        "
+                                     data-prototype-collections="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': form.digitizationCollections.vars.prototype, 'collectionType': 'digitization' }) }}
+                                        {% endfilter %}
+                                     "
+                                     >
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_files_total">0</span> Digitization File Titles</h2>
+                                <ul class="digitization_file" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/file-prototype.html.twig', { 'form': form.digitizationFiles.vars.prototype, 'fileType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        ">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- #end monthlyarchives-tabs -->
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            {{ form_row(form.month) }}
+            {{ form_row(form._token) }}
+            <p>
+            {{ form_row(form.submit) }}
+            </p>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Requested Collection Titles</h2>
-                <ul class="requested_collection" 
-                     data-prototype-boxquantity="
-                        {% filter escape %}
-                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': form.requestedCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'requested' }) }}
-                        {% endfilter %}
-                        "
-                     data-prototype-collections="
-                        {% filter escape %}
-                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': form.requestedCollections.vars.prototype, 'collectionType': 'requested' }) }}
-                        {% endfilter %}
-                     "
-                     >
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Requested File Titles</h2>
-                PLACEHOLDER!
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <h2>Research Minutes</h2>
-                {{ form_row(form.researchMinutes5) }}
-                {{ form_row(form.researchMinutes10) }}
-                {{ form_row(form.researchMinutes15) }}
-                {{ form_row(form.researchMinutes20) }}
-                {{ form_row(form.researchMinutes30) }}
-                {{ form_row(form.researchMinutes45) }}
-                {{ form_row(form.researchMinutes60) }}
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <h2>Instructional Minutes</h2>
-                {{ form_row(form.instructionalMinutes5) }}
-                {{ form_row(form.instructionalMinutes10) }}
-                {{ form_row(form.instructionalMinutes15) }}
-                {{ form_row(form.instructionalMinutes20) }}
-                {{ form_row(form.instructionalMinutes30) }}
-                {{ form_row(form.instructionalMinutes45) }}
-                {{ form_row(form.instructionalMinutes60) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-4">
-                <h2>Researchers</h2>
-                {{ form_row(form.researchersFaculty) }}
-                {{ form_row(form.researchersStaff) }}
-                {{ form_row(form.researchersUndergrad) }}
-                {{ form_row(form.researchersGrad) }}
-                {{ form_row(form.researchersCommunity) }}
-                {{ form_row(form.researchersOther) }}
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-8">
-                <h2>Email/Phone Reference</h2>
-                {{ form_row(form.directionalEmailRef) }}
-                {{ form_row(form.directionalPhoneRef) }}
-                {{ form_row(form.researchRequestsEmailRef) }}
-                {{ form_row(form.researchRequestsPhoneRef) }}
-                {{ form_row(form.researchRequestsCollectionEmailRef) }}
-                {{ form_row(form.researchRequestsCollectionPhoneRef) }}
-                {{ form_row(form.researchRequestsEmailRef) }}
-                {{ form_row(form.donationsEmailRef) }}
-                {{ form_row(form.donationsPhoneRef) }}
-                {{ form_row(form.loansEmailRef) }}
-                {{ form_row(form.loansPhoneRef) }}
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Technical Services</h2>
-                {{ form_row(form.holdingsAddedBooks) }}
-                {{ form_row(form.holdingsAddedFacultyPublications) }}
-                {{ form_row(form.accessionsLinearFeet) }}
-                {{ form_row(form.accessionsTotalCollections) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Digitization Book Titles</h2>
-                <ul class="digitization_book" data-prototype="{{ form_widget(form.digitizationBooks.vars.prototype)|e('html_attr') }}">
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Digitized Collections</h2>
-                <ul class="digitization_collection" 
-                     data-prototype-boxquantity="
-                        {% filter escape %}
-                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'digitization' }) }}
-                        {% endfilter %}
-                        "
-                     data-prototype-collections="
-                        {% filter escape %}
-                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': form.digitizationCollections.vars.prototype, 'collectionType': 'digitization' }) }}
-                        {% endfilter %}
-                     "
-                     >
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Digitized File Titles</h2>
-                PLACEHOLDER!
-            </div>
-        </div>
-        
-        {{ form_row(form.month) }}
-        {{ form_row(form._token) }}
-        {{ form_row(form.submit) }}
+    </div>
     {{ form_end(form, {'render_rest': false}) }}
 {% endblock %}
 {% block documentReady %}
