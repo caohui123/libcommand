@@ -1,0 +1,22 @@
+<li class="list-group-item {{ type }}bookquantity-item-container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-9">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type }}Books_{{ index }}_bookTitle">Title</label>
+            <select id="appbundle_monthlystatsarchives_{{ type }}Books_{{ index }}_bookTitle" name="appbundle_monthlystatsarchives[{{ type }}Books][{{ index }}][bookTitle]" required="required" class="form-control">
+                {% for option in form.children.bookTitle.vars.choices %}
+                    <option value="{{ option.data.id }}"
+                            {% if option.data.id == entity.bookTitle.id %}selected="selected"{% endif %}>
+                        {{ option.data.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-2">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type }}Books_{{ index }}_quantity">Quantity</label>
+            <input type="number" id="appbundle_monthlystatsarchives_{{ type }}Books_{{ index }}_quantity" name="appbundle_monthlystatsarchives[{{ type }}Books][{{ index }}][quantity]" class="{{ type }}book_quantity form-control" value="{{ entity.quantity }}" />
+        </div>
+        <div class="col-xs-12 col-sm-1">
+            <button type="button" class="delete-{{ type }}book btn btn-link"><span class="glyphicon glyphicon-trash text-danger" aria-label="delete {{ type }} book"></span></button>
+        </div>
+    </div>
+</li>

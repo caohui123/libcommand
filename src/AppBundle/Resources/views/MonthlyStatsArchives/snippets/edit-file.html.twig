@@ -1,0 +1,26 @@
+<li class="list-group-item {{ type }}file-item-container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type }}Files_{{ index }}_name">Name</label>
+            <input type="text" id="appbundle_monthlystatsarchives_{{ type }}Files_{{ index }}_name" name="appbundle_monthlystatsarchives[{{ type }}Files][{{ index }}][name]" required="required" maxlength="255" class="form-control" value="{{ entity.name }}" />
+        </div>
+        <div class="col-xs-12 col-sm-9 col-md-3 col-lg-3">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type }}Files_{{ index }}_type">Type</label>
+            <select id="appbundle_monthlystatsarchives_{{ type }}Files_{{ index }}_type" name="appbundle_monthlystatsarchives[{{ type }}Files][{{ index }}][type]" class="form-control">            
+                {% for option in form.children.type.vars.choices %}
+                    <option value="{{ option.value }}"
+                            {% if option.value == entity.type %}selected="selected"{% endif %}>
+                        {{ option.label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type }}Files_{{ index }}_quantity">Quantity</label>
+            <input type="number" id="appbundle_monthlystatsarchives_{{ type }}Files_{{ index }}_quantity" name="appbundle_monthlystatsarchives[{{ type }}Files][{{ index }}][quantity]" required="required" class="{{ type }}file_quantity form-control" value="{{ entity.quantity }}"/>
+        </div>
+        <div class="col-xs-12 col-sm-2 col-md-1">
+            <button type="button" class="delete-{{ type }}file btn btn-link"><span class="glyphicon glyphicon-trash text-danger" aria-label="delete {{ type }} file"></span></button>
+        </div>
+    </div>
+</li>

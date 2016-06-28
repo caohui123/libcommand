@@ -1,0 +1,16 @@
+<li class="list-group-item {{ type }}collection-item-container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type}}Collections_{{ index }}_callNumber">Call number</label>
+            <input type="text" id="appbundle_monthlystatsarchives_{{ type}}Collections_{{ index }}_callNumber" name="appbundle_monthlystatsarchives[{{ type}}Collections][{{ index }}][callNumber]" required="required" maxlength="70" class="form-control" value="{{ entity.callNumber }}" />
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type}}Collections_{{ index }}_linearFeet">Linear feet</label>
+            <input type="text" id="appbundle_monthlystatsarchives_{{ type}}Collections_{{ index }}_linearFeet" name="appbundle_monthlystatsarchives[{{ type}}Collections][{{ index }}][linearFeet]" required="required" step="0.1" type="number" min="0" class="form-control" value="{{ entity.linearFeet }}" />
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <button type="button" class="delete-{{ type }}collection btn btn-link"><span class="glyphicon glyphicon-trash text-danger" aria-label="delete {{ type }} collection"></span></button>
+        </div>
+    </div>
+</li>
+                                                                                

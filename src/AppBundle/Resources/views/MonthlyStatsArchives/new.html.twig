@@ -1,37 +1,25 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    {# Totals variables #}
-    {% set totalResearchMinutes5 = 0 %}
-    {% set totalResearchMinutes10 = 0 %}
-    {% set totalResearchMinutes15 = 0 %}
-    {% set totalResearchMinutes20 = 0 %}
-    {% set totalResearchMinutes30 = 0 %}
-    {% set totalResearchMinutes45 = 0 %}
-    {% set totalResearchMinutes60 = 0 %}
-    {% set totalInstructionalMinutes5 = 0 %}
-    {% set totalInstructionalMinutes10 = 0 %}
-    {% set totalInstructionalMinutes15 = 0 %}
-    {% set totalInstructionalMinutes20 = 0 %}
-    {% set totalInstructionalMinutes30 = 0 %}
-    {% set totalInstructionalMinutes45 = 0 %}
-    {% set totalInstructionalMinutes60 = 0 %}
-    
     <h1>MonthlyStatsArchives creation</h1>
+    <blockquote>
+        <p>Please note that the form will not submit unless all required fields are filled in. All fields form book and file titles must have a value. All collection titles must have at least one box with a quantity.</p>
+    </blockquote>
     <div class="row">
-        <div class="col-xs-12"  id="monthlyarchives-tabs">
-            <ul>
-                <li role="presentation"><a href="#requested-container" >Requested Materials</a></li>
-                <li role="presentation"><a href="#research-container">Researchers & Reference</a></li>
-                <li role="presentation"><a href="#digitization-container">Holdings & Conversions</a></li>
+        <div class="col-xs-12">
+            <ul class="nav nav-tabs" id="monthlyarchives-tabs">
+                <li role="presentation" class="active monthlyarchives-tab"><a href="#requested-container" >Requested Materials</a></li>
+                <li role="presentation" class="monthlyarchives-tab"><a href="#research-container">Researchers & Reference</a></li>
+                <li role="presentation" class="monthlyarchives-tab"><a href="#digitization-container">Holdings & Conversions</a></li>
             </ul>
     {{ form_start(form) }}
-            <section id="requested-container">
+            <section class="monthly-stats-section" id="requested-container">
                 <div class="row">
                     <div class="col-xs-12 col-sm-10 col-md-9">
                         <div class="row">
                             <div class="col-xs-12">
                                 <h2><span class="badge" id="requested_books_total">0</span> Requested Book Titles</h2>
+                                <p>Don't see the book title you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_booktitle_new') }}" target="_blank">add it here</a>.</p>
                                 <ul class="requested_book" 
                                     data-prototype="
                                         {% filter escape %}
@@ -44,6 +32,8 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <h2><span class="badge" id="requested_collections_total">0</span> Requested Collection Titles <small>(<span class="badge" id="requested_collectionboxes_total">0</span> boxes)</small></h2>
+                                <p>Don't see the collection you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_collectiontitle_new') }}" target="_blank">add it here</a>.</p>
+                                <p>Don't see the box you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_box_new') }}" target="_blank">add it here</a>.</p>
                                 <ul class="requested_collection" 
                                      data-prototype-boxquantity="
                                         {% filter escape %}
@@ -73,7 +63,7 @@
                     </div>
                 </div>
             </section>
-            <section id="research-container">
+            <section class="monthly-stats-section" id="research-container">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                         <h2>Research Minutes</h2>
@@ -182,7 +172,7 @@
                             <div class="col-xs-4">
                                 Sessions
                             </div>
-                            <div class="col-xs-4" id="instructional_minutes_5_total">
+                            <div class="col-xs-4">
                                 Time (mins)
                             </div>
                         </div>
@@ -357,7 +347,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-4">
-                                <label class="control-label">Research Requestes for Collection</label>
+                                <label class="control-label">Research Requests for Collection</label>
                             </div>
                             <div class="col-xs-4">
                                 {{ form_errors(form.researchRequestsCollectionEmailRef) }}
@@ -370,7 +360,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-4">
-                                <label class="control-label">Research Requestes</label>
+                                <label class="control-label">Research Requests</label>
                             </div>
                             <div class="col-xs-4">
                                 {{ form_errors(form.researchRequestsEmailRef) }}
@@ -410,21 +400,58 @@
                     </div>
                 </div>
             </section>
-            <section id="digitization-container">
+            <section class="monthly-stats-section" id="digitization-container">
                 <div class="row">
                     <div class="col-xs-12 col-sm-10 col-md-9">
+                        <h2>Technical Services</h2>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <h2>Technical Services</h2>
-                                {{ form_row(form.holdingsAddedBooks) }}
-                                {{ form_row(form.holdingsAddedFacultyPublications) }}
-                                {{ form_row(form.accessionsLinearFeet) }}
-                                {{ form_row(form.accessionsTotalCollections) }}
+                            <div class="col-xs-12 col-sm-6">
+                                <h3><span class="badge" id="processed_collections_total">0</span> Collections Processed</h3>
+                                <ul class="processed_collection" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/processedstoredcollection-prototype.html.twig', { 'form': form.processedCollections.vars.prototype, 'collectionType': 'processed' }) }}
+                                        {% endfilter %}
+                                        ">
+                                </ul>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <h3><span class="badge" id="stored_collections_total">0</span> Collections Stored</h3>
+                                <ul class="stored_collection" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/processedstoredcollection-prototype.html.twig', { 'form': form.storedCollections.vars.prototype, 'collectionType': 'stored' }) }}
+                                        {% endfilter %}
+                                        ">
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <h3>Holdings Added</h3>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(form.holdingsAddedBooks) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(form.holdingsAddedFacultyPublications) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <h3>Accessions</h3>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(form.accessionsLinearFeet) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(form.accessionsTotalCollections) }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <h2><span class="badge" id="digitization_books_total">0</span> Digitization Book Titles</h2>
+                                <p>Don't see the book title you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_booktitle_new') }}" target="_blank">add it here</a>.</p>
                                 <ul class="digitization_book" data-prototype="
                                         {% filter escape %}
                                             {{ include('AppBundle:MonthlyStatsArchives:snippets/book-prototype.html.twig', { 'form': form.digitizationBooks.vars.prototype, 'bookType': 'digitization' }) }}
@@ -436,6 +463,8 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <h2><span class="badge" id="digitization_collections_total">0</span> Digitization Collections <small>(<span class="badge" id="digitization_collectionboxes_total">0</span> boxes)</small></h2>
+                                <p>Don't see the collection you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_collectiontitle_new') }}" target="_blank">add it here</a>.</p>
+                                <p>Don't see the box you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_box_new') }}" target="_blank">add it here</a>.</p>
                                 <ul class="digitization_collection" 
                                      data-prototype-boxquantity="
                                         {% filter escape %}

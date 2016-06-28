@@ -1,4 +1,23 @@
 $(document).ready(function(){
+// Navigation tabs
+    $('#research-container, #digitization-container').hide();
+    $('ul#monthlyarchives-tabs > li a').on('click', function(e){
+        e.preventDefault();
+        
+        var divToShow = $(this).attr('href'); //the ID of the div to display is stored in the href of the nav tab
+        $('.monthlyarchives-tab').each(function(){
+            $(this).removeClass('active'); // remove the active class from all tabs
+        });
+        $(this).parent('.monthlyarchives-tab').addClass('active'); // put an active class on the tab that was clicked
+        
+        // hide all form sections
+        $('.monthly-stats-section').each(function(){
+            $(this).hide();
+        });
+        
+        $(divToShow).show(); //show the form section for the tab that was clicked
+    })
+    
 ////// Requested Collection //////
     var $requestedCollectionHolder;
         $requestedCollectionHolder = $('ul.requested_collection');
@@ -94,7 +113,7 @@ $(document).ready(function(){
     //Add an additional archives book form each time a user clicks the $addDigitizationBookLink
     $addDigitizationBookLink.on('click', function(e) {
         e.preventDefault();
-        addBookForm($digitizationBookHolder, $newDigitizationBookLi, 'digitization');
+        addBookForm($digitizationBookHolder, $newDigitizationBookLi, 'digitization', true);
     });
     
 ////// Requested Files //////
@@ -132,7 +151,42 @@ $(document).ready(function(){
         e.preventDefault();
         addFileForm($digitizationFileHolder, $newDigitizationFileLi, 'digitization', true);
     });
+    
+////// Collection Processed //////
+    var $processedCollectionHolder;
+        $processedCollectionHolder = $('ul.processed_collection');
+        
+    var $addProcessedCollectionLink = $('<a href="#" class="btn btn-sm btn-info add_processedcollection_link archives_addbtn">+ Processed Collection</a>');
+    var $newProcessedCollectionLi = $('<li class="list-style-none"></li>').append($addProcessedCollectionLink);
 
+    // add the "+ Processed Collection" li to the ul
+    $processedCollectionHolder.append($newProcessedCollectionLi);
+
+    $processedCollectionHolder.data('index', $processedCollectionHolder.find(':input').length);
+    
+    //Add an additional archives book form each time a user clicks the $addProcessedCollectionLink
+    $addProcessedCollectionLink.on('click', function(e) {
+        e.preventDefault();
+        addCollectionProcessedStoredForm($processedCollectionHolder, $newProcessedCollectionLi, 'processed', true);
+    });
+    
+////// Collection Stored //////
+    var $storedCollectionHolder;
+        $storedCollectionHolder = $('ul.stored_collection');
+        
+    var $addStoredCollectionLink = $('<a href="#" class="btn btn-sm btn-info add_storedcollection_link archives_addbtn">+ Stored Collection</a>');
+    var $newStoredCollectionLi = $('<li class="list-style-none"></li>').append($addStoredCollectionLink);
+
+    // add the "+ Stored Collection" li to the ul
+    $storedCollectionHolder.append($newStoredCollectionLi);
+
+    $storedCollectionHolder.data('index', $storedCollectionHolder.find(':input').length);
+    
+    //Add an additional archives book form each time a user clicks the $addStoredCollectionLink
+    $addStoredCollectionLink.on('click', function(e) {
+        e.preventDefault();
+        addCollectionProcessedStoredForm($storedCollectionHolder, $newStoredCollectionLi, 'stored', true);
+    });
     
     /**
      * Uses Symfony's prototype code to generate a new list item for a REQUESTED collection 
@@ -187,10 +241,7 @@ $(document).ready(function(){
         $newLinkLi.before($newCollectionFormLi);
         
         //Update the total number of digitization collections
-        var totalRequestedCollections = 0;
-            totalRequestedCollections += $(document).find('.requestedcollection-item-container').length;
-            
-        $('#requested_collections_total').html(totalRequestedCollections);
+        $('#requested_collections_total').html($(document).find('.requestedcollection-item-container').length);
     }
     
     /**
@@ -246,10 +297,7 @@ $(document).ready(function(){
         $newLinkLi.before($newCollectionFormLi);
         
         //Update the total number of digitization collections
-        var totalDigitizationCollections = 0;
-            totalDigitizationCollections += $(document).find('.digitizationcollection-item-container').length;
-            
-        $('#digitization_collections_total').html(totalDigitizationCollections);
+        $('#digitization_collections_total').html($(document).find('.digitizationcollection-item-container').length);
     }
     
     /**
@@ -375,6 +423,50 @@ $(document).ready(function(){
         $newLinkLi.before($newFormLi);
     }
     
+    /**
+     * Uses Symfony's prototype code to generate a new list item for a processed or stored collection
+     *
+     * @param jQuery Object $collectionHolder   The <ul> which holds the collection and prototype
+     * @param jQuery Object $newLinkLi          The jQuery element of the link that was just clicked.
+     */
+    function addCollectionProcessedStoredForm($collectionHolder, $newLinkLi, formType, bootstrapListStyle) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add form" link li
+        if(bootstrapListStyle === true){
+            var newFormLi = '<li class="list-group-item __formType__collection-item-container"></li>';
+                newFormLi = newFormLi.replace(/__formType__/g, formType);
+            var $newFormLi = $(newFormLi).append(newForm);
+        } else {
+            var newFormLi = '<li class="list-style-none __formType__collection-item-container"></li>';
+                newFormLi = newFormLi.replace(/__formType__/g, formType);
+            var $newFormLi = $(newFormLi).append(newForm);
+        }    
+        $newLinkLi.before($newFormLi);
+        
+        //Update the total number of processed/stored collections
+        var containerClass = '.__formType__collection-item-container';
+            containerClass = containerClass.replace(/__formType__/g, formType);
+        var totalCollections = 0;
+            totalCollections += $(document).find(containerClass).length;
+            
+        var totalDiv = '#__formType___collections_total';
+            totalDiv = totalDiv.replace(/__formType__/g, formType);
+            
+        $(totalDiv).html(totalCollections);
+    }
+    
 // Item deletions
     $(document).on('click', '.delete-requestedbook', function(event){
         event.preventDefault();
@@ -430,32 +522,44 @@ $(document).ready(function(){
         //update collection totals
         $('#digitization_collections_total').html( $(document).find('.digitizationcollection-item-container').length );
     });
-    
-// Navigation tabs
-    $('#monthlyarchives-tabs').tabs();
+    $(document).on('click', '.delete-processedcollection', function(event){
+        event.preventDefault();
+        $(this).parents('.processedcollection-item-container').remove();
+        
+        //update collection totals
+        $('#processed_collections_total').html( $(document).find('.processedcollection-item-container').length );
+    });
+    $(document).on('click', '.delete-storedcollection', function(event){
+        event.preventDefault();
+        $(this).parents('.storedcollection-item-container').remove();
+        
+        //update collection totals
+        $('#stored_collections_total').html( $(document).find('.storedcollection-item-container').length );
+    });
   
-// Update minute totals
+// Update minute totals on page load and whenever a .jscript_total number input is changed
+    $('.jscript_total').each(function(){
+       updateMinutes($(this)); 
+    });
+    
     $(document).on('change', '.jscript_total', function(e){
-        var id = $(this).attr('id');
-        var multiplier = id.match(/\d+$/); //matches the number at the end of the ID string
-       
-        if( $(this).hasClass('research_minutes') ){
-            console.log('castley rock!');
-            var targetDiv = 'research_minutes___minutes___total';
-               targetDiv = targetDiv.replace(/__minutes__/g, multiplier);
-           
-            $('#' + targetDiv).html($(this).val() * multiplier);
-        } 
-        if( $(this).hasClass('instructional_minutes') ){
-           var targetDiv = 'instructional_minutes___minutes___total';
-               targetDiv = targetDiv.replace(/__minutes__/g, multiplier);
-               
-           $('#' + targetDiv).html($(this).val() * multiplier);
-        }
+        updateMinutes($(this));
     })
     
-// Update book/file/box totals
-// NOTE: Collection totals updated in the addCollection functions!
+// Update book/file/box totals on page load and when changed
+// NOTE: Collection totals updated in the addCollection functions when a new collection is added.
+    
+    $('#requested_collections_total').html($(document).find('.requestedcollection-item-container').length);
+    $('#digitization_collections_total').html($(document).find('.digitizationcollection-item-container').length);
+    $('#processed_collections_total').html($(document).find('.processedcollection-item-container').length);
+    $('#stored_collections_total').html($(document).find('.storedcollection-item-container').length);
+    updateTotal($('.requestedbook_quantity'), $('#requested_books_total'));
+    updateTotal($('.digitizationbook_quantity'), $('#digitization_books_total'));
+    updateTotal($('.requestedfile_quantity'), $('#requested_files_total'));
+    updateTotal($('.digitizationfile_quantity'), $('#digitization_files_total'));
+    updateTotal($('.requestedcollectionbox_quantity'), $('#requested_collectionboxes_total'));
+    updateTotal($('.digitizationcollectionbox_quantity'), $('#digitization_collectionboxes_total'));
+    
     $(document).on('change', '.requestedbook_quantity', function(e){
         updateTotal($('.requestedbook_quantity'), $('#requested_books_total'));
     });
@@ -489,6 +593,29 @@ $(document).ready(function(){
            total += parseInt($(this).val()); 
         });
         $targetDiv.html(total);
+    }
+    
+    /**
+     * Multiply the number value of the given item times the multiplier specified in the div ID.
+     * 
+     * @param jQuery Object $changedItem  The element whose total should be multiplied.
+     */ 
+    function updateMinutes($changedItem){
+        var id = $changedItem.attr('id');
+        var multiplier = id.match(/\d+$/); //matches the number at the end of the ID string
+       
+        if( $changedItem.hasClass('research_minutes') ){
+            var targetDiv = 'research_minutes___minutes___total';
+               targetDiv = targetDiv.replace(/__minutes__/g, multiplier);
+           
+            $('#' + targetDiv).html($changedItem.val() * multiplier);
+        } 
+        if( $changedItem.hasClass('instructional_minutes') ){
+           var targetDiv = 'instructional_minutes___minutes___total';
+               targetDiv = targetDiv.replace(/__minutes__/g, multiplier);
+               
+           $('#' + targetDiv).html($changedItem.val() * multiplier);
+        }
     }
 });
 

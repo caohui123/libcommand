@@ -2,15 +2,535 @@
 
 {% block body -%}
     <h1>MonthlyStatsArchives edit</h1>
-
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('monthly_archives') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <blockquote>
+        <p>Please note that the form will not submit unless all required fields are filled in. All fields form book and file titles must have a value. All collection titles must have at least one box with a quantity.</p>
+    </blockquote>
+    <div class="row">
+        <div class="col-xs-12">
+            <ul class="nav nav-tabs" id="monthlyarchives-tabs">
+                <li role="presentation" class="active monthlyarchives-tab"><a href="#requested-container" >Requested Materials</a></li>
+                <li role="presentation" class="monthlyarchives-tab"><a href="#research-container">Researchers & Reference</a></li>
+                <li role="presentation" class="monthlyarchives-tab"><a href="#digitization-container">Holdings & Conversions</a></li>
+            </ul>
+    {{ form_start(edit_form) }}
+            <section class="monthly-stats-section" id="requested-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="requested_books_total">0</span> Requested Book Titles</h2>
+                                <p>Don't see the book title you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_booktitle_new') }}" target="_blank">add it here</a>.</p>
+                                <ul class="requested_book" 
+                                    data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/book-prototype.html.twig', { 'form': edit_form.requestedBooks.vars.prototype, 'bookType': 'requested'}) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for requestedBook in entity.requestedBooks if requestedBook %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-book.html.twig', { 'entity': requestedBook, 'form': edit_form.requestedBooks.vars.prototype, 'type': 'requested', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="requested_collections_total">0</span> Requested Collection Titles <small>(<span class="badge" id="requested_collectionboxes_total">0</span> boxes)</small></h2>
+                                <p>Don't see the collection you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_collectiontitle_new') }}" target="_blank">add it here</a>.</p>
+                                <p>Don't see the box you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_box_new') }}" target="_blank">add it here</a>.</p>
+                                <ul class="requested_collection" 
+                                     data-prototype-boxquantity="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': edit_form.requestedCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'requested' }) }}
+                                        {% endfilter %}
+                                        "
+                                     data-prototype-collections="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': edit_form.requestedCollections.vars.prototype, 'collectionType': 'requested' }) }}
+                                        {% endfilter %}
+                                     "
+                                     >
+                                    {% for requestedCollection in entity.requestedCollections if requestedCollection %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-collection.html.twig', { 'entity': requestedCollection, 'collection_form': edit_form.requestedCollections.vars.prototype, 'box_form': edit_form.requestedCollections.vars.prototype.children.boxQuantity.vars.prototype, 'type': 'requested', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="requested_files_total">0</span> Requested File Titles</h2>
+                                <ul class="requested_file" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/file-prototype.html.twig', { 'form': edit_form.requestedFiles.vars.prototype, 'fileType': 'requested' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for requestedFile in entity.requestedFiles if requestedFile %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-file.html.twig', { 'entity': requestedFile, 'form': edit_form.requestedFiles.vars.prototype, 'type': 'requested', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="monthly-stats-section" id="research-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                        <h2>Research Minutes</h2>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                
+                            </div>
+                            <div class="col-xs-4">
+                                Researchers
+                            </div>
+                            <div class="col-xs-4">
+                                Time (mins)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.researchMinutes5) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchMinutes5) }}
+                                {{ form_widget(edit_form.researchMinutes5) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_5_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.researchMinutes10) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchMinutes10) }}
+                                {{ form_widget(edit_form.researchMinutes10) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_10_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.researchMinutes15) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchMinutes15) }}
+                                {{ form_widget(edit_form.researchMinutes15) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_15_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.researchMinutes20) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchMinutes20) }}
+                                {{ form_widget(edit_form.researchMinutes20) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_20_total">
+                                0
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.researchMinutes30) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchMinutes30) }}
+                                {{ form_widget(edit_form.researchMinutes30) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_30_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.researchMinutes45) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchMinutes45) }}
+                                {{ form_widget(edit_form.researchMinutes45) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_45_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.researchMinutes60) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchMinutes60) }}
+                                {{ form_widget(edit_form.researchMinutes60) }}
+                            </div>
+                            <div class="col-xs-4" id="research_minutes_60_total">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                        <h2>Instructional Minutes</h2>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                
+                            </div>
+                            <div class="col-xs-4">
+                                Sessions
+                            </div>
+                            <div class="col-xs-4">
+                                Time (mins)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.instructionalMinutes5) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.instructionalMinutes5) }}
+                                {{ form_widget(edit_form.instructionalMinutes5) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_5_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.instructionalMinutes10) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.instructionalMinutes10) }}
+                                {{ form_widget(edit_form.instructionalMinutes10) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_10_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.instructionalMinutes15) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.instructionalMinutes15) }}
+                                {{ form_widget(edit_form.instructionalMinutes15) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_15_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.instructionalMinutes20) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.instructionalMinutes20) }}
+                                {{ form_widget(edit_form.instructionalMinutes20) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_20_total">
+                                0
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.instructionalMinutes30) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.instructionalMinutes30) }}
+                                {{ form_widget(edit_form.instructionalMinutes30) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_30_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.instructionalMinutes45) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.instructionalMinutes45) }}
+                                {{ form_widget(edit_form.instructionalMinutes45) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_45_total">
+                                0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                {{ form_label(edit_form.instructionalMinutes60) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.instructionalMinutes60) }}
+                                {{ form_widget(edit_form.instructionalMinutes60) }}
+                            </div>
+                            <div class="col-xs-4" id="instructional_minutes_60_total">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+                        <h2>Researchers</h2>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(edit_form.researchersFaculty) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(edit_form.researchersFaculty) }}
+                                {{ form_widget(edit_form.researchersFaculty) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(edit_form.researchersStaff) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(edit_form.researchersStaff) }}
+                                {{ form_widget(edit_form.researchersStaff) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(edit_form.researchersUndergrad) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(edit_form.researchersUndergrad) }}
+                                {{ form_widget(edit_form.researchersUndergrad) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(edit_form.researchersGrad) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(edit_form.researchersGrad) }}
+                                {{ form_widget(edit_form.researchersGrad) }}
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(edit_form.researchersCommunity) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(edit_form.researchersCommunity) }}
+                                {{ form_widget(edit_form.researchersCommunity) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ form_label(edit_form.researchersOther) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ form_errors(edit_form.researchersOther) }}
+                                {{ form_widget(edit_form.researchersOther) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-5">
+                        <h2>Email/Phone Reference</h2>
+                        <div class="row">
+                            <div class="col-xs-4">
+                            </div>
+                            <div class="col-xs-4">
+                                Email References
+                            </div>
+                            <div class="col-xs-4">
+                                Phone References
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Directional</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.directionalEmailRef) }}
+                                {{ form_widget(edit_form.directionalEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.directionalPhoneRef) }}
+                                {{ form_widget(edit_form.directionalPhoneRef) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Research Requests for Collection</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchRequestsCollectionEmailRef) }}
+                                {{ form_widget(edit_form.researchRequestsCollectionEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchRequestsCollectionPhoneRef) }}
+                                {{ form_widget(edit_form.researchRequestsCollectionPhoneRef) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Research Requests</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchRequestsEmailRef) }}
+                                {{ form_widget(edit_form.researchRequestsEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.researchRequestsPhoneRef) }}
+                                {{ form_widget(edit_form.researchRequestsPhoneRef) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Donations</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.donationsEmailRef) }}
+                                {{ form_widget(edit_form.donationsEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.donationsPhoneRef) }}
+                                {{ form_widget(edit_form.donationsPhoneRef) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Loans</label>
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.loansEmailRef) }}
+                                {{ form_widget(edit_form.loansEmailRef) }}
+                            </div>
+                            <div class="col-xs-4">
+                                {{ form_errors(edit_form.loansPhoneRef) }}
+                                {{ form_widget(edit_form.loansPhoneRef) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="monthly-stats-section" id="digitization-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <h2>Technical Services</h2>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <h3><span class="badge" id="processed_collections_total">0</span> Collections Processed</h3>
+                                <ul class="processed_collection" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/processedstoredcollection-prototype.html.twig', { 'form': edit_form.processedCollections.vars.prototype, 'collectionType': 'processed' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for processedCollection in entity.processedCollections if processedCollection %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-processedstoredcollection.html.twig', { 'entity': processedCollection, 'form': edit_form.processedCollections.vars.prototype, 'type': 'processed', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <h3><span class="badge" id="stored_collections_total">0</span> Collections Stored</h3>
+                                <ul class="stored_collection" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/processedstoredcollection-prototype.html.twig', { 'form': edit_form.storedCollections.vars.prototype, 'collectionType': 'stored' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for storedCollection in entity.storedCollections if storedCollection %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-processedstoredcollection.html.twig', { 'entity': storedCollection, 'form': edit_form.storedCollections.vars.prototype, 'type': 'stored', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <h3>Holdings Added</h3>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(edit_form.holdingsAddedBooks) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(edit_form.holdingsAddedFacultyPublications) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <h3>Accessions</h3>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(edit_form.accessionsLinearFeet) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(edit_form.accessionsTotalCollections) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_books_total">0</span> Digitization Book Titles</h2>
+                                <p>Don't see the book title you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_booktitle_new') }}" target="_blank">add it here</a>.</p>
+                                <ul class="digitization_book" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/book-prototype.html.twig', { 'form': edit_form.digitizationBooks.vars.prototype, 'bookType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for digitizationBook in entity.digitizationBooks if digitizationBook %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-book.html.twig', { 'entity': digitizationBook, 'form': edit_form.digitizationBooks.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_collections_total">0</span> Digitization Collections <small>(<span class="badge" id="digitization_collectionboxes_total">0</span> boxes)</small></h2>
+                                <p>Don't see the collection you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_collectiontitle_new') }}" target="_blank">add it here</a>.</p>
+                                <p>Don't see the box you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_box_new') }}" target="_blank">add it here</a>.</p>
+                                <ul class="digitization_collection" 
+                                     data-prototype-boxquantity="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': edit_form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        "
+                                     data-prototype-collections="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': edit_form.digitizationCollections.vars.prototype, 'collectionType': 'digitization' }) }}
+                                        {% endfilter %}
+                                     "
+                                     >
+                                    {% for digitizationCollection in entity.digitizationCollections if digitizationCollection %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-collection.html.twig', { 'entity': digitizationCollection, 'collection_form': edit_form.digitizationCollections.vars.prototype, 'box_form': edit_form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_files_total">0</span> Digitization File Titles</h2>
+                                <ul class="digitization_file" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/file-prototype.html.twig', { 'form': edit_form.digitizationFiles.vars.prototype, 'fileType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for digitizationFile in entity.digitizationFiles if digitizationFile %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-file.html.twig', { 'entity': digitizationFile, 'form': edit_form.digitizationFiles.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- #end monthlyarchives-tabs -->
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            {{ form_row(edit_form.month) }}
+            {{ form_row(edit_form._token) }}
+            <p>
+            {{ form_row(edit_form.submit) }}
+            </p>
+        </div>
+    </div>
+    {{ form_end(edit_form, {'render_rest': false}) }}
+{% endblock %}
+{% block documentReady %}
+    // JavaScript located in AppBundle/Resources/public/js/monthlystatsarchives.js
 {% endblock %}

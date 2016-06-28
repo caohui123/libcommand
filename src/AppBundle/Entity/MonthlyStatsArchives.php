@@ -12,6 +12,8 @@ use AppBundle\Entity\MonthlyStatsArchivesCollection;
 use AppBundle\Entity\MonthlyStatsArchivesBookQuantity;
 use AppBundle\Entity\MonthlyStatsArchivesFileRequested;
 use AppBundle\Entity\MonthlyStatsArchivesFileDigitization;
+use AppBundle\Entity\MonthlyStatsArchivesCollectionProcessed;
+use AppBundle\Entity\MonthlyStatsArchivesCollectionStored;
 
 /**
  * MonthlyStatsArchives
@@ -91,6 +93,24 @@ class MonthlyStatsArchives
      *      )
      */
     private $digitizationFiles; 
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesCollectionProcessed", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="monthlystatsarchives_monthlystatsarchivescollectionsprocessed",
+     *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="processedcollection_id", referencedColumnName="id", unique=true, onDelete="CASCADE")},
+     *      )
+     */
+    private $processedCollections;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="MonthlyStatsArchivesCollectionStored", cascade={"persist", "detach", "remove"}, orphanRemoval=true, fetch="LAZY")
+     * @ORM\JoinTable(name="monthlystatsarchives_monthlystatsarchivescollectionsstored",
+     *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="storedcollection_id", referencedColumnName="id", unique=true, onDelete="CASCADE")},
+     *      )
+     */
+    private $storedCollections; 
 
     /**
      * @var integer
@@ -385,6 +405,44 @@ class MonthlyStatsArchives
         $this->digitizationBooks = new ArrayCollection();
         $this->requestedFiles = new ArrayCollection();
         $this->digitizationFiles = new ArrayCollection();
+        $this->processedCollections = new ArrayCollection();
+        $this->storedCollections = new ArrayCollection();
+        
+        //set all integer field values to 0
+        $this->researchMinutes5 = 0;
+        $this->researchMinutes10 = 0;
+        $this->researchMinutes15 = 0;
+        $this->researchMinutes20 = 0;
+        $this->researchMinutes30 = 0;
+        $this->researchMinutes45 = 0;
+        $this->researchMinutes60 = 0;
+        $this->instructionalMinutes5 = 0;
+        $this->instructionalMinutes10 = 0;
+        $this->instructionalMinutes15 = 0;
+        $this->instructionalMinutes20 = 0;
+        $this->instructionalMinutes30 = 0;
+        $this->instructionalMinutes45 = 0;
+        $this->instructionalMinutes60 = 0;
+        $this->researchersFaculty = 0;
+        $this->researchersStaff = 0;
+        $this->researchersUndergrad = 0;
+        $this->researchersGrad = 0;
+        $this->researchersCommunity = 0;
+        $this->researchersOther = 0;
+        $this->directionalEmailRef = 0;
+        $this->directionalPhoneRef = 0;
+        $this->researchRequestsCollectionEmailRef = 0;
+        $this->researchRequestsCollectionPhoneRef = 0;
+        $this->researchRequestsEmailRef = 0;
+        $this->researchRequestsPhoneRef = 0;
+        $this->donationsEmailRef = 0;
+        $this->donationsPhoneRef = 0;
+        $this->loansEmailRef = 0;
+        $this->loansPhoneRef = 0;
+        $this->holdingsAddedBooks = 0;
+        $this->holdingsAddedFacultyPublications = 0;
+        $this->accessionsLinearFeet = 0;
+        $this->accessionsTotalCollections = 0;
     }
 
     /**
@@ -1451,6 +1509,78 @@ class MonthlyStatsArchives
     public function getDigitizationFiles()
     {
         return $this->digitizationFiles;
+    }
+    
+    /**
+     * Add processedCollections
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesCollectionProcessed  $processedCollections
+     * @return MonthlyStatsArchives
+     */
+    public function addProcessedCollection(MonthlyStatsArchivesCollectionProcessed $processedCollections)
+    {
+        $this->processedCollections->add($processedCollections);
+
+        return $this;
+    }
+
+    /**
+     * Remove processedCollections
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesCollectionProcessed  $processedCollections
+     * @return MonthlyStatsArchives
+     */
+    public function removeProcessedCollection(MonthlyStatsArchivesCollectionProcessed $processedCollections)
+    {
+        $this->processedCollections->removeElement($processedCollections);
+        
+        return $this;
+    }
+    
+    /**
+     * Get processedCollections
+     *
+     * @return ArrayCollection 
+     */
+    public function getProcessedCollections()
+    {
+        return $this->processedCollections;
+    }
+    
+    /**
+     * Add storedCollections
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesCollectionStored  $storedCollections
+     * @return MonthlyStatsArchives
+     */
+    public function addStoredCollection(MonthlyStatsArchivesCollectionStored $storedCollections)
+    {
+        $this->storedCollections->add($storedCollections);
+
+        return $this;
+    }
+
+    /**
+     * Remove storedCollections
+     *
+     * @param AppBundle\Entity\MonthlyStatsArchivesCollectionStored  $storedCollections
+     * @return MonthlyStatsArchives
+     */
+    public function removeStoredCollection(MonthlyStatsArchivesCollectionStored $storedCollections)
+    {
+        $this->storedCollections->removeElement($storedCollections);
+        
+        return $this;
+    }
+    
+    /**
+     * Get storedCollections
+     *
+     * @return ArrayCollection 
+     */
+    public function getStoredCollections()
+    {
+        return $this->storedCollections;
     }
     
     /**

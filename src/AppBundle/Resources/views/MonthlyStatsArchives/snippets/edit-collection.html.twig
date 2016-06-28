@@ -1,0 +1,57 @@
+<li class="list-style-none {{ type }}collection-item-container">
+    {# DO NOT REMOVE the class="collection-identifier" as it is used in the javascript #}
+    <div class="collection-identifier" id="appbundle_monthlystatsarchives_{{ type }}Collections_{{ index }}">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-10">
+                    <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type }}Collections_{{ index }}_name">{{ collection_form.children.name.vars.label }}</label>
+                    <select id="appbundle_monthlystatsarchives_{{ type }}Collections_{{ index }}_name" name="appbundle_monthlystatsarchives[{{ type }}Collections][{{ index }}][name]" required="required" class="form-control">
+                        {% for option in collection_form.children.name.vars.choices %}
+                            <option value="{{ option.data.id }}"
+                                    {% if option.data.id == entity.name.id %}selected="selected"{% endif %}>
+                                {{ option.data.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-xs-2" style="margin-top:25px">
+                    <button type="button" class="delete-{{ type }}collection btn btn-link"><span class="glyphicon glyphicon-trash text-danger" aria-label="delete {{ type }} collection"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {# Box collection #}
+    <ul class="{{ type }}_collection_boxquantity" id="{{ type }}_collection_boxquantity_{{ index }}">
+        {% set boxIndex = 0 %}
+        {% for box in entity.boxQuantity %}
+        <li class="list-group-item {{ type }}collectionbox-item-container">
+            <div class="boxquantity-identifier" id="appbundle_monthlystatsarchives_{{ type }}Collections_{{ index }}_boxQuantity_{{ boxIndex }}">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-9">
+                        <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type }}Collections_{{ index }}_boxQuantity_{{ boxIndex }}_box">{{ box_form.children.box.vars.label }}</label>
+                        <select id="appbundle_monthlystatsarchives_{{ type }}Collections_{{ index }}_boxQuantity_{{ boxIndex }}_box" name="appbundle_monthlystatsarchives[{{ type }}Collections][{{ index }}][boxQuantity][{{ boxIndex }}][box]" required="required" class="form-control">
+                            {% for option in box_form.children.box.vars.choices %}
+                                <option value="{{ option.data.id }}"
+                                        {% if option.data.id == box.box.id %}selected="selected"{% endif %}>
+                                    {{ option.data.boxNumber }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                        <label class="control-label required" for="appbundle_monthlystatsarchives_{{ type }}Collections_{{ index }}_boxQuantity_{{ boxIndex }}_quantity">Quantity</label>
+                        <input type="number" id="appbundle_monthlystatsarchives_{{ type }}Collections_{{ index }}_boxQuantity_{{ boxIndex }}_quantity" name="appbundle_monthlystatsarchives[{{ type }}Collections][{{ index }}][boxQuantity][{{ boxIndex }}][quantity]" class="{{ type }}collectionbox_quantity form-control" value="{{ box.quantity }}"/>
+                    </div>
+                    <div class="col-xs-12 col-sm-1">
+                        <button type="button" class="delete-{{ type }}collectionsbox btn btn-link"><span class="glyphicon glyphicon-trash text-danger" aria-label="delete {{ type }} collection"></span></button>
+                    </div>
+                </div>
+            </div>
+        </li>
+            {% set boxIndex = boxIndex + 1 %}
+        {% endfor %}
+        <li class="list-style-none">
+            <a href="#" class="btn btn-sm btn-default add_{{ type }}boxquantity_link archives_addbtn" id="add_requestedboxquantity_link_{{ index }}">+ Box</a>
+        </li>
+    </ul>
+</li>

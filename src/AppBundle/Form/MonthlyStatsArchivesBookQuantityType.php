@@ -29,8 +29,8 @@ class MonthlyStatsArchivesBookQuantityType extends AbstractType
                 'placeholder' => '--NOT SET--',
             ))
             ->add('quantity', null, array(
-                'data' => 0,
                 'label' => 'Quantity',
+                'required' => false,
             ))
         ;
     }

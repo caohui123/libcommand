@@ -1,203 +1,628 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+    {# Totals variables #}
+    {% set totalRequestedBookTitles = 0 %}
+    {% set totalRequestedFileTitles = 0 %}
+    {% set totalRequestedCollectionTitles = 0 %}
+    {% set totalDigitizationBookTitles = 0 %}
+    {% set totalDigitizationFileTitles = 0 %}
+    {% set totalDigitizationCollectionTitles = 0 %}
+    {% set totalProcessedCollections = 0 %}
+    {% set totalStoredCollections = 0 %}
+  
     <h1>MonthlyStatsArchives</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Month</th>
-                <td>{{ entity.month|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Researchminutes5</th>
-                <td>{{ entity.researchMinutes5 }}</td>
-            </tr>
-            <tr>
-                <th>Researchminutes10</th>
-                <td>{{ entity.researchMinutes10 }}</td>
-            </tr>
-            <tr>
-                <th>Researchminutes15</th>
-                <td>{{ entity.researchMinutes15 }}</td>
-            </tr>
-            <tr>
-                <th>Researchminutes20</th>
-                <td>{{ entity.researchMinutes20 }}</td>
-            </tr>
-            <tr>
-                <th>Researchminutes30</th>
-                <td>{{ entity.researchMinutes30 }}</td>
-            </tr>
-            <tr>
-                <th>Researchminutes45</th>
-                <td>{{ entity.researchMinutes45 }}</td>
-            </tr>
-            <tr>
-                <th>Researchminutes60</th>
-                <td>{{ entity.researchMinutes60 }}</td>
-            </tr>
-            <tr>
-                <th>Instructionalminutes5</th>
-                <td>{{ entity.instructionalMinutes5 }}</td>
-            </tr>
-            <tr>
-                <th>Instructionalminutes10</th>
-                <td>{{ entity.instructionalMinutes10 }}</td>
-            </tr>
-            <tr>
-                <th>Instructionalminutes15</th>
-                <td>{{ entity.instructionalMinutes15 }}</td>
-            </tr>
-            <tr>
-                <th>Instructionalminutes20</th>
-                <td>{{ entity.instructionalMinutes20 }}</td>
-            </tr>
-            <tr>
-                <th>Instructionalminutes30</th>
-                <td>{{ entity.instructionalMinutes30 }}</td>
-            </tr>
-            <tr>
-                <th>Instructionalminutes45</th>
-                <td>{{ entity.instructionalMinutes45 }}</td>
-            </tr>
-            <tr>
-                <th>Instructionalminutes60</th>
-                <td>{{ entity.instructionalMinutes60 }}</td>
-            </tr>
-            <tr>
-                <th>Researchersfaculty</th>
-                <td>{{ entity.researchersFaculty }}</td>
-            </tr>
-            <tr>
-                <th>Researchersstaff</th>
-                <td>{{ entity.researchersStaff }}</td>
-            </tr>
-            <tr>
-                <th>Researchersundergrad</th>
-                <td>{{ entity.researchersUndergrad }}</td>
-            </tr>
-            <tr>
-                <th>Researchersgrad</th>
-                <td>{{ entity.researchersGrad }}</td>
-            </tr>
-            <tr>
-                <th>Researcherscommunity</th>
-                <td>{{ entity.researchersCommunity }}</td>
-            </tr>
-            <tr>
-                <th>Researchersother</th>
-                <td>{{ entity.researchersOther }}</td>
-            </tr>
-            <tr>
-                <th>Directionalemailref</th>
-                <td>{{ entity.directionalEmailRef }}</td>
-            </tr>
-            <tr>
-                <th>Directionalphoneref</th>
-                <td>{{ entity.directionalPhoneRef }}</td>
-            </tr>
-            <tr>
-                <th>Researchrequestscollectionemailref</th>
-                <td>{{ entity.researchRequestsCollectionEmailRef }}</td>
-            </tr>
-            <tr>
-                <th>Researchrequestscollectionphoneref</th>
-                <td>{{ entity.researchRequestsCollectionPhoneRef }}</td>
-            </tr>
-            <tr>
-                <th>Researchrequestsemailref</th>
-                <td>{{ entity.researchRequestsEmailRef }}</td>
-            </tr>
-            <tr>
-                <th>Researchrequestsphoneref</th>
-                <td>{{ entity.researchRequestsPhoneRef }}</td>
-            </tr>
-            <tr>
-                <th>Donationsemailref</th>
-                <td>{{ entity.donationsEmailRef }}</td>
-            </tr>
-            <tr>
-                <th>Donationsphoneref</th>
-                <td>{{ entity.donationsPhoneRef }}</td>
-            </tr>
-            <tr>
-                <th>Loansemailref</th>
-                <td>{{ entity.loansEmailRef }}</td>
-            </tr>
-            <tr>
-                <th>Loansphoneref</th>
-                <td>{{ entity.loansPhoneRef }}</td>
-            </tr>
-            
-            {#
-            <tr>
-                <th>Collectionsprocessedlinearfeet</th>
-                <td>{{ entity.collectionsProcessedLinearFeet }}</td>
-            </tr>
-            <tr>
-                <th>Collectionsprocessedcallnumber</th>
-                <td>{{ entity.collectionsProcessedCallNumber }}</td>
-            </tr>
-            <tr>
-                <th>Collectionsprocessedtotalcollection</th>
-                <td>{{ entity.collectionsProcessedTotalCollection }}</td>
-            </tr>
-            <tr>
-                <th>Collectionsstoredlinearfeet</th>
-                <td>{{ entity.collectionsStoredLinearFeet }}</td>
-            </tr>
-            <tr>
-                <th>Collectionsstoredcallnumber</th>
-                <td>{{ entity.collectionsStoredCallNumber }}</td>
-            </tr>
-            <tr>
-                <th>Collectionsstoredtotalcollection</th>
-                <td>{{ entity.collectionsStoredTotalCollection }}</td>
-            </tr>
-            #}
-            <tr>
-                <th>Holdingsaddedbooks</th>
-                <td>{{ entity.holdingsAddedBooks }}</td>
-            </tr>
-            <tr>
-                <th>Holdingsaddedfacultypublications</th>
-                <td>{{ entity.holdingsAddedFacultyPublications }}</td>
-            </tr>
-            <tr>
-                <th>Accessionslinearfeet</th>
-                <td>{{ entity.accessionsLinearFeet }}</td>
-            </tr>
-            <tr>
-                <th>Accessionstotalcollections</th>
-                <td>{{ entity.accessionsTotalCollections }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{{ entity.updated|date('Y-m-d H:i:s') }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('monthly_archives') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('monthly_archives_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <div class="row">
+        <div class="col-xs-12">
+            <ul class="nav nav-tabs" id="monthlyarchives-tabs">
+                <li role="presentation" class="active monthlyarchives-tab"><a href="#requested-container" >Requested Materials</a></li>
+                <li role="presentation" class="monthlyarchives-tab"><a href="#research-container">Researchers & Reference</a></li>
+                <li role="presentation" class="monthlyarchives-tab"><a href="#digitization-container">Holdings & Conversions</a></li>
+            </ul>
+            <section class="monthly-stats-section" id="requested-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption><span class="badge">{{ totalRequestedBookTitles }}</span> Requested Book Titles</cpation>
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for requestedBook in entity.requestedBooks if requestedBook %}
+                                    <tr>
+                                        <td>{{ requestedBook.bookTitle }}</td>
+                                        <td>
+                                            {{ requestedBook.quantity }}
+                                            {% set totalRequestedBookTitles = totalRequestedBookTitles + requestedBook.quantity %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption><span class="badge">{{ totalRequestedCollectionTitles }}</span> Requested Collection Titles</cpation>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Box (Qty.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for requestedCollection in entity.requestedCollections if requestedCollection %}
+                                    <tr>
+                                        <td>
+                                            {{ requestedCollection.name }}
+                                            {% set totalRequestedCollectionTitles = totalRequestedCollectionTitles + 1 %}
+                                        </td>
+                                        <td>
+                                        {% if requestedCollection.boxQuantity is defined %}
+                                            {% for box in requestedCollection.boxQuantity if box %}
+                                                {{ box.box }}({{ box.quantity }}) | 
+                                            {% endfor %}
+                                        {% else %}
+                                            [No boxes]
+                                        {% endif %}    
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption><span class="badge">{{ totalRequestedFileTitles }}</span> Requested File Titles</cpation>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for requestedFile in entity.requestedFiles if requestedFile %}
+                                    <tr>
+                                        <td>{{ requestedFile.name }}</td>
+                                        <td>{{ requestedFile.type }}</td>
+                                        <td>
+                                            {{ requestedFile.quantity }}
+                                            {% set totalRequestedFileTitles = totalRequestedFileTitles + requestedFile.quantity %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>        
+                    </div>
+                </div>
+            </section>
+            <section class="monthly-stats-section" id="research-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption>Research Minutes</cpation>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Researchers</th>
+                                        <th>Time (mins)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>5 Minutes</td>
+                                        <td>
+                                            {{ entity.researchMinutes5 }}
+                                        </td>
+                                        <td>{{ entity.researchMinutes5 * 5 }}
+                                    </tr>
+                                    <tr>
+                                        <td>10 Minutes</td>
+                                        <td>
+                                            {{ entity.researchMinutes10 }}
+                                        </td>
+                                        <td>{{ entity.researchMinutes10 * 10 }}
+                                    </tr>
+                                    <tr>
+                                        <td>15 Minutes</td>
+                                        <td>
+                                            {{ entity.researchMinutes15 }}
+                                        </td>
+                                        <td>{{ entity.researchMinutes15 * 15 }}
+                                    </tr>
+                                    <tr>
+                                        <td>20 Minutes</td>
+                                        <td>
+                                            {{ entity.researchMinutes20 }}
+                                        </td>
+                                        <td>{{ entity.researchMinutes20 * 20 }}
+                                    </tr>
+                                    <tr>
+                                        <td>30 Minutes</td>
+                                        <td>
+                                            {{ entity.researchMinutes30 }}
+                                        </td>
+                                        <td>{{ entity.researchMinutes30 * 30 }}
+                                    </tr>
+                                    <tr>
+                                        <td>45 Minutes</td>
+                                        <td>
+                                            {{ entity.researchMinutes45 }}
+                                        </td>
+                                        <td>{{ entity.researchMinutes45 * 45 }}
+                                    </tr>
+                                    <tr>
+                                        <td>60 Minutes</td>
+                                        <td>
+                                            {{ entity.researchMinutes60 }}
+                                        </td>
+                                        <td>{{ entity.researchMinutes60 * 60 }}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>        
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption>Instructional Minutes</cpation>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Sessions</th>
+                                        <th>Time (mins)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>5 Minutes</td>
+                                        <td>
+                                            {{ entity.instructionalMinutes5 }}
+                                        </td>
+                                        <td>{{ entity.instructionalMinutes5 * 5 }}
+                                    </tr>
+                                    <tr>
+                                        <td>10 Minutes</td>
+                                        <td>
+                                            {{ entity.instructionalMinutes10 }}
+                                        </td>
+                                        <td>{{ entity.instructionalMinutes10 * 10 }}
+                                    </tr>
+                                    <tr>
+                                        <td>15 Minutes</td>
+                                        <td>
+                                            {{ entity.instructionalMinutes15 }}
+                                        </td>
+                                        <td>{{ entity.instructionalMinutes15 * 15 }}
+                                    </tr>
+                                    <tr>
+                                        <td>20 Minutes</td>
+                                        <td>
+                                            {{ entity.instructionalMinutes20 }}
+                                        </td>
+                                        <td>{{ entity.instructionalMinutes20 * 20 }}
+                                    </tr>
+                                    <tr>
+                                        <td>30 Minutes</td>
+                                        <td>
+                                            {{ entity.instructionalMinutes30 }}
+                                        </td>
+                                        <td>{{ entity.instructionalMinutes30 * 30 }}
+                                    </tr>
+                                    <tr>
+                                        <td>45 Minutes</td>
+                                        <td>
+                                            {{ entity.instructionalMinutes45 }}
+                                        </td>
+                                        <td>{{ entity.instructionalMinutes45 * 45 }}
+                                    </tr>
+                                    <tr>
+                                        <td>60 Minutes</td>
+                                        <td>
+                                            {{ entity.instructionalMinutes60 }}
+                                        </td>
+                                        <td>{{ entity.instructionalMinutes60 * 60 }}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+                        <div class="table-responsvie">
+                            <table class="table table-striped">
+                                <caption>Researchers</cpation>
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td>Total</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Faculty</td>
+                                        <td>{{ entity.researchersFaculty }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Staff</td>
+                                        <td>{{ entity.researchersStaff }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Undergraduate</td>
+                                        <td>{{ entity.researchersUndergrad }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Graduate</td>
+                                        <td>{{ entity.researchersGrad }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Community</td>
+                                        <td>{{ entity.researchersCommunity }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Other</td>
+                                        <td>{{ entity.researchersOther }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5">
+                        <div class="table-responsvie">
+                            <table class="table table-striped">
+                                <caption>Email/Phone References</cpation>
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td>Email References</td>
+                                        <td>Phone References</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Directional</td>
+                                        <td>{{ entity.directionalEmailRef }}</td>
+                                        <td>{{ entity.directionalPhoneRef }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Research Requests for Collection</td>
+                                        <td>{{ entity.researchRequestsCollectionEmailRef }}</td>
+                                        <td>{{ entity.researchRequestsCollectionPhoneRef }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Research Requests</td>
+                                        <td>{{ entity.researchRequestsEmailRef }}</td>
+                                        <td>{{ entity.researchRequestsPhoneRef }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Donations</td>
+                                        <td>{{ entity.donationsEmailRef }}</td>
+                                        <td>{{ entity.donationsPhoneRef }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Loans</td>
+                                        <td>{{ entity.loansEmailRef }}</td>
+                                        <td>{{ entity.loansPhoneRef }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="monthly-stats-section" id="digitization-container">
+                <h2>Technical Services</h2>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption>Collections Processed</cpation>
+                                <thead>
+                                    <tr>
+                                        <th>Call Number</th>
+                                        <th>Linear Feet</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for processedCollection in entity.processedCollections if processedCollection %}
+                                    <tr>
+                                        <td>{{ processedCollection.callNumber }}</td>
+                                        <td>
+                                            {{ processedCollection.linearFeet }}
+                                            {% set totalProcessedCollections = totalProcessedCollections + 1 %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption>Collections Stored</cpation>
+                                <thead>
+                                    <tr>
+                                        <th>Call Number</th>
+                                        <th>Linear Feet</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for storedCollection in entity.storedCollections if storedCollection %}
+                                    <tr>
+                                        <td>{{ storedCollection.callNumber }}</td>
+                                        <td>
+                                            {{ storedCollection.linearFeet }}
+                                            {% set totalStoredCollections = totalStoredCollections + 1 %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption>Holdings Added</cpation>
+                                <tbody>
+                                    <tr>
+                                        <td>Books</td>
+                                        <td>{{ entity.holdingsAddedBooks }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Faculty Publications</td>
+                                        <td>{{ entity.holdingsAddedFacultyPublications }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption>Accessions</cpation>
+                                <tbody>
+                                    <tr>
+                                        <td>Linear Feet</td>
+                                        <td>{{ entity.accessionsLinearFeet }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Collections</td>
+                                        <td>{{ entity.accessionsTotalCollections }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <h2>Digital Conversions</h2>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption><span class="badge">{{ totalDigitizationBookTitles }}</span> Digitization Book Titles</cpation>
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for digitizationBook in entity.digitizationBooks if digitizationBook %}
+                                    <tr>
+                                        <td>{{ digitizationBook.bookTitle }}</td>
+                                        <td>
+                                            {{ digitizationBook.quantity }}
+                                            {% set totalDigitizationBookTitles = totalDigitizationBookTitles + digitizationBook.quantity %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption><span class="badge">{{ totalDigitizationCollectionTitles }}</span> Digitization Collection Titles</cpation>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Box (Qty.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for digitizationCollection in entity.digitizationCollections if digitizationCollection %}
+                                    <tr>
+                                        <td>
+                                            {{ digitizationCollection.name }}
+                                            {% set totalDigitizationCollectionTitles = totalDigitizationCollectionTitles + 1 %}
+                                        </td>
+                                        <td>
+                                        {% if digitizationCollection.boxQuantity is defined %}
+                                            {% for box in digitizationCollection.boxQuantity if box %}
+                                                {{ box.box }}({{ box.quantity }}) | 
+                                            {% endfor %}
+                                        {% else %}
+                                            [No boxes]
+                                        {% endif %}    
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption><span class="badge">{{ totalDigitizationFileTitles }}</span> Digitization File Titles</cpation>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for digitizationFile in entity.digitizationFiles if digitizationFile %}
+                                    <tr>
+                                        <td>{{ digitizationFile.name }}</td>
+                                        <td>{{ digitizationFile.type }}</td>
+                                        <td>
+                                            {{ digitizationFile.quantity }}
+                                            {% set totalRequestedFileTitles = totalDigitizationFileTitles + digitizationFile.quantity %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>        
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+                                
+                                
+                                
+    {#                            
+            <section class="monthly-stats-section" id="digitization-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-9">
+                        <h2>Technical Services</h2>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <h3><span class="badge" id="processed_collections_total">0</span> Collections Processed</h3>
+                                <ul class="processed_collection" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/processedstoredcollection-prototype.html.twig', { 'form': edit_form.processedCollections.vars.prototype, 'collectionType': 'processed' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for processedCollection in entity.processedCollections if processedCollection %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-processedstoredcollection.html.twig', { 'entity': processedCollection, 'form': edit_form.processedCollections.vars.prototype, 'type': 'processed', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <h3><span class="badge" id="stored_collections_total">0</span> Collections Stored</h3>
+                                <ul class="stored_collection" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/processedstoredcollection-prototype.html.twig', { 'form': edit_form.storedCollections.vars.prototype, 'collectionType': 'stored' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for storedCollection in entity.storedCollections if storedCollection %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-processedstoredcollection.html.twig', { 'entity': storedCollection, 'form': edit_form.storedCollections.vars.prototype, 'type': 'stored', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <h3>Holdings Added</h3>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(edit_form.holdingsAddedBooks) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(edit_form.holdingsAddedFacultyPublications) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <h3>Accessions</h3>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(edit_form.accessionsLinearFeet) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4">
+                                        {{ form_row(edit_form.accessionsTotalCollections) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_books_total">0</span> Digitization Book Titles</h2>
+                                <p>Don't see the book title you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_booktitle_new') }}" target="_blank">add it here</a>.</p>
+                                <ul class="digitization_book" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/book-prototype.html.twig', { 'form': edit_form.digitizationBooks.vars.prototype, 'bookType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for digitizationBook in entity.digitizationBooks if digitizationBook %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-book.html.twig', { 'entity': digitizationBook, 'form': edit_form.digitizationBooks.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_collections_total">0</span> Digitization Collections <small>(<span class="badge" id="digitization_collectionboxes_total">0</span> boxes)</small></h2>
+                                <p>Don't see the collection you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_collectiontitle_new') }}" target="_blank">add it here</a>.</p>
+                                <p>Don't see the box you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_box_new') }}" target="_blank">add it here</a>.</p>
+                                <ul class="digitization_collection" 
+                                     data-prototype-boxquantity="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': edit_form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        "
+                                     data-prototype-collections="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': edit_form.digitizationCollections.vars.prototype, 'collectionType': 'digitization' }) }}
+                                        {% endfilter %}
+                                     "
+                                     >
+                                    {% for digitizationCollection in entity.digitizationCollections if digitizationCollection %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-collection.html.twig', { 'entity': digitizationCollection, 'collection_form': edit_form.digitizationCollections.vars.prototype, 'box_form': edit_form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2><span class="badge" id="digitization_files_total">0</span> Digitization File Titles</h2>
+                                <ul class="digitization_file" data-prototype="
+                                        {% filter escape %}
+                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/file-prototype.html.twig', { 'form': edit_form.digitizationFiles.vars.prototype, 'fileType': 'digitization' }) }}
+                                        {% endfilter %}
+                                        ">
+                                    {% for digitizationFile in entity.digitizationFiles if digitizationFile %}
+                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-file.html.twig', { 'entity': digitizationFile, 'form': edit_form.digitizationFiles.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- #end monthlyarchives-tabs -->
+    </div>
+    
+    #}
+{% endblock %}
+{% block documentReady %}
+    // JavaScript located in AppBundle/Resources/public/js/monthlystatsarchives.js
 {% endblock %}

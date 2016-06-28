@@ -8,12 +8,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * MonthlyStatsArchivesBoxQuantity
+ * MonthlyStatsArchivesCollectionProcessed
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class MonthlyStatsArchivesBoxQuantity
+class MonthlyStatsArchivesCollectionProcessed
 {
     /**
      * @var integer
@@ -25,18 +25,18 @@ class MonthlyStatsArchivesBoxQuantity
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="callNumber", type="string", length=70)
      */
-    private $quantity;
-    
+    private $callNumber;
+
     /**
-     * @ORM\ManyToOne(targetEntity="MonthlyStatsArchivesBox")
-     * @ORM\JoinColumn(name="box_id", referencedColumnName="id")
-     * @Assert\NotNull()
+     * @var string
+     *
+     * @ORM\Column(name="linearFeet", type="decimal", precision=15, scale=1)
      */
-    private $box;
+    private $linearFeet;
     
     /**
      * @var \DateTime $created
@@ -78,7 +78,7 @@ class MonthlyStatsArchivesBoxQuantity
     /**
      * @var User $contentChangedBy
      *
-     * @Gedmo\Blameable(on="change", field={"quantity", "box"})
+     * @Gedmo\Blameable(on="change", field={"callNumber", "linearFeet"})
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(referencedColumnName="id")
      * @Serializer\Exclude //exclude from API calls 
@@ -97,51 +97,51 @@ class MonthlyStatsArchivesBoxQuantity
     }
 
     /**
-     * Set quantity
+     * Set callNumber
      *
-     * @param integer $quantity
+     * @param string $callNumber
      *
-     * @return MonthlyStatsArchivesBoxQuantity
+     * @return MonthlyStatsArchivesCollectionProcessed
      */
-    public function setQuantity($quantity)
+    public function setCallNumber($callNumber)
     {
-        $this->quantity = $quantity;
+        $this->callNumber = $callNumber;
 
         return $this;
     }
 
     /**
-     * Get quantity
+     * Get callNumber
      *
-     * @return integer
+     * @return string
      */
-    public function getQuantity()
+    public function getCallNumber()
     {
-        return $this->quantity;
+        return $this->callNumber;
     }
-    
+
     /**
-     * Set Box
+     * Set linearFeet
      *
-     * @param AppBundle\Entity\MonthlyStatsArchivesBox $box
+     * @param string $linearFeet
      *
-     * @return MonthlyStatsArchivesBoxQuantity
+     * @return MonthlyStatsArchivesCollectionProcessed
      */
-    public function setBox(MonthlyStatsArchivesBox $box)
+    public function setLinearFeet($linearFeet)
     {
-        $this->box = $box;
+        $this->linearFeet = $linearFeet;
 
         return $this;
     }
 
     /**
-     * Get Box
+     * Get linearFeet
      *
-     * @return AppBundle\Entity\MonthlyStatsArchivesBox
+     * @return string
      */
-    public function getBox()
+    public function getLinearFeet()
     {
-        return $this->box;
+        return $this->linearFeet;
     }
     
     /**
