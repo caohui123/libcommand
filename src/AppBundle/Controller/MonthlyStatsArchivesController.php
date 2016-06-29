@@ -19,7 +19,7 @@ use AppBundle\Form\MonthlyStatsArchivesType;
  */
 class MonthlyStatsArchivesController extends Controller
 {
-    const START_YEAR = 2003;
+    const START_YEAR = 2013;
     
     /**
      * Lists all MonthlyStatsArchives entities.
@@ -27,16 +27,17 @@ class MonthlyStatsArchivesController extends Controller
      * @Route("/", name="monthly_archives")
      * @Method("GET")
      * @Template()
-     * //@Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:MonthlyStatsArchives')->findAll();
+        $statsService = $this->get('monthlystatistics_service');
+        $yearlyTables = $statsService->monthlyTablesByYear('archives', self::START_YEAR);
 
         return array(
-            'entities' => $entities,
+            'yearly_tables' => $yearlyTables,
         );
     }
     /**
@@ -45,7 +46,7 @@ class MonthlyStatsArchivesController extends Controller
      * @Route("/", name="monthly_archives_create")
      * @Method("POST")
      * @Template("AppBundle:MonthlyStatsArchives:new.html.twig")
-     * //@Secure(roles="ROLE_MONTHLYARCHIVES_EDIT")
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_EDIT")
      */
     public function createAction(Request $request)
     {
@@ -95,7 +96,7 @@ class MonthlyStatsArchivesController extends Controller
      * @Route("/new/{month}", name="monthly_archives_new")
      * @Method("GET")
      * @Template()
-     * //@Secure(roles="ROLE_MONTHLYARCHIVES_EDIT")
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_EDIT")
      */
     public function newAction($month)
     {
@@ -114,7 +115,7 @@ class MonthlyStatsArchivesController extends Controller
      * @Route("/{id}", name="monthly_archives_show")
      * @Method("GET")
      * @Template()
-     * //@Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
      */
     public function showAction($id)
     {
@@ -140,7 +141,7 @@ class MonthlyStatsArchivesController extends Controller
      * @Route("/{id}/edit", name="monthly_archives_edit")
      * @Method("GET")
      * @Template()
-     * //@Secure(roles="ROLE_MONTHLYARCHIVES_EDIT")
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_EDIT")
      */
     public function editAction($id)
     {
@@ -186,7 +187,7 @@ class MonthlyStatsArchivesController extends Controller
      * @Route("/{id}", name="monthly_archives_update")
      * @Method("PUT")
      * @Template("AppBundle:MonthlyStatsArchives:edit.html.twig")
-     * //@Secure(roles="ROLE_MONTHLYARCHIVES_EDIT")
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_EDIT")
      */
     public function updateAction(Request $request, $id)
     {
@@ -219,7 +220,7 @@ class MonthlyStatsArchivesController extends Controller
      *
      * @Route("/{id}", name="monthly_archives_delete")
      * @Method("DELETE")
-     * //@Secure(roles="ROLE_MONTHLYARCHIVES_DELETE")
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -261,11 +262,11 @@ class MonthlyStatsArchivesController extends Controller
     /**
      * Displays a printer-friendly MonthlyStatsArchives entity.
      *
-     * @Route("/{id}/print", name="monthly_govdocs_print")
+     * @Route("/{id}/print", name="monthly_archives_print")
      * @Method("GET")
      * @Template()
      * 
-     * //@Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
      */
     public function printAction($id)
     {
@@ -280,5 +281,130 @@ class MonthlyStatsArchivesController extends Controller
         return array(
             'entity'      => $entity,
         );
+    }
+    
+    /**
+     * Call the Monthly Stats Service to view a report for the year.
+     * 
+     * @Route("/report", name="monthly_archives_report")
+     * @Method("POST")
+     * @Template("AppBundle:MonthlyStatsArchives:viewyearlyreport.html.twig")
+     * 
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
+     */
+    public function viewYearlyReportAction(Request $request){
+        $requestData = $request->request->all();
+        
+        $reportType = $requestData['report_type'];
+        $reportYear = $requestData['report_year'];
+        
+        if(isset($requestData['options'])){
+            $reportOptions = $requestData['options'];
+        } else {
+            $reportOptions = array();
+        }
+        
+        $statsService = $this->get('monthlystatistics_service');
+        $entities = $statsService->generateYearlyReport('archives', $reportYear, $reportType);
+        
+        return array(
+            'entities' => $entities,
+            'type' => $reportType,
+            'year' => $reportYear,
+            'options' => $reportOptions,
+        );
+    }
+    
+    /**
+     * Call the Monthly Stats Service to print a report for the year.
+     * 
+     * @Route("/report/print/yearly", name="monthly_archives_report_print")
+     * @Method("GET")
+     * @Template("AppBundle:MonthlyStatsArchives:printyearlyreport.html.twig")
+     * 
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
+     */
+    public function printYearlyReportAction(Request $request){
+        $requestData = $request->query->all();
+        
+        $reportType = $requestData['report_type'];
+        $reportYear = $requestData['report_year'];
+        
+        if(isset($requestData['options'])){
+            $reportOptions = $requestData['options'];
+        } else {
+            $reportOptions = array();
+        }
+        
+        $statsService = $this->get('monthlystatistics_service');
+        $entities = $statsService->generateYearlyReport('archives', $reportYear, $reportType);
+        
+        return array(
+            'entities' => $entities,
+            'type' => $reportType,
+            'year' => $reportYear,
+            'options' => $reportOptions,
+        );
+    }
+    
+    /**
+     * Call the Monthly Stats Service to generate a CSV report for the year.
+     * 
+     * @Route("/report/csv/yearly", name="monthly_archives_report_csv")
+     * @Method("GET")
+     * 
+     * @Secure(roles="ROLE_MONTHLYARCHIVES_VIEW")
+     */
+    public function csvYearlyReportAction(Request $request){
+        $requestData = $request->query->all();
+        
+        $reportType = $requestData['report_type'];
+        $reportYear = $requestData['report_year'];
+        
+        
+        if(isset($requestData['options'])){
+            $reportOptions = $requestData['options'];
+        } else {
+            $reportOptions = array();
+        }
+        
+        $statsService = $this->get('monthlystatistics_service');
+        $entities = $statsService->generateYearlyReport('archives', $reportYear, $reportType);
+        
+        $excelFile = $statsService->assembleArchivesCSV($reportType, $reportYear, $reportOptions, $entities);
+        
+        return $excelFile;
+    }
+    
+    /**
+     * Retrieve a year dropdown list from the Instruction Service
+     * 
+     * @Route("/years/dropdown", name="monthly_archives_dropdown")
+     * @Method("GET")
+     * @Template()
+     */
+    public function getYearsDropdownAction(Request $request){
+        $requestData = $request->query->all();
+        $reportType = $requestData['type'];
+        $reportYear = self::START_YEAR;
+
+        $instructionService = $this->get('instruction_service');
+        
+        switch($reportType){
+            case 'calendar':
+                $years = $instructionService->generateYears(false, $reportYear);
+                break;
+            case 'fiscal':
+                $years = $instructionService->generateYears(true, $reportYear);
+                break;
+        }
+        
+        if(isset($years) && $years != null){
+            return $this->render('snippets/monthlystats-yeardropdown.html.twig', array(
+                'years' => $years,
+            ));
+        }
+        
+        return new Response('Improperly configured GET request for year dropdown menu.', 400);
     }
 }

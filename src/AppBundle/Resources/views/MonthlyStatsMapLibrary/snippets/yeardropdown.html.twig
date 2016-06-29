@@ -1,8 +1,0 @@
-{# Uses the instruction service generateYears() function for a dropdown of years #}
-<label for="report_year">Year</label>
-<select name="report_year" id="report_year">
-    {% for year in years %}
-        <option value="{{ year }}">{{ year }}</option>
-    {% endfor %}
-</select>
-<input type="submit" class="btn btn-sm btn-info" value="Generate" />

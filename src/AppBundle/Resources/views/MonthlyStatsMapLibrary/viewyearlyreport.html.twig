@@ -35,7 +35,7 @@
         <div class="col-xs-12 table-responsive">
             <table class="table table-bordered">
                 {% set tableHeadingVars = { 'category': 'Holdings' } %}
-                {% include 'AppBundle:MonthlyStatsMapLibrary:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
                 <tbody>
                     <tr>
                         <th>Maps Added (gross)</th>
@@ -120,7 +120,7 @@
         <div class="col-xs-12 table-responsive">
             <table class="table table-bordered">
                 {% set tableHeadingVars = { 'category': 'Usage' } %}
-                {% include 'AppBundle:MonthlyStatsMapLibrary:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
                 <tbody>
                     <tr>
                         <th>Items Shelved</th>
@@ -167,7 +167,7 @@
         <div class="col-xs-12 table-responsive">
             <table class="table table-bordered">
                 {% set tableHeadingVars = { 'category': 'Reference Statistics' } %}
-                {% include 'AppBundle:MonthlyStatsMapLibrary:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
                 <tbody>
                     <tr>
                         <td colspan="14">Directional/Procedural Questions</td>

@@ -1,0 +1,62 @@
+<thead>
+    <tr>
+        <th>{{category}}</th>
+    {% if type == 'calendar' %}
+        <th colspan="2">Jan '{{year|slice(2,2)}}</th>
+        <th colspan="2">Feb '{{year|slice(2,2)}}</th>
+        <th colspan="2">Mar '{{year|slice(2,2)}}</th>
+        <th colspan="2">Apr '{{year|slice(2,2)}}</th>
+        <th colspan="2">May '{{year|slice(2,2)}}</th>
+        <th colspan="2">Jun '{{year|slice(2,2)}}</th>
+        <th colspan="2">Jul '{{year|slice(2,2)}}</th>
+        <th colspan="2">Aug '{{year|slice(2,2)}}</th>
+        <th colspan="2">Sep '{{year|slice(2,2)}}</th>
+        <th colspan="2">Oct '{{year|slice(2,2)}}</th>
+        <th colspan="2">Nov '{{year|slice(2,2)}}</th>
+        <th colspan="2">Dec '{{year|slice(2,2)}}</th>
+    {% elseif type == 'fiscal' %}
+        <th colspan="2">Jul '{{year|slice(2,2)}}</th>   
+        <th colspan="2">Aug '{{year|slice(2,2)}}</th>  
+        <th colspan="2">Sep '{{year|slice(2,2)}}</th>  
+        <th colspan="2">Oct '{{year|slice(2,2)}}</th>  
+        <th colspan="2">Nov '{{year|slice(2,2)}}</th>  
+        <th colspan="2">Dec '{{year|slice(2,2)}}</th>  
+        <th colspan="2">Jan '{{year|slice(7,2)}}</th>  
+        <th colspan="2">Feb '{{year|slice(7,2)}}</th>  
+        <th colspan="2">Mar '{{year|slice(7,2)}}</th>  
+        <th colspan="2">Apr '{{year|slice(7,2)}}</th>  
+        <th colspan="2">May '{{year|slice(7,2)}}</th>  
+        <th colspan="2">Jun '{{year|slice(7,2)}}</th>  
+    {% endif %}
+        <th colspan="2">TOTALS</th>
+    <tr>
+    <tr>
+        <td></td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+        <td>Email</td>
+        <td>Phone</td>
+    </tr>
+</thead>

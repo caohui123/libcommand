@@ -1,0 +1,16 @@
+{% extends '::printbase.html.twig' %}
+{% block title %}Archives Monthly Statistics{% endblock %}
+{% block body %}
+    
+<h1>Archives Statistics: {{ type|capitalize }} Year {{ year }}</h1>
+<button class="print-btn" onclick="window.print();">Print</button>
+    {% if options.requested is defined %}
+        REQUESTED!
+    {% endif %}
+    {% if options.research is defined %}
+        RESEARCH!
+    {% endif %}
+    {% if options.digitization is defined %}
+        DIGITIZATION!
+    {% endif %}            
+{% endblock %}

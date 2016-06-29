@@ -546,7 +546,7 @@ $(document).ready(function(){
         updateMinutes($(this));
     })
     
-// Update book/file/box totals on page load and when changed
+// Update book/file/box totals on page load and when changed (new.html.twig and edit.html.twig)
 // NOTE: Collection totals updated in the addCollection functions when a new collection is added.
     
     $('#requested_collections_total').html($(document).find('.requestedcollection-item-container').length);
@@ -579,24 +579,40 @@ $(document).ready(function(){
         updateTotal($('.digitizationcollectionbox_quantity'), $('#digitization_collectionboxes_total'));
     });
     
-
+//Calculate book/file/box/collection totals on page load (show.html.twig)    
+    $('#show_requested_collections_total').html($(document).find('.show_requested_collections_quantity').length);
+    $('#show_digitization_collections_total').html($(document).find('.show_digitization_collections_quantity').length);
+    $('#show_processed_collections_total').html($(document).find('.show_processed_collections_quantity').length);
+    $('#show_stored_collections_total').html($(document).find('.show_stored_collections_quantity').length);
+    updateTotal($('.show_requested_books_quantity'), $('#show_requested_books_total'), true);
+    updateTotal($('.show_digitization_books_quantity'), $('#show_digitization_books_total'), true);
+    updateTotal($('.show_requested_collectionboxes_quantity'), $('#show_requested_collectionboxes_total'), true);
+    updateTotal($('.show_digitization_collectionboxes_quantity'), $('#show_digitization_collectionboxes_total'), true);
+    updateTotal($('.show_requested_files_quantity'), $('#show_requested_files_total'), true);
+    updateTotal($('.show_digitization_files_quantity'), $('#show_digitization_files_total'), true);
+    
     /**
-     * Sum up the total for all values given in each input field
+     * Sum up the total for all values given in each input field (new.html.twig, edit.html.twig, show.html.twig).
      * 
-     * @param jQuery Object $items  The class of items whose total should be added.
+     * @param jQuery Object $items      The class of items whose total should be added.
      * @param jQuery Object $targetDiv  The target div where the sum should be updated.
+     * @param boolean $html             Should an html value be parsed as an int (true) or should an input value be parsed as an int (false).
      */ 
-    function updateTotal($items, $targetDiv){
+    function updateTotal($items, $targetDiv, $html){
         var total = 0;
         
         $items.each(function(){
-           total += parseInt($(this).val()); 
+            if($html === true){
+                total += parseInt($(this).html()); 
+            } else {
+                total += parseInt($(this).val()); 
+            }
         });
-        $targetDiv.html(total);
+        $targetDiv.html(total)
     }
     
     /**
-     * Multiply the number value of the given item times the multiplier specified in the div ID.
+     * Multiply the number value of the given item times the multiplier specified in the div ID (new.html.twig and edit.html.twig).
      * 
      * @param jQuery Object $changedItem  The element whose total should be multiplied.
      */ 

@@ -3277,6 +3277,25 @@ var firstAvailCol;if(typeof(matrix[rowIndex])=="undefined"){matrix[rowIndex]=[];
 
 !function(a){"object"==typeof exports&&exports&&"object"==typeof module&&module&&module.exports===exports?a(require("jquery")):"function"==typeof define&&define.amd?define(["jquery"],a):a(jQuery)}(function(a){function b(a){var b=a[0];return b.offsetWidth>0&&b.offsetHeight>0}function c(b){if(b.minTime&&(b.minTime=u(b.minTime)),b.maxTime&&(b.maxTime=u(b.maxTime)),b.durationTime&&"function"!=typeof b.durationTime&&(b.durationTime=u(b.durationTime)),"now"==b.scrollDefault)b.scrollDefault=function(){return b.roundingFunction(u(new Date),b)};else if(b.scrollDefault&&"function"!=typeof b.scrollDefault){var c=b.scrollDefault;b.scrollDefault=function(){return b.roundingFunction(u(c),b)}}else b.minTime&&(b.scrollDefault=function(){return b.roundingFunction(b.minTime,b)});if("string"===a.type(b.timeFormat)&&b.timeFormat.match(/[gh]/)&&(b._twelveHourTime=!0),b.showOnFocus===!1&&-1!=b.showOn.indexOf("focus")&&b.showOn.splice(b.showOn.indexOf("focus"),1),b.disableTimeRanges.length>0){for(var d in b.disableTimeRanges)b.disableTimeRanges[d]=[u(b.disableTimeRanges[d][0]),u(b.disableTimeRanges[d][1])];b.disableTimeRanges=b.disableTimeRanges.sort(function(a,b){return a[0]-b[0]});for(var d=b.disableTimeRanges.length-1;d>0;d--)b.disableTimeRanges[d][0]<=b.disableTimeRanges[d-1][1]&&(b.disableTimeRanges[d-1]=[Math.min(b.disableTimeRanges[d][0],b.disableTimeRanges[d-1][0]),Math.max(b.disableTimeRanges[d][1],b.disableTimeRanges[d-1][1])],b.disableTimeRanges.splice(d,1))}return b}function d(b){var c=b.data("timepicker-settings"),d=b.data("timepicker-list");if(d&&d.length&&(d.remove(),b.data("timepicker-list",!1)),c.useSelect){d=a("<select />",{"class":"ui-timepicker-select"});var g=d}else{d=a("<ul />",{"class":"ui-timepicker-list"});var g=a("<div />",{"class":"ui-timepicker-wrapper",tabindex:-1});g.css({display:"none",position:"absolute"}).append(d)}if(c.noneOption)if(c.noneOption===!0&&(c.noneOption=c.useSelect?"Time...":"None"),a.isArray(c.noneOption)){for(var h in c.noneOption)if(parseInt(h,10)==h){var i=e(c.noneOption[h],c.useSelect);d.append(i)}}else{var i=e(c.noneOption,c.useSelect);d.append(i)}if(c.className&&g.addClass(c.className),(null!==c.minTime||null!==c.durationTime)&&c.showDuration){"function"==typeof c.step?"function":c.step;g.addClass("ui-timepicker-with-duration"),g.addClass("ui-timepicker-step-"+c.step)}var k=c.minTime;"function"==typeof c.durationTime?k=u(c.durationTime()):null!==c.durationTime&&(k=c.durationTime);var m=null!==c.minTime?c.minTime:0,n=null!==c.maxTime?c.maxTime:m+w-1;m>n&&(n+=w),n===w-1&&"string"===a.type(c.timeFormat)&&c.show2400&&(n=w);var p=c.disableTimeRanges,q=0,v=p.length,x=c.step;"function"!=typeof x&&(x=function(){return c.step});for(var h=m,z=0;n>=h;z++,h+=60*x(z)){var A=h,B=t(A,c);if(c.useSelect){var C=a("<option />",{value:B});C.text(B)}else{var C=a("<li />");C.addClass(43200>A%86400?"ui-timepicker-am":"ui-timepicker-pm"),C.data("time",86400>=A?A:A%86400),C.text(B)}if((null!==c.minTime||null!==c.durationTime)&&c.showDuration){var D=s(h-k,c.step);if(c.useSelect)C.text(C.text()+" ("+D+")");else{var E=a("<span />",{"class":"ui-timepicker-duration"});E.text(" ("+D+")"),C.append(E)}}v>q&&(A>=p[q][1]&&(q+=1),p[q]&&A>=p[q][0]&&A<p[q][1]&&(c.useSelect?C.prop("disabled",!0):C.addClass("ui-timepicker-disabled"))),d.append(C)}if(g.data("timepicker-input",b),b.data("timepicker-list",g),c.useSelect)b.val()&&d.val(f(u(b.val()),c)),d.on("focus",function(){a(this).data("timepicker-input").trigger("showTimepicker")}),d.on("blur",function(){a(this).data("timepicker-input").trigger("hideTimepicker")}),d.on("change",function(){o(b,a(this).val(),"select")}),o(b,d.val(),"initial"),b.hide().after(d);else{var F=c.appendTo;"string"==typeof F?F=a(F):"function"==typeof F&&(F=F(b)),F.append(g),l(b,d),d.on("mousedown","li",function(c){b.off("focus.timepicker"),b.on("focus.timepicker-ie-hack",function(){b.off("focus.timepicker-ie-hack"),b.on("focus.timepicker",y.show)}),j(b)||b[0].focus(),d.find("li").removeClass("ui-timepicker-selected"),a(this).addClass("ui-timepicker-selected"),r(b)&&(b.trigger("hideTimepicker"),d.on("mouseup.timepicker","li",function(a){d.off("mouseup.timepicker"),g.hide()}))})}}function e(b,c){var d,e,f;return"object"==typeof b?(d=b.label,e=b.className,f=b.value):"string"==typeof b?d=b:a.error("Invalid noneOption value"),c?a("<option />",{value:f,"class":e,text:d}):a("<li />",{"class":e,text:d}).data("time",f)}function f(a,b){return a=b.roundingFunction(a,b),null!==a?t(a,b):void 0}function g(){return new Date(1970,1,1,0,0,0)}function h(b){var c=a(b.target),d=c.closest(".ui-timepicker-input");0===d.length&&0===c.closest(".ui-timepicker-wrapper").length&&(y.hide(),a(document).unbind(".ui-timepicker"),a(window).unbind(".ui-timepicker"))}function j(a){var b=a.data("timepicker-settings");return(window.navigator.msMaxTouchPoints||"ontouchstart"in document)&&b.disableTouchKeyboard}function k(b,c,d){if(!d&&0!==d)return!1;var e=b.data("timepicker-settings"),f=!1,d=e.roundingFunction(d,e);return c.find("li").each(function(b,c){var e=a(c);if("number"==typeof e.data("time"))return e.data("time")==d?(f=e,!1):void 0}),f}function l(a,b){b.find("li").removeClass("ui-timepicker-selected");var c=u(n(a),a.data("timepicker-settings"));if(null!==c){var d=k(a,b,c);if(d){var e=d.offset().top-b.offset().top;(e+d.outerHeight()>b.outerHeight()||0>e)&&b.scrollTop(b.scrollTop()+d.position().top-d.outerHeight()),d.addClass("ui-timepicker-selected")}}}function m(b,c){if(""!==this.value&&"timepicker"!=c){var d=a(this);if(!d.is(":focus")||b&&"change"==b.type){var e=d.data("timepicker-settings"),f=u(this.value,e);if(null===f)return void d.trigger("timeFormatError");var g=!1;null!==e.minTime&&f<e.minTime?g=!0:null!==e.maxTime&&f>e.maxTime&&(g=!0),a.each(e.disableTimeRanges,function(){return f>=this[0]&&f<this[1]?(g=!0,!1):void 0}),e.forceRoundTime&&(f=e.roundingFunction(f,e));var h=t(f,e);g?o(d,h,"error")&&d.trigger("timeRangeError"):o(d,h)}}}function n(a){return a.is("input")?a.val():a.data("ui-timepicker-value")}function o(a,b,c){if(a.is("input")){a.val(b);var d=a.data("timepicker-settings");d.useSelect&&"select"!=c&&"initial"!=c&&a.data("timepicker-list").val(f(u(b),d))}return a.data("ui-timepicker-value")!=b?(a.data("ui-timepicker-value",b),"select"==c?a.trigger("selectTime").trigger("changeTime").trigger("change","timepicker"):"error"!=c&&a.trigger("changeTime"),!0):(a.trigger("selectTime"),!1)}function p(c){var d=a(this),e=d.data("timepicker-list");if(!e||!b(e)){if(40!=c.keyCode)return!0;y.show.call(d.get(0)),e=d.data("timepicker-list"),j(d)||d.focus()}switch(c.keyCode){case 13:return r(d)&&y.hide.apply(this),c.preventDefault(),!1;case 38:var f=e.find(".ui-timepicker-selected");return f.length?f.is(":first-child")||(f.removeClass("ui-timepicker-selected"),f.prev().addClass("ui-timepicker-selected"),f.prev().position().top<f.outerHeight()&&e.scrollTop(e.scrollTop()-f.outerHeight())):(e.find("li").each(function(b,c){return a(c).position().top>0?(f=a(c),!1):void 0}),f.addClass("ui-timepicker-selected")),!1;case 40:return f=e.find(".ui-timepicker-selected"),0===f.length?(e.find("li").each(function(b,c){return a(c).position().top>0?(f=a(c),!1):void 0}),f.addClass("ui-timepicker-selected")):f.is(":last-child")||(f.removeClass("ui-timepicker-selected"),f.next().addClass("ui-timepicker-selected"),f.next().position().top+2*f.outerHeight()>e.outerHeight()&&e.scrollTop(e.scrollTop()+f.outerHeight())),!1;case 27:e.find("li").removeClass("ui-timepicker-selected"),y.hide();break;case 9:y.hide();break;default:return!0}}function q(c){var d=a(this),e=d.data("timepicker-list"),f=d.data("timepicker-settings");if(!e||!b(e)||f.disableTextInput)return!0;switch(c.keyCode){case 96:case 97:case 98:case 99:case 100:case 101:case 102:case 103:case 104:case 105:case 48:case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:case 65:case 77:case 80:case 186:case 8:case 46:f.typeaheadHighlight?l(d,e):e.hide()}}function r(a){var b=a.data("timepicker-settings"),c=a.data("timepicker-list"),d=null,e=c.find(".ui-timepicker-selected");return e.hasClass("ui-timepicker-disabled")?!1:(e.length&&(d=e.data("time")),null!==d&&("string"!=typeof d&&(d=t(d,b)),o(a,d,"select")),!0)}function s(a,b){a=Math.abs(a);var c,d,e=Math.round(a/60),f=[];return 60>e?f=[e,x.mins]:(c=Math.floor(e/60),d=e%60,30==b&&30==d&&(c+=x.decimal+5),f.push(c),f.push(1==c?x.hr:x.hrs),30!=b&&d&&(f.push(d),f.push(x.mins))),f.join(" ")}function t(b,c){if(null===b)return null;var d=new Date(v.valueOf()+1e3*b);if(isNaN(d.getTime()))return null;if("function"===a.type(c.timeFormat))return c.timeFormat(d);for(var e,f,g="",h=0;h<c.timeFormat.length;h++)switch(f=c.timeFormat.charAt(h)){case"a":g+=d.getHours()>11?x.pm:x.am;break;case"A":g+=d.getHours()>11?x.PM:x.AM;break;case"g":e=d.getHours()%12,g+=0===e?"12":e;break;case"G":e=d.getHours(),b===w&&(e=24),g+=e;break;case"h":e=d.getHours()%12,0!==e&&10>e&&(e="0"+e),g+=0===e?"12":e;break;case"H":e=d.getHours(),b===w&&(e=c.show2400?24:0),g+=e>9?e:"0"+e;break;case"i":var i=d.getMinutes();g+=i>9?i:"0"+i;break;case"s":b=d.getSeconds(),g+=b>9?b:"0"+b;break;case"\\":h++,g+=c.timeFormat.charAt(h);break;default:g+=f}return g}function u(a,b){if(""===a)return null;if(!a||a+0==a)return a;if("object"==typeof a)return 3600*a.getHours()+60*a.getMinutes()+a.getSeconds();a=a.toLowerCase().replace(/[\s\.]/g,""),("a"==a.slice(-1)||"p"==a.slice(-1))&&(a+="m");var c="("+x.am.replace(".","")+"|"+x.pm.replace(".","")+"|"+x.AM.replace(".","")+"|"+x.PM.replace(".","")+")?",d=new RegExp("^"+c+"([0-9]?[0-9])\\W?([0-5][0-9])?\\W?([0-5][0-9])?"+c+"$"),e=a.match(d);if(!e)return null;var f=parseInt(1*e[2],10)%24,g=e[1]||e[5],h=f;if(12>=f&&g){var i=g==x.pm||g==x.PM;h=12==f?i?12:0:f+(i?12:0)}var j=1*e[3]||0,k=1*e[4]||0,l=3600*h+60*j+k;if(12>f&&!g&&b&&b._twelveHourTime&&b.scrollDefault){var m=l-b.scrollDefault();0>m&&m>=w/-2&&(l=(l+w/2)%w)}return l}var v=g(),w=86400,x={am:"am",pm:"pm",AM:"AM",PM:"PM",decimal:".",mins:"mins",hr:"hr",hrs:"hrs"},y={init:function(b){return this.each(function(){var e=a(this),f=[];for(var g in a.fn.timepicker.defaults)e.data(g)&&(f[g]=e.data(g));var h=a.extend({},a.fn.timepicker.defaults,f,b);if(h.lang&&(x=a.extend(x,h.lang)),h=c(h),e.data("timepicker-settings",h),e.addClass("ui-timepicker-input"),h.useSelect)d(e);else{if(e.prop("autocomplete","off"),h.showOn)for(i in h.showOn)e.on(h.showOn[i]+".timepicker",y.show);e.on("change.timepicker",m),e.on("keydown.timepicker",p),e.on("keyup.timepicker",q),h.disableTextInput&&e.on("keydown.timepicker",function(a){a.preventDefault()}),m.call(e.get(0))}})},show:function(c){var e=a(this),f=e.data("timepicker-settings");if(c&&c.preventDefault(),f.useSelect)return void e.data("timepicker-list").focus();j(e)&&e.blur();var g=e.data("timepicker-list");if(!e.prop("readonly")&&(g&&0!==g.length&&"function"!=typeof f.durationTime||(d(e),g=e.data("timepicker-list")),!b(g))){e.data("ui-timepicker-value",e.val()),l(e,g),y.hide(),g.show();var i={};f.orientation.match(/r/)?i.left=e.offset().left+e.outerWidth()-g.outerWidth()+parseInt(g.css("marginLeft").replace("px",""),10):i.left=e.offset().left+parseInt(g.css("marginLeft").replace("px",""),10);var m;m=f.orientation.match(/t/)?"t":f.orientation.match(/b/)?"b":e.offset().top+e.outerHeight(!0)+g.outerHeight()>a(window).height()+a(window).scrollTop()?"t":"b","t"==m?(g.addClass("ui-timepicker-positioned-top"),i.top=e.offset().top-g.outerHeight()+parseInt(g.css("marginTop").replace("px",""),10)):(g.removeClass("ui-timepicker-positioned-top"),i.top=e.offset().top+e.outerHeight()+parseInt(g.css("marginTop").replace("px",""),10)),g.offset(i);var o=g.find(".ui-timepicker-selected");if(!o.length){var p=u(n(e));null!==p?o=k(e,g,p):f.scrollDefault&&(o=k(e,g,f.scrollDefault()))}if(o&&o.length){var q=g.scrollTop()+o.position().top-o.outerHeight();g.scrollTop(q)}else g.scrollTop(0);return f.stopScrollPropagation&&a(document).on("wheel.ui-timepicker",".ui-timepicker-wrapper",function(b){b.preventDefault();var c=a(this).scrollTop();a(this).scrollTop(c+b.originalEvent.deltaY)}),a(document).on("touchstart.ui-timepicker mousedown.ui-timepicker",h),a(window).on("resize.ui-timepicker",h),f.closeOnWindowScroll&&a(document).on("scroll.ui-timepicker",h),e.trigger("showTimepicker"),this}},hide:function(c){var d=a(this),e=d.data("timepicker-settings");return e&&e.useSelect&&d.blur(),a(".ui-timepicker-wrapper").each(function(){var c=a(this);if(b(c)){var d=c.data("timepicker-input"),e=d.data("timepicker-settings");e&&e.selectOnBlur&&r(d),c.hide(),d.trigger("hideTimepicker")}}),this},option:function(b,e){return this.each(function(){var f=a(this),g=f.data("timepicker-settings"),h=f.data("timepicker-list");if("object"==typeof b)g=a.extend(g,b);else if("string"==typeof b&&"undefined"!=typeof e)g[b]=e;else if("string"==typeof b)return g[b];g=c(g),f.data("timepicker-settings",g),h&&(h.remove(),f.data("timepicker-list",!1)),g.useSelect&&d(f)})},getSecondsFromMidnight:function(){return u(n(this))},getTime:function(a){var b=this,c=n(b);if(!c)return null;var d=u(c);if(null===d)return null;a||(a=v);var e=new Date(a);return e.setHours(d/3600),e.setMinutes(d%3600/60),e.setSeconds(d%60),e.setMilliseconds(0),e},setTime:function(a){var b=this,c=b.data("timepicker-settings");if(c.forceRoundTime)var d=f(u(a),c);else var d=t(u(a),c);return a&&null===d&&c.noneOption&&(d=a),o(b,d),b.data("timepicker-list")&&l(b,b.data("timepicker-list")),this},remove:function(){var a=this;if(a.hasClass("ui-timepicker-input")){var b=a.data("timepicker-settings");return a.removeAttr("autocomplete","off"),a.removeClass("ui-timepicker-input"),a.removeData("timepicker-settings"),a.off(".timepicker"),a.data("timepicker-list")&&a.data("timepicker-list").remove(),b.useSelect&&a.show(),a.removeData("timepicker-list"),this}}};a.fn.timepicker=function(b){return this.length?y[b]?this.hasClass("ui-timepicker-input")?y[b].apply(this,Array.prototype.slice.call(arguments,1)):this:"object"!=typeof b&&b?void a.error("Method "+b+" does not exist on jQuery.timepicker"):y.init.apply(this,arguments):this},a.fn.timepicker.defaults={appendTo:"body",className:null,closeOnWindowScroll:!1,disableTextInput:!1,disableTimeRanges:[],disableTouchKeyboard:!1,durationTime:null,forceRoundTime:!1,maxTime:null,minTime:null,noneOption:!1,orientation:"l",roundingFunction:function(a,b){if(null===a)return null;var c=a%(60*b.step);return c>=30*b.step?a+=60*b.step-c:a-=c,a},scrollDefault:null,selectOnBlur:!1,show2400:!1,showDuration:!1,showOn:["click","focus"],showOnFocus:!0,step:30,stopScrollPropagation:!1,timeFormat:"g:ia",typeaheadHighlight:!0,useSelect:!1}});
 $(document).ready(function(){
+// Navigation tabs
+    $('#research-container, #digitization-container').hide();
+    $('ul#monthlyarchives-tabs > li a').on('click', function(e){
+        e.preventDefault();
+        
+        var divToShow = $(this).attr('href'); //the ID of the div to display is stored in the href of the nav tab
+        $('.monthlyarchives-tab').each(function(){
+            $(this).removeClass('active'); // remove the active class from all tabs
+        });
+        $(this).parent('.monthlyarchives-tab').addClass('active'); // put an active class on the tab that was clicked
+        
+        // hide all form sections
+        $('.monthly-stats-section').each(function(){
+            $(this).hide();
+        });
+        
+        $(divToShow).show(); //show the form section for the tab that was clicked
+    })
+    
 ////// Requested Collection //////
     var $requestedCollectionHolder;
         $requestedCollectionHolder = $('ul.requested_collection');
@@ -3372,7 +3391,7 @@ $(document).ready(function(){
     //Add an additional archives book form each time a user clicks the $addDigitizationBookLink
     $addDigitizationBookLink.on('click', function(e) {
         e.preventDefault();
-        addBookForm($digitizationBookHolder, $newDigitizationBookLi, 'digitization');
+        addBookForm($digitizationBookHolder, $newDigitizationBookLi, 'digitization', true);
     });
     
 ////// Requested Files //////
@@ -3410,7 +3429,42 @@ $(document).ready(function(){
         e.preventDefault();
         addFileForm($digitizationFileHolder, $newDigitizationFileLi, 'digitization', true);
     });
+    
+////// Collection Processed //////
+    var $processedCollectionHolder;
+        $processedCollectionHolder = $('ul.processed_collection');
+        
+    var $addProcessedCollectionLink = $('<a href="#" class="btn btn-sm btn-info add_processedcollection_link archives_addbtn">+ Processed Collection</a>');
+    var $newProcessedCollectionLi = $('<li class="list-style-none"></li>').append($addProcessedCollectionLink);
 
+    // add the "+ Processed Collection" li to the ul
+    $processedCollectionHolder.append($newProcessedCollectionLi);
+
+    $processedCollectionHolder.data('index', $processedCollectionHolder.find(':input').length);
+    
+    //Add an additional archives book form each time a user clicks the $addProcessedCollectionLink
+    $addProcessedCollectionLink.on('click', function(e) {
+        e.preventDefault();
+        addCollectionProcessedStoredForm($processedCollectionHolder, $newProcessedCollectionLi, 'processed', true);
+    });
+    
+////// Collection Stored //////
+    var $storedCollectionHolder;
+        $storedCollectionHolder = $('ul.stored_collection');
+        
+    var $addStoredCollectionLink = $('<a href="#" class="btn btn-sm btn-info add_storedcollection_link archives_addbtn">+ Stored Collection</a>');
+    var $newStoredCollectionLi = $('<li class="list-style-none"></li>').append($addStoredCollectionLink);
+
+    // add the "+ Stored Collection" li to the ul
+    $storedCollectionHolder.append($newStoredCollectionLi);
+
+    $storedCollectionHolder.data('index', $storedCollectionHolder.find(':input').length);
+    
+    //Add an additional archives book form each time a user clicks the $addStoredCollectionLink
+    $addStoredCollectionLink.on('click', function(e) {
+        e.preventDefault();
+        addCollectionProcessedStoredForm($storedCollectionHolder, $newStoredCollectionLi, 'stored', true);
+    });
     
     /**
      * Uses Symfony's prototype code to generate a new list item for a REQUESTED collection 
@@ -3465,10 +3519,7 @@ $(document).ready(function(){
         $newLinkLi.before($newCollectionFormLi);
         
         //Update the total number of digitization collections
-        var totalRequestedCollections = 0;
-            totalRequestedCollections += $(document).find('.requestedcollection-item-container').length;
-            
-        $('#requested_collections_total').html(totalRequestedCollections);
+        $('#requested_collections_total').html($(document).find('.requestedcollection-item-container').length);
     }
     
     /**
@@ -3524,10 +3575,7 @@ $(document).ready(function(){
         $newLinkLi.before($newCollectionFormLi);
         
         //Update the total number of digitization collections
-        var totalDigitizationCollections = 0;
-            totalDigitizationCollections += $(document).find('.digitizationcollection-item-container').length;
-            
-        $('#digitization_collections_total').html(totalDigitizationCollections);
+        $('#digitization_collections_total').html($(document).find('.digitizationcollection-item-container').length);
     }
     
     /**
@@ -3653,6 +3701,50 @@ $(document).ready(function(){
         $newLinkLi.before($newFormLi);
     }
     
+    /**
+     * Uses Symfony's prototype code to generate a new list item for a processed or stored collection
+     *
+     * @param jQuery Object $collectionHolder   The <ul> which holds the collection and prototype
+     * @param jQuery Object $newLinkLi          The jQuery element of the link that was just clicked.
+     */
+    function addCollectionProcessedStoredForm($collectionHolder, $newLinkLi, formType, bootstrapListStyle) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add form" link li
+        if(bootstrapListStyle === true){
+            var newFormLi = '<li class="list-group-item __formType__collection-item-container"></li>';
+                newFormLi = newFormLi.replace(/__formType__/g, formType);
+            var $newFormLi = $(newFormLi).append(newForm);
+        } else {
+            var newFormLi = '<li class="list-style-none __formType__collection-item-container"></li>';
+                newFormLi = newFormLi.replace(/__formType__/g, formType);
+            var $newFormLi = $(newFormLi).append(newForm);
+        }    
+        $newLinkLi.before($newFormLi);
+        
+        //Update the total number of processed/stored collections
+        var containerClass = '.__formType__collection-item-container';
+            containerClass = containerClass.replace(/__formType__/g, formType);
+        var totalCollections = 0;
+            totalCollections += $(document).find(containerClass).length;
+            
+        var totalDiv = '#__formType___collections_total';
+            totalDiv = totalDiv.replace(/__formType__/g, formType);
+            
+        $(totalDiv).html(totalCollections);
+    }
+    
 // Item deletions
     $(document).on('click', '.delete-requestedbook', function(event){
         event.preventDefault();
@@ -3708,32 +3800,44 @@ $(document).ready(function(){
         //update collection totals
         $('#digitization_collections_total').html( $(document).find('.digitizationcollection-item-container').length );
     });
-    
-// Navigation tabs
-    $('#monthlyarchives-tabs').tabs();
+    $(document).on('click', '.delete-processedcollection', function(event){
+        event.preventDefault();
+        $(this).parents('.processedcollection-item-container').remove();
+        
+        //update collection totals
+        $('#processed_collections_total').html( $(document).find('.processedcollection-item-container').length );
+    });
+    $(document).on('click', '.delete-storedcollection', function(event){
+        event.preventDefault();
+        $(this).parents('.storedcollection-item-container').remove();
+        
+        //update collection totals
+        $('#stored_collections_total').html( $(document).find('.storedcollection-item-container').length );
+    });
   
-// Update minute totals
+// Update minute totals on page load and whenever a .jscript_total number input is changed
+    $('.jscript_total').each(function(){
+       updateMinutes($(this)); 
+    });
+    
     $(document).on('change', '.jscript_total', function(e){
-        var id = $(this).attr('id');
-        var multiplier = id.match(/\d+$/); //matches the number at the end of the ID string
-       
-        if( $(this).hasClass('research_minutes') ){
-            console.log('castley rock!');
-            var targetDiv = 'research_minutes___minutes___total';
-               targetDiv = targetDiv.replace(/__minutes__/g, multiplier);
-           
-            $('#' + targetDiv).html($(this).val() * multiplier);
-        } 
-        if( $(this).hasClass('instructional_minutes') ){
-           var targetDiv = 'instructional_minutes___minutes___total';
-               targetDiv = targetDiv.replace(/__minutes__/g, multiplier);
-               
-           $('#' + targetDiv).html($(this).val() * multiplier);
-        }
+        updateMinutes($(this));
     })
     
-// Update book/file/box totals
-// NOTE: Collection totals updated in the addCollection functions!
+// Update book/file/box totals on page load and when changed (new.html.twig and edit.html.twig)
+// NOTE: Collection totals updated in the addCollection functions when a new collection is added.
+    
+    $('#requested_collections_total').html($(document).find('.requestedcollection-item-container').length);
+    $('#digitization_collections_total').html($(document).find('.digitizationcollection-item-container').length);
+    $('#processed_collections_total').html($(document).find('.processedcollection-item-container').length);
+    $('#stored_collections_total').html($(document).find('.storedcollection-item-container').length);
+    updateTotal($('.requestedbook_quantity'), $('#requested_books_total'));
+    updateTotal($('.digitizationbook_quantity'), $('#digitization_books_total'));
+    updateTotal($('.requestedfile_quantity'), $('#requested_files_total'));
+    updateTotal($('.digitizationfile_quantity'), $('#digitization_files_total'));
+    updateTotal($('.requestedcollectionbox_quantity'), $('#requested_collectionboxes_total'));
+    updateTotal($('.digitizationcollectionbox_quantity'), $('#digitization_collectionboxes_total'));
+    
     $(document).on('change', '.requestedbook_quantity', function(e){
         updateTotal($('.requestedbook_quantity'), $('#requested_books_total'));
     });
@@ -3753,20 +3857,59 @@ $(document).ready(function(){
         updateTotal($('.digitizationcollectionbox_quantity'), $('#digitization_collectionboxes_total'));
     });
     
-
+//Calculate book/file/box/collection totals on page load (show.html.twig)    
+    $('#show_requested_collections_total').html($(document).find('.show_requested_collections_quantity').length);
+    $('#show_digitization_collections_total').html($(document).find('.show_digitization_collections_quantity').length);
+    $('#show_processed_collections_total').html($(document).find('.show_processed_collections_quantity').length);
+    $('#show_stored_collections_total').html($(document).find('.show_stored_collections_quantity').length);
+    updateTotal($('.show_requested_books_quantity'), $('#show_requested_books_total'), true);
+    updateTotal($('.show_digitization_books_quantity'), $('#show_digitization_books_total'), true);
+    updateTotal($('.show_requested_collectionboxes_quantity'), $('#show_requested_collectionboxes_total'), true);
+    updateTotal($('.show_digitization_collectionboxes_quantity'), $('#show_digitization_collectionboxes_total'), true);
+    updateTotal($('.show_requested_files_quantity'), $('#show_requested_files_total'), true);
+    updateTotal($('.show_digitization_files_quantity'), $('#show_digitization_files_total'), true);
+    
     /**
-     * Sum up the total for all values given in each input field
+     * Sum up the total for all values given in each input field (new.html.twig, edit.html.twig, show.html.twig).
      * 
-     * @param jQuery Object $items  The class of items whose total should be added.
+     * @param jQuery Object $items      The class of items whose total should be added.
      * @param jQuery Object $targetDiv  The target div where the sum should be updated.
+     * @param boolean $html             Should an html value be parsed as an int (true) or should an input value be parsed as an int (false).
      */ 
-    function updateTotal($items, $targetDiv){
+    function updateTotal($items, $targetDiv, $html){
         var total = 0;
         
         $items.each(function(){
-           total += parseInt($(this).val()); 
+            if($html === true){
+                total += parseInt($(this).html()); 
+            } else {
+                total += parseInt($(this).val()); 
+            }
         });
-        $targetDiv.html(total);
+        $targetDiv.html(total)
+    }
+    
+    /**
+     * Multiply the number value of the given item times the multiplier specified in the div ID (new.html.twig and edit.html.twig).
+     * 
+     * @param jQuery Object $changedItem  The element whose total should be multiplied.
+     */ 
+    function updateMinutes($changedItem){
+        var id = $changedItem.attr('id');
+        var multiplier = id.match(/\d+$/); //matches the number at the end of the ID string
+       
+        if( $changedItem.hasClass('research_minutes') ){
+            var targetDiv = 'research_minutes___minutes___total';
+               targetDiv = targetDiv.replace(/__minutes__/g, multiplier);
+           
+            $('#' + targetDiv).html($changedItem.val() * multiplier);
+        } 
+        if( $changedItem.hasClass('instructional_minutes') ){
+           var targetDiv = 'instructional_minutes___minutes___total';
+               targetDiv = targetDiv.replace(/__minutes__/g, multiplier);
+               
+           $('#' + targetDiv).html($changedItem.val() * multiplier);
+        }
     }
 });
 

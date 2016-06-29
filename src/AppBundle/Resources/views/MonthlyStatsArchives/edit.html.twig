@@ -1,9 +1,16 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Archives Monthly Statistics{% endblock %}
 {% block body -%}
-    <h1>MonthlyStatsArchives edit</h1>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Archives Stats: ' ~ entity.month|date('F Y') } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button and print button #}
+    {% set toolbarvars = {'basepath' : path('monthly_archives'), 'printpath' : path('monthly_archives_print', { 'id': entity.id }) } %}
+    {% include 'snippets/editToolbar.html.twig' with toolbarvars %} 
+    
     <blockquote>
-        <p>Please note that the form will not submit unless all required fields are filled in. All fields form book and file titles must have a value. All collection titles must have at least one box with a quantity.</p>
+        <p>Please note that the form will not submit unless all required fields are filled in.</p>
     </blockquote>
     <div class="row">
         <div class="col-xs-12">
@@ -526,10 +533,14 @@
             {{ form_row(edit_form._token) }}
             <p>
             {{ form_row(edit_form.submit) }}
+        {{ form_end(edit_form, {'render_rest': false}) }}
+            
+            {% if is_granted('ROLE_MONTHLYARCHIVES_DELETE') %}
+                {{ form(delete_form) }}
+            {% endif %}
             </p>
         </div>
     </div>
-    {{ form_end(edit_form, {'render_rest': false}) }}
 {% endblock %}
 {% block documentReady %}
     // JavaScript located in AppBundle/Resources/public/js/monthlystatsarchives.js

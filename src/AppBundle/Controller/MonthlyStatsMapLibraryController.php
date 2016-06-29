@@ -410,7 +410,7 @@ class MonthlyStatsMapLibraryController extends Controller
         }
         
         if(isset($years) && $years != null){
-            return $this->render('AppBundle:MonthlyStatsMapLibrary:snippets/yeardropdown.html.twig', array(
+            return $this->render('snippets/monthlystats-yeardropdown.html.twig', array(
                 'years' => $years,
             ));
         }

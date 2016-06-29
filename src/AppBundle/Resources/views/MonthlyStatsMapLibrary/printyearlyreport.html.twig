@@ -28,7 +28,7 @@
     {% if options.holdings is defined %}
     <table class="libcommand-print-table libcommand-print-table-650">
         {% set tableHeadingVars = { 'category': 'Holdings' } %}
-        {% include 'AppBundle:MonthlyStatsMapLibrary:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+        {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
         <tbody>
             <tr>
                 <th>Maps Added (gross)</th>
@@ -109,7 +109,7 @@
     {% if options.usage is defined %}
     <table class="libcommand-print-table libcommand-print-table-650">
         {% set tableHeadingVars = { 'category': 'Usage' } %}
-        {% include 'AppBundle:MonthlyStatsMapLibrary:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+        {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
         <tbody>
             <tr>
                 <th>Items Shelved</th>
@@ -152,7 +152,7 @@
     {% if options.reference is defined %}
     <table class="libcommand-print-table libcommand-print-table-650">
         {% set tableHeadingVars = { 'category': 'Reference Statistics' } %}
-        {% include 'AppBundle:MonthlyStatsMapLibrary:snippets/tableheading-template.html.twig' with tableHeadingVars %}
+        {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
         <tbody>
             <tr>
                 <td colspan="14">Directional/Procedural Questions</td>

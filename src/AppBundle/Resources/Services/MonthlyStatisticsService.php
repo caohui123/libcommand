@@ -77,6 +77,7 @@ class MonthlyStatisticsService{
             case 'periodical':
                 break;
             case 'archives':
+                $path = 'monthly_archives';
                 break;
         }
         
@@ -695,6 +696,7 @@ class MonthlyStatisticsService{
             case 'periodical':
                 break;
             case 'archives':
+                $repo = $this->em->getRepository('AppBundle\Entity\MonthlyStatsArchives');
                 break;
         }
         

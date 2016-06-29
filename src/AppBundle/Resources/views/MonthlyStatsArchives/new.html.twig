@@ -1,9 +1,16 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Archives Monthly Statistics{% endblock %}
 {% block body -%}
-    <h1>MonthlyStatsArchives creation</h1>
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'New Archives Stats: ' ~ entity.month|date('F Y') } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button #}
+    {% set vars = {'basepath' : path('monthly_archives')} %}
+    {% include 'snippets/newToolbar.html.twig' with vars %}
+    
     <blockquote>
-        <p>Please note that the form will not submit unless all required fields are filled in. All fields form book and file titles must have a value. All collection titles must have at least one box with a quantity.</p>
+        <p>Please note that the form will not submit unless all required fields are filled in.</p>
     </blockquote>
     <div class="row">
         <div class="col-xs-12">

@@ -1,0 +1,721 @@
+{% extends '::base.html.twig' %}
+{% block title %}Archives Monthly Statistics{% endblock %}
+{% block body -%}
+    {# Totals Variables #}
+    {% set totalRequestedBookTitles = 0 %}
+    {% set totalRequestedCollectionTitles = 0 %}
+    {% set totalRequestedCollectionBoxes = 0 %}
+    {% set totalRequestedFiles = 0 %}
+    {% set totalResearchMinutes5 = 0 %}
+    {% set totalResearchMinutes10 = 0 %}
+    {% set totalResearchMinutes15 = 0 %}
+    {% set totalResearchMinutes20 = 0 %}
+    {% set totalResearchMinutes30 = 0 %}
+    {% set totalResearchMinutes45 = 0 %}
+    {% set totalResearchMinutes60 = 0 %}
+    {% set totalInstructionalMinutes5 = 0 %}
+    {% set totalInstructionalMinutes10 = 0 %}
+    {% set totalInstructionalMinutes15 = 0 %}
+    {% set totalInstructionalMinutes20 = 0 %}
+    {% set totalInstructionalMinutes30 = 0 %}
+    {% set totalInstructionalMinutes45 = 0 %}
+    {% set totalInstructionalMinutes60 = 0 %}
+    {% set totalResearchersFaculty = 0 %}
+    {% set totalResearchersStaff = 0 %}
+    {% set totalResearchersUndergrad = 0 %}
+    {% set totalResearchersGrad = 0 %}
+    {% set totalResearchersCommunity = 0 %}
+    {% set totalResearchersOther = 0 %}
+    {% set totalDirectionalEmailRef = 0 %}
+    {% set totalDirectionalPhoneRef = 0 %}
+    {% set totalRequestsCollectionEmailRef = 0 %}
+    {% set totalRequestsCollectionPhoneRef = 0 %}
+    {% set totalResearchRequestsEmailRef = 0 %}
+    {% set totalResearchRequestsPhoneRef = 0 %}
+    {% set totalDonationsEmailRef = 0 %}
+    {% set totalDonationsPhoneRef = 0 %}
+    {% set totalLoansEmailRef = 0 %}
+    {% set totalLoansPhoneRef = 0 %}
+    {% set totalCollectionsProcessed = 0 %}
+    {% set totalCollectionsStored = 0 %}
+    {% set totalHoldingsBooks = 0 %}
+    {% set totalHoldingsFacultyPublications = 0 %}
+    {% set totalAccessionsLinearFeet = 0 %}
+    {% set totalAccessionsTotalCollections = 0 %}
+    {% set totalDigitizationBookTitles = 0 %}
+    {% set totalDigitizationCollectionTitles = 0 %}
+    {% set totalDigitizationCollectionBoxes = 0 %}
+    {% set totalDigitizationFiles = 0 %}
+    
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Archives Statistics: ' ~ type|capitalize ~ ' Year ' ~ year } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back, CSV, Print buttons #}
+    {% set vars = {'basepath' : path('monthly_archives'), 'csvpath': path('monthly_archives_report_csv', {'report_type': type, 'report_year': year, 'options': options}), 'printpath': path('monthly_archives_report_print', {'report_type': type, 'report_year': year, 'options': options}) } %}
+    {% include 'snippets/csvToolbar.html.twig' with vars %}
+
+    <h2>Totals</h2>
+    {% if options.requested is defined %}
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Requested Materials' } %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Book Titles</th>
+                        {% for monthly in entities %}
+                            {% set thisMonthBookTotal = 0 %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {# each book #}
+                                {% for book in monthly.requestedBooks %}
+                                    {% set totalRequestedBookTitles = totalRequestedBookTitles + book.quantity %}
+                                    {% set thisMonthBookTotal = thisMonthBookTotal + book.quantity %}
+                                {% endfor %}
+                                <td>{{ thisMonthBookTotal }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalRequestedBookTitles }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Collection Titles</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalRequestedCollectionTitles = totalRequestedCollectionTitles + monthly.requestedCollections|length %}
+                                <td>{{ monthly.requestedCollections|length }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalRequestedCollectionTitles }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Collection Boxes</th>
+                        {% for monthly in entities %}
+                            {% set thisMonthBoxTotal = 0 %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {# each collection #}
+                                {% for collection in monthly.requestedCollections %}
+                                    {# each boxQuantity #}
+                                    {% for boxQuantity in collection.boxQuantity %}
+                                        {% set thisMonthBoxTotal = thisMonthBoxTotal + boxQuantity.quantity %}
+                                        {% set totalRequestedCollectionBoxes = totalRequestedCollectionBoxes + boxQuantity.quantity %}
+                                    {% endfor %}
+                                {% endfor %}
+                                <td>{{ thisMonthBoxTotal }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalRequestedCollectionBoxes }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>File Titles</th>
+                        {% for monthly in entities %}
+                            {% set thisMonthFileTotal = 0 %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {# each file #}
+                                {% for file in monthly.requestedFiles %}
+                                    {% set thisMonthFileTotal = thisMonthFileTotal + file.quantity %}
+                                    {% set totalRequestedFiles = totalRequestedFiles + file.quantity %}
+                                {% endfor %}
+                                <td>{{ thisMonthFileTotal }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalRequestedFiles }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    {% if options.research is defined %}
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Research Minutes' } %}
+                {% include 'AppBundle:MonthlyStatsArchives:snippets/minutes-tableheading-template.html.twig' with tableHeadingVars %}
+                <tr>
+                    <th>5 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalResearchMinutes5 = totalResearchMinutes5 + monthly.researchMinutes5 %}
+                            <td>{{ monthly.researchMinutes5 }}</td>
+                            <td>{{ monthly.researchMinutes5 * 5 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalResearchMinutes5 }}</strong></td>
+                    <td><strong>{{ totalResearchMinutes5 * 5 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>10 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalResearchMinutes10 = totalResearchMinutes10 + monthly.researchMinutes10 %}
+                            <td>{{ monthly.researchMinutes10 }}</td>
+                            <td>{{ monthly.researchMinutes10 * 10 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalResearchMinutes10 }}</strong></td>
+                    <td><strong>{{ totalResearchMinutes10 * 10 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>15 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalResearchMinutes15 = totalResearchMinutes15 + monthly.researchMinutes15 %}
+                            <td>{{ monthly.researchMinutes15 }}</td>
+                            <td>{{ monthly.researchMinutes15 * 15 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalResearchMinutes15 }}</strong></td>
+                    <td><strong>{{ totalResearchMinutes15 * 15 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>20 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalResearchMinutes20 = totalResearchMinutes20 + monthly.researchMinutes20 %}
+                            <td>{{ monthly.researchMinutes20 }}</td>
+                            <td>{{ monthly.researchMinutes20 * 20 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalResearchMinutes20 }}</strong></td>
+                    <td><strong>{{ totalResearchMinutes20 * 20 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>30 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalResearchMinutes30 = totalResearchMinutes30 + monthly.researchMinutes30 %}
+                            <td>{{ monthly.researchMinutes30 }}</td>
+                            <td>{{ monthly.researchMinutes30 * 30 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalResearchMinutes30 }}</strong></td>
+                    <td><strong>{{ totalResearchMinutes30 * 30 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>45 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalResearchMinutes45 = totalResearchMinutes45 + monthly.researchMinutes45 %}
+                            <td>{{ monthly.researchMinutes45 }}</td>
+                            <td>{{ monthly.researchMinutes45 * 45 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalResearchMinutes45 }}</strong></td>
+                    <td><strong>{{ totalResearchMinutes45 * 45 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>60 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalResearchMinutes60 = totalResearchMinutes60 + monthly.researchMinutes60 %}
+                            <td>{{ monthly.researchMinutes60 }}</td>
+                            <td>{{ monthly.researchMinutes60 * 60 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalResearchMinutes60 }}</strong></td>
+                    <td><strong>{{ totalResearchMinutes60 * 60 }}</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Instructional Minutes' } %}
+                {% include 'AppBundle:MonthlyStatsArchives:snippets/minutes-tableheading-template.html.twig' with tableHeadingVars %}
+                <tr>
+                    <th>5 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalInstructionalMinutes5 = totalInstructionalMinutes5 + monthly.instructionalMinutes5 %}
+                            <td>{{ monthly.instructionalMinutes5 }}</td>
+                            <td>{{ monthly.instructionalMinutes5 * 5 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalInstructionalMinutes5 }}</strong></td>
+                    <td><strong>{{ totalInstructionalMinutes5 * 5 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>10 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalInstructionalMinutes10 = totalInstructionalMinutes10 + monthly.instructionalMinutes10 %}
+                            <td>{{ monthly.instructionalMinutes10 }}</td>
+                            <td>{{ monthly.instructionalMinutes10 * 10 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalInstructionalMinutes10 }}</strong></td>
+                    <td><strong>{{ totalInstructionalMinutes10 * 10 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>15 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalInstructionalMinutes15 = totalInstructionalMinutes15 + monthly.instructionalMinutes15 %}
+                            <td>{{ monthly.instructionalMinutes15 }}</td>
+                            <td>{{ monthly.instructionalMinutes15 * 15 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalInstructionalMinutes15 }}</strong></td>
+                    <td><strong>{{ totalInstructionalMinutes15 * 15 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>20 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalInstructionalMinutes20 = totalInstructionalMinutes20 + monthly.instructionalMinutes20 %}
+                            <td>{{ monthly.instructionalMinutes20 }}</td>
+                            <td>{{ monthly.instructionalMinutes20 * 20 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalInstructionalMinutes20 }}</strong></td>
+                    <td><strong>{{ totalInstructionalMinutes20 * 20 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>30 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalInstructionalMinutes30 = totalInstructionalMinutes30 + monthly.instructionalMinutes30 %}
+                            <td>{{ monthly.instructionalMinutes30 }}</td>
+                            <td>{{ monthly.instructionalMinutes30 * 30 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalInstructionalMinutes30 }}</strong></td>
+                    <td><strong>{{ totalInstructionalMinutes30 * 30 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>45 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalInstructionalMinutes45 = totalInstructionalMinutes45 + monthly.instructionalMinutes45 %}
+                            <td>{{ monthly.instructionalMinutes45 }}</td>
+                            <td>{{ monthly.instructionalMinutes45 * 45 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalInstructionalMinutes45 }}</strong></td>
+                    <td><strong>{{ totalInstructionalMinutes45 * 45 }}</strong></td>
+                </tr>
+                <tr>
+                    <th>60 Minutes</th>
+                    {% for monthly in entities %}
+                        {% if monthly == null %}
+                            <td>0</td>
+                            <td>0</td>
+                        {% else %}
+                            {% set totalInstructionalMinutes60 = totalInstructionalMinutes60 + monthly.instructionalMinutes60 %}
+                            <td>{{ monthly.instructionalMinutes60 }}</td>
+                            <td>{{ monthly.instructionalMinutes60 * 60 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><strong>{{ totalInstructionalMinutes60 }}</strong></td>
+                    <td><strong>{{ totalInstructionalMinutes60 * 60 }}</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Researchers' } %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Faculty</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalResearchersFaculty = totalResearchersFaculty + monthly.researchersFaculty %}
+                                <td>{{ monthly.researchersFaculty }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalResearchersFaculty }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Staff</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalResearchersStaff = totalResearchersStaff + monthly.researchersStaff %}
+                                <td>{{ monthly.researchersStaff }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalResearchersStaff }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Undergraduate</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalResearchersUndergrad = totalResearchersUndergrad + monthly.researchersUndergrad %}
+                                <td>{{ monthly.researchersUndergrad }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalResearchersUndergrad }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Graduate</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalResearchersGrad = totalResearchersGrad + monthly.researchersGrad %}
+                                <td>{{ monthly.researchersGrad }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalResearchersGrad }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Community</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalResearchersCommunity = totalResearchersCommunity + monthly.researchersCommunity %}
+                                <td>{{ monthly.researchersCommunity }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalResearchersCommunity }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Other</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalResearchersOther = totalResearchersOther + monthly.researchersOther %}
+                                <td>{{ monthly.researchersOther }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalResearchersOther }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Email/Phone Reference' } %}
+                {% include 'AppBundle:MonthlyStatsArchives:snippets/emailphonereference-tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Directional</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                                <td>0</td>
+                            {% else %}
+                                {% set totalDirectionalEmailRef = totalDirectionalEmailRef + monthly.directionalEmailRef %}
+                                {% set totalDirectionalPhoneRef = totalDirectionalPhoneRef + monthly.directionalPhoneRef %}
+                                <td>{{ monthly.directionalEmailRef }}</td>
+                                <td>{{ monthly.directionalPhoneRef }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalDirectionalEmailRef }}</strong></td>
+                        <td><strong>{{ totalDirectionalPhoneRef }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Research Requests for Collection</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                                <td>0</td>
+                            {% else %}
+                                {% set totalRequestsCollectionEmailRef = totalRequestsCollectionEmailRef + monthly.researchRequestsCollectionEmailRef %}
+                                {% set totalRequestsCollectionPhoneRef = totalRequestsCollectionPhoneRef + monthly.researchRequestsCollectionPhoneRef %}
+                                <td>{{ monthly.researchRequestsCollectionEmailRef }}</td>
+                                <td>{{ monthly.researchRequestsCollectionPhoneRef }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalRequestsCollectionEmailRef }}</strong></td>
+                        <td><strong>{{ totalRequestsCollectionPhoneRef }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Research Requests</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                                <td>0</td>
+                            {% else %}
+                                {% set totalResearchRequestsEmailRef = totalResearchRequestsEmailRef + monthly.researchRequestsEmailRef %}
+                                {% set totalResearchRequestsPhoneRef = totalResearchRequestsPhoneRef + monthly.researchRequestsPhoneRef %}
+                                <td>{{ monthly.researchRequestsEmailRef }}</td>
+                                <td>{{ monthly.researchRequestsPhoneRef }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalResearchRequestsEmailRef }}</strong></td>
+                        <td><strong>{{ totalResearchRequestsPhoneRef }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Donations</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                                <td>0</td>
+                            {% else %}
+                                {% set totalDonationsEmailRef = totalDonationsEmailRef + monthly.donationsEmailRef %}
+                                {% set totalDonationsPhoneRef = totalDonationsPhoneRef + monthly.donationsPhoneRef %}
+                                <td>{{ monthly.donationsEmailRef }}</td>
+                                <td>{{ monthly.donationsPhoneRef }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalDonationsEmailRef }}</strong></td>
+                        <td><strong>{{ totalDonationsPhoneRef }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Loans</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                                <td>0</td>
+                            {% else %}
+                                {% set totalLoansEmailRef = totalLoansEmailRef + monthly.loansEmailRef %}
+                                {% set totalLoansPhoneRef = totalLoansPhoneRef + monthly.loansPhoneRef %}
+                                <td>{{ monthly.loansEmailRef }}</td>
+                                <td>{{ monthly.loansPhoneRef }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalLoansEmailRef }}</strong></td>
+                        <td><strong>{{ totalLoansPhoneRef }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    {% if options.digitization is defined %}
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Technical Services' } %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Collections Processed</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalCollectionsProcessed = totalCollectionsProcessed + monthly.processedCollections|length %}
+                                <td>{{ monthly.processedCollections|length }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalCollectionsProcessed }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Collections Stored</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalCollectionsStored = totalCollectionsStored + monthly.storedCollections|length %}
+                                <td>{{ monthly.storedCollections|length }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalCollectionsStored }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Holdings Added' } %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Books</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalHoldingsBooks = totalHoldingsBooks + monthly.holdingsAddedBooks %}
+                                <td>{{ monthly.holdingsAddedBooks }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalHoldingsBooks }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Faculty Publications</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalHoldingsFacultyPublications = totalHoldingsFacultyPublications + monthly.holdingsAddedFacultyPublications %}
+                                <td>{{ monthly.holdingsAddedFacultyPublications }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalHoldingsFacultyPublications }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Holdings Added' } %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Linear Feet</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalAccessionsLinearFeet = totalAccessionsLinearFeet + monthly.accessionsLinearFeet %}
+                                <td>{{ monthly.accessionsLinearFeet }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalAccessionsLinearFeet }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Total Collections</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalAccessionsTotalCollections = totalAccessionsTotalCollections + monthly.accessionsTotalCollections %}
+                                <td>{{ monthly.accessionsTotalCollections }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalAccessionsTotalCollections }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>       
+    <div class="row">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-bordered">
+                {% set tableHeadingVars = { 'category': 'Digitization Materials' } %}
+                {% include 'snippets/monthlystats-tableheading-template.html.twig' with tableHeadingVars %}
+                <tbody>
+                    <tr>
+                        <th>Book Titles</th>
+                        {% for monthly in entities %}
+                            {% set thisMonthBookTotal = 0 %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {# each book #}
+                                {% for book in monthly.digitizationBooks %}
+                                    {% set totalDigitizationBookTitles = totalDigitizationBookTitles + book.quantity %}
+                                    {% set thisMonthBookTotal = thisMonthBookTotal + book.quantity %}
+                                {% endfor %}
+                                <td>{{ thisMonthBookTotal }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalDigitizationBookTitles }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Collection Titles</th>
+                        {% for monthly in entities %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {% set totalDigitizationCollectionTitles = totalDigitizationCollectionTitles + monthly.digitizationCollections|length %}
+                                <td>{{ monthly.digitizationCollections|length }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalDigitizationCollectionTitles }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Collection Boxes</th>
+                        {% for monthly in entities %}
+                            {% set thisMonthBoxTotal = 0 %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {# each collection #}
+                                {% for collection in monthly.digitizationCollections %}
+                                    {# each boxQuantity #}
+                                    {% for boxQuantity in collection.boxQuantity %}
+                                        {% set thisMonthBoxTotal = thisMonthBoxTotal + boxQuantity.quantity %}
+                                        {% set totalDigitizationCollectionBoxes = totalDigitizationCollectionBoxes + boxQuantity.quantity %}
+                                    {% endfor %}
+                                {% endfor %}
+                                <td>{{ thisMonthBoxTotal }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalDigitizationCollectionBoxes }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>File Titles</th>
+                        {% for monthly in entities %}
+                            {% set thisMonthFileTotal = 0 %}
+                            {% if monthly == null %}
+                                <td>0</td>
+                            {% else %}
+                                {# each file #}
+                                {% for file in monthly.digitizationFiles %}
+                                    {% set thisMonthFileTotal = thisMonthFileTotal + file.quantity %}
+                                    {% set totalDigitizationFiles = totalDigitizationFiles + file.quantity %}
+                                {% endfor %}
+                                <td>{{ thisMonthFileTotal }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><strong>{{ totalDigitizationFiles }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+{% block documentReady %}
+    
+{% endblock %}

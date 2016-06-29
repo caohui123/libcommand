@@ -1,17 +1,15 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Archives Monthly Statistics{% endblock %}
 {% block body -%}
-    {# Totals variables #}
-    {% set totalRequestedBookTitles = 0 %}
-    {% set totalRequestedFileTitles = 0 %}
-    {% set totalRequestedCollectionTitles = 0 %}
-    {% set totalDigitizationBookTitles = 0 %}
-    {% set totalDigitizationFileTitles = 0 %}
-    {% set totalDigitizationCollectionTitles = 0 %}
-    {% set totalProcessedCollections = 0 %}
-    {% set totalStoredCollections = 0 %}
-  
-    <h1>MonthlyStatsArchives</h1>
+    
+    {# Page Heading #}
+    {% set headingvars = {'headingcontent' : 'Archives Stats: ' ~ entity.month|date('F Y') } %}
+    {% include 'snippets/pageHeading.html.twig' with headingvars %}
+    
+    {# Back button, edit and print buttons #}
+    {% set toolbarvars = {'basepath' : path('monthly_archives'), 'editpath' : path('monthly_archives_edit', { 'id': entity.id }), 'printpath' : path('monthly_archives_print', { 'id': entity.id }), 'editrole' : 'ROLE_MONTHLYARCHIVES_EDIT'} %}
+    {% include 'snippets/showToolbar.html.twig' with toolbarvars %}
+    
     <div class="row">
         <div class="col-xs-12">
             <ul class="nav nav-tabs" id="monthlyarchives-tabs">
@@ -24,7 +22,7 @@
                     <div class="col-xs-12 col-sm-10 col-md-9">
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <caption><span class="badge">{{ totalRequestedBookTitles }}</span> Requested Book Titles</cpation>
+                                <caption><span class="badge" id="show_requested_books_total">0</span> Requested Book Titles</cpation>
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -35,10 +33,7 @@
                                 {% for requestedBook in entity.requestedBooks if requestedBook %}
                                     <tr>
                                         <td>{{ requestedBook.bookTitle }}</td>
-                                        <td>
-                                            {{ requestedBook.quantity }}
-                                            {% set totalRequestedBookTitles = totalRequestedBookTitles + requestedBook.quantity %}
-                                        </td>
+                                        <td><span class="show_requested_books_quantity">{{ requestedBook.quantity }}</span></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -50,7 +45,7 @@
                     <div class="col-xs-12 col-sm-10 col-md-9">
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <caption><span class="badge">{{ totalRequestedCollectionTitles }}</span> Requested Collection Titles</cpation>
+                                <caption><span class="badge" id="show_requested_collections_total">0</span> Requested Collection Titles (<span class="badge" id="show_requested_collectionboxes_total">0</span> Boxes)</cpation>
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -59,15 +54,12 @@
                                 </thead>
                                 <tbody>
                                 {% for requestedCollection in entity.requestedCollections if requestedCollection %}
-                                    <tr>
-                                        <td>
-                                            {{ requestedCollection.name }}
-                                            {% set totalRequestedCollectionTitles = totalRequestedCollectionTitles + 1 %}
-                                        </td>
+                                    <tr class="show_requested_collections_quantity">
+                                        <td>{{ requestedCollection.name }}</td>
                                         <td>
                                         {% if requestedCollection.boxQuantity is defined %}
                                             {% for box in requestedCollection.boxQuantity if box %}
-                                                {{ box.box }}({{ box.quantity }}) | 
+                                                {{ box.box }}(<span class="show_requested_collectionboxes_quantity">{{ box.quantity }}</span>) | 
                                             {% endfor %}
                                         {% else %}
                                             [No boxes]
@@ -84,7 +76,7 @@
                     <div class="col-xs-12 col-sm-10 col-md-9">
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <caption><span class="badge">{{ totalRequestedFileTitles }}</span> Requested File Titles</cpation>
+                                <caption><span class="badge" id="show_requested_files_total">0</span> Requested File Titles</cpation>
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -97,10 +89,7 @@
                                     <tr>
                                         <td>{{ requestedFile.name }}</td>
                                         <td>{{ requestedFile.type }}</td>
-                                        <td>
-                                            {{ requestedFile.quantity }}
-                                            {% set totalRequestedFileTitles = totalRequestedFileTitles + requestedFile.quantity %}
-                                        </td>
+                                        <td><span class="show_requested_files_quantity">{{ requestedFile.quantity }}</span></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -331,7 +320,7 @@
                     <div class="col-xs-12 col-sm-6 col-md-4">
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <caption>Collections Processed</cpation>
+                                <caption><span class="badge" id="show_processed_collections_total">0</span> Collections Processed</cpation>
                                 <thead>
                                     <tr>
                                         <th>Call Number</th>
@@ -340,12 +329,9 @@
                                 </thead>
                                 <tbody>
                                 {% for processedCollection in entity.processedCollections if processedCollection %}
-                                    <tr>
+                                    <tr class="show_processed_collections_quantity">
                                         <td>{{ processedCollection.callNumber }}</td>
-                                        <td>
-                                            {{ processedCollection.linearFeet }}
-                                            {% set totalProcessedCollections = totalProcessedCollections + 1 %}
-                                        </td>
+                                        <td>{{ processedCollection.linearFeet }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -355,7 +341,7 @@
                     <div class="col-xs-12 col-sm-6 col-md-4">
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <caption>Collections Stored</cpation>
+                                <caption><span class="badge" id="show_stored_collections_total">0</span> Collections Stored</cpation>
                                 <thead>
                                     <tr>
                                         <th>Call Number</th>
@@ -364,12 +350,9 @@
                                 </thead>
                                 <tbody>
                                 {% for storedCollection in entity.storedCollections if storedCollection %}
-                                    <tr>
+                                    <tr class="show_stored_collections_quantity">
                                         <td>{{ storedCollection.callNumber }}</td>
-                                        <td>
-                                            {{ storedCollection.linearFeet }}
-                                            {% set totalStoredCollections = totalStoredCollections + 1 %}
-                                        </td>
+                                        <td>{{ storedCollection.linearFeet }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -418,7 +401,7 @@
                     <div class="col-xs-12 col-sm-10 col-md-9">
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <caption><span class="badge">{{ totalDigitizationBookTitles }}</span> Digitization Book Titles</cpation>
+                                <caption><span class="badge" id="show_digitization_books_total">0</span> Digitization Book Titles</cpation>
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -429,10 +412,7 @@
                                 {% for digitizationBook in entity.digitizationBooks if digitizationBook %}
                                     <tr>
                                         <td>{{ digitizationBook.bookTitle }}</td>
-                                        <td>
-                                            {{ digitizationBook.quantity }}
-                                            {% set totalDigitizationBookTitles = totalDigitizationBookTitles + digitizationBook.quantity %}
-                                        </td>
+                                        <td><span class="show_digitization_books_quantity">{{ digitizationBook.quantity }}</span></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -444,7 +424,7 @@
                     <div class="col-xs-12 col-sm-10 col-md-9">
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <caption><span class="badge">{{ totalDigitizationCollectionTitles }}</span> Digitization Collection Titles</cpation>
+                                <caption><span class="badge" id="show_digitization_collections_total">0</span> Digitization Collection Titles (<span class="badge" id="show_digitization_collectionboxes_total">0</span> Boxes)</cpation>
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -453,15 +433,12 @@
                                 </thead>
                                 <tbody>
                                 {% for digitizationCollection in entity.digitizationCollections if digitizationCollection %}
-                                    <tr>
-                                        <td>
-                                            {{ digitizationCollection.name }}
-                                            {% set totalDigitizationCollectionTitles = totalDigitizationCollectionTitles + 1 %}
-                                        </td>
+                                    <tr class="show_digitization_collections_quantity">
+                                        <td>{{ digitizationCollection.name }}</td>
                                         <td>
                                         {% if digitizationCollection.boxQuantity is defined %}
                                             {% for box in digitizationCollection.boxQuantity if box %}
-                                                {{ box.box }}({{ box.quantity }}) | 
+                                                {{ box.box }}(<span class="show_digitization_collectionboxes_quantity">{{ box.quantity }}</span>) | 
                                             {% endfor %}
                                         {% else %}
                                             [No boxes]
@@ -478,7 +455,7 @@
                     <div class="col-xs-12 col-sm-10 col-md-9">
                         <div class="table-responsive">
                             <table class="table table-striped">
-                                <caption><span class="badge">{{ totalDigitizationFileTitles }}</span> Digitization File Titles</cpation>
+                                <caption><span class="badge" id="show_digitization_files_total">0</span> Digitization File Titles</cpation>
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -491,10 +468,7 @@
                                     <tr>
                                         <td>{{ digitizationFile.name }}</td>
                                         <td>{{ digitizationFile.type }}</td>
-                                        <td>
-                                            {{ digitizationFile.quantity }}
-                                            {% set totalRequestedFileTitles = totalDigitizationFileTitles + digitizationFile.quantity %}
-                                        </td>
+                                        <td><span class="show_digitization_files_quantity">{{ digitizationFile.quantity }}</span></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -505,123 +479,6 @@
             </section>
         </div>
     </div>
-                                
-                                
-                                
-    {#                            
-            <section class="monthly-stats-section" id="digitization-container">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-md-9">
-                        <h2>Technical Services</h2>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <h3><span class="badge" id="processed_collections_total">0</span> Collections Processed</h3>
-                                <ul class="processed_collection" data-prototype="
-                                        {% filter escape %}
-                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/processedstoredcollection-prototype.html.twig', { 'form': edit_form.processedCollections.vars.prototype, 'collectionType': 'processed' }) }}
-                                        {% endfilter %}
-                                        ">
-                                    {% for processedCollection in entity.processedCollections if processedCollection %}
-                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-processedstoredcollection.html.twig', { 'entity': processedCollection, 'form': edit_form.processedCollections.vars.prototype, 'type': 'processed', 'index': loop.index0 }) }}
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <h3><span class="badge" id="stored_collections_total">0</span> Collections Stored</h3>
-                                <ul class="stored_collection" data-prototype="
-                                        {% filter escape %}
-                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/processedstoredcollection-prototype.html.twig', { 'form': edit_form.storedCollections.vars.prototype, 'collectionType': 'stored' }) }}
-                                        {% endfilter %}
-                                        ">
-                                    {% for storedCollection in entity.storedCollections if storedCollection %}
-                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-processedstoredcollection.html.twig', { 'entity': storedCollection, 'form': edit_form.storedCollections.vars.prototype, 'type': 'stored', 'index': loop.index0 }) }}
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <h3>Holdings Added</h3>
-                                <div class="row">
-                                    <div class="col-xs-6 col-sm-4">
-                                        {{ form_row(edit_form.holdingsAddedBooks) }}
-                                    </div>
-                                    <div class="col-xs-6 col-sm-4">
-                                        {{ form_row(edit_form.holdingsAddedFacultyPublications) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <h3>Accessions</h3>
-                                <div class="row">
-                                    <div class="col-xs-6 col-sm-4">
-                                        {{ form_row(edit_form.accessionsLinearFeet) }}
-                                    </div>
-                                    <div class="col-xs-6 col-sm-4">
-                                        {{ form_row(edit_form.accessionsTotalCollections) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <h2><span class="badge" id="digitization_books_total">0</span> Digitization Book Titles</h2>
-                                <p>Don't see the book title you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_booktitle_new') }}" target="_blank">add it here</a>.</p>
-                                <ul class="digitization_book" data-prototype="
-                                        {% filter escape %}
-                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/book-prototype.html.twig', { 'form': edit_form.digitizationBooks.vars.prototype, 'bookType': 'digitization' }) }}
-                                        {% endfilter %}
-                                        ">
-                                    {% for digitizationBook in entity.digitizationBooks if digitizationBook %}
-                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-book.html.twig', { 'entity': digitizationBook, 'form': edit_form.digitizationBooks.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <h2><span class="badge" id="digitization_collections_total">0</span> Digitization Collections <small>(<span class="badge" id="digitization_collectionboxes_total">0</span> boxes)</small></h2>
-                                <p>Don't see the collection you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_collectiontitle_new') }}" target="_blank">add it here</a>.</p>
-                                <p>Don't see the box you're looking for? Save this form and then <a href="{{ path('monthly_archives_components_box_new') }}" target="_blank">add it here</a>.</p>
-                                <ul class="digitization_collection" 
-                                     data-prototype-boxquantity="
-                                        {% filter escape %}
-                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/boxquantity-prototype.html.twig', { 'form': edit_form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'collectionType': 'digitization' }) }}
-                                        {% endfilter %}
-                                        "
-                                     data-prototype-collections="
-                                        {% filter escape %}
-                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/collection-prototype.html.twig', { 'form': edit_form.digitizationCollections.vars.prototype, 'collectionType': 'digitization' }) }}
-                                        {% endfilter %}
-                                     "
-                                     >
-                                    {% for digitizationCollection in entity.digitizationCollections if digitizationCollection %}
-                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-collection.html.twig', { 'entity': digitizationCollection, 'collection_form': edit_form.digitizationCollections.vars.prototype, 'box_form': edit_form.digitizationCollections.vars.prototype.children.boxQuantity.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <h2><span class="badge" id="digitization_files_total">0</span> Digitization File Titles</h2>
-                                <ul class="digitization_file" data-prototype="
-                                        {% filter escape %}
-                                            {{ include('AppBundle:MonthlyStatsArchives:snippets/file-prototype.html.twig', { 'form': edit_form.digitizationFiles.vars.prototype, 'fileType': 'digitization' }) }}
-                                        {% endfilter %}
-                                        ">
-                                    {% for digitizationFile in entity.digitizationFiles if digitizationFile %}
-                                        {{ include('AppBundle:MonthlyStatsArchives:snippets/edit-file.html.twig', { 'entity': digitizationFile, 'form': edit_form.digitizationFiles.vars.prototype, 'type': 'digitization', 'index': loop.index0 }) }}
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div><!-- #end monthlyarchives-tabs -->
-    </div>
-    
-    #}
 {% endblock %}
 {% block documentReady %}
     // JavaScript located in AppBundle/Resources/public/js/monthlystatsarchives.js
